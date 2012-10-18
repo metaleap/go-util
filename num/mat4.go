@@ -1,0 +1,274 @@
+package num
+
+import (
+	"math"
+)
+
+var (
+	Mat4Identity = NewMat4Identity()
+
+	tmpInt int
+	tfX, tfY, tfZ, tfQ float64
+	tmpMat0 TMat4
+	tmpMat1, tmpMat2 *TMat4
+	tvN, tvU, tvV *TVec3
+)
+
+/*
+	Column-major 4x4 matrix type, like in GLSL.
+	Mostly 3D-related functions.
+	Use the GoMatrix package for sciencier needs.
+*/
+
+type TMat4 [16]float64
+
+func (me *TMat4) Add (mat *TMat4) {
+	me[0], me[4], me[8], me[12] = me[0] + mat[0], me[4] + mat[4], me[8] + mat[8], me[12] + mat[12]
+	me[1], me[5], me[9], me[13] = me[1] + mat[1], me[5] + mat[5], me[9] + mat[9], me[13] + mat[13]
+	me[2], me[6], me[10], me[14] = me[2] + mat[2], me[6] + mat[6], me[10] + mat[10], me[14] + mat[14]
+	me[3], me[7], me[11], me[15] = me[3] + mat[3], me[7] + mat[7], me[11] + mat[11], me[15] + mat[15]
+}
+
+func (me *TMat4) Clear () {
+	me[0], me[4], me[8], me[12] = 0, 0, 0, 0
+	me[1], me[5], me[9], me[13] = 0, 0, 0, 0
+	me[2], me[6], me[10], me[14] = 0, 0, 0, 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 0
+}
+
+func (me *TMat4) CopyFrom (mat *TMat4) {
+	*me = *mat
+}
+
+func (me *TMat4) CopyTo (mat *TMat4) {
+	*mat = *me
+}
+
+func (me *TMat4) Frustum (left, right, bottom, top, near, far float64) {
+	me[0], me[4], me[8], me[12] = ((near * 2) / (right - left)), 0, ((right + left) / (right - left)), 0
+	me[1], me[5], me[9], me[13] = 0, ((near * 2) / (top - bottom)), ((top + bottom) / (top - bottom)), 0
+	me[2], me[6], me[10], me[14] = 0, 0, -(far + near) / (far - near), (-(far * near * 2) / (far - near))
+	me[3], me[7], me[11], me[15] = 0, 0, -1, 0
+}
+
+func (me *TMat4) Identity () {
+	me[0], me[4], me[8], me[12] = 1, 0, 0, 0
+	me[1], me[5], me[9], me[13] = 0, 1, 0, 0
+	me[2], me[6], me[10], me[14] = 0, 0, 1, 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) LookAt (lookTarget, worldUp *TVec3) {
+	/*
+	var aFwd, aSide, aUp = &TVec3 { eyePos.X - lookTarget.X, eyePos.Y - lookTarget.Y, eyePos.Z - lookTarget.Z }, &TVec3 {}, &TVec3 {}
+	aFwd.Normalize()
+	aSide.X, aSide.Y, aSide.Z = (worldUp.Y * aFwd.Z) - (worldUp.Z * aFwd.Y), (worldUp.Z * aFwd.X) - (worldUp.X * aFwd.Z), (worldUp.X * aFwd.Y) - (worldUp.Y * aFwd.X)
+	aSide.Normalize()
+	aUp.X, aUp.Y, aUp.Z = (aFwd.Y * aSide.Z) - (aFwd.Z * aSide.Y), (aFwd.Z * aSide.X) - (aFwd.X * aSide.Z), (aFwd.X * aSide.Y) - (aFwd.Y * aSide.X)
+	aUp.Normalize()
+	me[0], me[4], me[8], me[12] = aSide.X, aSide.Y, aSide.Z, -((aSide.X * eyePos.X) + (aSide.Y * eyePos.Y) + (aSide.Z * eyePos.Z))
+	me[1], me[5], me[9], me[13] = aUp.X, aUp.Y, aUp.Z, -((aUp.X * eyePos.X) + (aUp.Y * eyePos.Y) + (aUp.Z * eyePos.Z))
+	me[2], me[6], me[10], me[14] = aFwd.X, aFwd.Y, aFwd.Z, -((aFwd.X * eyePos.X) + (aFwd.Y * eyePos.Y) + (aFwd.Z * eyePos.Z))
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+	*/
+	tvN = lookTarget.Normalized()
+	tvU = worldUp.Normalized().Cross(lookTarget)
+	tvV = tvN.Cross(tvU)
+	me[0], me[4], me[8], me[12] = tvU.X, tvU.Y, tvU.Z, 0
+	me[1], me[5], me[9], me[13] = tvV.X, tvV.Y, tvV.Z, 0
+	me[2], me[6], me[10], me[14] = tvN.X, tvN.Y, tvN.Z, 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) Mult1 (v float64) {
+	me[0], me[4], me[8], me[12] = me[0] * v, me[4] * v, me[8] * v, me[12] * v
+	me[1], me[5], me[9], me[13] = me[1] * v, me[5] * v, me[9] * v, me[13] * v
+	me[2], me[6], me[10], me[14] = me[2] * v, me[6] * v, me[10] * v, me[14] * v
+	me[3], me[7], me[11], me[15] = me[3] * v, me[7] * v, me[11] * v, me[15] * v
+}
+
+func (me *TMat4) Mult3 (v *TVec3) *TQuat {
+	return &TQuat {
+		(me[0] * v.X) + (me[4] * v.Y) + (me[8] * v.Z) + (me[12] * 1),
+		(me[1] * v.X) + (me[5] * v.Y) + (me[9] * v.Z) + (me[13] * 1),
+		(me[2] * v.X) + (me[6] * v.Y) + (me[10] * v.Z) + (me[14] * 1),
+		(me[3] * v.X) + (me[7] * v.Y) + (me[11] * v.Z) + (me[15] * 1),
+	}
+}
+
+func (me *TMat4) Mult4 (v *TQuat) *TQuat {
+	return &TQuat {
+		(me[0] * v.X) + (me[4] * v.Y) + (me[8] * v.Z) + (me[12] * v.Y),
+		(me[1] * v.X) + (me[5] * v.Y) + (me[9] * v.Z) + (me[13] * v.Y),
+		(me[2] * v.X) + (me[6] * v.Y) + (me[10] * v.Z) + (me[14] * v.Y),
+		(me[3] * v.X) + (me[7] * v.Y) + (me[11] * v.Z) + (me[15] * v.Y),
+	}
+}
+
+func (me *TMat4) Perspective (fovY, aspect, near, far float64) {
+	tfY = near * math.Tan(fovY * math.Pi / 360)
+	tfX = tfY * aspect
+	me.Frustum(-tfX, tfX, -tfY, tfY, near, far)
+}
+
+func (me *TMat4) Rotation (rad float64, axes *TVec3) {
+	var cos, sin = math.Cos(rad), math.Sin(rad)
+	var x, y, z = axes.X, axes.Y, axes.Z
+	var xx, yy, zz, xy, xz, yz = x * x, y * y, z * z, x * y, x * z, y * z
+	me[0], me[4], me[8], me[12] = (xx + (1 - xx) * cos),		(xy * (1 - cos) - z * sin),	(xz * (1 - cos) + y * sin),	0
+	me[1], me[5], me[9], me[13] = (xy * (1 - cos) + z * sin),	(yy + (1 - yy) * cos),		(yz * (1 - cos) - x * sin),	0
+	me[2], me[6], me[10], me[14] = (xz * (1 - cos) - y * sin),	(yz * (1 - cos) + x * sin),	(zz + (1 - zz) * cos),		0
+	me[3], me[7], me[11], me[15] = 0,							0,							0,							1
+}
+
+func (me *TMat4) RotationX (rad float64) {
+	me[0], me[4], me[8], me[12] = 1, 0, 0, 0
+	me[1], me[5], me[9], me[13] = 0, math.Cos(rad), -math.Sin(rad), 0
+	me[2], me[6], me[10], me[14] = 0, math.Sin(rad), math.Cos(rad), 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) RotationY (rad float64) {
+	me[0], me[4], me[8], me[12] = math.Cos(rad), 0, math.Sin(rad), 0
+	me[1], me[5], me[9], me[13] = 0, 1, 0, 0
+	me[2], me[6], me[10], me[14] = -math.Sin(rad), 0, math.Cos(rad), 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) RotationZ (rad float64) {
+	me[0], me[4], me[8], me[12] = math.Cos(rad), -math.Sin(rad), 0, 0
+	me[1], me[5], me[9], me[13] = math.Sin(rad), math.Cos(rad), 0, 0
+	me[2], me[6], me[10], me[14] = 0, 0, 1, 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) Scaling (vec *TVec3) {
+	me[0], me[4], me[8], me[12] = vec.X, 0, 0, 0
+	me[1], me[5], me[9], me[13] = 0, vec.Y, 0, 0
+	me[2], me[6], me[10], me[14] = 0, 0, vec.Z, 0
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *TMat4) SetFromMult4 (one, two *TMat4) {
+	me[0], me[4], me[8], me[12] = (one[0] * two[0]) + (one[4] * two[1]) + (one[8] * two[2]) + (one[12] * two[3]), (one[0] * two[4]) + (one[4] * two[5]) + (one[8] * two[6]) + (one[12] * two[7]), (one[0] * two[8]) + (one[4] * two[9]) + (one[8] * two[10]) + (one[12] * two[11]), (one[0] * two[12]) + (one[4] * two[13]) + (one[8] * two[14]) + (one[12] * two[15])
+	me[1], me[5], me[9], me[13] = (one[1] * two[0]) + (one[5] * two[1]) + (one[9] * two[2]) + (one[13] * two[3]), (one[1] * two[4]) + (one[5] * two[5]) + (one[9] * two[6]) + (one[13] * two[7]), (one[1] * two[8]) + (one[5] * two[9]) + (one[9] * two[10]) + (one[13] * two[11]), (one[1] * two[12]) + (one[5] * two[13]) + (one[9] * two[14]) + (one[13] * two[15])
+	me[2], me[6], me[10], me[14] = (one[2] * two[0]) + (one[6] * two[1]) + (one[10] * two[2]) + (one[14] * two[3]), (one[2] * two[4]) + (one[6] * two[5]) + (one[10] * two[6]) + (one[14] * two[7]), (one[2] * two[8]) + (one[6] * two[9]) + (one[10] * two[10]) + (one[14] * two[11]), (one[2] * two[12]) + (one[6] * two[13]) + (one[10] * two[14]) + (one[14] * two[15])
+	me[3], me[7], me[11], me[15] = (one[3] * two[0]) + (one[7] * two[1]) + (one[11] * two[2]) + (one[15] * two[3]), (one[3] * two[4]) + (one[7] * two[5]) + (one[11] * two[6]) + (one[15] * two[7]), (one[3] * two[8]) + (one[7] * two[9]) + (one[11] * two[10]) + (one[15] * two[11]), (one[3] * two[12]) + (one[7] * two[13]) + (one[11] * two[14]) + (one[15] * two[15])
+}
+
+func (me *TMat4) SetFromMultN (mats ... *TMat4) {
+	tmpMat1 = mats[0]
+	for tmpInt = 1; tmpInt < len(mats); tmpInt++ {
+		tmpMat2 = mats[tmpInt]
+		me[0], me[4], me[8], me[12] = (tmpMat1[0] * tmpMat2[0]) + (tmpMat1[4] * tmpMat2[1]) + (tmpMat1[8] * tmpMat2[2]) + (tmpMat1[12] * tmpMat2[3]), (tmpMat1[0] * tmpMat2[4]) + (tmpMat1[4] * tmpMat2[5]) + (tmpMat1[8] * tmpMat2[6]) + (tmpMat1[12] * tmpMat2[7]), (tmpMat1[0] * tmpMat2[8]) + (tmpMat1[4] * tmpMat2[9]) + (tmpMat1[8] * tmpMat2[10]) + (tmpMat1[12] * tmpMat2[11]), (tmpMat1[0] * tmpMat2[12]) + (tmpMat1[4] * tmpMat2[13]) + (tmpMat1[8] * tmpMat2[14]) + (tmpMat1[12] * tmpMat2[15])
+		me[1], me[5], me[9], me[13] = (tmpMat1[1] * tmpMat2[0]) + (tmpMat1[5] * tmpMat2[1]) + (tmpMat1[9] * tmpMat2[2]) + (tmpMat1[13] * tmpMat2[3]), (tmpMat1[1] * tmpMat2[4]) + (tmpMat1[5] * tmpMat2[5]) + (tmpMat1[9] * tmpMat2[6]) + (tmpMat1[13] * tmpMat2[7]), (tmpMat1[1] * tmpMat2[8]) + (tmpMat1[5] * tmpMat2[9]) + (tmpMat1[9] * tmpMat2[10]) + (tmpMat1[13] * tmpMat2[11]), (tmpMat1[1] * tmpMat2[12]) + (tmpMat1[5] * tmpMat2[13]) + (tmpMat1[9] * tmpMat2[14]) + (tmpMat1[13] * tmpMat2[15])
+		me[2], me[6], me[10], me[14] = (tmpMat1[2] * tmpMat2[0]) + (tmpMat1[6] * tmpMat2[1]) + (tmpMat1[10] * tmpMat2[2]) + (tmpMat1[14] * tmpMat2[3]), (tmpMat1[2] * tmpMat2[4]) + (tmpMat1[6] * tmpMat2[5]) + (tmpMat1[10] * tmpMat2[6]) + (tmpMat1[14] * tmpMat2[7]), (tmpMat1[2] * tmpMat2[8]) + (tmpMat1[6] * tmpMat2[9]) + (tmpMat1[10] * tmpMat2[10]) + (tmpMat1[14] * tmpMat2[11]), (tmpMat1[2] * tmpMat2[12]) + (tmpMat1[6] * tmpMat2[13]) + (tmpMat1[10] * tmpMat2[14]) + (tmpMat1[14] * tmpMat2[15])
+		me[3], me[7], me[11], me[15] = (tmpMat1[3] * tmpMat2[0]) + (tmpMat1[7] * tmpMat2[1]) + (tmpMat1[11] * tmpMat2[2]) + (tmpMat1[15] * tmpMat2[3]), (tmpMat1[3] * tmpMat2[4]) + (tmpMat1[7] * tmpMat2[5]) + (tmpMat1[11] * tmpMat2[6]) + (tmpMat1[15] * tmpMat2[7]), (tmpMat1[3] * tmpMat2[8]) + (tmpMat1[7] * tmpMat2[9]) + (tmpMat1[11] * tmpMat2[10]) + (tmpMat1[15] * tmpMat2[11]), (tmpMat1[3] * tmpMat2[12]) + (tmpMat1[7] * tmpMat2[13]) + (tmpMat1[11] * tmpMat2[14]) + (tmpMat1[15] * tmpMat2[15])
+		tmpMat0 = *me
+		tmpMat1 = &tmpMat0
+	}
+}
+
+func (me *TMat4) Sub (mat *TMat4) {
+	me[0], me[4], me[8], me[12] = me[0] - mat[0], me[4] - mat[4], me[8] - mat[8], me[12] - mat[12]
+	me[1], me[5], me[9], me[13] = me[1] - mat[1], me[5] - mat[5], me[9] - mat[9], me[13] - mat[13]
+	me[2], me[6], me[10], me[14] = me[2] - mat[2], me[6] - mat[6], me[10] - mat[10], me[14] - mat[14]
+	me[3], me[7], me[11], me[15] = me[3] - mat[3], me[7] - mat[7], me[11] - mat[11], me[15] - mat[15]
+}
+
+func (me *TMat4) ToInverseMat3 (mat *TMat3) {
+	var a00, a01, a02 = me[0], me[1], me[2]
+	var a10, a11, a12 = me[4], me[5], me[6]
+	var a20, a21, a22 = me[8], me[9], me[10]
+	var b01 = a22 * a11 - a12 * a21
+	var b11 = -a22 * a10 + a12 * a20
+	var b21 = a21 * a10 - a11 * a20
+	var d = a00 * b01 + a01 * b11 + a02 * b21
+	var id = 1 / d
+
+	mat[0], mat[3], mat[6] = b01 * id,							b11 * id,							b21 * id
+	mat[1], mat[4], mat[7] = (-a22 * a01 + a02 * a21) * id,		(a22 * a00 - a02 * a20) * id,		(-a21 * a00 + a01 * a20) * id
+	mat[2], mat[5], mat[8] = (a12 * a01 - a02 * a11) * id,		(-a12 * a00 + a02 * a10) * id,		(a11 * a00 - a01 * a10) * id
+}
+
+func (me *TMat4) Translation (vec *TVec3) {
+	me[0], me[4], me[8], me[12] = 1, 0, 0, vec.X
+	me[1], me[5], me[9], me[13] = 0, 1, 0, vec.Y
+	me[2], me[6], me[10], me[14] = 0, 0, 1, vec.Z
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func NewMat4Add (a, b *TMat4) *TMat4 {
+	var mat = &TMat4 {}
+	mat[0], mat[4], mat[8], mat[12] = a[0] + b[0], a[4] + b[4], a[8] + b[8], a[12] + b[12]
+	mat[1], mat[5], mat[9], mat[13] = a[1] + b[1], a[5] + b[5], a[9] + b[9], a[13] + b[13]
+	mat[2], mat[6], mat[10], mat[14] = a[2] + b[2], a[6] + b[6], a[10] + b[10], a[14] + b[14]
+	mat[3], mat[7], mat[11], mat[15] = a[3] + b[3], a[7] + b[7], a[11] + b[11], a[15] + b[15]
+	return mat
+}
+
+func NewMat4Frustum (left, right, bottom, top, near, far float64) *TMat4 {
+	var mat = &TMat4 {}; mat.Frustum(left, right, bottom, top, near, far); return mat
+}
+
+func NewMat4Identity () *TMat4 {
+	var mat = &TMat4 {}; mat.Identity(); return mat
+}
+
+func NewMat4LookAt (lookTarget, worldUp *TVec3) *TMat4 {
+	var mat = &TMat4 {}; mat.LookAt(lookTarget, worldUp); return mat
+}
+
+func NewMat4Mult1 (m *TMat4, v float64) *TMat4 {
+	var mat = &TMat4 {}
+	mat[0], mat[4], mat[8], mat[12] = m[0] * v, m[4] * v, m[8] * v, m[12] * v
+	mat[1], mat[5], mat[9], mat[13] = m[1] * v, m[5] * v, m[9] * v, m[13] * v
+	mat[2], mat[6], mat[10], mat[14] = m[2] * v, m[6] * v, m[10] * v, m[14] * v
+	mat[3], mat[7], mat[11], mat[15] = m[3] * v, m[7] * v, m[11] * v, m[15] * v
+	return mat
+}
+
+func NewMat4Mult4 (one, two *TMat4) *TMat4 {
+	var mat = &TMat4 {}; mat.SetFromMult4(one, two); return mat
+}
+
+func NewMat4MultN (mats ... *TMat4) *TMat4 {
+	var mat = &TMat4 {}; mat.SetFromMultN(mats ...); return mat
+}
+
+func NewMat4Perspective (fovY, aspect, near, far float64) *TMat4 {
+	var mat = &TMat4 {}; mat.Perspective(fovY, aspect, near, far); return mat
+}
+
+func NewMat4Rotation (rad float64, axes *TVec3) *TMat4 {
+	var mat = &TMat4 {}; mat.Rotation(rad, axes); return mat
+}
+
+func NewMat4RotationX (rad float64) *TMat4 {
+	var mat = &TMat4 {}; mat.RotationX(rad); return mat
+}
+
+func NewMat4RotationY (rad float64) *TMat4 {
+	var mat = &TMat4 {}; mat.RotationY(rad); return mat
+}
+
+func NewMat4RotationZ (rad float64) *TMat4 {
+	var mat = &TMat4 {}; mat.RotationZ(rad); return mat
+}
+
+func NewMat4Scaling (vec *TVec3) *TMat4 {
+	var mat = &TMat4 {}; mat.Scaling(vec); return mat
+}
+
+func NewMat4Sub (a, b *TMat4) *TMat4 {
+	var mat = &TMat4 {}
+	mat[0], mat[4], mat[8], mat[12] = a[0] - b[0], a[4] - b[4], a[8] - b[8], a[12] - b[12]
+	mat[1], mat[5], mat[9], mat[13] = a[1] - b[1], a[5] - b[5], a[9] - b[9], a[13] - b[13]
+	mat[2], mat[6], mat[10], mat[14] = a[2] - b[2], a[6] - b[6], a[10] - b[10], a[14] - b[14]
+	mat[3], mat[7], mat[11], mat[15] = a[3] - b[3], a[7] - b[7], a[11] - b[11], a[15] - b[15]
+	return mat
+}
+
+func NewMat4Translation (vec *TVec3) *TMat4 {
+	var mat = &TMat4 {}; mat.Translation(vec); return mat
+}
