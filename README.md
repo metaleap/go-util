@@ -7,7 +7,7 @@ Utility packages:
 
 - **go-util/gfx** -- not really useful for now
 
-- **go-util/gl** -- all kinds of OpenGL helpers, based on the http://github.com/chsc/gogl/gl42 OpenGL wrapper
+- **go-util/gl** -- all kinds of OpenGL helpers, based on the http://github.com/chsc/gogl/ OpenGL wrapper
 
 - **go-util/io** -- misc utility funcs such as ExtractZipFile, FileExists and the likes...
 
