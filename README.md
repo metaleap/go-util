@@ -3,7 +3,7 @@ go-util
 
 Utility packages:
 
-- **go-util** -- not really useful for now (mostly a few typed "Iif" funcs to make up for Golang's lack of ternary operators)
+- **go-util** -- not really useful for now (mostly a few typed "iif" funcs to make up for Golang's lack of ternary operators)
 
 - **go-util/gfx** -- not really useful for now
 
