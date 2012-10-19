@@ -99,14 +99,21 @@ func FileExistsPath (dirPath string, fileBaseName string, fileExts []string, try
 	return "", time.Time {}, 0
 }
 
+func ReadBinaryFile (filePath string, panicOnError bool) []byte {
+	var file, err = os.Open(filePath)
+	var bytes []byte
+	if err == nil {
+		defer file.Close()
+		bytes, err = ioutil.ReadAll(file)
+	}
+	if panicOnError && (err != nil) { panic(err) }
+	return bytes
+}
+
 func ReadFromBinary (readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool {
 	var o, err = readSeeker.Seek(offset, 0)
-	if (o != offset) || (err != nil) {
-		return false
-	}
-	if err = binary.Read(readSeeker, byteOrder, ptr); err != nil {
-		return false
-	}
+	if (o != offset) || (err != nil) { return false }
+	if err = binary.Read(readSeeker, byteOrder, ptr); err != nil { return false }
 	return true
 }
 

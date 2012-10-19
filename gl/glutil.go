@@ -7,8 +7,8 @@ import (
 
 	gl "github.com/chsc/gogl/gl42"
 
-	coreutil "github.com/go3d/go-util"
 	strutil "github.com/go3d/go-util/str"
+	util "github.com/go3d/go-util"
 )
 
 var (
@@ -83,7 +83,7 @@ func LastError (step string, fmtArgs ... interface{}) error {
 func SetVersion () {
 	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 = false, false, false, false, false, false
 	GlSlVersion = "150"
-	if glVer := coreutil.ParseVersion(GlStr(gl.VERSION)); len(glVer) > 0 {
+	if glVer := util.ParseVersion(GlStr(gl.VERSION)); len(glVer) > 0 {
 		if Version[0] = glVer[0]; len(glVer) > 1 { Version[1] = glVer[1] }
 		if Version[0] >= 3 {
 			if Version[0] == 3 {

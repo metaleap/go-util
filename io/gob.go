@@ -5,10 +5,10 @@ import (
 	"encoding/gob"
 	"os"
 
-	coreutil "github.com/go3d/go-util"
+	util "github.com/go3d/go-util"
 )
 
-func CreateGobsFile (targetFilePath string, recs *[]interface{}, getRecPtr coreutil.FAnyToAny, gzipped bool) {
+func CreateGobsFile (targetFilePath string, recs *[]interface{}, getRecPtr util.FAnyToAny, gzipped bool) {
 	var file, err = os.Create(targetFilePath)
 	var gobber *gob.Encoder
 	var gzipper *gzip.Writer
@@ -30,7 +30,7 @@ func CreateGobsFile (targetFilePath string, recs *[]interface{}, getRecPtr coreu
 		gobber = gob.NewEncoder(file)
 	}
 	for _, rec := range *recs {
-		if err = gobber.Encode(coreutil.PtrVal(getRecPtr(rec))); err != nil {
+		if err = gobber.Encode(util.PtrVal(getRecPtr(rec))); err != nil {
 			panic(err)
 		}
 	}

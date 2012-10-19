@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	coreutil "github.com/go3d/go-util"
+	util "github.com/go3d/go-util"
 )
 
 func Concat (vals ... string) string {
@@ -34,7 +34,7 @@ func Distance (s1, s2 string) int {
 	}
 	for i = 1; i < len(d); i++ {
 		for j = 1; j < len(d[0]); j++ {
-			cost = coreutil.Ifi(s1[i - 1] == s2[j - 1], 0, 1)
+			cost = util.Ifi(s1[i - 1] == s2[j - 1], 0, 1)
 			min1 = d[i - 1][j] + 1
 			min2 = d[i][j - 1] + 1
 			min3 = d[i - 1][j - 1] + cost
@@ -47,7 +47,7 @@ func Distance (s1, s2 string) int {
 func First (fun func (s string) bool, step int, vals ... string) string {
 	var l = len(vals)
 	var reverse = step < 0
-	for i := coreutil.Ifi(reverse, l - 1, 0); coreutil.Ifb(reverse, i >= 0, i < l); i += step {
+	for i := util.Ifi(reverse, l - 1, 0); util.Ifb(reverse, i >= 0, i < l); i += step {
 		if fun(vals[i]) {
 			return vals[i]
 		}
