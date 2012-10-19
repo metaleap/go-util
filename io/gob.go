@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"os"
 
-	coreutil "github.com/go-ngine/go-util"
+	coreutil "github.com/go3d/go-util"
 )
 
 func CreateGobsFile (targetFilePath string, recs *[]interface{}, getRecPtr coreutil.FAnyToAny, gzipped bool) {

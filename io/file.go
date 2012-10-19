@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	strutil "github.com/go-ngine/go-util/str"
+	strutil "github.com/go3d/go-util/str"
 )
 
 func DirExists (path string) bool {

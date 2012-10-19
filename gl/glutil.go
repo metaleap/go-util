@@ -7,8 +7,8 @@ import (
 
 	gl "github.com/chsc/gogl/gl42"
 
-	coreutil "github.com/go-ngine/go-util"
-	strutil "github.com/go-ngine/go-util/str"
+	coreutil "github.com/go3d/go-util"
+	strutil "github.com/go3d/go-util/str"
 )
 
 var (
