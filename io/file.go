@@ -126,13 +126,20 @@ func ReadTextFile (filePath string, panicOnError bool, defVal string) string {
 	return defVal
 }
 
-func WalkDirectory (dirPath, fileExtension string) {
+func WalkDirectory (dirPath, fileSuffix string, fileFunc func(string), recurseSubDirs bool) error {
 	var fileInfos, err = ioutil.ReadDir(dirPath)
 	if err == nil {
 		for _, fi := range fileInfos {
-			println(fi)
+			if !fi.IsDir() {
+				if (len(fileSuffix) == 0) || strings.HasSuffix(fi.Name(), fileSuffix) {
+					fileFunc(filepath.Join(dirPath, fi.Name()))
+				}
+			} else if recurseSubDirs {
+				if err = WalkDirectory(filepath.Join(dirPath, fi.Name()), fileSuffix, fileFunc, recurseSubDirs); err != nil {
+					break
+				}
+			}
 		}
-	} else {
-		println(err.Error())
 	}
+	return err
 }
