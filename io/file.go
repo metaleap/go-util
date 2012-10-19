@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	strutil "github.com/metaleap/go-util/str"
+	strutil "github.com/go-ngine/go-util/str"
 )
 
 func DirExists (path string) bool {
@@ -124,4 +124,15 @@ func ReadTextFile (filePath string, panicOnError bool, defVal string) string {
 		panic(err)
 	}
 	return defVal
+}
+
+func WalkDirectory (dirPath, fileExtension string) {
+	var fileInfos, err = ioutil.ReadDir(dirPath)
+	if err == nil {
+		for _, fi := range fileInfos {
+			println(fi)
+		}
+	} else {
+		println(err.Error())
+	}
 }

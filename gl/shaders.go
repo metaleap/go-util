@@ -107,12 +107,12 @@ func ShaderLocationU (glProg gl.Uint, name string) gl.Int {
 	return ShaderLocation(glProg, name, false)
 }
 
-func ShaderSource (name string, shader gl.Uint, source string, defines map[string]interface{}, logPrint bool) error {
+func ShaderSource (name string, shader gl.Uint, source string, defines map[string]interface{}, logPrint bool, glslVersion string) error {
 	var src []*gl.Char
 	var i, l = 1, len(defines)
 	var lines = make([]string, (l * 5) + 3)
 	var joined string
-	lines[0] = "#version 400 core\n"
+	lines[0] = "#version " + glslVersion + " core\n"
 	for dk, dv := range defines {
 		lines[i + 0] = "#define "
 		lines[i + 1] = dk

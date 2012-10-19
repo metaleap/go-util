@@ -3,7 +3,7 @@ package glutil
 import (
 	gl "github.com/chsc/gogl/gl42"
 
-	numutil "github.com/metaleap/go-util/num"
+	numutil "github.com/go-ngine/go-util/num"
 )
 
 type TGlMat3 [9]gl.Float

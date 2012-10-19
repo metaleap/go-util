@@ -7,12 +7,17 @@ import (
 
 	gl "github.com/chsc/gogl/gl42"
 
-	strutil "github.com/metaleap/go-util/str"
+	coreutil "github.com/go-ngine/go-util"
+	strutil "github.com/go-ngine/go-util/str"
 )
 
 var (
+	Version = [2]int { 0, 0 }
+
 	extensionPrefixes = []string { "GL_ARB_", "GL_ATI_", "GL_S3_", "GL_EXT_", "GL_IBM_", "GL_KTX_", "GL_NV_", "GL_NVX_", "GL_OES_", "GL_SGIS_", "GL_SGIX_", "GL_SUN_", "GL_APPLE_" }
 	extensions []string = nil
+	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 bool
+	GlSlVersion = "150"
 )
 
 func Extension (name string) bool {
@@ -73,4 +78,24 @@ func LastError (step string, fmtArgs ... interface{}) error {
 		err = errors.New(errStr)
 	}
 	return err
+}
+
+func SetVersion () {
+	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 = false, false, false, false, false, false
+	GlSlVersion = "150"
+	if glVer := coreutil.ParseVersion(GlStr(gl.VERSION)); len(glVer) > 0 {
+		if Version[0] = glVer[0]; len(glVer) > 1 { Version[1] = glVer[1] }
+		if Version[0] >= 3 {
+			if Version[0] == 3 {
+				if Version[1] >= 2 { IsGl32 = true }
+				if Version[1] >= 3 { IsGl33, GlSlVersion = true, "330" }
+			}
+			if Version[0] == 4 {
+				IsGl32, IsGl33, IsGl40, GlSlVersion = true, true, true, "400"
+				if Version[1] >= 1 { IsGl41, GlSlVersion = true, "410" }
+				if Version[1] >= 2 { IsGl42, GlSlVersion = true, "420" }
+				if Version[1] >= 3 { IsGl43, GlSlVersion = true, "430" }
+			}
+		}
+	}
 }

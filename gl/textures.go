@@ -98,8 +98,12 @@ func MakeTextureFromImageFile (filePath string, wrapS, wrapT, minFilter, magFilt
 			gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, minFilter)
 			gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS)
 			gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT)
-			gl.TexStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, sw, sh)
-			gl.TexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, sw, sh, gl.RGBA, gl.UNSIGNED_BYTE, gl.Pointer(&rgba.Pix[0]))
+			if IsGl42 {
+				gl.TexStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, sw, sh)
+				gl.TexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, sw, sh, gl.RGBA, gl.UNSIGNED_BYTE, gl.Pointer(&rgba.Pix[0]))
+			} else {
+				gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, sw, sh, 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Pointer(&rgba.Pix[0]))
+			}
 			if (mipMaps) { gl.GenerateMipmap(gl.TEXTURE_2D) }
 			gl.BindTexture(gl.TEXTURE_2D, 0)
 		}
