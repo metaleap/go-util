@@ -13,6 +13,16 @@ import (
 	strutil "github.com/go3d/go-util/str"
 )
 
+func CopyFile (srcFilePath, destFilePath string) (err error) {
+	var src, dst *os.File
+	if src, err = os.Open(srcFilePath); err != nil { return }
+	defer src.Close()
+	if dst, err = os.Create(destFilePath); err != nil { return }
+	defer dst.Close()
+	_, err = io.Copy(dst, src)
+	return
+}
+
 func DirExists (path string) bool {
 	var stat, err = os.Stat(path)
 	if (err == nil) && (stat != nil) { return stat.IsDir() }
@@ -139,17 +149,22 @@ func ReadTextFile (filePath string, panicOnError bool, defVal string) string {
 	return defVal
 }
 
-func WalkDirectory (dirPath, fileSuffix string, fileFunc func(string), recurseSubDirs bool) error {
+func WalkDirectory (dirPath, fileSuffix string, fileFunc func (string, bool) bool, recurseSubDirs bool) error {
 	var fileInfos, err = ioutil.ReadDir(dirPath)
 	if err == nil {
 		for _, fi := range fileInfos {
 			if !fi.IsDir() {
 				if (len(fileSuffix) == 0) || strings.HasSuffix(fi.Name(), fileSuffix) {
-					fileFunc(filepath.Join(dirPath, fi.Name()))
+					recurseSubDirs = fileFunc(filepath.Join(dirPath, fi.Name()), recurseSubDirs)
 				}
-			} else if recurseSubDirs {
-				if err = WalkDirectory(filepath.Join(dirPath, fi.Name()), fileSuffix, fileFunc, recurseSubDirs); err != nil {
-					break
+			}
+		}
+		if recurseSubDirs {
+			for _, fi := range fileInfos {
+				if fi.IsDir() {
+					if err = WalkDirectory(filepath.Join(dirPath, fi.Name()), fileSuffix, fileFunc, recurseSubDirs); err != nil {
+						break
+					}
 				}
 			}
 		}
