@@ -15,10 +15,18 @@ import (
 
 func DirExists (path string) bool {
 	var stat, err = os.Stat(path)
-	if (err == nil) && (stat != nil) {
-		return stat.IsDir()
-	}
+	if (err == nil) && (stat != nil) { return stat.IsDir() }
 	return false
+}
+
+func EnsureDirExists (path string) error {
+	var err error
+	if !DirExists(path) {
+		if err = EnsureDirExists(filepath.Dir(path)); err == nil {
+			err = os.Mkdir(path, os.ModePerm)
+		}
+	}
+	return err
 }
 
 func ExtractZipFile (zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ... string) error {
@@ -70,9 +78,7 @@ func ExtractZipFile (zipFilePath, targetDirPath string, deleteZipFile bool, file
 
 func FileExists (path string) bool {
 	var stat, err = os.Stat(path)
-	if (err == nil) && (stat != nil) {
-		return !stat.IsDir()
-	}
+	if (err == nil) && (stat != nil) { return !stat.IsDir() }
 	return false
 }
 
@@ -149,4 +155,8 @@ func WalkDirectory (dirPath, fileSuffix string, fileFunc func(string), recurseSu
 		}
 	}
 	return err
+}
+
+func WriteTextFile (filePath, contents string) error {
+	return ioutil.WriteFile(filePath, []byte(contents), os.ModePerm)
 }
