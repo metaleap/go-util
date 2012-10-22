@@ -27,9 +27,7 @@ func Extension (name string) bool {
 }
 
 func Extensions () []string {
-	if extensions == nil {
-		extensions = strutil.Split(GlStr(gl.EXTENSIONS), " ")
-	}
+	if extensions == nil { extensions = strutil.Split(GlStr(gl.EXTENSIONS), " ") }
 	return extensions
 }
 

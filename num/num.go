@@ -93,6 +93,10 @@ func Round (v float64) float64 {
 	return math.Floor(v)
 }
 
+func Saturate (v float64) float64 {
+	return Clamp(v, 0, 1)
+}
+
 func Sign (v float64) float64 {
 	if v == 0 { return 0 }
 	return v / math.Abs(v)

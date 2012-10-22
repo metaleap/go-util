@@ -1,17 +1,10 @@
 package glutil
 
 import (
-	"bytes"
-	"encoding/binary"
-	"errors"
+	"fmt"
 	"image"
-	_ "image/jpeg"
-	_ "image/png"
-	"io"
-	"io/ioutil"
-	"log"
 	"math"
-	"os"
+	"reflect"
 
 	gl "github.com/chsc/gogl/gl42"
 )
@@ -22,60 +15,53 @@ const (
 )
 
 var (
-	TexFilter gl.Int = gl.NEAREST
-	TexWrap gl.Int = gl.CLAMP_TO_BORDER
-
 	maxTexAnisotropy gl.Float = -100
-	maxTexBufSize, maxTexSize1D, maxTexSize2D, maxTexSize3D gl.Int = 0, 0, 0, 0
 )
 
-func FindTexSize2D (maxSize, numTexels, minSize float64) (float64, float64) {
-	var wh float64
-	if math.Floor(numTexels) != numTexels { log.Panicf("AAAAH %v", numTexels) }
-	if numTexels <= maxSize { return numTexels, 1 }
-	for h := 2.0; h < maxSize; h ++ {
-		for w := 2.0; w < maxSize; w ++ {
-			wh = w * h
-			if wh == numTexels {
-				if minSize > 0 { for (math.Mod(w, 2) == 0) && (math.Mod(h, 2) == 0) && ((w / 2) >= minSize) && ((h / 2) >= minSize) { w, h = w / 2, h / 2 } }
-				for ((h * 2) < w) && (math.Mod(w, 2) == 0) { w, h = w / 2, h * 2 }
-				if minSize > 0 { for (math.Mod(w, 2) == 0) && (math.Mod(h, 2) == 0) && ((w / 2) >= minSize) && ((h / 2) >= minSize) { w, h = w / 2, h / 2 } }
-				return w, h
-			} else if wh > numTexels { break }
-		}
+func ImageTextureProperties (img image.Image, width, height, numLevels *gl.Sizei, sizedInternalFormat, pixelDataFormat, pixelDataType *gl.Enum) (pixPtr gl.Pointer) {
+	*pixelDataType = gl.UNSIGNED_BYTE
+	*numLevels = gl.Sizei(int(math.Log2(math.Max(float64(img.Bounds().Dx()), float64(img.Bounds().Dy()))) + 1))
+	*width, *height = gl.Sizei(img.Bounds().Dx()), gl.Sizei(img.Bounds().Dy())
+	switch pic := img.(type) {
+	case *image.Alpha:
+		*sizedInternalFormat = gl.R8
+		*pixelDataFormat = gl.RED
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.Alpha16:
+		*sizedInternalFormat = gl.R16
+		*pixelDataFormat = gl.RED
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.Gray:
+		*sizedInternalFormat = gl.R8
+		*pixelDataFormat = gl.RED
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.Gray16:
+		*sizedInternalFormat = gl.R16
+		*pixelDataFormat = gl.RED
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.NRGBA:
+		*sizedInternalFormat = gl.RGBA8
+		*pixelDataFormat = gl.RGBA
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.NRGBA64:
+		*sizedInternalFormat = gl.RGBA16
+		*pixelDataFormat = gl.RGBA
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.RGBA:
+		*sizedInternalFormat = gl.RGBA8
+		*pixelDataFormat = gl.RGBA
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	case *image.RGBA64:
+		*sizedInternalFormat = gl.RGBA16
+		*pixelDataFormat = gl.RGBA
+		pixPtr = gl.Pointer(&pic.Pix[0])
+	default:
+		panic(fmt.Errorf("Unsupported image.Image type (%v) for use as OpenGL texture", reflect.TypeOf(pic)))
 	}
-	return 0, 0
+	return
 }
 
-func MakeTexture (glPtr *gl.Uint, dimensions uint8, texFormat gl.Enum, width, height, depth gl.Sizei) error {
-	return MakeTextureForTarget(glPtr, dimensions, width, height, depth, 0, texFormat, false)
-}
-
-func MakeTextureForTarget (glPtr *gl.Uint, dimensions uint8, width, height, depth gl.Sizei, texTarget gl.Enum, texFormat gl.Enum, reuseGlPtr bool) error {
-	var is3d, is2d = (dimensions == 3), (dimensions == 2)
-	if texTarget == 0 { texTarget = Ife(is3d, gl.TEXTURE_3D, Ife(is2d, gl.TEXTURE_2D, gl.TEXTURE_1D)) }
-	if texFormat == 0 { texFormat = gl.RGBA8 }
-	if width == 0 { return errors.New("MakeTextureForTarget() needs at least width") }
-	if height == 0 { height = width }
-	if depth == 0 { depth = height }
-	if (!reuseGlPtr) || (*glPtr == 0) { gl.GenTextures(1, glPtr) }
-	gl.BindTexture(texTarget, *glPtr)
-	gl.TexParameteri(texTarget, gl.TEXTURE_MAG_FILTER, TexFilter)
-	gl.TexParameteri(texTarget, gl.TEXTURE_MIN_FILTER, TexFilter)
-	gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_S, TexWrap)
-	if is2d || is3d { gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_T, TexWrap) }
-	if is3d { gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_R, TexWrap) }
-	if is3d {
-		gl.TexStorage3D(texTarget, 1, texFormat, width, height, depth)
-	} else if is2d {
-		gl.TexStorage2D(texTarget, 1, texFormat, width, height)
-	} else {
-		gl.TexStorage1D(texTarget, 1, texFormat, width)
-	}
-	gl.BindTexture(texTarget, 0)
-	return LastError("MakeTextureForTarget(dim=%v w=%v h=%v d=%v)", dimensions, width, height, depth)
-}
-
+/*
 func MakeTextureFromImageFile (filePath string, wrapS, wrapT, minFilter, magFilter gl.Int, mipMaps bool) gl.Uint {
 	var file, err = os.Open(filePath)
 	var img image.Image
@@ -110,69 +96,7 @@ func MakeTextureFromImageFile (filePath string, wrapS, wrapT, minFilter, magFilt
 	}
 	return tex
 }
-
-func MakeTextureFromImageFloatsFile (filePath string, w, h int) (gl.Uint, error) {
-	var file, err = os.Open(filePath)
-	var tex gl.Uint
-	var pix = make([]gl.Float, w * h * 3)
-	var fVal float32
-	var raw []uint8
-	var buf *bytes.Buffer
-	var i int
-	if err != nil { return tex, err }
-	defer file.Close()
-	raw, err = ioutil.ReadAll(file)
-	if err != nil { return tex, err }
-	buf = bytes.NewBuffer(raw)
-	for i = 0; (err == nil) && (i < len(pix)); i++ {
-		if err = binary.Read(buf, binary.LittleEndian, &fVal); err == io.EOF {
-			err = nil; break
-		} else if err == nil {
-			pix[i] = gl.Float(fVal)
-		}
-	}
-	if err != nil { return tex, err }
-	sw, sh := gl.Sizei(w), gl.Sizei(h)
-	gl.GenTextures(1, &tex)
-	gl.BindTexture(gl.TEXTURE_2D, tex)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
-	gl.TexStorage2D(gl.TEXTURE_2D, 1, gl.RGB16F, sw, sh)
-	gl.TexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, sw, sh, gl.RGB, gl.FLOAT, gl.Pointer(&pix[0]))
-	gl.BindTexture(gl.TEXTURE_2D, 0)
-	return tex, LastError("MakeTextureFromImageFloatsFile(%v)", filePath)
-}
-
-func MakeTextures (num gl.Sizei, glPtr []gl.Uint, dimensions uint8, texFormat gl.Enum, width, height, depth gl.Sizei) error {
-	var err error
-	var is3d, is2d = (dimensions == 3), (dimensions == 2)
-	var texTarget gl.Enum = Ife(is3d, gl.TEXTURE_3D, Ife(is2d, gl.TEXTURE_2D, gl.TEXTURE_1D))
-	gl.GenTextures(num, &glPtr[0])
-	if err = LastError("MakeTextures.GenTextures(num=%v)", num); err != nil { return err }
-	if width == 0 { return errors.New("MakeTextures() needs at least width") }
-	if height == 0 { height = width }
-	if depth == 0 { depth = height }
-	for i := 0; i < len(glPtr); i++ {
-		gl.BindTexture(texTarget, glPtr[i])
-		gl.TexParameteri(texTarget, gl.TEXTURE_MAG_FILTER, TexFilter)
-		gl.TexParameteri(texTarget, gl.TEXTURE_MIN_FILTER, TexFilter)
-		gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_R, TexWrap)
-		gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_S, TexWrap)
-		gl.TexParameteri(texTarget, gl.TEXTURE_WRAP_T, TexWrap)
-		if is3d {
-			gl.TexStorage3D(texTarget, 1, texFormat, width, height, depth)
-		} else if is2d {
-			gl.TexStorage2D(texTarget, 1, texFormat, width, height)
-		} else {
-			gl.TexStorage1D(texTarget, 1, texFormat, width)
-		}
-		gl.BindTexture(texTarget, 0)
-		if err = LastError("MakeTextures.Loop(i=%v dim=%v w=%v h=%v d=%v)", i, dimensions, width, height, depth); err != nil { return err }
-	}
-	return err
-}
+*/
 
 func MaxTextureAnisotropy () gl.Float {
 	if maxTexAnisotropy == -100 {
@@ -180,13 +104,4 @@ func MaxTextureAnisotropy () gl.Float {
 		if Extension("texture_filter_anisotropic") { gl.GetFloatv(MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxTexAnisotropy) }
 	}
 	return maxTexAnisotropy
-}
-
-func MaxTextureBufferSize () (uint64, error) {
-	var err error
-	if maxTexBufSize == 0 {
-		gl.GetIntegerv(gl.MAX_TEXTURE_BUFFER_SIZE, &maxTexBufSize)
-		err = LastError("MaxTextureBufferSize()")
-	}
-	return uint64(maxTexBufSize), err
 }

@@ -15,63 +15,63 @@ type TShaderProgram struct {
 	UnifLocs map[string]gl.Int
 }
 
-func NewShaderProgram (name string, glCShader, glFShader, glGShader, glTcShader, glTeShader, glVShader gl.Uint) (*TShaderProgram, error) {
-	var err error
-	var hasAtt = false
-	var glProg = gl.CreateProgram()
-	var glStatus gl.Int
-	if glCShader != 0 { hasAtt = true; gl.AttachShader(glProg, glCShader) }
-	if glFShader != 0 { hasAtt = true; gl.AttachShader(glProg, glFShader) }
-	if glGShader != 0 { hasAtt = true; gl.AttachShader(glProg, glGShader) }
-	if glTcShader != 0 { hasAtt = true; gl.AttachShader(glProg, glTcShader) }
-	if glTeShader != 0 { hasAtt = true; gl.AttachShader(glProg, glTeShader) }
-	if glVShader != 0 { hasAtt = true; gl.AttachShader(glProg, glVShader) }
-	if (!hasAtt) {
-		gl.DeleteProgram(glProg)
-		return nil, fmt.Errorf("No shader attachments specified for program %s", name)
-	}
-	gl.LinkProgram(glProg)
-	if glCShader != 0 { gl.DetachShader(glProg, glCShader); gl.DeleteShader(glCShader) }
-	if glFShader != 0 { gl.DetachShader(glProg, glFShader); gl.DeleteShader(glFShader) }
-	if glGShader != 0 { gl.DetachShader(glProg, glGShader); gl.DeleteShader(glGShader) }
-	if glTcShader != 0 { gl.DetachShader(glProg, glTcShader); gl.DeleteShader(glTcShader) }
-	if glTeShader != 0 { gl.DetachShader(glProg, glTeShader); gl.DeleteShader(glTeShader) }
-	if glVShader != 0 { gl.DetachShader(glProg, glVShader); gl.DeleteShader(glVShader) }
-	if gl.GetProgramiv(glProg, gl.LINK_STATUS, &glStatus); glStatus == 0 {
-		err = fmt.Errorf("SHADER PROGRAM %s: %s", name, ShaderInfoLog(glProg, false))
-	}
-	return &TShaderProgram { name, glProg, map[string]gl.Uint {}, map[string]gl.Int {} }, err
-}
-
-func (me *TShaderProgram) CleanUp () {
-	gl.DeleteProgram(me.Program)
-}
-
-func (me *TShaderProgram) HasAttr (name string) bool {
-	return ShaderIsAttrLocation(me.AttrLocs[name])
-}
-
-func (me *TShaderProgram) HasUnif (name string) bool {
-	return ShaderIsUnifLocation(me.UnifLocs[name])
-}
-
-func (me *TShaderProgram) SetAttrLocations (attribNames ... string) {
-	var loc gl.Uint
-	for _, attribName := range attribNames {
-		loc = ShaderLocationA(me.Program, attribName)
-		if me.AttrLocs[attribName] = loc; ShaderIsAttrLocation(loc) {
-			gl.EnableVertexAttribArray(me.AttrLocs[attribName])
+	func NewShaderProgram (name string, glCShader, glFShader, glGShader, glTcShader, glTeShader, glVShader gl.Uint) (*TShaderProgram, error) {
+		var err error
+		var hasAtt = false
+		var glProg = gl.CreateProgram()
+		var glStatus gl.Int
+		if glCShader != 0 { hasAtt = true; gl.AttachShader(glProg, glCShader) }
+		if glFShader != 0 { hasAtt = true; gl.AttachShader(glProg, glFShader) }
+		if glGShader != 0 { hasAtt = true; gl.AttachShader(glProg, glGShader) }
+		if glTcShader != 0 { hasAtt = true; gl.AttachShader(glProg, glTcShader) }
+		if glTeShader != 0 { hasAtt = true; gl.AttachShader(glProg, glTeShader) }
+		if glVShader != 0 { hasAtt = true; gl.AttachShader(glProg, glVShader) }
+		if (!hasAtt) {
+			gl.DeleteProgram(glProg)
+			return nil, fmt.Errorf("No shader attachments specified for program %s", name)
 		}
-		LastError("")
+		gl.LinkProgram(glProg)
+		if glCShader != 0 { gl.DetachShader(glProg, glCShader); gl.DeleteShader(glCShader) }
+		if glFShader != 0 { gl.DetachShader(glProg, glFShader); gl.DeleteShader(glFShader) }
+		if glGShader != 0 { gl.DetachShader(glProg, glGShader); gl.DeleteShader(glGShader) }
+		if glTcShader != 0 { gl.DetachShader(glProg, glTcShader); gl.DeleteShader(glTcShader) }
+		if glTeShader != 0 { gl.DetachShader(glProg, glTeShader); gl.DeleteShader(glTeShader) }
+		if glVShader != 0 { gl.DetachShader(glProg, glVShader); gl.DeleteShader(glVShader) }
+		if gl.GetProgramiv(glProg, gl.LINK_STATUS, &glStatus); glStatus == 0 {
+			err = fmt.Errorf("SHADER PROGRAM %s: %s", name, ShaderInfoLog(glProg, false))
+		}
+		return &TShaderProgram { name, glProg, map[string]gl.Uint {}, map[string]gl.Int {} }, err
 	}
-}
 
-func (me *TShaderProgram) SetUnifLocations (unifNames ...string) {
-	for _, unifName := range unifNames {
-		me.UnifLocs[unifName] = ShaderLocationU(me.Program, unifName)
-		LastError("")
+	func (me *TShaderProgram) CleanUp () {
+		gl.DeleteProgram(me.Program)
 	}
-}
+
+	func (me *TShaderProgram) HasAttr (name string) bool {
+		return ShaderIsAttrLocation(me.AttrLocs[name])
+	}
+
+	func (me *TShaderProgram) HasUnif (name string) bool {
+		return ShaderIsUnifLocation(me.UnifLocs[name])
+	}
+
+	func (me *TShaderProgram) SetAttrLocations (attribNames ... string) {
+		var loc gl.Uint
+		for _, attribName := range attribNames {
+			loc = ShaderLocationA(me.Program, attribName)
+			if me.AttrLocs[attribName] = loc; ShaderIsAttrLocation(loc) {
+				gl.EnableVertexAttribArray(me.AttrLocs[attribName])
+			}
+			LastError("")
+		}
+	}
+
+	func (me *TShaderProgram) SetUnifLocations (unifNames ...string) {
+		for _, unifName := range unifNames {
+			me.UnifLocs[unifName] = ShaderLocationU(me.Program, unifName)
+			LastError("")
+		}
+	}
 
 func ShaderInfoLog (shaderOrProgram gl.Uint, isShader bool) string {
 	var err error
