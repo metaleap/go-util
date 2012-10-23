@@ -153,6 +153,10 @@ func (me *TVec3) ScaledAdded (mul float64, add *TVec3) *TVec3 {
 	return &TVec3 { (me.X * mul) + add.X, (me.Y * mul) + add.Y, (me.Z * mul) + add.Z }
 }
 
+func (me *TVec3) Set (x, y, z float64) {
+	me.X, me.Y, me.Z = x, y, z
+}
+
 func (me *TVec3) SetFrom (vec *TVec3) {
 	me.X, me.Y, me.Z = vec.X, vec.Y, vec.Z
 }
