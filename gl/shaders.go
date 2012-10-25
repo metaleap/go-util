@@ -55,22 +55,24 @@ type TShaderProgram struct {
 		return ShaderIsUnifLocation(me.UnifLocs[name])
 	}
 
-	func (me *TShaderProgram) SetAttrLocations (attribNames ... string) {
+	func (me *TShaderProgram) SetAttrLocations (attribNames ... string) (err error) {
 		var loc gl.Uint
 		for _, attribName := range attribNames {
 			loc = ShaderLocationA(me.Program, attribName)
 			if me.AttrLocs[attribName] = loc; ShaderIsAttrLocation(loc) {
 				gl.EnableVertexAttribArray(me.AttrLocs[attribName])
+				if err = LastError("SetAttrLocations(%v)"); err != nil { return }
 			}
-			LastError("")
 		}
+		return
 	}
 
-	func (me *TShaderProgram) SetUnifLocations (unifNames ...string) {
+	func (me *TShaderProgram) SetUnifLocations (unifNames ...string) (err error) {
 		for _, unifName := range unifNames {
 			me.UnifLocs[unifName] = ShaderLocationU(me.Program, unifName)
-			LastError("")
+			if err = LastError("SetUnifLocations(%v)", unifName); err != nil { return }
 		}
+		return
 	}
 
 func ShaderInfoLog (shaderOrProgram gl.Uint, isShader bool) string {
