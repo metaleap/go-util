@@ -60,7 +60,6 @@ type TShaderProgram struct {
 		for _, attribName := range attribNames {
 			loc = ShaderLocationA(me.Program, attribName)
 			if me.AttrLocs[attribName] = loc; ShaderIsAttrLocation(loc) {
-				gl.EnableVertexAttribArray(me.AttrLocs[attribName])
 				if err = LastError("SetAttrLocations(%v)"); err != nil { return }
 			}
 		}
