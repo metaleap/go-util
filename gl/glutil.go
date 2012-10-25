@@ -80,12 +80,12 @@ func LastError (step string, fmtArgs ... interface{}) error {
 
 func SetVersion () {
 	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 = false, false, false, false, false, false
-	GlSlVersion = "150"
+	GlSlVersion = "120"
 	if glVer := util.ParseVersion(GlStr(gl.VERSION)); len(glVer) > 0 {
 		if Version[0] = glVer[0]; len(glVer) > 1 { Version[1] = glVer[1] }
 		if Version[0] >= 3 {
 			if Version[0] == 3 {
-				if Version[1] >= 2 { IsGl32 = true }
+				if Version[1] >= 2 { IsGl32, GlSlVersion = true, "150" }
 				if Version[1] >= 3 { IsGl33, GlSlVersion = true, "330" }
 			}
 			if Version[0] == 4 {
@@ -96,4 +96,8 @@ func SetVersion () {
 			}
 		}
 	}
+}
+
+func VersionMatch (major, minor int) bool {
+	return (Version[0] > major) || ((Version[0] == major) && (Version[1] >= minor))
 }

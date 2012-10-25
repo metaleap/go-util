@@ -82,12 +82,14 @@ func IsFloat64s(any interface{}) bool {
 func ParseVersion(vString string) []int {
 	//	3.3.0 - Build 8.15.10.2761.
 	var nums = []int{}
-	var i int
+	var i uint64
+	var pos int
 	var err error
 	var parts = strings.Split(vString, ".")
 	for _, p := range parts {
-		if i, err = strconv.Atoi(p); err == nil {
-			nums = append(nums, i)
+		if pos = strings.Index(p, " "); pos > 0 { p = p[ : pos] }
+		if i, err = strconv.ParseUint(p, 10, 8); err == nil {
+			nums = append(nums, int(i))
 		} else {
 			break
 		}
