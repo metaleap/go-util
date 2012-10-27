@@ -37,6 +37,22 @@ func Fin1 (val, max float32) float32 {
 	return 1 / (max / val)
 }
 
+func Hash3 (one, two, three uint) uint {
+	var rshift = func (x, y uint) uint {
+		return x >> y
+	}
+	one = one - two;  one = one - three;  one = one ^ (rshift(three, 13));
+	two = two - three;  two = two - one;  two = two ^ (one << 8); 
+	three = three - one;  three = three - two;  three = three ^ (rshift(two, 13));
+	one = one - two;  one = one - three;  one = one ^ (rshift(three, 12));
+	two = two - three;  two = two - one;  two = two ^ (one << 16);
+	three = three - one;  three = three - two;  three = three ^ (rshift(two, 5));
+	one = one - two;  one = one - three;  one = one ^ (rshift(three, 3));
+	two = two - three;  two = two - one;  two = two ^ (one << 10);
+	three = three - one;  three = three - two;  three = three ^ (rshift(two, 15));
+	return three;
+}
+
 func Iin1 (val, max int) int {
 	return 1 / (max / val)
 }
