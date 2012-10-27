@@ -40,22 +40,6 @@ func ClampF (val, min, max gl.Float) gl.Float {
 	return MinF(MaxF(val, min), max)
 }
 
-func Hash3 (one, two, three gl.Uint) gl.Uint {
-	var rshift = func (x, y gl.Uint) gl.Uint {
-		return x >> y
-	}
-	one = one - two;  one = one - three;  one = one ^ (rshift(three, 13));
-	two = two - three;  two = two - one;  two = two ^ (one << 8); 
-	three = three - one;  three = three - two;  three = three ^ (rshift(two, 13));
-	one = one - two;  one = one - three;  one = one ^ (rshift(three, 12));
-	two = two - three;  two = two - one;  two = two ^ (one << 16);
-	three = three - one;  three = three - two;  three = three ^ (rshift(two, 5));
-	one = one - two;  one = one - three;  one = one ^ (rshift(three, 3));
-	two = two - three;  two = two - one;  two = two ^ (one << 10);
-	three = three - one;  three = three - two;  three = three ^ (rshift(two, 15));
-	return three;
-}
-
 func IfE (cond bool, ifTrue, ifFalse gl.Enum) gl.Enum {
 	if cond { return ifTrue }
 	return ifFalse
