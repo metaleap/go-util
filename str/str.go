@@ -68,8 +68,13 @@ func ForEach (fun func (i int, s string), vals ... string) {
 }
 
 func InSliceAt (vals []string, val string) int {
+	for i, v := range vals { if v == val { return i } }
+	return -1
+}
+
+func InSliceAtIgnoreCase (vals []string, val string) int {
 	for i, v := range vals {
-		if v == val {
+		if (v == val) || (strings.ToLower(v) == strings.ToLower(val)) {
 			return i
 		}
 	}
@@ -87,6 +92,10 @@ func IsAscii (str string) bool {
 
 func IsInSlice (vals []string, val string) bool {
 	return InSliceAt(vals, val) >= 0
+}
+
+func IsInSliceIgnoreCase (vals []string, val string) bool {
+	return InSliceAtIgnoreCase(vals, val) >= 0
 }
 
 func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {

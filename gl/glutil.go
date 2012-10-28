@@ -3,7 +3,6 @@ package glutil
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	gl "github.com/chsc/gogl/gl42"
 
@@ -14,20 +13,22 @@ import (
 var (
 	Version = [2]int { 0, 0 }
 
-	extensionPrefixes = []string { "GL_ARB_", "GL_ATI_", "GL_S3_", "GL_EXT_", "GL_IBM_", "GL_KTX_", "GL_NV_", "GL_NVX_", "GL_OES_", "GL_SGIS_", "GL_SGIX_", "GL_SUN_", "GL_APPLE_" }
 	extensions []string = nil
 	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 bool
 	GlSlVersion = "150"
 )
 
 func Extension (name string) bool {
-	if strings.HasPrefix(name, "GL_") { return strutil.InSliceAt(Extensions(), name) >= 0 }
-	for _, ep := range extensionPrefixes { if strutil.InSliceAt(Extensions(), ep + name) >= 0 { return true } }
-	return false
+	return strutil.IsInSliceIgnoreCase(Extensions(), name)
 }
 
 func Extensions () []string {
-	if extensions == nil { extensions = strutil.Split(GlStr(gl.EXTENSIONS), " ") }
+	if extensions == nil {
+		var num gl.Int
+		gl.GetIntegerv(gl.NUM_EXTENSIONS, &num)
+		extensions = make([]string, num)
+		if num > 0 { for i := gl.Int(0); i < num; i++ { extensions[i] = GlStri(gl.EXTENSIONS, gl.Uint(i)) } }
+	}
 	return extensions
 }
 
@@ -37,6 +38,10 @@ func GlConnInfo () string {
 
 func GlStr (name gl.Enum) string {
 	return gl.GoStringUb(gl.GetString(name))
+}
+
+func GlStri (name gl.Enum, i gl.Uint) string {
+	return gl.GoStringUb(gl.GetStringi(name, i))
 }
 
 func GlVal (name gl.Enum) (gl.Int, error) {
