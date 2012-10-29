@@ -73,8 +73,9 @@ func InSliceAt (vals []string, val string) int {
 }
 
 func InSliceAtIgnoreCase (vals []string, val string) int {
+	var lv = strings.ToLower(val)
 	for i, v := range vals {
-		if (v == val) || (strings.ToLower(v) == strings.ToLower(val)) {
+		if (v == val) || (strings.ToLower(v) == lv) {
 			return i
 		}
 	}

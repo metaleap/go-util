@@ -101,9 +101,7 @@ func MakeTextureFromImageFile (filePath string, wrapS, wrapT, minFilter, magFilt
 func MaxTextureAnisotropy () gl.Float {
 	if maxTexAnisotropy == -100 {
 		maxTexAnisotropy = 0
-		if Extension("texture_filter_anisotropic") {
-			gl.GetFloatv(MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxTexAnisotropy)
-		}
+		if Extension("texture_filter_anisotropic") { gl.GetFloatv(MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxTexAnisotropy) }
 	}
 	return maxTexAnisotropy
 }

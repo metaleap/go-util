@@ -12,14 +12,19 @@ import (
 
 var (
 	Version = [2]int { 0, 0 }
+	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 bool
+	GlSlVersion = ""
 
 	extensions []string = nil
-	IsGl32, IsGl33, IsGl40, IsGl41, IsGl42, IsGl43 bool
-	GlSlVersion = "150"
+	extensionPrefixes = []string { "GL_AMD_", "GL_APPLE_", "GL_ARB_", "GL_ATI_", "GL_EXT_", "GL_IBM_", "GL_KTX_", "GL_NV_", "GL_NVX_", "GL_OES_", "GL_S3_", "GL_SGIS_", "GL_SGIX_", "GL_SUN_", "WGL_EXT_" }
 )
 
 func Extension (name string) bool {
-	return strutil.IsInSliceIgnoreCase(Extensions(), name)
+	if strutil.IsInSliceIgnoreCase(Extensions(), name) { return true }
+	for _, pref := range extensionPrefixes {
+		if strutil.IsInSliceIgnoreCase(Extensions(), pref + name) { return true }
+	}
+	return false
 }
 
 func Extensions () []string {
