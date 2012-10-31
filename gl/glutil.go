@@ -16,7 +16,7 @@ var (
 	GlSlVersion = ""
 
 	extensions []string = nil
-	extensionPrefixes = []string { "GL_AMD_", "GL_APPLE_", "GL_ARB_", "GL_ATI_", "GL_EXT_", "GL_IBM_", "GL_KTX_", "GL_NV_", "GL_NVX_", "GL_OES_", "GL_S3_", "GL_SGIS_", "GL_SGIX_", "GL_SUN_", "WGL_EXT_" }
+	extensionPrefixes = []string { "GL_AMD_", "GL_APPLE_", "GL_ARB_", "GL_ATI_", "GL_EXT_", "GL_IBM_", "GL_KTX_", "GL_NV_", "GL_NVX_", "GL_OES_", "GL_S3_", "GL_SGIS_", "GL_SGIX_", "GL_SUN_", "GL_WIN_", "WGL_EXT_" }
 )
 
 func Extension (name string) bool {
