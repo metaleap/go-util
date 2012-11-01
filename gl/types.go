@@ -6,6 +6,8 @@ import (
 	numutil "github.com/go3d/go-util/num"
 )
 
+type TGlVec4 [4]gl.Float
+
 type TGlMat3 [9]gl.Float
 
 	func NewGlMat3 (mat *numutil.TMat3) *TGlMat3 {
