@@ -149,6 +149,16 @@ func ReadTextFile (filePath string, panicOnError bool, defVal string) string {
 	return defVal
 }
 
+func SaveToFile (r io.Reader, filename string) (err error) {
+	var file *os.File
+	file, err = os.Create(filename)
+	if file != nil {
+		defer file.Close()
+		if err == nil { _, err = io.Copy(file, r) }
+	}
+	return
+}
+
 func WalkDirectory (dirPath, fileSuffix string, fileFunc func (string, bool) bool, recurseSubDirs bool) error {
 	var fileInfos, err = ioutil.ReadDir(dirPath)
 	if err == nil {
