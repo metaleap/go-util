@@ -111,6 +111,11 @@ func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {
 	return slice
 }
 
+func Replace (str string, repls map[string]string) string {
+	for k, v := range repls { str = strings.Replace(str, k, v, -1) }
+	return str
+}
+
 func Split (str string, sep string) []string {
 	var spl []string = nil
 	if len(str) > 0 {
