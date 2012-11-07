@@ -6,12 +6,8 @@ import (
 	"os"
 )
 
-type TRpcNone struct {
-}
-
 var (
 	HttpClient = new(http.Client)
-	RpcNone = &TRpcNone {}
 )
 
 func DownloadFile (fileUrl, filePath string) error {

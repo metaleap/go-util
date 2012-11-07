@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type FAnyToAny func(src interface{}) interface{}
+type AnyToAny func(src interface{}) interface{}
 
 func BaseCodePath (subDirNames ... string) string {
 	return filepath.Join(append([]string { os.Getenv("GOPATH"), "src", "github.com", "go3d" }, subDirNames ...) ...)

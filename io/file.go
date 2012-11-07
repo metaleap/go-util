@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	strutil "github.com/go3d/go-util/str"
+	ustr "github.com/metaleap/go-util/str"
 )
 
 func CopyFile (srcFilePath, destFilePath string) (err error) {
@@ -58,7 +58,7 @@ func ExtractZipFile (zipFilePath, targetDirPath string, deleteZipFile bool, file
 				}
 			}
 			for _, zfile = range unzip.File {
-				if (fnames == nil) || (strutil.InSliceAt(fnames, zfile.FileHeader.Name) >= 0) {
+				if (fnames == nil) || (ustr.InSliceAt(fnames, zfile.FileHeader.Name) >= 0) {
 					zfileReader, err = zfile.Open()
 					if zfileReader != nil {
 						if (err == nil) {

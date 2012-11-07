@@ -7,8 +7,6 @@ Utility packages:
 
 - **go-util/gfx** -- not really useful for now
 
-- **go-util/gl** -- all kinds of OpenGL helpers, imports the http://github.com/chsc/gogl/ "gl42" OpenGL binding
-
 - **go-util/io** -- misc helper funcs such as ExtractZipFile, FileExists and the likes...
 
 - **go-util/net** -- not really useful for now

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	util "github.com/go3d/go-util"
+	util "github.com/metaleap/go-util"
 )
 
 func Concat (vals ... string) string {
