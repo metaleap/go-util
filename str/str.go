@@ -16,9 +16,7 @@ func Concat (vals ... string) string {
 
 func ContainsOnce (str1, str2 string) bool {
 	var first, last = strings.Index(str1, str2), strings.LastIndex(str1, str2)
-	if (first >= 0) && (first == last) {
-		return true
-	}
+	if (first >= 0) && (first == last) { return true }
 	return false
 }
 
@@ -48,23 +46,17 @@ func First (fun func (s string) bool, step int, vals ... string) string {
 	var l = len(vals)
 	var reverse = step < 0
 	for i := util.Ifi(reverse, l - 1, 0); util.Ifb(reverse, i >= 0, i < l); i += step {
-		if fun(vals[i]) {
-			return vals[i]
-		}
+		if fun(vals[i]) { return vals[i] }
 	}
 	return ""
 }
 
 func FirstNonEmpty (step int, vals ... string) string {
-	return First(func (s string) bool {
-		return len(s) > 0
-	}, step, vals ...)
+	return First(func (s string) bool { return len(s) > 0 }, step, vals ...)
 }
 
 func ForEach (fun func (i int, s string), vals ... string) {
-	for i, s := range vals {
-		fun(i, s)
-	}
+	for i, s := range vals { fun(i, s) }
 }
 
 func InSliceAt (vals []string, val string) int {
@@ -74,20 +66,12 @@ func InSliceAt (vals []string, val string) int {
 
 func InSliceAtIgnoreCase (vals []string, val string) int {
 	var lv = strings.ToLower(val)
-	for i, v := range vals {
-		if (v == val) || (strings.ToLower(v) == lv) {
-			return i
-		}
-	}
+	for i, v := range vals { if (v == val) || (strings.ToLower(v) == lv) { return i } }
 	return -1
 }
 
 func IsAscii (str string) bool {
-	for _, c := range str {
-		if c > unicode.MaxASCII {
-			return false
-		}
-	}
+	for _, c := range str { if c > unicode.MaxASCII { return false } }
 	return true
 }
 
@@ -99,16 +83,32 @@ func IsInSliceIgnoreCase (vals []string, val string) bool {
 	return InSliceAtIgnoreCase(vals, val) >= 0
 }
 
+func IsLower (s string) bool {
+	for _, r := range s { if unicode.IsLetter(r) && !unicode.IsLower(r) { return false } }
+	return true
+}
+
+func IsUpper (s string) bool {
+	for _, r := range s { if unicode.IsLetter(r) && !unicode.IsUpper(r) { return false } }
+	return true
+}
+
+func LettersOnly (s string) (ret string) {
+	for _, r := range s { if unicode.IsLetter(r) { ret += string(r) } }
+	return
+}
+
 func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {
 	var slice = []string {}
 	for _, s := range vals {
-		if (len(s) > 0) {
-			slice = append(slice, s)
-		} else if breakAtFirstEmpty {
-			break
-		}
+		if (len(s) > 0) { slice = append(slice, s) } else if breakAtFirstEmpty { break }
 	}
 	return slice
+}
+
+func PrefixWithSep (prefix, sep, v string) string {
+	if len(prefix) > 0 { return prefix + sep + v }
+	return v
 }
 
 func Replace (str string, repls map[string]string) string {
@@ -116,62 +116,58 @@ func Replace (str string, repls map[string]string) string {
 	return str
 }
 
-func Split (str string, sep string) []string {
-	var spl []string = nil
-	if len(str) > 0 {
-		spl = strings.Split(str, sep)
-		/*
-		ls := len(sep)
-		for si, sv := range spl {
-			if len(sv) >= ls {
-				for sv[0:ls] == sep {
-					sv = sv[ls:]
-				}
-				for sv[len(sv) - ls:] == sep {
-					sv = sv[:len(sv) - ls]
-				}
-				spl[si] = sv
-			}
-		}
-		return Without(spl, true, sep)
-		*/
-	}
-	return spl
+func RuneAt (str string, pos int) rune {
+	for i, r := range str { if i == pos { return r } }
+	return 0
 }
 
-func Title (str string) string {
-	return strings.Title(strings.ToLower(str))
+func SafeIdentifier (s, safePrefix string) (ret string) {
+	var words []string
+	var isL, isD, last bool
+	for _, r := range s {
+		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD {
+			if isL != last { ret += " " }; ret += string(r)
+		} else { ret += " " }; last = isL
+	}
+	words = NonEmpties(false, strings.Split(strings.Title(ret), " ") ...)
+	for i, w := range words {
+		if (len(w) > 1) && IsUpper(w) { words[i] = strings.Title(strings.ToLower(w)) }
+	}
+	if ret = strings.Join(words, ""); !unicode.IsLetter(RuneAt(ret, 0)) { ret = safePrefix + ret }
+	return
+}
+
+func StripPrefix (val, prefix string) string {
+	for strings.HasPrefix(val, prefix) { val = val[len(prefix) :] }
+	return val
+}
+
+func StripSuffix (val, suffix string) string {
+	for strings.HasSuffix(val, suffix) { val = val[: len(val) - len(suffix)] }
+	return val
 }
 
 func ToFloat32 (str string) float32 {
 	var f, err = strconv.ParseFloat(str, 32)
-	if err == nil {
-		return float32(f)
-	}
+	if err == nil { return float32(f) }
 	return 0.0
 }
 
 func ToFloat64 (str string) float64 {
 	var f, err = strconv.ParseFloat(str, 64)
-	if err == nil {
-		return f
-	}
+	if err == nil { return f }
 	return 0.0
 }
 
 func ToFloat64s (strs ... string) []float64 {
 	var f = make([]float64, len(strs))
-	for i, s := range strs {
-		f[i] = ToFloat64(s)
-	}
+	for i, s := range strs { f[i] = ToFloat64(s) }
 	return f
 }
 
 func ToInt (str string) int {
 	var i, err = strconv.Atoi(str)
-	if err == nil {
-		return i
-	}
+	if err == nil { return i }
 	return 0
 }
 
@@ -195,11 +191,12 @@ func ToStrings (any interface{}) []string {
 	return nil
 }
 
-func TrimLeft (val, trim string) string {
-	if strings.Index(val, trim) == 0 {
-		return val[len(trim):]
-	}
-	return val
+func ToLowerIfUpper (s string) string {
+	if IsUpper(s) { return strings.ToLower(s) }; return s
+}
+
+func ToUpperIfLower (s string) string {
+	if IsLower(s) { return strings.ToUpper(s) }; return s
 }
 
 func Without (slice []string, keepOrder bool, withoutVals ... string) []string {
