@@ -121,20 +121,28 @@ func RuneAt (str string, pos int) rune {
 	return 0
 }
 
-func SafeIdentifier (s, safePrefix string) (ret string) {
+func SafeIdentifier (s string) (ret string) {
 	var words []string
 	var isL, isD, last bool
 	for _, r := range s {
-		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD {
-			if isL != last { ret += " " }; ret += string(r)
-		} else { ret += " " }; last = isL
+		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD /*|| ((r == '_') && (i == 0))*/ {
+			if isL != last { ret += " " }
+			ret += string(r)
+		} else {
+			ret += " "
+		}
+		last = isL
 	}
-	words = NonEmpties(false, strings.Split(strings.Title(ret), " ") ...)
+	words = Split(strings.Title(ret), " ")
 	for i, w := range words {
 		if (len(w) > 1) && IsUpper(w) { words[i] = strings.Title(strings.ToLower(w)) }
 	}
-	if ret = strings.Join(words, ""); !unicode.IsLetter(RuneAt(ret, 0)) { ret = safePrefix + ret }
+	ret = strings.Join(words, "") // if !unicode.IsLetter(RuneAt(ret, 0)) { ret = safePrefix + ret }
 	return
+}
+
+func Split (v, s string) (sl []string) {
+	if len(v) > 0 { sl = strings.Split(v, s) }; return
 }
 
 func StripPrefix (val, prefix string) string {

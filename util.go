@@ -85,7 +85,7 @@ func ParseVersion(vString string) []int {
 	var i uint64
 	var pos int
 	var err error
-	var parts = strings.Split(vString, ".")
+	var parts = split(vString, ".")
 	for _, p := range parts {
 		if pos = strings.Index(p, " "); pos > 0 { p = p[ : pos] }
 		if i, err = strconv.ParseUint(p, 10, 8); err == nil {
@@ -99,4 +99,8 @@ func ParseVersion(vString string) []int {
 
 func PtrVal(ptr interface{}) interface{} {
 	return reflect.Indirect(reflect.ValueOf(ptr)).Interface()
+}
+
+func split (v, s string) (sl []string) {
+	if len(v) > 0 { sl = strings.Split(v, s) }; return
 }
