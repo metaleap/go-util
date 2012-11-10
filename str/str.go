@@ -111,6 +111,11 @@ func PrefixWithSep (prefix, sep, v string) string {
 	return v
 }
 
+func PrependIf (s, p string) string {
+	if strings.HasPrefix(s, p) { return s }
+	return p + s
+}
+
 func Replace (str string, repls map[string]string) string {
 	for k, v := range repls { str = strings.Replace(str, k, v, -1) }
 	return str
