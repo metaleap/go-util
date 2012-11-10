@@ -124,9 +124,9 @@ func RuneAt (str string, pos int) rune {
 func SafeIdentifier (s string) (ret string) {
 	var words []string
 	var isL, isD, last bool
-	for _, r := range s {
-		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD /*|| ((r == '_') && (i == 0))*/ {
-			if isL != last { ret += " " }
+	for i, r := range s {
+		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD || ((r == '_') && (i == 0)) {
+			if (i > 0) && (isL != last) { ret += " " }
 			ret += string(r)
 		} else {
 			ret += " "
