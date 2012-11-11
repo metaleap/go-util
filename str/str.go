@@ -106,6 +106,12 @@ func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {
 	return slice
 }
 
+func Pluralize (s string) string {
+	if strings.HasSuffix(s, "s") { return s }
+	if strings.HasSuffix(s, "y") { return s[0 : (len(s) - 1)] + "ies" }
+	return s + "s"
+}
+
 func PrefixWithSep (prefix, sep, v string) string {
 	if len(prefix) > 0 { return prefix + sep + v }
 	return v
