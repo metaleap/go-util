@@ -107,7 +107,7 @@ func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {
 }
 
 func Pluralize (s string) string {
-	if strings.HasSuffix(s, "s") { return s }
+	if strings.HasSuffix(s, "s") { return s + "es" }
 	if strings.HasSuffix(s, "y") { return s[0 : (len(s) - 1)] + "ies" }
 	return s + "s"
 }
