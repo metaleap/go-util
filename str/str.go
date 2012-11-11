@@ -88,6 +88,11 @@ func IsLower (s string) bool {
 	return true
 }
 
+func IsOneOf (s string, all ... string) bool {
+	for _, a := range all { if s == a { return true } }
+	return false
+}
+
 func IsUpper (s string) bool {
 	for _, r := range s { if unicode.IsLetter(r) && !unicode.IsUpper(r) { return false } }
 	return true
@@ -108,7 +113,7 @@ func NonEmpties (breakAtFirstEmpty bool, vals ... string) []string {
 
 func Pluralize (s string) string {
 	if strings.HasSuffix(s, "s") { return s + "es" }
-	if strings.HasSuffix(s, "y") { return s[0 : (len(s) - 1)] + "ies" }
+	if (len(s) > 1) && strings.HasSuffix(s, "y") && !IsOneOf(s[(len(s) - 2) :], "ay", "ey", "oy", "uy", "iy") { return s[0 : (len(s) - 1)] + "ies" }
 	return s + "s"
 }
 
