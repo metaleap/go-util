@@ -10,8 +10,12 @@ import (
 
 type AnyToAny func(src interface{}) interface{}
 
-func BaseCodePath (gitHubName string, subDirNames ... string) string {
+func BaseCodePathGithub (gitHubName string, subDirNames ... string) string {
 	return filepath.Join(append([]string { os.Getenv("GOPATH"), "src", "github.com", gitHubName }, subDirNames ...) ...)
+}
+
+func BaseCodePathGo (subDirNames ... string) string {
+	return filepath.Join(append([]string { os.Getenv("GOPATH"), "src" }, subDirNames ...) ...)
 }
 
 func Ifb(cond, ifTrue, ifFalse bool) bool {

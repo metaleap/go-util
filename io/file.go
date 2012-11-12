@@ -182,6 +182,10 @@ func WalkDirectory (dirPath, fileSuffix string, fileFunc func (string, bool) boo
 	return err
 }
 
+func WriteBinaryFile (filePath string, contents []byte) error {
+	return ioutil.WriteFile(filePath, contents, os.ModePerm)
+}
+
 func WriteTextFile (filePath, contents string) error {
-	return ioutil.WriteFile(filePath, []byte(contents), os.ModePerm)
+	return WriteBinaryFile(filePath, []byte(contents))
 }
