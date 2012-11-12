@@ -59,6 +59,11 @@ func ForEach (fun func (i int, s string), vals ... string) {
 	for i, s := range vals { fun(i, s) }
 }
 
+func Ifm (cond bool, ifTrue, ifFalse map[string]string) map[string]string {
+	if cond { return ifTrue }
+	return ifFalse
+}
+
 func InSliceAt (vals []string, val string) int {
 	for i, v := range vals { if v == val { return i } }
 	return -1
