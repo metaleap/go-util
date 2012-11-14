@@ -42,6 +42,12 @@ func Distance (s1, s2 string) int {
 	return d[len(s1)][len(s2)]
 }
 
+func Equivalent (one, two []string) bool {
+	if len(one) != len(two) { return false }
+	if len(one) > 0 { for _, v := range one { if InSliceAt(two, v) < 0 { return false } } }
+	return true
+}
+
 func First (fun func (s string) bool, step int, vals ... string) string {
 	var l = len(vals)
 	var reverse = step < 0
