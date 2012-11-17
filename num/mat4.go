@@ -105,7 +105,10 @@ func (me *Mat4) Mult4 (v *Quat) *Quat {
 	}
 }
 
-func (me *Mat4) Perspective (fovY, aspect, near, far float64) {
+func (me *Mat4) Perspective (fovX, fovY, aspect, near, far float64) {
+	if (fovY == 0) {
+
+	}
 	tfY = near * math.Tan(fovY * math.Pi / 360)
 	tfX = tfY * aspect
 	me.Frustum(-tfX, tfX, -tfY, tfY, near, far)
@@ -236,8 +239,8 @@ func NewMat4MultN (mats ... *Mat4) *Mat4 {
 	var mat = &Mat4 {}; mat.SetFromMultN(mats ...); return mat
 }
 
-func NewMat4Perspective (fovY, aspect, near, far float64) *Mat4 {
-	var mat = &Mat4 {}; mat.Perspective(fovY, aspect, near, far); return mat
+func NewMat4Perspective (fovX, fovY, aspect, near, far float64) *Mat4 {
+	var mat = &Mat4 {}; mat.Perspective(fovX, fovY, aspect, near, far); return mat
 }
 
 func NewMat4Rotation (rad float64, axes *Vec3) *Mat4 {
