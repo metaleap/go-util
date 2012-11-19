@@ -83,9 +83,8 @@ func IsFloat64s(any interface{}) bool {
 	return false
 }
 
-func ParseVersion(vString string) []int {
+func ParseVersion(vString string) (majorMinor []int, both float64) {
 	//	3.3.0 - Build 8.15.10.2761.
-	var nums = []int{}
 	var i uint64
 	var pos int
 	var err error
@@ -93,12 +92,14 @@ func ParseVersion(vString string) []int {
 	for _, p := range parts {
 		if pos = strings.Index(p, " "); pos > 0 { p = p[ : pos] }
 		if i, err = strconv.ParseUint(p, 10, 8); err == nil {
-			nums = append(nums, int(i))
+			if majorMinor = append(majorMinor, int(i)); len(majorMinor) >= 2 { break }
 		} else {
 			break
 		}
 	}
-	return nums
+	if len(majorMinor) > 0 { both = float64(majorMinor[0]) }
+	if len(majorMinor) > 1 { both += (float64(majorMinor[1]) * 0.1) }
+	return
 }
 
 func PtrVal(ptr interface{}) interface{} {
