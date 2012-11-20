@@ -1,0 +1,284 @@
+<html>
+	<head>
+		<title>Package github.com/metaleap/go-util/io</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="http://golang.org/doc/style.css" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://golang.org/doc/godocs.js"></script>
+	</head>
+	<body>
+		<div id="page" class="wide">
+		<div class="container">
+		<h1>Package github.com/metaleap/go-util/io</h1>
+		<div id="nav"></div>
+		<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util/io"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index">Index</a></dd>
+			
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Various line-savers for common I/O needs.
+</p>
+
+			</div>
+		</div>
+		
+	
+		<h2 id="pkg-index">Index</h2>
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+		<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#CopyFile">func CopyFile(srcFilePath, destFilePath string) (err error)</a></dd>
+			
+				
+				<dd><a href="#DirExists">func DirExists(path string) bool</a></dd>
+			
+				
+				<dd><a href="#EnsureDirExists">func EnsureDirExists(path string) error</a></dd>
+			
+				
+				<dd><a href="#ExtractZipFile">func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error</a></dd>
+			
+				
+				<dd><a href="#FileExists">func FileExists(path string) bool</a></dd>
+			
+				
+				<dd><a href="#FileExistsPath">func FileExistsPath(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, modTime time.Time, size int64)</a></dd>
+			
+				
+				<dd><a href="#ReadBinaryFile">func ReadBinaryFile(filePath string, panicOnError bool) []byte</a></dd>
+			
+				
+				<dd><a href="#ReadFromBinary">func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool</a></dd>
+			
+				
+				<dd><a href="#ReadTextFile">func ReadTextFile(filePath string, panicOnError bool, defVal string) string</a></dd>
+			
+				
+				<dd><a href="#SaveToFile">func SaveToFile(r io.Reader, filename string) (err error)</a></dd>
+			
+				
+				<dd><a href="#WalkDirectory">func WalkDirectory(dirPath, fileSuffix string, fileFunc func(string, bool) bool, recurseSubDirs bool) error</a></dd>
+			
+				
+				<dd><a href="#WriteBinaryFile">func WriteBinaryFile(filePath string, contents []byte) error</a></dd>
+			
+				
+				<dd><a href="#WriteTextFile">func WriteTextFile(filePath, contents string) error</a></dd>
+			
+			
+			
+		</dl>
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/file.go">file.go</a>
+			
+				<a href="/target/gob.go">gob.go</a>
+			
+			</span>
+			</p>
+		
+	
+		
+		
+		
+			
+			
+			<h2 id="CopyFile">func <a href="/target/file.go?s=261:321#L7">CopyFile</a></h2>
+			<pre>func CopyFile(srcFilePath, destFilePath string) (err error)</pre>
+			<p>
+Performs an io.Copy from the specified local source file to the specified local destination file.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DirExists">func <a href="/target/file.go?s=529:562#L16">DirExists</a></h2>
+			<pre>func DirExists(path string) bool</pre>
+			<p>
+Returns true if a directory exists at the specified path.
+</p>
+
+			
+		
+			
+			
+			<h2 id="EnsureDirExists">func <a href="/target/file.go?s=750:790#L23">EnsureDirExists</a></h2>
+			<pre>func EnsureDirExists(path string) error</pre>
+			<p>
+If a directory does not exist at the specified path, attempts to create it.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ExtractZipFile">func <a href="/target/file.go?s=1215:1351#L37">ExtractZipFile</a></h2>
+			<pre>func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error</pre>
+			<p>
+Extracts a ZIP archive to the local file system.
+zipFilePath: full file path to the ZIP archive file
+targetDirPath: directory path where un-zipped archive contents are extracted to
+deleteZipFile: deletes the ZIP archive file upon successful extraction
+</p>
+
+			
+		
+			
+			
+			<h2 id="FileExists">func <a href="/target/file.go?s=2562:2596#L85">FileExists</a></h2>
+			<pre>func FileExists(path string) bool</pre>
+			<p>
+Returns true if a file exists at the specified path.
+</p>
+
+			
+		
+			
+			
+			<h2 id="FileExistsPath">func <a href="/target/file.go?s=2949:3108#L93">FileExistsPath</a></h2>
+			<pre>func FileExistsPath(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, modTime time.Time, size int64)</pre>
+			<p>
+If a file with a given base-name and one of a number of extensions exists in the specified directory, returns details on it.
+The tryLower and tryUpper flags also test for upper-case and lower-case variants of the specified fileBaseName.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadBinaryFile">func <a href="/target/file.go?s=3904:3967#L119">ReadBinaryFile</a></h2>
+			<pre>func ReadBinaryFile(filePath string, panicOnError bool) []byte</pre>
+			<p>
+Reads and returns the binary contents of a file with non-idiomatic error handling:
+filePath: full local file path
+panicOnError: true to panic() if an error occurred reading the file
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadFromBinary">func <a href="/target/file.go?s=4312:4422#L127">ReadFromBinary</a></h2>
+			<pre>func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool</pre>
+			<p>
+Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
+Returns false if data could not be successfully read as specified, otherwise true.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadTextFile">func <a href="/target/file.go?s=4929:5005#L138">ReadTextFile</a></h2>
+			<pre>func ReadTextFile(filePath string, panicOnError bool, defVal string) string</pre>
+			<p>
+Reads and returns the contents of a text file with non-idiomatic error handling:
+filePath: full local file path
+panicOnError: true to panic() if an error occurred reading the file, or false to return defVal in the case of error
+defVal: the string value to return if the file couldn&#39;t be read successfully
+</p>
+
+			
+		
+			
+			
+			<h2 id="SaveToFile">func <a href="/target/file.go?s=5241:5299#L146">SaveToFile</a></h2>
+			<pre>func SaveToFile(r io.Reader, filename string) (err error)</pre>
+			<p>
+Performs an io.Copy() from the specified io.Reader to the specified local file.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WalkDirectory">func <a href="/target/file.go?s=5944:6053#L161">WalkDirectory</a></h2>
+			<pre>func WalkDirectory(dirPath, fileSuffix string, fileFunc func(string, bool) bool, recurseSubDirs bool) error</pre>
+			<p>
+Recursively walks along a directory hierarchy, calling the specified callback function for each file encountered.
+dirPath: the path of the directory in which to start walking
+fileSuffix: optional; if specified, fileFunc is only called for files whose name has this suffix
+fileFunc: callback function called per file. Returns true to keep recursing into sub-dirs. Arguments: full file path and current recurseSubDirs value
+recurseSubDirs: true to recurse into sub-directories.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WriteBinaryFile">func <a href="/target/file.go?s=6666:6727#L185">WriteBinaryFile</a></h2>
+			<pre>func WriteBinaryFile(filePath string, contents []byte) error</pre>
+			<p>
+A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WriteTextFile">func <a href="/target/file.go?s=6890:6942#L190">WriteTextFile</a></h2>
+			<pre>func WriteTextFile(filePath, contents string) error</pre>
+			<p>
+A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
+</p>
+
+			
+		
+		
+		</div>
+	
+
+	
+
+
+
+
+
+
+
+
+		</div></div>
+	</body>
+</html>

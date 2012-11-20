@@ -1,5 +1,5 @@
 package io
-
+/*
 import (
 	"compress/gzip"
 	"encoding/gob"
@@ -7,6 +7,12 @@ import (
 
 	util "github.com/metaleap/go-util"
 )
+
+type AnyToAny func(src interface{}) interface{}
+
+func PtrVal(ptr interface{}) interface{} {
+	return reflect.Indirect(reflect.ValueOf(ptr)).Interface()
+}
 
 func CreateGobsFile (targetFilePath string, recs []interface{}, getRecPtr util.AnyToAny, gzipped bool) (err error) {
 	var file *os.File
@@ -30,3 +36,4 @@ func CreateGobsFile (targetFilePath string, recs []interface{}, getRecPtr util.A
 	}
 	return
 }
+*/

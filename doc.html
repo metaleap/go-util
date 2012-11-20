@@ -1,0 +1,306 @@
+<html>
+	<head>
+		<title>Package github.com/metaleap/go-util</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="http://golang.org/doc/style.css" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://golang.org/doc/godocs.js"></script>
+	</head>
+	<body>
+		<div id="page" class="wide">
+		<div class="container">
+		<h1>Package github.com/metaleap/go-util</h1>
+		<div id="nav"></div>
+		<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index">Index</a></dd>
+			
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+A tiny assortement of occasionally-useful Go utilities.
+</p>
+
+			</div>
+		</div>
+		
+	
+		<h2 id="pkg-index">Index</h2>
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+		<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#BaseCodePathGithub">func BaseCodePathGithub(gitHubName string, subDirNames ...string) string</a></dd>
+			
+				
+				<dd><a href="#BaseCodePathGo">func BaseCodePathGo(subDirNames ...string) string</a></dd>
+			
+				
+				<dd><a href="#Ifb">func Ifb(cond, ifTrue, ifFalse bool) bool</a></dd>
+			
+				
+				<dd><a href="#Ifd">func Ifd(cond bool, ifTrue, ifFalse float64) float64</a></dd>
+			
+				
+				<dd><a href="#Ifi">func Ifi(cond bool, ifTrue, ifFalse int) int</a></dd>
+			
+				
+				<dd><a href="#Ifi16">func Ifi16(cond bool, ifTrue, ifFalse int16) int16</a></dd>
+			
+				
+				<dd><a href="#Ifi32">func Ifi32(cond bool, ifTrue, ifFalse int32) int32</a></dd>
+			
+				
+				<dd><a href="#Ifi64">func Ifi64(cond bool, ifTrue, ifFalse int64) int64</a></dd>
+			
+				
+				<dd><a href="#Ifs">func Ifs(cond bool, ifTrue string, ifFalse string) string</a></dd>
+			
+				
+				<dd><a href="#Ifu32">func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</a></dd>
+			
+				
+				<dd><a href="#ParseVersion">func ParseVersion(verstr string) (majorMinor []int, both float64)</a></dd>
+			
+			
+			
+		</dl>
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/util.go">util.go</a>
+			
+			</span>
+			</p>
+		
+	
+		
+		
+		
+			
+			
+			<h2 id="BaseCodePathGithub">func <a href="/target/util.go?s=296:370#L2">BaseCodePathGithub</a></h2>
+			<pre>func BaseCodePathGithub(gitHubName string, subDirNames ...string) string</pre>
+			<p>
+Returns the *filepath*-joined full directory path for a specified $GOPATH/src/github.com sub-directory.
+Example: util.BaseCodePathGo(&#34;metaleap&#34;, &#34;go-util&#34;) = &#34;c:\gd\src\github.com\metaleap\go-util&#34; if $GOPATH is c:\gd.
+</p>
+
+			
+		
+			
+			
+			<h2 id="BaseCodePathGo">func <a href="/target/util.go?s=706:757#L8">BaseCodePathGo</a></h2>
+			<pre>func BaseCodePathGo(subDirNames ...string) string</pre>
+			<p>
+Returns the *filepath*-joined full directory path for a specified $GOPATH/src sub-directory.
+Example: util.BaseCodePathGo(&#34;tools&#34;, &#34;importers&#34;, &#34;sql&#34;) = &#34;c:\gd\src\tools\importers\sql&#34; if $GOPATH is c:\gd.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifb">func <a href="/target/util.go?s=917:958#L13">Ifb</a></h2>
+			<pre>func Ifb(cond, ifTrue, ifFalse bool) bool</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifd">func <a href="/target/util.go?s=1069:1121#L19">Ifd</a></h2>
+			<pre>func Ifd(cond bool, ifTrue, ifFalse float64) float64</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi">func <a href="/target/util.go?s=1232:1276#L25">Ifi</a></h2>
+			<pre>func Ifi(cond bool, ifTrue, ifFalse int) int</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi16">func <a href="/target/util.go?s=1387:1437#L31">Ifi16</a></h2>
+			<pre>func Ifi16(cond bool, ifTrue, ifFalse int16) int16</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi32">func <a href="/target/util.go?s=1548:1598#L37">Ifi32</a></h2>
+			<pre>func Ifi32(cond bool, ifTrue, ifFalse int32) int32</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi64">func <a href="/target/util.go?s=1709:1759#L43">Ifi64</a></h2>
+			<pre>func Ifi64(cond bool, ifTrue, ifFalse int64) int64</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifs">func <a href="/target/util.go?s=1870:1927#L49">Ifs</a></h2>
+			<pre>func Ifs(cond bool, ifTrue string, ifFalse string) string</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifu32">func <a href="/target/util.go?s=2038:2090#L55">Ifu32</a></h2>
+			<pre>func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=2345:2410#L62">ParseVersion</a></h2>
+			<pre>func ParseVersion(verstr string) (majorMinor []int, both float64)</pre>
+			<p>
+Attempts to extract major and minor version components from a string that begins with a version number.
+Example: returns []int{3, 2} and float64(3.2) for a verstr that is &#34;3.2.0 - Build 8.15.10.2761&#34;
+</p>
+
+			
+		
+		
+		</div>
+	
+
+	
+
+
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="..">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="gfx/">gfx</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="io/">io</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="net/">net</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="num/">num</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="str/">str</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+		</div></div>
+	</body>
+</html>

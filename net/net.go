@@ -7,10 +7,7 @@ import (
 	uio "github.com/metaleap/go-util/io"
 )
 
-var (
-	HttpClient = new(http.Client)
-)
-
+//	Downloads a remote file to the specified local file path.
 func DownloadFile (fileUrl, filePath string) (err error) {
 	var rc io.ReadCloser
 	if rc, err = OpenRemoteFile(fileUrl); rc != nil {
@@ -20,8 +17,9 @@ func DownloadFile (fileUrl, filePath string) (err error) {
 	return err
 }
 
+//	Opens a remote file at the specified (net/http-compatible) fileUrl and returns its io.ReadCloser.
 func OpenRemoteFile (fileUrl string) (rc io.ReadCloser, err error) {
 	var resp *http.Response
-	if resp, err = HttpClient.Get(fileUrl); resp != nil { rc = resp.Body }
+	if resp, err = new(http.Client).Get(fileUrl); resp != nil { rc = resp.Body }
 	return
 }
