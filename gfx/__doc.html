@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Package github.com/metaleap/go-util/net</title>
+		<title>Package github.com/metaleap/go-util/gfx</title>
 		<meta charset="UTF-8" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link type="text/css" rel="stylesheet" href="http://golang.org/doc/style.css" />
@@ -10,7 +10,7 @@
 	<body>
 		<div id="page" class="wide">
 		<div class="container">
-		<h1>Package github.com/metaleap/go-util/net</h1>
+		<h1>Package github.com/metaleap/go-util/gfx</h1>
 		<div id="nav"></div>
 		<!--
 	Copyright 2009 The Go Authors. All rights reserved.
@@ -27,7 +27,7 @@
 	
 		<div id="short-nav">
 			<dl>
-			<dd><code>import "github.com/metaleap/go-util/net"</code></dd>
+			<dd><code>import "github.com/metaleap/go-util/gfx"</code></dd>
 			</dl>
 			<dl>
 			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
@@ -45,7 +45,7 @@
 			<div class="expanded">
 				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
 				<p>
-Various line-savers for common networking needs.
+Nothing to see here really...
 </p>
 
 			</div>
@@ -60,10 +60,10 @@ Various line-savers for common networking needs.
 			
 			
 				
-				<dd><a href="#DownloadFile">func DownloadFile(fileUrl, filePath string) (err error)</a></dd>
+				<dd><a href="#Index3D">func Index3D(x, y, z, xsize, ysize int) int</a></dd>
 			
 				
-				<dd><a href="#OpenRemoteFile">func OpenRemoteFile(fileUrl string) (rc io.ReadCloser, err error)</a></dd>
+				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
 			
 			
 			
@@ -78,7 +78,7 @@ Various line-savers for common networking needs.
 			
 				<a href="/target/doc.go">doc.go</a>
 			
-				<a href="/target/net.go">net.go</a>
+				<a href="/target/gfx.go">gfx.go</a>
 			
 			</span>
 			</p>
@@ -89,20 +89,20 @@ Various line-savers for common networking needs.
 		
 			
 			
-			<h2 id="DownloadFile">func <a href="/target/net.go?s=143:199#L1">DownloadFile</a></h2>
-			<pre>func DownloadFile(fileUrl, filePath string) (err error)</pre>
+			<h2 id="Index3D">func <a href="/target/gfx.go?s=203:246#L1">Index3D</a></h2>
+			<pre>func Index3D(x, y, z, xsize, ysize int) int</pre>
 			<p>
-Downloads a remote file to the specified local file path.
+If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
 </p>
 
 			
 		
 			
 			
-			<h2 id="OpenRemoteFile">func <a href="/target/net.go?s=444:510#L11">OpenRemoteFile</a></h2>
-			<pre>func OpenRemoteFile(fileUrl string) (rc io.ReadCloser, err error)</pre>
+			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=338:399#L5">SavePngImageFile</a></h2>
+			<pre>func SavePngImageFile(img image.Image, filePath string) error</pre>
 			<p>
-Opens a remote file at the specified (net/http-compatible) fileUrl and returns its io.ReadCloser.
+Saves any given image as a local PNG file.
 </p>
 
 			

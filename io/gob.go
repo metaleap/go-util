@@ -1,4 +1,5 @@
 package io
+
 /*
 import (
 	"compress/gzip"
