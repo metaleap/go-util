@@ -13,7 +13,7 @@ func Index3D(x, y, z, xsize, ysize int) int {
 
 //	Saves any given image as a local PNG file.
 func SavePngImageFile(img image.Image, filePath string) error {
-	var file, err = os.Create(filePath)
+	file, err := os.Create(filePath)
 	if err == nil {
 		defer file.Close()
 		png.Encode(file, img)

@@ -35,7 +35,14 @@ func AllEqual(test float64, vals ...float64) bool {
 
 //	Clamps val between c0 and c1
 func Clamp(val, c0, c1 float64) float64 {
-	return math.Min(math.Max(val, c0), c1)
+	// return math.Min(math.Max(val, c0), c1)
+	if val < c0 {
+		return c0
+	}
+	if val > c1 {
+		return c1
+	}
+	return val
 }
 
 //	Converts the specified degrees to radians.
@@ -85,12 +92,12 @@ func IsEveni(val int) bool {
 //	Returns true if val represents an integer
 func IsInt(val float64) bool {
 	_, f := math.Modf(val)
-	return f == 0
+	return (f == 0)
 }
 
 //	Returns true if math.Mod(v, m) is zero
 func IsMod0(v, m int) bool {
-	return math.Mod(float64(v), float64(m)) == 0
+	return (math.Mod(float64(v), float64(m)) == 0)
 }
 
 /*

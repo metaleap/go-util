@@ -1,9 +1,7 @@
 package str
 
 import (
-	// "fmt"
 	"math"
-	// "strconv"
 	"strings"
 	"unicode"
 
@@ -17,7 +15,7 @@ func Concat(vals ...string) string {
 
 //	Returns true if str2 is contained in str1 exactly once.
 func ContainsOnce(str1, str2 string) bool {
-	var first, last = strings.Index(str1, str2), strings.LastIndex(str1, str2)
+	first, last := strings.Index(str1, str2), strings.LastIndex(str1, str2)
 	if (first >= 0) && (first == last) {
 		return true
 	}
@@ -26,8 +24,10 @@ func ContainsOnce(str1, str2 string) bool {
 
 //	A simple string-similarity algorithm.
 func Distance(s1, s2 string) int {
-	var cost, min1, min2, min3, i, j int
-	var d = make([][]int, len(s1)+1)
+	var (
+		cost, min1, min2, min3, i, j int
+		d                            = make([][]int, len(s1)+1)
+	)
 	for i = 0; i < len(d); i++ {
 		d[i] = make([]int, len(s2)+1)
 		d[i][0] = i
@@ -65,8 +65,8 @@ func Equivalent(one, two []string) bool {
 //	Returns the first string in vals to match the specified predicate.
 //	step: 1 to test all values. A higher value to skip n values after each test. Negative for reverse slice traversal. Or use 0 to get stuck in an infinite loop.
 func First(predicate func(s string) bool, step int, vals ...string) string {
-	var l = len(vals)
-	var reverse = step < 0
+	l := len(vals)
+	reverse := step < 0
 	for i := util.Ifi(reverse, l-1, 0); util.Ifb(reverse, i >= 0, i < l); i += step {
 		if predicate(vals[i]) {
 			return vals[i]
@@ -105,7 +105,7 @@ func InSliceAt(vals []string, val string) int {
 
 //	Returns the position of lower-case val in lower-case vals.
 func InSliceAtIgnoreCase(vals []string, val string) int {
-	var lv = strings.ToLower(val)
+	lv := strings.ToLower(val)
 	for i, v := range vals {
 		if (v == val) || (strings.ToLower(v) == lv) {
 			return i
@@ -175,8 +175,7 @@ func LettersOnly(s string) (ret string) {
 }
 
 //	Returns a slice that contains the non-empty strings in vals.
-func NonEmpties(breakAtFirstEmpty bool, vals ...string) []string {
-	var slice = []string{}
+func NonEmpties(breakAtFirstEmpty bool, vals ...string) (slice []string) {
 	for _, s := range vals {
 		if len(s) > 0 {
 			slice = append(slice, s)
@@ -184,7 +183,7 @@ func NonEmpties(breakAtFirstEmpty bool, vals ...string) []string {
 			break
 		}
 	}
-	return slice
+	return
 }
 
 //	A most simplistic (not linguistically-correct) English-language pluralizer that may be useful for code or doc generation.
@@ -225,19 +224,22 @@ func Replace(str string, repls map[string]string) string {
 	return str
 }
 
+/*
 //	Returns the rune in str at pos.
 func RuneAt(str string, pos int) rune {
-	for i, r := range str {
+	var i = 0
+	for _, r := range str {
 		if i == pos {
 			return r
 		}
+		i++
 	}
 	return 0
 }
+*/
 
 //	Creates a Pascal-cased "identifier" version of the specified string.
 func SafeIdentifier(s string) (ret string) {
-	var words []string
 	var isL, isD, last bool
 	for i, r := range s {
 		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD || ((r == '_') && (i == 0)) {
@@ -250,7 +252,7 @@ func SafeIdentifier(s string) (ret string) {
 		}
 		last = isL
 	}
-	words = Split(strings.Title(ret), " ")
+	words := Split(strings.Title(ret), " ")
 	for i, w := range words {
 		if (len(w) > 1) && IsUpper(w) {
 			words[i] = strings.Title(strings.ToLower(w))
@@ -348,10 +350,9 @@ func ToUpperIfLower(s string) string {
 
 //	Removes all withoutVals from slice.
 func Without(slice []string, keepOrder bool, withoutVals ...string) []string {
-	var pos int
 	if len(withoutVals) > 0 {
 		for _, w := range withoutVals {
-			for pos = InSliceAt(slice, w); pos >= 0; pos = InSliceAt(slice, w) {
+			for pos := InSliceAt(slice, w); pos >= 0; pos = InSliceAt(slice, w) {
 				if keepOrder {
 					slice = append(slice[:pos], slice[pos+1:]...)
 				} else {

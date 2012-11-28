@@ -49,12 +49,14 @@ func EnsureDirExists(path string) error {
 //	targetDirPath: directory path where un-zipped archive contents are extracted to
 //	deleteZipFile: deletes the ZIP archive file upon successful extraction
 func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error {
-	var fnames []string = nil
-	var fnprefix string = ""
-	var efile *os.File
-	var zfile *zip.File
-	var zfileReader io.ReadCloser
-	var unzip, err = zip.OpenReader(zipFilePath)
+	var (
+		fnames      []string = nil
+		fnprefix    string   = ""
+		efile       *os.File
+		zfile       *zip.File
+		zfileReader io.ReadCloser
+		unzip, err  = zip.OpenReader(zipFilePath)
+	)
 	if unzip != nil {
 		if (err == nil) && (unzip.File != nil) {
 			if (fileNamesToExtract != nil) && (len(fileNamesToExtract) > 0) {
@@ -107,9 +109,11 @@ func FileExists(path string) bool {
 //	If a file with a given base-name and one of a number of extensions exists in the specified directory, returns details on it.
 //	The tryLower and tryUpper flags also test for upper-case and lower-case variants of the specified fileBaseName.
 func FileExistsPath(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, modTime time.Time, size int64) {
-	var stat os.FileInfo
-	var err error
-	var fext, fpath string
+	var (
+		stat        os.FileInfo
+		err         error
+		fext, fpath string
+	)
 	for _, fext = range fileExts {
 		fpath = filepath.Join(dirPath, fileBaseName+fext)
 		if stat, err = os.Stat(fpath); err != nil {

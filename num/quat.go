@@ -41,13 +41,16 @@ func (me *Quat) Normalize() {
 }
 
 //	Returns a new quaternion that is the normalized representation of this quaternion.
-func (me *Quat) Normalized() *Quat {
+func (me *Quat) Normalized() (q *Quat) {
+	quat := Quat{}
+	q = &quat
 	tfQ = me.Magnitude()
 	if tfQ == 0 {
-		return &Quat{tfQ, tfQ, tfQ, tfQ}
+		return
 	}
 	tfQ = 1 / tfQ
-	return &Quat{me.X * tfQ, me.Y * tfQ, me.Z * tfQ, me.W * tfQ}
+	quat.X, quat.Y, quat.Z, quat.W = me.X*tfQ, me.Y*tfQ, me.Z*tfQ, me.W*tfQ
+	return
 }
 
 //	Sets this quaternion to the conjugated representation of c.

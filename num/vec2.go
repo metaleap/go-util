@@ -35,20 +35,19 @@ func (me Vec2) Mult(vec Vec2) Vec2 {
 
 //	Normalizes this 2D vector.
 func (me *Vec2) Normalize() {
-	var l = 1 / me.Magnitude()
-	me.X *= l
-	me.Y *= l
+	l := 1 / me.Magnitude()
+	me.X, me.Y = me.X*l, me.Y*l
 }
 
 //	Returns a new 2D vector that is the normalized representation of this 2D vector.
 func (me Vec2) Normalized() Vec2 {
-	var l = 1 / me.Magnitude()
+	l := 1 / me.Magnitude()
 	return Vec2{me.X * l, me.Y * l}
 }
 
 //	Returns a new 2D vector that is the normalized representation of this 2D vector scaled by factor.
 func (me Vec2) NormalizedScaled(factor float64) Vec2 {
-	var l = 1 / me.Magnitude()
+	l := 1 / me.Magnitude()
 	return Vec2{me.X * l * factor, me.Y * l * factor}
 }
 

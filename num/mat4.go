@@ -197,18 +197,20 @@ func (me *Mat4) Sub(mat *Mat4) {
 
 //	Sets this 4x4 matrix to the inverse of mat.
 func (me *Mat4) ToInverseMat3(mat *Mat3) {
-	var a00, a01, a02 = me[0], me[1], me[2]
-	var a10, a11, a12 = me[4], me[5], me[6]
-	var a20, a21, a22 = me[8], me[9], me[10]
-	var b01 = a22*a11 - a12*a21
-	var b11 = -a22*a10 + a12*a20
-	var b21 = a21*a10 - a11*a20
-	var d = a00*b01 + a01*b11 + a02*b21
-	var id = 1 / d
+	var (
+		a00, a01, a02 = me[0], me[1], me[2]
+		a10, a11, a12 = me[4], me[5], me[6]
+		a20, a21, a22 = me[8], me[9], me[10]
+		b01           = a22*a11 - a12*a21
+		b11           = -a22*a10 + a12*a20
+		b21           = a21*a10 - a11*a20
+		d             = a00*b01 + a01*b11 + a02*b21
+		dInv          = 1 / d
+	)
 
-	mat[0], mat[3], mat[6] = b01*id, b11*id, b21*id
-	mat[1], mat[4], mat[7] = (-a22*a01+a02*a21)*id, (a22*a00-a02*a20)*id, (-a21*a00+a01*a20)*id
-	mat[2], mat[5], mat[8] = (a12*a01-a02*a11)*id, (-a12*a00+a02*a10)*id, (a11*a00-a01*a10)*id
+	mat[0], mat[3], mat[6] = b01*dInv, b11*dInv, b21*dInv
+	mat[1], mat[4], mat[7] = (-a22*a01+a02*a21)*dInv, (a22*a00-a02*a20)*dInv, (-a21*a00+a01*a20)*dInv
+	mat[2], mat[5], mat[8] = (a12*a01-a02*a11)*dInv, (-a12*a00+a02*a10)*dInv, (a11*a00-a01*a10)*dInv
 }
 
 //	Sets this 4x4 matrix to a transformation matrix representing "translate by vec"
@@ -220,65 +222,65 @@ func (me *Mat4) Translation(vec *Vec3) {
 }
 
 //	Returns a new 4x4 matrix representing the result of adding a to b.
-func NewMat4Add(a, b *Mat4) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Add(a, b *Mat4) (mat *Mat4) {
+	mat = &Mat4{}
 	mat[0], mat[4], mat[8], mat[12] = a[0]+b[0], a[4]+b[4], a[8]+b[8], a[12]+b[12]
 	mat[1], mat[5], mat[9], mat[13] = a[1]+b[1], a[5]+b[5], a[9]+b[9], a[13]+b[13]
 	mat[2], mat[6], mat[10], mat[14] = a[2]+b[2], a[6]+b[6], a[10]+b[10], a[14]+b[14]
 	mat[3], mat[7], mat[11], mat[15] = a[3]+b[3], a[7]+b[7], a[11]+b[11], a[15]+b[15]
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix representing the specified frustum.
-func NewMat4Frustum(left, right, bottom, top, near, far float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Frustum(left, right, bottom, top, near, far float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.Frustum(left, right, bottom, top, near, far)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix representing the identity matrix.
-func NewMat4Identity() *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Identity() (mat *Mat4) {
+	mat = &Mat4{}
 	mat.Identity()
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix representing the specified look-at matrix.
-func NewMat4LookAt(lookTarget, worldUp *Vec3) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4LookAt(lookTarget, worldUp *Vec3) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.LookAt(lookTarget, worldUp)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix representing the result of multiplying all values in m with v.
-func NewMat4Mult1(m *Mat4, v float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Mult1(m *Mat4, v float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat[0], mat[4], mat[8], mat[12] = m[0]*v, m[4]*v, m[8]*v, m[12]*v
 	mat[1], mat[5], mat[9], mat[13] = m[1]*v, m[5]*v, m[9]*v, m[13]*v
 	mat[2], mat[6], mat[10], mat[14] = m[2]*v, m[6]*v, m[10]*v, m[14]*v
 	mat[3], mat[7], mat[11], mat[15] = m[3]*v, m[7]*v, m[11]*v, m[15]*v
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents the result of multiplying one with two.
-func NewMat4Mult4(one, two *Mat4) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Mult4(one, two *Mat4) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.SetFromMult4(one, two)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents the result of multiplying all mats with one another.
-func NewMat4MultN(mats ...*Mat4) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4MultN(mats ...*Mat4) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.SetFromMultN(mats...)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents the specified perspective-projection matrix.
-func NewMat4Perspective(fovX, fovY, aspect, near, far float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Perspective(fovX, fovY, aspect, near, far float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.Perspective(fovX, fovY, aspect, near, far)
-	return mat
+	return
 }
 
 /*
@@ -288,46 +290,46 @@ func NewMat4Rotation (rad float64, axes *Vec3) *Mat4 {
 */
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the X asis.
-func NewMat4RotationX(rad float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4RotationX(rad float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.RotationX(rad)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the Y asis.
-func NewMat4RotationY(rad float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4RotationY(rad float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.RotationY(rad)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the Z asis.
-func NewMat4RotationZ(rad float64) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4RotationZ(rad float64) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.RotationZ(rad)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents a transformation of "scale by vec".
-func NewMat4Scaling(vec *Vec3) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Scaling(vec *Vec3) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.Scaling(vec)
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents a minus b.
-func NewMat4Sub(a, b *Mat4) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Sub(a, b *Mat4) (mat *Mat4) {
+	mat = &Mat4{}
 	mat[0], mat[4], mat[8], mat[12] = a[0]-b[0], a[4]-b[4], a[8]-b[8], a[12]-b[12]
 	mat[1], mat[5], mat[9], mat[13] = a[1]-b[1], a[5]-b[5], a[9]-b[9], a[13]-b[13]
 	mat[2], mat[6], mat[10], mat[14] = a[2]-b[2], a[6]-b[6], a[10]-b[10], a[14]-b[14]
 	mat[3], mat[7], mat[11], mat[15] = a[3]-b[3], a[7]-b[7], a[11]-b[11], a[15]-b[15]
-	return mat
+	return
 }
 
 //	Returns a new 4x4 matrix that represents a transformation of "translate by vec".
-func NewMat4Translation(vec *Vec3) *Mat4 {
-	var mat = &Mat4{}
+func NewMat4Translation(vec *Vec3) (mat *Mat4) {
+	mat = &Mat4{}
 	mat.Translation(vec)
-	return mat
+	return
 }

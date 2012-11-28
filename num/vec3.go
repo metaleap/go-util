@@ -157,10 +157,10 @@ func (me *Vec3) Normalized() *Vec3 {
 }
 
 //	Returns a new 3D vector that represents this 3D vector, normalized, then scaled by factor.
-func (me *Vec3) NormalizedScaled(factor float64) *Vec3 {
-	var vec = me.Normalized()
+func (me *Vec3) NormalizedScaled(factor float64) (vec *Vec3) {
+	vec = me.Normalized()
 	vec.Scale(factor)
-	return vec
+	return
 }
 
 //	Rotates this 3D vector angleDeg degrees around the specified axis.

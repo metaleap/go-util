@@ -167,7 +167,7 @@ deleteZipFile: deletes the ZIP archive file upon successful extraction
 		
 			
 			
-			<h2 id="FileExists">func <a href="/target/file.go?s=2555:2588#L89">FileExists</a></h2>
+			<h2 id="FileExists">func <a href="/target/file.go?s=2570:2603#L91">FileExists</a></h2>
 			<pre>func FileExists(path string) bool</pre>
 			<p>
 Returns true if a file exists at the specified path.
@@ -177,7 +177,7 @@ Returns true if a file exists at the specified path.
 		
 			
 			
-			<h2 id="FileExistsPath">func <a href="/target/file.go?s=2944:3102#L99">FileExistsPath</a></h2>
+			<h2 id="FileExistsPath">func <a href="/target/file.go?s=2959:3117#L101">FileExistsPath</a></h2>
 			<pre>func FileExistsPath(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, modTime time.Time, size int64)</pre>
 			<p>
 If a file with a given base-name and one of a number of extensions exists in the specified directory, returns details on it.
@@ -188,7 +188,7 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/file.go?s=3891:3953#L125">ReadBinaryFile</a></h2>
+			<h2 id="ReadBinaryFile">func <a href="/target/file.go?s=3922:3984#L129">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath string, panicOnError bool) []byte</pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -200,7 +200,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/file.go?s=4301:4410#L135">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/file.go?s=4332:4441#L139">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool</pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -211,7 +211,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/file.go?s=4923:4998#L150">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/file.go?s=4954:5029#L154">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath string, panicOnError bool, defVal string) string</pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -224,7 +224,7 @@ defVal: the string value to return if the file couldn&#39;t be read successfully
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/file.go?s=5240:5297#L162">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/file.go?s=5271:5328#L166">SaveToFile</a></h2>
 			<pre>func SaveToFile(r io.Reader, filename string) (err error)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -234,7 +234,7 @@ Performs an io.Copy() from the specified io.Reader to the specified local file.
 		
 			
 			
-			<h2 id="WalkDirectory">func <a href="/target/file.go?s=5947:6054#L179">WalkDirectory</a></h2>
+			<h2 id="WalkDirectory">func <a href="/target/file.go?s=5978:6085#L183">WalkDirectory</a></h2>
 			<pre>func WalkDirectory(dirPath, fileSuffix string, fileFunc func(string, bool) bool, recurseSubDirs bool) error</pre>
 			<p>
 Recursively walks along a directory hierarchy, calling the specified callback function for each file encountered.
@@ -248,7 +248,7 @@ recurseSubDirs: true to recurse into sub-directories.
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/file.go?s=6667:6727#L203">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/file.go?s=6698:6758#L207">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath string, contents []byte) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -258,7 +258,7 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/file.go?s=6890:6941#L208">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/file.go?s=6921:6972#L212">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents string) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
