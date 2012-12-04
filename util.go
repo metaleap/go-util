@@ -7,16 +7,16 @@ import (
 	"strings"
 )
 
-//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src/github.com sub-directory.
-//	Example: util.BaseCodePathGo("metaleap", "go-util") = "c:\gd\src\github.com\metaleap\go-util" if $GOPATH is c:\gd.
-func BaseCodePathGithub(gitHubName string, subDirNames ...string) string {
-	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src", "github.com", gitHubName}, subDirNames...)...)
+//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src sub-directory.
+//	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
+func GopathSrc(subDirNames ...string) string {
+	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src"}, subDirNames...)...)
 }
 
-//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src sub-directory.
-//	Example: util.BaseCodePathGo("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
-func BaseCodePathGo(subDirNames ...string) string {
-	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src"}, subDirNames...)...)
+//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src/github.com sub-directory.
+//	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
+func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
+	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src", "github.com", gitHubName}, subDirNames...)...)
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -86,11 +86,16 @@ func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32 {
 //	Attempts to extract major and minor version components from a string that begins with a version number.
 //	Example: returns []int{3, 2} and float64(3.2) for a verstr that is "3.2.0 - Build 8.15.10.2761"
 func ParseVersion(verstr string) (majorMinor []int, both float64) {
+	var (
+		pos int
+		i   uint64
+		err error
+	)
 	for _, p := range strings.Split(verstr, ".") {
-		if pos := strings.Index(p, " "); pos > 0 {
+		if pos = strings.Index(p, " "); pos > 0 {
 			p = p[:pos]
 		}
-		if i, err := strconv.ParseUint(p, 10, 8); err == nil {
+		if i, err = strconv.ParseUint(p, 10, 8); err == nil {
 			if majorMinor = append(majorMinor, int(i)); len(majorMinor) >= 2 {
 				break
 			}

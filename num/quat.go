@@ -31,7 +31,7 @@ func (me *Quat) Magnitude() float64 {
 
 //	Normalizes this quaternion.
 func (me *Quat) Normalize() {
-	tfQ = me.Magnitude()
+	tfQ := me.Magnitude()
 	if tfQ == 0 {
 		me.X, me.Y, me.Z = tfQ, tfQ, tfQ
 	} else {
@@ -44,7 +44,7 @@ func (me *Quat) Normalize() {
 func (me *Quat) Normalized() (q *Quat) {
 	quat := Quat{}
 	q = &quat
-	tfQ = me.Magnitude()
+	tfQ := me.Magnitude()
 	if tfQ == 0 {
 		return
 	}

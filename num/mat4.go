@@ -8,11 +8,9 @@ var (
 	//	Represents the 4x4 identity matrix.
 	Mat4Identity = NewMat4Identity()
 
-	tmpInt             int
-	tfX, tfY, tfZ, tfQ float64
-	tmpMat0            Mat4
-	tmpMat1, tmpMat2   *Mat4
-	tvN, tvU, tvV      *Vec3
+	tmpMat0          Mat4
+	tmpMat1, tmpMat2 *Mat4
+	tvN, tvU, tvV    *Vec3
 )
 
 //	Represents a 4x4 column-major matrix.
@@ -112,12 +110,9 @@ func (me *Mat4) Mult4(v *Quat) *Quat {
 }
 
 //	Sets this 4x4 matrix to the specified perspective-projection matrix.
-func (me *Mat4) Perspective(fovX, fovY, aspect, near, far float64) {
-	if (fovY == 0) || (fovX != 0) {
-		panic("num.Mat4.Perspective(fovX) not currently supported. Specify fovX = 0 and a fovY != 0.")
-	}
-	tfY = near * math.Tan(fovY*math.Pi/360)
-	tfX = tfY * aspect
+func (me *Mat4) Perspective(fovY, aspect, near, far float64) {
+	tfY := near * math.Tan(fovY*math.Pi/360)
+	tfX := tfY * aspect
 	me.Frustum(-tfX, tfX, -tfY, tfY, near, far)
 }
 
@@ -176,8 +171,8 @@ func (me *Mat4) SetFromMult4(one, two *Mat4) {
 //	Sets this 4x4 matrix to the result of multiplying all the specified mats with one another.
 func (me *Mat4) SetFromMultN(mats ...*Mat4) {
 	tmpMat1 = mats[0]
-	for tmpInt = 1; tmpInt < len(mats); tmpInt++ {
-		tmpMat2 = mats[tmpInt]
+	for i := 1; i < len(mats); i++ {
+		tmpMat2 = mats[i]
 		me[0], me[4], me[8], me[12] = (tmpMat1[0]*tmpMat2[0])+(tmpMat1[4]*tmpMat2[1])+(tmpMat1[8]*tmpMat2[2])+(tmpMat1[12]*tmpMat2[3]), (tmpMat1[0]*tmpMat2[4])+(tmpMat1[4]*tmpMat2[5])+(tmpMat1[8]*tmpMat2[6])+(tmpMat1[12]*tmpMat2[7]), (tmpMat1[0]*tmpMat2[8])+(tmpMat1[4]*tmpMat2[9])+(tmpMat1[8]*tmpMat2[10])+(tmpMat1[12]*tmpMat2[11]), (tmpMat1[0]*tmpMat2[12])+(tmpMat1[4]*tmpMat2[13])+(tmpMat1[8]*tmpMat2[14])+(tmpMat1[12]*tmpMat2[15])
 		me[1], me[5], me[9], me[13] = (tmpMat1[1]*tmpMat2[0])+(tmpMat1[5]*tmpMat2[1])+(tmpMat1[9]*tmpMat2[2])+(tmpMat1[13]*tmpMat2[3]), (tmpMat1[1]*tmpMat2[4])+(tmpMat1[5]*tmpMat2[5])+(tmpMat1[9]*tmpMat2[6])+(tmpMat1[13]*tmpMat2[7]), (tmpMat1[1]*tmpMat2[8])+(tmpMat1[5]*tmpMat2[9])+(tmpMat1[9]*tmpMat2[10])+(tmpMat1[13]*tmpMat2[11]), (tmpMat1[1]*tmpMat2[12])+(tmpMat1[5]*tmpMat2[13])+(tmpMat1[9]*tmpMat2[14])+(tmpMat1[13]*tmpMat2[15])
 		me[2], me[6], me[10], me[14] = (tmpMat1[2]*tmpMat2[0])+(tmpMat1[6]*tmpMat2[1])+(tmpMat1[10]*tmpMat2[2])+(tmpMat1[14]*tmpMat2[3]), (tmpMat1[2]*tmpMat2[4])+(tmpMat1[6]*tmpMat2[5])+(tmpMat1[10]*tmpMat2[6])+(tmpMat1[14]*tmpMat2[7]), (tmpMat1[2]*tmpMat2[8])+(tmpMat1[6]*tmpMat2[9])+(tmpMat1[10]*tmpMat2[10])+(tmpMat1[14]*tmpMat2[11]), (tmpMat1[2]*tmpMat2[12])+(tmpMat1[6]*tmpMat2[13])+(tmpMat1[10]*tmpMat2[14])+(tmpMat1[14]*tmpMat2[15])
@@ -277,9 +272,9 @@ func NewMat4MultN(mats ...*Mat4) (mat *Mat4) {
 }
 
 //	Returns a new 4x4 matrix that represents the specified perspective-projection matrix.
-func NewMat4Perspective(fovX, fovY, aspect, near, far float64) (mat *Mat4) {
+func NewMat4Perspective(fovY, aspect, near, far float64) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.Perspective(fovX, fovY, aspect, near, far)
+	mat.Perspective(fovY, aspect, near, far)
 	return
 }
 

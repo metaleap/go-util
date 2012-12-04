@@ -10,11 +10,11 @@ const (
 )
 
 var (
-	//	Contains a float64 that is extremely near to 0 and should also work for float32.
-	Epsilon float64
+	//	Contains the smallest float64 that is greater than 0 and would still fit into a float32.
+	Epsilon32 float64
 
-	//	Contains the float64 that is nearest to 0.
-	EpsilonMax float64
+	//	Contains the smallest float64 that is greater than 0.
+	Epsilon64 float64
 
 	//	Contains the positive-infinity float64 returned by math.Inf(1)
 	Infinity float64
@@ -51,13 +51,13 @@ func DegToRad(deg float64) float64 {
 }
 
 //	Returns the "normalized ratio" of val to max.
-//	Example: for max = 900 and val = 300, returns 0.33333...
+//	Example: for max = 900 and val = 300, returns 0.33333.
 func Din1(val, max float64) float64 {
 	return 1 / (max / val)
 }
 
 //	Returns the "normalized ratio" of val to max.
-//	Example: for max = 900 and val = 300, returns 0.33333...
+//	Example: for max = 900 and val = 300, returns 0.33333.
 func Fin1(val, max float32) float32 {
 	return 1 / (max / val)
 }
@@ -85,7 +85,7 @@ func Iin1 (val, max int) int {
 */
 
 //	Returns true if val is even
-func IsEveni(val int) bool {
+func IsEven(val int) bool {
 	return (math.Mod(float64(val), 2) == 0)
 }
 
@@ -156,10 +156,14 @@ func Saturate(v float64) float64 {
 
 //	Returns -1 if v is negative, 1 if v is positive, or 0 if v is zero.
 func Sign(v float64) float64 {
-	if v == 0 {
-		return 0
+	if v > 0 {
+		return 1
 	}
-	return v / math.Abs(v)
+	if v < 0 {
+		return -1
+	}
+	return 0
+	// return v / math.Abs(v)
 }
 
 //	Returns 0 if x < edge, otherwise returns 1.
@@ -177,10 +181,9 @@ func init() {
 		if eps = math.Pow(2, -i); eps == 0 {
 			break
 		}
-		if i == 23 {
-			Epsilon = eps
-		} else {
-			EpsilonMax = eps
+		if i <= 23 {
+			Epsilon32 = eps
 		}
+		Epsilon64 = eps
 	}
 }

@@ -6,8 +6,7 @@ import (
 )
 
 var (
-	tmpVal, tmpCos, tmpSin    float64
-	tmpQ, tmpQw, tmpQr, tmpQc = &Quat{}, &Quat{}, &Quat{}, &Quat{}
+	tmpQ, tmpQw, tmpQr, tmpQc = Quat{}, Quat{}, Quat{}, Quat{}
 )
 
 //	Represented a 3-dimensional vector.
@@ -56,10 +55,10 @@ func (me *Vec3) Cross(vec *Vec3) *Vec3 {
 }
 
 //	Returns a new 3D vector that represents the cross-product of this 3D vector and vec, normalized.
-func (me *Vec3) CrossNormalized(vec *Vec3) *Vec3 {
-	var r = &Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
+func (me *Vec3) CrossNormalized(vec *Vec3) (r *Vec3) {
+	r = &Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
 	r.Normalize()
-	return r
+	return
 }
 
 //	Returns a new 3D vector that represents this 3D vector divided by vec.
@@ -137,7 +136,7 @@ func (me *Vec3) Mult1(val float64) *Vec3 {
 
 //	Normalizes this 3D vector.
 func (me *Vec3) Normalize() {
-	tmpVal = me.Magnitude()
+	tmpVal := me.Magnitude()
 	if tmpVal == 0 {
 		me.X, me.Y, me.Z = tmpVal, tmpVal, tmpVal
 	} else {
@@ -148,7 +147,7 @@ func (me *Vec3) Normalize() {
 
 //	Returns a new 3D vector that represents this 3D vector, normalized.
 func (me *Vec3) Normalized() *Vec3 {
-	tmpVal = me.Magnitude()
+	tmpVal := me.Magnitude()
 	if tmpVal == 0 {
 		return &Vec3{tmpVal, tmpVal, tmpVal}
 	}
@@ -165,12 +164,16 @@ func (me *Vec3) NormalizedScaled(factor float64) (vec *Vec3) {
 
 //	Rotates this 3D vector angleDeg degrees around the specified axis.
 func (me *Vec3) RotateDeg(angleDeg float64, axis *Vec3) {
-	tmpCos = math.Cos(DegToRad(angleDeg / 2))
-	tmpSin = math.Sin(DegToRad(angleDeg / 2))
+	me.RotateRad(DegToRad(angleDeg/2), axis)
+}
+
+func (me *Vec3) RotateRad(angleRad float64, axis *Vec3) {
+	tmpCos := math.Cos(angleRad)
+	tmpSin := math.Sin(angleRad)
 	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*tmpSin, axis.Y*tmpSin, axis.Z*tmpSin, tmpCos
-	tmpQc.SetFromConjugated(tmpQr)
-	tmpQ.SetFromMult3(tmpQr, me)
-	tmpQw.SetFromMult(tmpQ, tmpQc)
+	tmpQc.SetFromConjugated(&tmpQr)
+	tmpQ.SetFromMult3(&tmpQr, me)
+	tmpQw.SetFromMult(&tmpQ, &tmpQc)
 	me.X, me.Y, me.Z = tmpQw.X, tmpQw.Y, tmpQw.Z
 }
 
@@ -229,16 +232,29 @@ func (me *Vec3) SetFromDegToRad(deg *Vec3) {
 	me.X, me.Y, me.Z = DegToRad(deg.X), DegToRad(deg.Y), DegToRad(deg.Z)
 }
 
-//	Sets each component of this 3D vector to Epsilon if it is smaller than Epsilon.
-func (me *Vec3) SetFromEpsilon() {
-	if math.Abs(me.X) < Epsilon {
-		me.X = Epsilon
+//	Sets each component of this 3D vector to Epsilon32 if it is 0 or greater but smaller than Epsilon32.
+func (me *Vec3) SetFromEpsilon32() {
+	if (me.X >= 0) && (me.X < Epsilon32) {
+		me.X = Epsilon32
 	}
-	if math.Abs(me.Y) < Epsilon {
-		me.Y = Epsilon
+	if (me.Y >= 0) && (me.Y < Epsilon32) {
+		me.Y = Epsilon32
 	}
-	if math.Abs(me.Z) < Epsilon {
-		me.Z = Epsilon
+	if (me.Z >= 0) && (me.Z < Epsilon32) {
+		me.Z = Epsilon32
+	}
+}
+
+//	Sets each component of this 3D vector to Epsilon64 if it is 0 or greater but smaller than Epsilon64.
+func (me *Vec3) SetFromEpsilon64() {
+	if (me.X >= 0) && (me.X < Epsilon64) {
+		me.X = Epsilon64
+	}
+	if (me.Y >= 0) && (me.Y < Epsilon64) {
+		me.Y = Epsilon64
+	}
+	if (me.Z >= 0) && (me.Z < Epsilon64) {
+		me.Z = Epsilon64
 	}
 }
 
@@ -269,7 +285,7 @@ func (me *Vec3) SetFromNeg(vec *Vec3) {
 
 //	Sets this 3D vector to pos rotated as expressed in rotCos and rotSin.
 func (me *Vec3) SetFromRotation(pos, rotCos, rotSin *Vec3) {
-	tmpVal = ((pos.Y * rotSin.X) + (pos.Z * rotCos.X))
+	tmpVal := ((pos.Y * rotSin.X) + (pos.Z * rotCos.X))
 	me.X = (pos.X * rotCos.Y) + (tmpVal * rotSin.Y)
 	me.Y = (pos.Y * rotCos.X) - (pos.Z * rotSin.X)
 	me.Z = (-pos.X * rotSin.Y) + (tmpVal * rotCos.Y)
@@ -280,22 +296,22 @@ func (me *Vec3) SetFromSin(vec *Vec3) {
 	me.X, me.Y, me.Z = math.Sin(vec.X), math.Sin(vec.Y), math.Sin(vec.Z)
 }
 
-//	Sets each component of this 3D vector to the corresponding component in zero if it is less than edge, else to the corresponding component in one.
-func (me *Vec3) SetFromStep1(edge float64, vec, zero, one *Vec3) {
+//	Sets each component of this 3D vector to the corresponding component in v0 if it is less than edge, else to the corresponding component in v1.
+func (me *Vec3) SetFromStep(edge float64, vec, v0, v1 *Vec3) {
 	if vec.X < edge {
-		me.X = zero.X
+		me.X = v0.X
 	} else {
-		me.X = one.X
+		me.X = v1.X
 	}
 	if vec.Y < edge {
-		me.Y = zero.Y
+		me.Y = v0.Y
 	} else {
-		me.Y = one.Y
+		me.Y = v1.Y
 	}
 	if vec.Z < edge {
-		me.Z = zero.Z
+		me.Z = v0.Z
 	} else {
-		me.Z = one.Z
+		me.Z = v1.Z
 	}
 }
 

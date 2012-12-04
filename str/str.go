@@ -224,20 +224,6 @@ func Replace(str string, repls map[string]string) string {
 	return str
 }
 
-/*
-//	Returns the rune in str at pos.
-func RuneAt(str string, pos int) rune {
-	var i = 0
-	for _, r := range str {
-		if i == pos {
-			return r
-		}
-		i++
-	}
-	return 0
-}
-*/
-
 //	Creates a Pascal-cased "identifier" version of the specified string.
 func SafeIdentifier(s string) (ret string) {
 	var isL, isD, last bool
@@ -258,7 +244,7 @@ func SafeIdentifier(s string) (ret string) {
 			words[i] = strings.Title(strings.ToLower(w))
 		}
 	}
-	ret = strings.Join(words, "") // if !unicode.IsLetter(RuneAt(ret, 0)) { ret = safePrefix + ret }
+	ret = strings.Join(words, "")
 	return
 }
 
