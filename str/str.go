@@ -144,6 +144,11 @@ func IsLower(s string) bool {
 	return true
 }
 
+//	Returns true if MatchSimplePattern(s, patterns...) returns a match.
+func IsSimplePatternMatch(s string, patterns ...string) bool {
+	return len(MatchSimplePattern(s, patterns...)) > 0
+}
+
 //	Returns true if s is in all.
 func IsOneOf(s string, all ...string) bool {
 	for _, a := range all {
@@ -172,6 +177,17 @@ func LettersOnly(s string) (ret string) {
 		}
 	}
 	return
+}
+
+//	Checks s against the specified simple-patterns and returns the first matching pattern encountered, or "" if there is no match.
+//	(A "simple-pattern" is a string that can optionally have one leading or trailing (or both) asterisk ('*') wildcard.)
+func MatchSimplePattern(s string, patterns ...string) string {
+	for _, p := range patterns {
+		if (s == p) || (strings.HasPrefix(p, "*") && strings.HasSuffix(p, "*") && strings.Contains(s, p[1:len(p)-1])) || (strings.HasPrefix(p, "*") && strings.HasSuffix(s, p[1:])) || (strings.HasSuffix(p, "*") && strings.HasPrefix(s, p[:len(p)-1])) {
+			return p
+		}
+	}
+	return ""
 }
 
 //	Returns a slice that contains the non-empty strings in vals.

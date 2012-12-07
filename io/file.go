@@ -17,6 +17,40 @@ var (
 	ModePerm = os.ModePerm
 )
 
+//	Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
+func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
+	var fileInfos []os.FileInfo
+	if fileInfos, err = ioutil.ReadDir(path); err == nil {
+		for _, fi := range fileInfos {
+			if fn := fi.Name(); !ustr.IsSimplePatternMatch(fn, keepNamePatterns...) {
+				if err = os.RemoveAll(filepath.Join(path, fn)); err != nil {
+					return
+				}
+			}
+		}
+	}
+	return
+}
+
+//	Copies all files and directories inside srcDirPath to destDirPath.
+func CopyAll(srcDirPath, destDirPath string) (err error) {
+	var (
+		srcPath, destPath string
+		fileInfos         []os.FileInfo
+	)
+	if fileInfos, err = ioutil.ReadDir(srcDirPath); (err == nil) && (len(fileInfos) > 0) {
+		EnsureDirExists(destDirPath)
+		for _, fi := range fileInfos {
+			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(destDirPath, fi.Name()); fi.IsDir() {
+				CopyAll(srcPath, destPath)
+			} else {
+				CopyFile(srcPath, destPath)
+			}
+		}
+	}
+	return
+}
+
 //	Performs an io.Copy from the specified local source file to the specified local destination file.
 func CopyFile(srcFilePath, destFilePath string) (err error) {
 	var src *os.File

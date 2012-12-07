@@ -94,6 +94,9 @@ A tiny assortement of occasionally-useful Go utilities.
 				
 				<dd><a href="#ParseVersion">func ParseVersion(verstr string) (majorMinor []int, both float64)</a></dd>
 			
+				
+				<dd><a href="#UserHomeDirPath">func UserHomeDirPath() (dirPath string)</a></dd>
+			
 			
 			
 		</dl>
@@ -140,7 +143,7 @@ Example: util.GopathSrcGithub(&#34;metaleap&#34;, &#34;go-util&#34;, &#34;num&#3
 		
 			
 			
-			<h2 id="Ifb">func <a href="/target/util.go?s=902:943#L13">Ifb</a></h2>
+			<h2 id="Ifb">func <a href="/target/util.go?s=1326:1367#L23">Ifb</a></h2>
 			<pre>func Ifb(cond, ifTrue, ifFalse bool) bool</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -150,7 +153,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifd">func <a href="/target/util.go?s=1057:1109#L21">Ifd</a></h2>
+			<h2 id="Ifd">func <a href="/target/util.go?s=1481:1533#L31">Ifd</a></h2>
 			<pre>func Ifd(cond bool, ifTrue, ifFalse float64) float64</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -160,7 +163,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi">func <a href="/target/util.go?s=1223:1267#L29">Ifi</a></h2>
+			<h2 id="Ifi">func <a href="/target/util.go?s=1647:1691#L39">Ifi</a></h2>
 			<pre>func Ifi(cond bool, ifTrue, ifFalse int) int</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -170,7 +173,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi16">func <a href="/target/util.go?s=1381:1431#L37">Ifi16</a></h2>
+			<h2 id="Ifi16">func <a href="/target/util.go?s=1805:1855#L47">Ifi16</a></h2>
 			<pre>func Ifi16(cond bool, ifTrue, ifFalse int16) int16</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -180,7 +183,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi32">func <a href="/target/util.go?s=1545:1595#L45">Ifi32</a></h2>
+			<h2 id="Ifi32">func <a href="/target/util.go?s=1969:2019#L55">Ifi32</a></h2>
 			<pre>func Ifi32(cond bool, ifTrue, ifFalse int32) int32</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -190,7 +193,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi64">func <a href="/target/util.go?s=1709:1759#L53">Ifi64</a></h2>
+			<h2 id="Ifi64">func <a href="/target/util.go?s=2133:2183#L63">Ifi64</a></h2>
 			<pre>func Ifi64(cond bool, ifTrue, ifFalse int64) int64</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -200,7 +203,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifs">func <a href="/target/util.go?s=1873:1930#L61">Ifs</a></h2>
+			<h2 id="Ifs">func <a href="/target/util.go?s=2297:2354#L71">Ifs</a></h2>
 			<pre>func Ifs(cond bool, ifTrue string, ifFalse string) string</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -210,7 +213,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifu32">func <a href="/target/util.go?s=2044:2096#L69">Ifu32</a></h2>
+			<h2 id="Ifu32">func <a href="/target/util.go?s=2468:2520#L79">Ifu32</a></h2>
 			<pre>func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -220,11 +223,23 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="ParseVersion">func <a href="/target/util.go?s=2354:2419#L78">ParseVersion</a></h2>
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=2778:2843#L88">ParseVersion</a></h2>
 			<pre>func ParseVersion(verstr string) (majorMinor []int, both float64)</pre>
 			<p>
 Attempts to extract major and minor version components from a string that begins with a version number.
 Example: returns []int{3, 2} and float64(3.2) for a verstr that is &#34;3.2.0 - Build 8.15.10.2761&#34;
+</p>
+
+			
+		
+			
+			
+			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=1110:1149#L15">UserHomeDirPath</a></h2>
+			<pre>func UserHomeDirPath() (dirPath string)</pre>
+			<p>
+Returns the path to the current user&#39;s home directory.
+Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
+Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
 </p>
 
 			

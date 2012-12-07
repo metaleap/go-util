@@ -19,6 +19,16 @@ func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src", "github.com", gitHubName}, subDirNames...)...)
 }
 
+//	Returns the path to the current user's home directory.
+//	Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
+//	Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
+func UserHomeDirPath() (dirPath string) {
+	if dirPath = os.ExpandEnv("$userprofile"); len(dirPath) == 0 {
+		dirPath = os.ExpandEnv("$HOME")
+	}
+	return
+}
+
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifb(cond, ifTrue, ifFalse bool) bool {
 	if cond {

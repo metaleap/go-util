@@ -62,6 +62,12 @@ Various line-savers for common I/O needs.
 			
 			
 				
+				<dd><a href="#ClearDirectory">func ClearDirectory(path string, keepNamePatterns ...string) (err error)</a></dd>
+			
+				
+				<dd><a href="#CopyAll">func CopyAll(srcDirPath, destDirPath string) (err error)</a></dd>
+			
+				
 				<dd><a href="#CopyFile">func CopyFile(srcFilePath, destFilePath string) (err error)</a></dd>
 			
 				
@@ -135,7 +141,27 @@ Various line-savers for common I/O needs.
 		
 			
 			
-			<h2 id="CopyFile">func <a href="/target/file.go?s=375:434#L11">CopyFile</a></h2>
+			<h2 id="ClearDirectory">func <a href="/target/file.go?s=388:460#L11">ClearDirectory</a></h2>
+			<pre>func ClearDirectory(path string, keepNamePatterns ...string) (err error)</pre>
+			<p>
+Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CopyAll">func <a href="/target/file.go?s=834:890#L26">CopyAll</a></h2>
+			<pre>func CopyAll(srcDirPath, destDirPath string) (err error)</pre>
+			<p>
+Copies all files and directories inside srcDirPath to destDirPath.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CopyFile">func <a href="/target/file.go?s=1431:1490#L45">CopyFile</a></h2>
 			<pre>func CopyFile(srcFilePath, destFilePath string) (err error)</pre>
 			<p>
 Performs an io.Copy from the specified local source file to the specified local destination file.
@@ -145,7 +171,7 @@ Performs an io.Copy from the specified local source file to the specified local 
 		
 			
 			
-			<h2 id="DirExists">func <a href="/target/file.go?s=645:677#L22">DirExists</a></h2>
+			<h2 id="DirExists">func <a href="/target/file.go?s=1701:1733#L56">DirExists</a></h2>
 			<pre>func DirExists(path string) bool</pre>
 			<p>
 Returns true if a directory exists at the specified path.
@@ -155,7 +181,7 @@ Returns true if a directory exists at the specified path.
 		
 			
 			
-			<h2 id="EnsureDirExists">func <a href="/target/file.go?s=865:910#L30">EnsureDirExists</a></h2>
+			<h2 id="EnsureDirExists">func <a href="/target/file.go?s=1921:1966#L64">EnsureDirExists</a></h2>
 			<pre>func EnsureDirExists(path string) (err error)</pre>
 			<p>
 If a directory does not exist at the specified path, attempts to create it.
@@ -165,7 +191,7 @@ If a directory does not exist at the specified path, attempts to create it.
 		
 			
 			
-			<h2 id="ExtractZipFile">func <a href="/target/file.go?s=1316:1450#L43">ExtractZipFile</a></h2>
+			<h2 id="ExtractZipFile">func <a href="/target/file.go?s=2372:2506#L77">ExtractZipFile</a></h2>
 			<pre>func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error</pre>
 			<p>
 Extracts a ZIP archive to the local file system.
@@ -178,7 +204,7 @@ deleteZipFile: deletes the ZIP archive file upon successful extraction.
 		
 			
 			
-			<h2 id="FileExists">func <a href="/target/file.go?s=2686:2719#L93">FileExists</a></h2>
+			<h2 id="FileExists">func <a href="/target/file.go?s=3742:3775#L127">FileExists</a></h2>
 			<pre>func FileExists(path string) bool</pre>
 			<p>
 Returns true if a file (not a directory) exists at the specified path.
@@ -188,7 +214,7 @@ Returns true if a file (not a directory) exists at the specified path.
 		
 			
 			
-			<h2 id="FindFileInfo">func <a href="/target/file.go?s=3069:3217#L102">FindFileInfo</a></h2>
+			<h2 id="FindFileInfo">func <a href="/target/file.go?s=4125:4273#L136">FindFileInfo</a></h2>
 			<pre>func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, fileInfo *os.FileInfo)</pre>
 			<p>
 If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
@@ -199,7 +225,7 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/file.go?s=3972:4034#L130">ReadBinaryFile</a></h2>
+			<h2 id="ReadBinaryFile">func <a href="/target/file.go?s=5028:5090#L164">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath string, panicOnError bool) []byte</pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -211,7 +237,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/file.go?s=4379:4488#L140">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/file.go?s=5435:5544#L174">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool</pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -222,7 +248,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/file.go?s=4998:5073#L155">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/file.go?s=6054:6129#L189">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath string, panicOnError bool, defVal string) string</pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -235,7 +261,7 @@ defVal: the string value to return if the file couldn&#39;t be read successfully
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/file.go?s=5312:5369#L167">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/file.go?s=6368:6425#L201">SaveToFile</a></h2>
 			<pre>func SaveToFile(r io.Reader, filename string) (err error)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -245,7 +271,7 @@ Performs an io.Copy() from the specified io.Reader to the specified local file.
 		
 			
 			
-			<h2 id="WalkDirectory">func <a href="/target/file.go?s=6019:6126#L184">WalkDirectory</a></h2>
+			<h2 id="WalkDirectory">func <a href="/target/file.go?s=7075:7182#L218">WalkDirectory</a></h2>
 			<pre>func WalkDirectory(dirPath, fileSuffix string, fileFunc func(string, bool) bool, recurseSubDirs bool) error</pre>
 			<p>
 Recursively walks along a directory hierarchy, calling the specified callback function for each file encountered.
@@ -259,7 +285,7 @@ recurseSubDirs: true to recurse into sub-directories.
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/file.go?s=6736:6796#L208">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/file.go?s=7792:7852#L242">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath string, contents []byte) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -269,7 +295,7 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/file.go?s=6956:7007#L213">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/file.go?s=8012:8063#L247">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents string) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
