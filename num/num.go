@@ -5,17 +5,13 @@ import (
 )
 
 const (
+	Epsilon32 = math.SmallestNonzeroFloat32
+	Epsilon64 = math.SmallestNonzeroFloat64
 	PiDiv180  = math.Pi / 180
 	PiHalfDiv = 0.5 / math.Pi
 )
 
 var (
-	//	Contains the smallest float64 that is greater than 0 and would still fit into a float32.
-	Epsilon32 float64
-
-	//	Contains the smallest float64 that is greater than 0.
-	Epsilon64 float64
-
 	//	Contains the positive-infinity float64 returned by math.Inf(1)
 	Infinity float64
 
@@ -175,15 +171,5 @@ func Step(edge, x float64) int {
 }
 
 func init() {
-	var eps, i float64
 	Infinity, NegInfinity = math.Inf(1), math.Inf(-1)
-	for i = 0; i <= 8192; i++ {
-		if eps = math.Pow(2, -i); eps == 0 {
-			break
-		}
-		if i <= 23 {
-			Epsilon32 = eps
-		}
-		Epsilon64 = eps
-	}
 }
