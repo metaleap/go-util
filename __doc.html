@@ -92,6 +92,9 @@ A tiny assortement of occasionally-useful Go utilities.
 				<dd><a href="#Ifu32">func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</a></dd>
 			
 				
+				<dd><a href="#Ifu64">func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64</a></dd>
+			
+				
 				<dd><a href="#ParseVersion">func ParseVersion(verstr string) (majorMinor []int, both float64)</a></dd>
 			
 				
@@ -223,7 +226,17 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="ParseVersion">func <a href="/target/util.go?s=2778:2843#L88">ParseVersion</a></h2>
+			<h2 id="Ifu64">func <a href="/target/util.go?s=2634:2686#L87">Ifu64</a></h2>
+			<pre>func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64</pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=2944:3009#L96">ParseVersion</a></h2>
 			<pre>func ParseVersion(verstr string) (majorMinor []int, both float64)</pre>
 			<p>
 Attempts to extract major and minor version components from a string that begins with a version number.
