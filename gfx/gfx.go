@@ -6,16 +6,43 @@ import (
 	"os"
 )
 
+//	Describes a literal color using four 32-bit floating-point numbers in RGBA order.
 type Rgba32 struct {
-	R, G, B, A float32
+	//	Red component
+	R float32
+	//	Green component
+	G float32
+	//	Blue component
+	B float32
+	//	Alpha component
+	A float32
 }
 
-func NewRgba32(vals []float64) *Rgba32 {
-	return &Rgba32{R: float32(vals[0]), G: float32(vals[1]), B: float32(vals[2]), A: float32(vals[3])}
+//	Converts the specified vals to a newly initialized Rgba32 instance.
+func NewRgba32(vals []float64) (me *Rgba32) {
+	me = &Rgba32{}
+	if len(vals) > 0 {
+		if me.R = float32(vals[0]); len(vals) > 1 {
+			if me.G = float32(vals[1]); len(vals) > 2 {
+				if me.B = float32(vals[2]); len(vals) > 3 {
+					me.A = float32(vals[3])
+				}
+			}
+		}
+	}
+	return
 }
 
+//	Describes a literal color using four 64-bit floating-point numbers in RGBA order.
 type Rgba64 struct {
-	R, G, B, A float64
+	//	Red component
+	R float64
+	//	Green component
+	G float64
+	//	Blue component
+	B float64
+	//	Alpha component
+	A float64
 }
 
 //	If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...

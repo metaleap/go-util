@@ -70,7 +70,7 @@ Nothing to see here really...
 				<dd><a href="#Rgba32">type Rgba32</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#NewRgba32">func NewRgba32(vals []float64) *Rgba32</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#NewRgba32">func NewRgba32(vals []float64) (me *Rgba32)</a></dd>
 				
 				
 			
@@ -102,7 +102,7 @@ Nothing to see here really...
 		
 			
 			
-			<h2 id="Index3D">func <a href="/target/gfx.go?s=435:478#L12">Index3D</a></h2>
+			<h2 id="Index3D">func <a href="/target/gfx.go?s=1015:1058#L39">Index3D</a></h2>
 			<pre>func Index3D(x, y, z, xsize, ysize int) int</pre>
 			<p>
 If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
@@ -112,7 +112,7 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=570:631#L17">SavePngImageFile</a></h2>
+			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1150:1211#L44">SavePngImageFile</a></h2>
 			<pre>func SavePngImageFile(img image.Image, filePath string) error</pre>
 			<p>
 Saves any given image as a local PNG file.
@@ -123,11 +123,21 @@ Saves any given image as a local PNG file.
 		
 			
 			
-			<h2 id="Rgba32">type <a href="/target/gfx.go?s=53:95#L1">Rgba32</a></h2>
+			<h2 id="Rgba32">type <a href="/target/gfx.go?s=138:281#L1">Rgba32</a></h2>
 			<pre>type Rgba32 struct {
-    R, G, B, A float32
+    <span class="comment">//	Red component</span>
+    R float32
+    <span class="comment">//	Green component</span>
+    G float32
+    <span class="comment">//	Blue component</span>
+    B float32
+    <span class="comment">//	Alpha component</span>
+    A float32
 }</pre>
-			
+			<p>
+Describes a literal color using four 32-bit floating-point numbers in RGBA order.
+</p>
+
 
 			
 
@@ -137,9 +147,12 @@ Saves any given image as a local PNG file.
 
 			
 				
-				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=97:135#L3">NewRgba32</a></h3>
-				<pre>func NewRgba32(vals []float64) *Rgba32</pre>
-				
+				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=354:397#L12">NewRgba32</a></h3>
+				<pre>func NewRgba32(vals []float64) (me *Rgba32)</pre>
+				<p>
+Converts the specified vals to a newly initialized Rgba32 instance.
+</p>
+
 				
 			
 
@@ -147,11 +160,21 @@ Saves any given image as a local PNG file.
 		
 			
 			
-			<h2 id="Rgba64">type <a href="/target/gfx.go?s=241:283#L7">Rgba64</a></h2>
+			<h2 id="Rgba64">type <a href="/target/gfx.go?s=720:863#L27">Rgba64</a></h2>
 			<pre>type Rgba64 struct {
-    R, G, B, A float64
+    <span class="comment">//	Red component</span>
+    R float64
+    <span class="comment">//	Green component</span>
+    G float64
+    <span class="comment">//	Blue component</span>
+    B float64
+    <span class="comment">//	Alpha component</span>
+    A float64
 }</pre>
-			
+			<p>
+Describes a literal color using four 64-bit floating-point numbers in RGBA order.
+</p>
+
 
 			
 
