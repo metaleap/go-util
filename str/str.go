@@ -81,12 +81,36 @@ func FirstNonEmpty(step int, vals ...string) string {
 	return First(func(s string) bool { return len(s) > 0 }, step, vals...)
 }
 
-// func ForEach (fun func (i int, s string), vals ... string) {
-// 	for i, s := range vals { fun(i, s) }
-// }
+//	Returns true if s starts with any one of the specified prefixes.
+func HasAnyPrefix(s string, prefixes ...string) bool {
+	for _, prefix := range prefixes {
+		if strings.HasPrefix(s, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
+//	Returns true if s ends with any one of the specified suffixes.
+func HasAnySuffix(s string, suffixes ...string) bool {
+	for _, suffix := range suffixes {
+		if strings.HasSuffix(s, suffix) {
+			return true
+		}
+	}
+	return false
+}
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifm(cond bool, ifTrue, ifFalse map[string]string) map[string]string {
+	if cond {
+		return ifTrue
+	}
+	return ifFalse
+}
+
+//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+func Ifs(cond bool, ifTrue string, ifFalse string) string {
 	if cond {
 		return ifTrue
 	}
