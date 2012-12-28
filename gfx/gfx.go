@@ -45,6 +45,11 @@ type Rgba64 struct {
 	A float64
 }
 
+//	If 2-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 2D coordinate...
+func Index2D(x, y, ysize int) int {
+	return (x * ysize) + y
+}
+
 //	If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
 func Index3D(x, y, z, xsize, ysize int) int {
 	return (((z * xsize) + x) * ysize) + y
