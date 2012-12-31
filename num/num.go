@@ -12,11 +12,11 @@ const (
 )
 
 var (
-	//	Contains the positive-infinity float64 returned by math.Inf(1)
-	Infinity float64
+	//	Contains the positive-infinity float64 returned by math.Inf(1).
+	Infinity = math.Inf(1)
 
 	//	Contains the negative-infinity float64 returned by math.Inf(-1)
-	NegInfinity float64
+	NegInfinity = math.Inf(-1)
 )
 
 //	Returns true if all vals equal test.
@@ -168,8 +168,4 @@ func Step(edge, x float64) int {
 		return 0
 	}
 	return 1
-}
-
-func init() {
-	Infinity, NegInfinity = math.Inf(1), math.Inf(-1)
 }

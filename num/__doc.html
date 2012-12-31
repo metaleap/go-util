@@ -535,11 +535,11 @@ A few maths-helpers, plus vectors, matrices and quaternions.
 			<h2 id="pkg-variables">Variables</h2>
 			
 				<pre>var (
-    <span class="comment">//	Contains the positive-infinity float64 returned by math.Inf(1)</span>
-    Infinity float64
+    <span class="comment">//	Contains the positive-infinity float64 returned by math.Inf(1).</span>
+    Infinity = math.Inf(1)
 
     <span class="comment">//	Contains the negative-infinity float64 returned by math.Inf(-1)</span>
-    NegInfinity float64
+    NegInfinity = math.Inf(-1)
 )</pre>
 				
 			
@@ -559,7 +559,7 @@ A few maths-helpers, plus vectors, matrices and quaternions.
 		
 			
 			
-			<h2 id="AllEqual">func <a href="/target/num.go?s=404:453#L13">AllEqual</a></h2>
+			<h2 id="AllEqual">func <a href="/target/num.go?s=418:467#L13">AllEqual</a></h2>
 			<pre>func AllEqual(test float64, vals ...float64) bool</pre>
 			<p>
 Returns true if all vals equal test.
@@ -569,7 +569,7 @@ Returns true if all vals equal test.
 		
 			
 			
-			<h2 id="Clamp">func <a href="/target/num.go?s=584:623#L23">Clamp</a></h2>
+			<h2 id="Clamp">func <a href="/target/num.go?s=598:637#L23">Clamp</a></h2>
 			<pre>func Clamp(val, c0, c1 float64) float64</pre>
 			<p>
 Clamps val between c0 and c1
@@ -579,7 +579,7 @@ Clamps val between c0 and c1
 		
 			
 			
-			<h2 id="DegToRad">func <a href="/target/num.go?s=790:824#L35">DegToRad</a></h2>
+			<h2 id="DegToRad">func <a href="/target/num.go?s=804:838#L35">DegToRad</a></h2>
 			<pre>func DegToRad(deg float64) float64</pre>
 			<p>
 Converts the specified degrees to radians.
@@ -589,7 +589,7 @@ Converts the specified degrees to radians.
 		
 			
 			
-			<h2 id="Din1">func <a href="/target/num.go?s=960:995#L41">Din1</a></h2>
+			<h2 id="Din1">func <a href="/target/num.go?s=974:1009#L41">Din1</a></h2>
 			<pre>func Din1(val, max float64) float64</pre>
 			<p>
 Returns the &#34;normalized ratio&#34; of val to max.
@@ -600,7 +600,7 @@ Example: for max = 900 and val = 300, returns 0.33333.
 		
 			
 			
-			<h2 id="Fin1">func <a href="/target/num.go?s=1132:1167#L47">Fin1</a></h2>
+			<h2 id="Fin1">func <a href="/target/num.go?s=1146:1181#L47">Fin1</a></h2>
 			<pre>func Fin1(val, max float32) float32</pre>
 			<p>
 Returns the &#34;normalized ratio&#34; of val to max.
@@ -611,7 +611,7 @@ Example: for max = 900 and val = 300, returns 0.33333.
 		
 			
 			
-			<h2 id="IsEven">func <a href="/target/num.go?s=2054:2079#L74">IsEven</a></h2>
+			<h2 id="IsEven">func <a href="/target/num.go?s=2068:2093#L74">IsEven</a></h2>
 			<pre>func IsEven(val int) bool</pre>
 			<p>
 Returns true if val is even
@@ -621,7 +621,7 @@ Returns true if val is even
 		
 			
 			
-			<h2 id="IsInt">func <a href="/target/num.go?s=2171:2199#L79">IsInt</a></h2>
+			<h2 id="IsInt">func <a href="/target/num.go?s=2185:2213#L79">IsInt</a></h2>
 			<pre>func IsInt(val float64) bool</pre>
 			<p>
 Returns true if val represents an integer
@@ -631,7 +631,7 @@ Returns true if val represents an integer
 		
 			
 			
-			<h2 id="IsMod0">func <a href="/target/num.go?s=2288:2314#L85">IsMod0</a></h2>
+			<h2 id="IsMod0">func <a href="/target/num.go?s=2302:2328#L85">IsMod0</a></h2>
 			<pre>func IsMod0(v, m int) bool</pre>
 			<p>
 Returns true if math.Mod(v, m) is zero
@@ -641,7 +641,7 @@ Returns true if math.Mod(v, m) is zero
 		
 			
 			
-			<h2 id="Mini">func <a href="/target/num.go?s=2746:2771#L112">Mini</a></h2>
+			<h2 id="Mini">func <a href="/target/num.go?s=2760:2785#L112">Mini</a></h2>
 			<pre>func Mini(v1, v2 int) int</pre>
 			<p>
 Returns the smaller of two values.
@@ -651,7 +651,7 @@ Returns the smaller of two values.
 		
 			
 			
-			<h2 id="Mix">func <a href="/target/num.go?s=2910:2943#L120">Mix</a></h2>
+			<h2 id="Mix">func <a href="/target/num.go?s=2924:2957#L120">Mix</a></h2>
 			<pre>func Mix(x, y, a float64) float64</pre>
 			<p>
 Returns x if a is 0, y if a is 1, or a corresponding mix of both if a is between 0 and 1.
@@ -661,7 +661,7 @@ Returns x if a is 0, y if a is 1, or a corresponding mix of both if a is between
 		
 			
 			
-			<h2 id="RadToDeg">func <a href="/target/num.go?s=3027:3061#L125">RadToDeg</a></h2>
+			<h2 id="RadToDeg">func <a href="/target/num.go?s=3041:3075#L125">RadToDeg</a></h2>
 			<pre>func RadToDeg(rad float64) float64</pre>
 			<p>
 Converts the specified radians to degrees.
@@ -671,7 +671,7 @@ Converts the specified radians to degrees.
 		
 			
 			
-			<h2 id="Round">func <a href="/target/num.go?s=3166:3195#L130">Round</a></h2>
+			<h2 id="Round">func <a href="/target/num.go?s=3180:3209#L130">Round</a></h2>
 			<pre>func Round(v float64) float64</pre>
 			<p>
 Returns math.Ceil(v) if fraction &gt;= 0.5, otherwise returns math.Floor(v)
@@ -681,7 +681,7 @@ Returns math.Ceil(v) if fraction &gt;= 0.5, otherwise returns math.Floor(v)
 		
 			
 			
-			<h2 id="Saturate">func <a href="/target/num.go?s=3337:3369#L139">Saturate</a></h2>
+			<h2 id="Saturate">func <a href="/target/num.go?s=3351:3383#L139">Saturate</a></h2>
 			<pre>func Saturate(v float64) float64</pre>
 			<p>
 Clamps v between 0 and 1.
@@ -691,7 +691,7 @@ Clamps v between 0 and 1.
 		
 			
 			
-			<h2 id="Sign">func <a href="/target/num.go?s=3469:3497#L144">Sign</a></h2>
+			<h2 id="Sign">func <a href="/target/num.go?s=3483:3511#L144">Sign</a></h2>
 			<pre>func Sign(v float64) float64</pre>
 			<p>
 Returns -1 if v is negative, 1 if v is positive, or 0 if v is zero.
@@ -701,7 +701,7 @@ Returns -1 if v is negative, 1 if v is positive, or 0 if v is zero.
 		
 			
 			
-			<h2 id="Step">func <a href="/target/num.go?s=3640:3670#L156">Step</a></h2>
+			<h2 id="Step">func <a href="/target/num.go?s=3654:3684#L156">Step</a></h2>
 			<pre>func Step(edge, x float64) int</pre>
 			<p>
 Returns 0 if x &lt; edge, otherwise returns 1.
