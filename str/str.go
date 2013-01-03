@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	util "github.com/metaleap/go-util"
+	ugo "github.com/metaleap/go-util"
 )
 
 //	Does a strings.Join() on the specified string values.
@@ -37,7 +37,7 @@ func Distance(s1, s2 string) int {
 	}
 	for i = 1; i < len(d); i++ {
 		for j = 1; j < len(d[0]); j++ {
-			cost = util.Ifi(s1[i-1] == s2[j-1], 0, 1)
+			cost = ugo.Ifi(s1[i-1] == s2[j-1], 0, 1)
 			min1 = d[i-1][j] + 1
 			min2 = d[i][j-1] + 1
 			min3 = d[i-1][j-1] + cost
@@ -67,7 +67,7 @@ func Equivalent(one, two []string) bool {
 func First(predicate func(s string) bool, step int, vals ...string) string {
 	l := len(vals)
 	reverse := step < 0
-	for i := util.Ifi(reverse, l-1, 0); util.Ifb(reverse, i >= 0, i < l); i += step {
+	for i := ugo.Ifi(reverse, l-1, 0); ugo.Ifb(reverse, i >= 0, i < l); i += step {
 		if predicate(vals[i]) {
 			return vals[i]
 		}
