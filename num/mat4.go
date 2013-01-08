@@ -216,6 +216,13 @@ func (me *Mat4) Translation(vec *Vec3) {
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
 
+//	Calls the Identity() method on all specified mats.
+func Mat4Identities(mats ...*Mat4) {
+	for _, mat := range mats {
+		mat.Identity()
+	}
+}
+
 //	Returns a new 4x4 matrix representing the result of adding a to b.
 func NewMat4Add(a, b *Mat4) (mat *Mat4) {
 	mat = &Mat4{}

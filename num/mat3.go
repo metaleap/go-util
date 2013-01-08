@@ -8,13 +8,6 @@ var (
 //	Represents a 3x3 matrix.
 type Mat3 [9]float64
 
-//	Returns a new 3x3 identity matrix.
-func NewMat3Identity() (mat *Mat3) {
-	mat = &Mat3{}
-	mat.Identity()
-	return
-}
-
 //	Sets this 3x3 matrix to the 3x3 identity matrix.
 func (me *Mat3) Identity() {
 	me[0], me[3], me[6] = 1, 0, 0
@@ -31,4 +24,18 @@ func (me *Mat3) Transpose() {
 	me[5] = me[7]
 	me[6] = a02
 	me[7] = a12
+}
+
+//	Calls the Identity() method on all specified mats.
+func Mat3Identities(mats ...*Mat3) {
+	for _, mat := range mats {
+		mat.Identity()
+	}
+}
+
+//	Returns a new 3x3 identity matrix.
+func NewMat3Identity() (mat *Mat3) {
+	mat = &Mat3{}
+	mat.Identity()
+	return
 }
