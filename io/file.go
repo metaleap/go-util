@@ -64,7 +64,7 @@ func CopyFile(srcFilePath, destFilePath string) (err error) {
 
 //	Returns true if a directory exists at the specified path.
 func DirExists(path string) bool {
-	if stat, err := os.Stat(path); (err == nil) && (stat != nil) {
+	if stat, err := os.Stat(path); err == nil {
 		return stat.IsDir()
 	}
 	return false
@@ -135,7 +135,7 @@ func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileN
 
 //	Returns true if a file (not a directory) exists at the specified path.
 func FileExists(path string) bool {
-	if stat, err := os.Stat(path); (err == nil) && (stat != nil) {
+	if stat, err := os.Stat(path); err == nil {
 		return !stat.IsDir()
 	}
 	return false

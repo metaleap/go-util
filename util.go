@@ -7,16 +7,41 @@ import (
 	"strings"
 )
 
-//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src sub-directory.
-//	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
-func GopathSrc(subDirNames ...string) string {
-	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src"}, subDirNames...)...)
+var (
+	goPaths       [][]string
+	goPathsLenIs1 bool
+)
+
+func init() {
+	for _, gp := range strings.Split(os.Getenv("GOPATH"), string(os.PathListSeparator)) {
+		goPaths = append(goPaths, []string{gp, "src"})
+	}
+	goPathsLenIs1 = (len(goPaths) == 1)
 }
 
-//	Returns the *filepath*-joined full directory path for a specified $GOPATH/src/github.com sub-directory.
+func dirExists(path string) bool {
+	if stat, err := os.Stat(path); err == nil {
+		return stat.IsDir()
+	}
+	return false
+}
+
+//	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
+//	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
+func GopathSrc(subDirNames ...string) (gps string) {
+	var gp []string
+	for _, gp = range goPaths {
+		if gps = filepath.Join(append(gp, subDirNames...)...); goPathsLenIs1 || dirExists(gps) {
+			break
+		}
+	}
+	return
+}
+
+//	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
-	return filepath.Join(append([]string{os.Getenv("GOPATH"), "src", "github.com", gitHubName}, subDirNames...)...)
+	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
 }
 
 //	Returns the path to the current user's home directory.

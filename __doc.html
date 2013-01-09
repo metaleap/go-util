@@ -62,7 +62,7 @@ A tiny assortement of occasionally-useful Go utilities.
 			
 			
 				
-				<dd><a href="#GopathSrc">func GopathSrc(subDirNames ...string) string</a></dd>
+				<dd><a href="#GopathSrc">func GopathSrc(subDirNames ...string) (gps string)</a></dd>
 			
 				
 				<dd><a href="#GopathSrcGithub">func GopathSrcGithub(gitHubName string, subDirNames ...string) string</a></dd>
@@ -124,10 +124,10 @@ A tiny assortement of occasionally-useful Go utilities.
 		
 			
 			
-			<h2 id="GopathSrc">func <a href="/target/util.go?s=278:322#L2">GopathSrc</a></h2>
-			<pre>func GopathSrc(subDirNames ...string) string</pre>
+			<h2 id="GopathSrc">func <a href="/target/util.go?s=653:703#L21">GopathSrc</a></h2>
+			<pre>func GopathSrc(subDirNames ...string) (gps string)</pre>
 			<p>
-Returns the *filepath*-joined full directory path for a specified $GOPATH/src sub-directory.
+Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
 Example: util.GopathSrc(&#34;tools&#34;, &#34;importers&#34;, &#34;sql&#34;) = &#34;c:\gd\src\tools\importers\sql&#34; if $GOPATH is c:\gd.
 </p>
 
@@ -135,10 +135,10 @@ Example: util.GopathSrc(&#34;tools&#34;, &#34;importers&#34;, &#34;sql&#34;) = &
 		
 			
 			
-			<h2 id="GopathSrcGithub">func <a href="/target/util.go?s=652:721#L8">GopathSrcGithub</a></h2>
+			<h2 id="GopathSrcGithub">func <a href="/target/util.go?s=1112:1181#L33">GopathSrcGithub</a></h2>
 			<pre>func GopathSrcGithub(gitHubName string, subDirNames ...string) string</pre>
 			<p>
-Returns the *filepath*-joined full directory path for a specified $GOPATH/src/github.com sub-directory.
+Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
 Example: util.GopathSrcGithub(&#34;metaleap&#34;, &#34;go-util&#34;, &#34;num&#34;) = &#34;c:\gd\src\github.com\metaleap\go-util\num&#34; if $GOPATH is c:\gd.
 </p>
 
@@ -146,7 +146,7 @@ Example: util.GopathSrcGithub(&#34;metaleap&#34;, &#34;go-util&#34;, &#34;num&#3
 		
 			
 			
-			<h2 id="Ifb">func <a href="/target/util.go?s=1326:1367#L23">Ifb</a></h2>
+			<h2 id="Ifb">func <a href="/target/util.go?s=1754:1795#L48">Ifb</a></h2>
 			<pre>func Ifb(cond, ifTrue, ifFalse bool) bool</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -156,7 +156,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifd">func <a href="/target/util.go?s=1481:1533#L31">Ifd</a></h2>
+			<h2 id="Ifd">func <a href="/target/util.go?s=1909:1961#L56">Ifd</a></h2>
 			<pre>func Ifd(cond bool, ifTrue, ifFalse float64) float64</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -166,7 +166,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi">func <a href="/target/util.go?s=1647:1691#L39">Ifi</a></h2>
+			<h2 id="Ifi">func <a href="/target/util.go?s=2075:2119#L64">Ifi</a></h2>
 			<pre>func Ifi(cond bool, ifTrue, ifFalse int) int</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -176,7 +176,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi16">func <a href="/target/util.go?s=1805:1855#L47">Ifi16</a></h2>
+			<h2 id="Ifi16">func <a href="/target/util.go?s=2233:2283#L72">Ifi16</a></h2>
 			<pre>func Ifi16(cond bool, ifTrue, ifFalse int16) int16</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -186,7 +186,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi32">func <a href="/target/util.go?s=1969:2019#L55">Ifi32</a></h2>
+			<h2 id="Ifi32">func <a href="/target/util.go?s=2397:2447#L80">Ifi32</a></h2>
 			<pre>func Ifi32(cond bool, ifTrue, ifFalse int32) int32</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -196,7 +196,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi64">func <a href="/target/util.go?s=2133:2183#L63">Ifi64</a></h2>
+			<h2 id="Ifi64">func <a href="/target/util.go?s=2561:2611#L88">Ifi64</a></h2>
 			<pre>func Ifi64(cond bool, ifTrue, ifFalse int64) int64</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -206,7 +206,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifs">func <a href="/target/util.go?s=2297:2354#L71">Ifs</a></h2>
+			<h2 id="Ifs">func <a href="/target/util.go?s=2725:2782#L96">Ifs</a></h2>
 			<pre>func Ifs(cond bool, ifTrue string, ifFalse string) string</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -216,7 +216,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifu32">func <a href="/target/util.go?s=2468:2520#L79">Ifu32</a></h2>
+			<h2 id="Ifu32">func <a href="/target/util.go?s=2896:2948#L104">Ifu32</a></h2>
 			<pre>func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -226,7 +226,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifu64">func <a href="/target/util.go?s=2634:2686#L87">Ifu64</a></h2>
+			<h2 id="Ifu64">func <a href="/target/util.go?s=3062:3114#L112">Ifu64</a></h2>
 			<pre>func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64</pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -236,7 +236,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="ParseVersion">func <a href="/target/util.go?s=2944:3009#L96">ParseVersion</a></h2>
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=3372:3437#L121">ParseVersion</a></h2>
 			<pre>func ParseVersion(verstr string) (majorMinor []int, both float64)</pre>
 			<p>
 Attempts to extract major and minor version components from a string that begins with a version number.
@@ -247,7 +247,7 @@ Example: returns []int{3, 2} and float64(3.2) for a verstr that is &#34;3.2.0 - 
 		
 			
 			
-			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=1110:1149#L15">UserHomeDirPath</a></h2>
+			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=1538:1577#L40">UserHomeDirPath</a></h2>
 			<pre>func UserHomeDirPath() (dirPath string)</pre>
 			<p>
 Returns the path to the current user&#39;s home directory.
