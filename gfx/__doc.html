@@ -45,7 +45,7 @@
 			<div class="expanded">
 				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
 				<p>
-Nothing to see here really...
+General helpers for working with graphics, imagery and picture sampling.
 </p>
 
 			</div>
@@ -73,12 +73,25 @@ Nothing to see here really...
 				<dd><a href="#Rgba32">type Rgba32</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#NewRgba32">func NewRgba32(vals []float64) (me *Rgba32)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#NewRgba32">func NewRgba32(vals ...float64) (me *Rgba32)</a></dd>
 				
 				
 			
 				
 				<dd><a href="#Rgba64">type Rgba64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SamplerWrapping">type SamplerWrapping</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewSamplerWrapping">func NewSamplerWrapping(stp WrapKind, borderColor *Rgba32) (me *SamplerWrapping)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#WrapKind">type WrapKind</a></dd>
 				
 				
 			
@@ -96,6 +109,8 @@ Nothing to see here really...
 			
 				<a href="/target/gfx.go">gfx.go</a>
 			
+				<a href="/target/sampling.go">sampling.go</a>
+			
 			</span>
 			</p>
 		
@@ -105,7 +120,7 @@ Nothing to see here really...
 		
 			
 			
-			<h2 id="Index2D">func <a href="/target/gfx.go?s=1015:1048#L39">Index2D</a></h2>
+			<h2 id="Index2D">func <a href="/target/gfx.go?s=1091:1124#L40">Index2D</a></h2>
 			<pre>func Index2D(x, y, ysize int) int</pre>
 			<p>
 If 2-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 2D coordinate...
@@ -115,7 +130,7 @@ If 2-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="Index3D">func <a href="/target/gfx.go?s=1228:1271#L44">Index3D</a></h2>
+			<h2 id="Index3D">func <a href="/target/gfx.go?s=1304:1347#L45">Index3D</a></h2>
 			<pre>func Index3D(x, y, z, xsize, ysize int) int</pre>
 			<p>
 If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
@@ -125,7 +140,7 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1363:1424#L49">SavePngImageFile</a></h2>
+			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1439:1500#L50">SavePngImageFile</a></h2>
 			<pre>func SavePngImageFile(img image.Image, filePath string) error</pre>
 			<p>
 Saves any given image as a local PNG file.
@@ -160,10 +175,11 @@ Describes a literal color using four 32-bit floating-point numbers in RGBA order
 
 			
 				
-				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=354:397#L12">NewRgba32</a></h3>
-				<pre>func NewRgba32(vals []float64) (me *Rgba32)</pre>
+				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=429:473#L13">NewRgba32</a></h3>
+				<pre>func NewRgba32(vals ...float64) (me *Rgba32)</pre>
 				<p>
 Converts the specified vals to a newly initialized Rgba32 instance.
+The first 4 vals are used for R, G, B, and A in that order, if present.
 </p>
 
 				
@@ -173,7 +189,7 @@ Converts the specified vals to a newly initialized Rgba32 instance.
 		
 			
 			
-			<h2 id="Rgba64">type <a href="/target/gfx.go?s=720:863#L27">Rgba64</a></h2>
+			<h2 id="Rgba64">type <a href="/target/gfx.go?s=796:939#L28">Rgba64</a></h2>
 			<pre>type Rgba64 struct {
     <span class="comment">//	Red component</span>
     R float64
@@ -189,6 +205,98 @@ Describes a literal color using four 64-bit floating-point numbers in RGBA order
 </p>
 
 
+			
+
+			
+
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SamplerWrapping">type <a href="/target/sampling.go?s=1494:2085#L24">SamplerWrapping</a></h2>
+			<pre>type SamplerWrapping struct {
+    <span class="comment">//	When reading past the edge of the texture address space</span>
+    <span class="comment">//	based on the wrap modes involving clamps, this color takes over.</span>
+    BorderColor Rgba32
+
+    <span class="comment">//	Controls texture repeating and clamping of the S coordinate.</span>
+    <span class="comment">//	Must be one of the WrapKind* enumerated constants.</span>
+    WrapS WrapKind
+
+    <span class="comment">//	Controls texture repeating and clamping of the T coordinate.</span>
+    <span class="comment">//	Must be one of the WrapKind* enumerated constants.</span>
+    WrapT WrapKind
+
+    <span class="comment">//	Controls texture repeating and clamping of the P coordinate.</span>
+    <span class="comment">//	Must be one of the WrapKind* enumerated constants.</span>
+    WrapP WrapKind
+}</pre>
+			<p>
+Controls texture repeating and clamping.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewSamplerWrapping">func <a href="/target/sampling.go?s=2244:2324#L44">NewSamplerWrapping</a></h3>
+				<pre>func NewSamplerWrapping(stp WrapKind, borderColor *Rgba32) (me *SamplerWrapping)</pre>
+				<p>
+Initializes a new SamplerWrapping with the specified coordinate wrappings
+and borderColor. If no borderColor is specified, black (0, 0, 0, 1) is used.
+</p>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="WrapKind">type <a href="/target/sampling.go?s=75:92#L1">WrapKind</a></h2>
+			<pre>type WrapKind int</pre>
+			<p>
+Categorizes the kinds of wrapping used in SamplerWrapping.
+</p>
+
+
+			
+				<pre>const (
+    <span class="comment">//	Ignores the integer part of texture coordinates, using only the fractional part and tiling the</span>
+    <span class="comment">//	texture at every integer junction. For example, for u values between 0 and 3, the texture is</span>
+    <span class="comment">//	repeated three times; no mirroring is performed.</span>
+    WrapKindRepeat WrapKind = 0x2901
+
+    <span class="comment">//	First mirrors the texture coordinate. The mirrored coordinate is then clamped as described for</span>
+    <span class="comment">//	WrapKindClamp. Flips the texture at every integer junction. For u values between 0 and 1,</span>
+    <span class="comment">//	for example, the texture is addressed normally; between 1 and 2, the texture is flipped (mirrored);</span>
+    <span class="comment">//	between 2 and 3, the texture is normal again; and so on.</span>
+    WrapKindMirror WrapKind = 0x8370
+
+    <span class="comment">//	Clamps texture coordinates at all MIPmap levels such that</span>
+    <span class="comment">//	the texture filter never samples a border texel.</span>
+    WrapKindClamp WrapKind = 0x812F
+
+    <span class="comment">//	Clamps texture coordinates at all MIPmaps such that the texture filter always samples border</span>
+    <span class="comment">//	texels for fragments whose corresponding texture coordinate is sufficiently far outside</span>
+    <span class="comment">//	the range [0, 1]. Much like WrapKindClamp, except texture coordinates outside</span>
+    <span class="comment">//	the range [0.0, 1.0] are set to the border color.</span>
+    WrapKindBorder WrapKind = 0x812D
+
+    <span class="comment">//	Takes the absolute value of the texture coordinate (thus, mirroring around 0),</span>
+    <span class="comment">//	and then clamps to the maximum value.</span>
+    WrapKindMirrorOnce WrapKind = 41
+)</pre>
+				
 			
 
 			

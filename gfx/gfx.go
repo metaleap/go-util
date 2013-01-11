@@ -19,7 +19,8 @@ type Rgba32 struct {
 }
 
 //	Converts the specified vals to a newly initialized Rgba32 instance.
-func NewRgba32(vals []float64) (me *Rgba32) {
+//	The first 4 vals are used for R, G, B, and A in that order, if present.
+func NewRgba32(vals ...float64) (me *Rgba32) {
 	me = &Rgba32{}
 	if len(vals) > 0 {
 		if me.R = float32(vals[0]); len(vals) > 1 {

@@ -1,2 +1,2 @@
-//	Nothing to see here really...
+//	General helpers for working with graphics, imagery and picture sampling.
 package gfx
