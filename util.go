@@ -1,6 +1,7 @@
 package util
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -42,6 +43,13 @@ func GopathSrc(subDirNames ...string) (gps string) {
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
+}
+
+//	If err isn't nil, short-hand for log.Println(err.Error())
+func LogError(err error) {
+	if err != nil {
+		log.Println(err.Error())
+	}
 }
 
 //	Returns the path to the current user's home directory.
