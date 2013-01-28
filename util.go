@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -131,4 +132,34 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 		return ifTrue
 	}
 	return ifFalse
+}
+
+//	Attempts to extract major and minor version components from a string that begins with a version number.
+//	Example: returns []int{3, 2} and float64(3.2) for a verstr that is "3.2.0 - Build 8.15.10.2761"
+func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
+	var (
+		pos, j int
+		i      uint64
+		err    error
+	)
+	for _, p := range strings.Split(verstr, ".") {
+		if pos = strings.Index(p, " "); pos > 0 {
+			p = p[:pos]
+		}
+		if i, err = strconv.ParseUint(p, 10, 8); err == nil {
+			majorMinor[j] = int(i)
+			if j++; j >= len(majorMinor) {
+				break
+			}
+		} else {
+			break
+		}
+	}
+	if len(majorMinor) > 0 {
+		both = float64(majorMinor[0])
+	}
+	if len(majorMinor) > 1 {
+		both += (float64(majorMinor[1]) * 0.1)
+	}
+	return
 }
