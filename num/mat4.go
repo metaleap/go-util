@@ -4,15 +4,6 @@ import (
 	"math"
 )
 
-var (
-	//	Represents the 4x4 identity matrix.
-	Mat4Identity = NewMat4Identity()
-
-	tmpMat0          Mat4
-	tmpMat1, tmpMat2 *Mat4
-	tvN, tvU, tvV    *Vec3
-)
-
 //	Represents a 4x4 column-major matrix.
 type Mat4 [16]float64
 
@@ -60,6 +51,7 @@ func (me *Mat4) Identity() {
 
 //	Sets this 4x4 matrix to the specified look-at matrix.
 func (me *Mat4) LookAt(lookTarget, worldUp *Vec3) {
+	var tvN, tvU, tvV *Vec3
 	/*
 		var aFwd, aSide, aUp = &Vec3 { eyePos.X - lookTarget.X, eyePos.Y - lookTarget.Y, eyePos.Z - lookTarget.Z }, &Vec3 {}, &Vec3 {}
 		aFwd.Normalize()
@@ -170,15 +162,19 @@ func (me *Mat4) SetFromMult4(one, two *Mat4) {
 
 //	Sets this 4x4 matrix to the result of multiplying all the specified mats with one another.
 func (me *Mat4) SetFromMultN(mats ...*Mat4) {
-	tmpMat1 = mats[0]
+	var (
+		mat0       Mat4
+		mat1, mat2 *Mat4
+	)
+	mat1 = mats[0]
 	for i := 1; i < len(mats); i++ {
-		tmpMat2 = mats[i]
-		me[0], me[4], me[8], me[12] = (tmpMat1[0]*tmpMat2[0])+(tmpMat1[4]*tmpMat2[1])+(tmpMat1[8]*tmpMat2[2])+(tmpMat1[12]*tmpMat2[3]), (tmpMat1[0]*tmpMat2[4])+(tmpMat1[4]*tmpMat2[5])+(tmpMat1[8]*tmpMat2[6])+(tmpMat1[12]*tmpMat2[7]), (tmpMat1[0]*tmpMat2[8])+(tmpMat1[4]*tmpMat2[9])+(tmpMat1[8]*tmpMat2[10])+(tmpMat1[12]*tmpMat2[11]), (tmpMat1[0]*tmpMat2[12])+(tmpMat1[4]*tmpMat2[13])+(tmpMat1[8]*tmpMat2[14])+(tmpMat1[12]*tmpMat2[15])
-		me[1], me[5], me[9], me[13] = (tmpMat1[1]*tmpMat2[0])+(tmpMat1[5]*tmpMat2[1])+(tmpMat1[9]*tmpMat2[2])+(tmpMat1[13]*tmpMat2[3]), (tmpMat1[1]*tmpMat2[4])+(tmpMat1[5]*tmpMat2[5])+(tmpMat1[9]*tmpMat2[6])+(tmpMat1[13]*tmpMat2[7]), (tmpMat1[1]*tmpMat2[8])+(tmpMat1[5]*tmpMat2[9])+(tmpMat1[9]*tmpMat2[10])+(tmpMat1[13]*tmpMat2[11]), (tmpMat1[1]*tmpMat2[12])+(tmpMat1[5]*tmpMat2[13])+(tmpMat1[9]*tmpMat2[14])+(tmpMat1[13]*tmpMat2[15])
-		me[2], me[6], me[10], me[14] = (tmpMat1[2]*tmpMat2[0])+(tmpMat1[6]*tmpMat2[1])+(tmpMat1[10]*tmpMat2[2])+(tmpMat1[14]*tmpMat2[3]), (tmpMat1[2]*tmpMat2[4])+(tmpMat1[6]*tmpMat2[5])+(tmpMat1[10]*tmpMat2[6])+(tmpMat1[14]*tmpMat2[7]), (tmpMat1[2]*tmpMat2[8])+(tmpMat1[6]*tmpMat2[9])+(tmpMat1[10]*tmpMat2[10])+(tmpMat1[14]*tmpMat2[11]), (tmpMat1[2]*tmpMat2[12])+(tmpMat1[6]*tmpMat2[13])+(tmpMat1[10]*tmpMat2[14])+(tmpMat1[14]*tmpMat2[15])
-		me[3], me[7], me[11], me[15] = (tmpMat1[3]*tmpMat2[0])+(tmpMat1[7]*tmpMat2[1])+(tmpMat1[11]*tmpMat2[2])+(tmpMat1[15]*tmpMat2[3]), (tmpMat1[3]*tmpMat2[4])+(tmpMat1[7]*tmpMat2[5])+(tmpMat1[11]*tmpMat2[6])+(tmpMat1[15]*tmpMat2[7]), (tmpMat1[3]*tmpMat2[8])+(tmpMat1[7]*tmpMat2[9])+(tmpMat1[11]*tmpMat2[10])+(tmpMat1[15]*tmpMat2[11]), (tmpMat1[3]*tmpMat2[12])+(tmpMat1[7]*tmpMat2[13])+(tmpMat1[11]*tmpMat2[14])+(tmpMat1[15]*tmpMat2[15])
-		tmpMat0 = *me
-		tmpMat1 = &tmpMat0
+		mat2 = mats[i]
+		me[0], me[4], me[8], me[12] = (mat1[0]*mat2[0])+(mat1[4]*mat2[1])+(mat1[8]*mat2[2])+(mat1[12]*mat2[3]), (mat1[0]*mat2[4])+(mat1[4]*mat2[5])+(mat1[8]*mat2[6])+(mat1[12]*mat2[7]), (mat1[0]*mat2[8])+(mat1[4]*mat2[9])+(mat1[8]*mat2[10])+(mat1[12]*mat2[11]), (mat1[0]*mat2[12])+(mat1[4]*mat2[13])+(mat1[8]*mat2[14])+(mat1[12]*mat2[15])
+		me[1], me[5], me[9], me[13] = (mat1[1]*mat2[0])+(mat1[5]*mat2[1])+(mat1[9]*mat2[2])+(mat1[13]*mat2[3]), (mat1[1]*mat2[4])+(mat1[5]*mat2[5])+(mat1[9]*mat2[6])+(mat1[13]*mat2[7]), (mat1[1]*mat2[8])+(mat1[5]*mat2[9])+(mat1[9]*mat2[10])+(mat1[13]*mat2[11]), (mat1[1]*mat2[12])+(mat1[5]*mat2[13])+(mat1[9]*mat2[14])+(mat1[13]*mat2[15])
+		me[2], me[6], me[10], me[14] = (mat1[2]*mat2[0])+(mat1[6]*mat2[1])+(mat1[10]*mat2[2])+(mat1[14]*mat2[3]), (mat1[2]*mat2[4])+(mat1[6]*mat2[5])+(mat1[10]*mat2[6])+(mat1[14]*mat2[7]), (mat1[2]*mat2[8])+(mat1[6]*mat2[9])+(mat1[10]*mat2[10])+(mat1[14]*mat2[11]), (mat1[2]*mat2[12])+(mat1[6]*mat2[13])+(mat1[10]*mat2[14])+(mat1[14]*mat2[15])
+		me[3], me[7], me[11], me[15] = (mat1[3]*mat2[0])+(mat1[7]*mat2[1])+(mat1[11]*mat2[2])+(mat1[15]*mat2[3]), (mat1[3]*mat2[4])+(mat1[7]*mat2[5])+(mat1[11]*mat2[6])+(mat1[15]*mat2[7]), (mat1[3]*mat2[8])+(mat1[7]*mat2[9])+(mat1[11]*mat2[10])+(mat1[15]*mat2[11]), (mat1[3]*mat2[12])+(mat1[7]*mat2[13])+(mat1[11]*mat2[14])+(mat1[15]*mat2[15])
+		mat0 = *me
+		mat1 = &mat0
 	}
 }
 

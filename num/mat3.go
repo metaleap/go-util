@@ -1,10 +1,5 @@
 package num
 
-var (
-	//	Represents the 3x3 identity matrix.
-	Mat3Identity = NewMat3Identity()
-)
-
 //	Represents a 3x3 matrix.
 type Mat3 [9]float64
 

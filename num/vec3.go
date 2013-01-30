@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	tmpQ, tmpQw, tmpQr, tmpQc = Quat{}, Quat{}, Quat{}, Quat{}
+// tmpQ, tmpQw, tmpQr, tmpQc = Quat{}, Quat{}, Quat{}, Quat{}
 )
 
 //	Represented a 3-dimensional vector.
@@ -168,9 +168,9 @@ func (me *Vec3) RotateDeg(angleDeg float64, axis *Vec3) {
 }
 
 func (me *Vec3) RotateRad(angleRad float64, axis *Vec3) {
-	tmpCos := math.Cos(angleRad)
-	tmpSin := math.Sin(angleRad)
-	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*tmpSin, axis.Y*tmpSin, axis.Z*tmpSin, tmpCos
+	tmpQ, tmpQw, tmpQr, tmpQc := Quat{}, Quat{}, Quat{}, Quat{}
+	cos, sin := math.Cos(angleRad), math.Sin(angleRad)
+	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*sin, axis.Y*sin, axis.Z*sin, cos
 	tmpQc.SetFromConjugated(&tmpQr)
 	tmpQ.SetFromMult3(&tmpQr, me)
 	tmpQw.SetFromMult(&tmpQ, &tmpQc)
