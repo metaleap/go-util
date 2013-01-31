@@ -56,7 +56,8 @@ func (me *Vec3) Cross(vec *Vec3) *Vec3 {
 
 //	Returns a new 3D vector that represents the cross-product of this 3D vector and vec, normalized.
 func (me *Vec3) CrossNormalized(vec *Vec3) (r *Vec3) {
-	r = &Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
+	r = me.Cross(vec) // should be inlined.
+	//	&Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
 	r.Normalize()
 	return
 }
@@ -136,23 +137,20 @@ func (me *Vec3) Mult1(val float64) *Vec3 {
 
 //	Normalizes this 3D vector.
 func (me *Vec3) Normalize() {
-	tmpVal := me.Magnitude()
-	if tmpVal == 0 {
-		me.X, me.Y, me.Z = tmpVal, tmpVal, tmpVal
+	if tmpVal := me.Magnitude(); tmpVal == 0 {
+		me.X, me.Y, me.Z = 0, 0, 0
 	} else {
-		tmpVal = 1 / tmpVal
-		me.X, me.Y, me.Z = me.X*tmpVal, me.Y*tmpVal, me.Z*tmpVal
+		me.Scale(1 / tmpVal)
 	}
 }
 
 //	Returns a new 3D vector that represents this 3D vector, normalized.
-func (me *Vec3) Normalized() *Vec3 {
-	tmpVal := me.Magnitude()
-	if tmpVal == 0 {
-		return &Vec3{tmpVal, tmpVal, tmpVal}
+func (me *Vec3) Normalized() (vec *Vec3) {
+	vec = &Vec3{}
+	if tmpVal := me.Magnitude(); tmpVal != 0 {
+		vec.SetFromMult1(me, 1/tmpVal)
 	}
-	tmpVal = 1 / tmpVal
-	return &Vec3{me.X * tmpVal, me.Y * tmpVal, me.Z * tmpVal}
+	return
 }
 
 //	Returns a new 3D vector that represents this 3D vector, normalized, then scaled by factor.
@@ -163,18 +161,18 @@ func (me *Vec3) NormalizedScaled(factor float64) (vec *Vec3) {
 }
 
 //	Rotates this 3D vector angleDeg degrees around the specified axis.
-func (me *Vec3) RotateDeg(angleDeg float64, axis *Vec3) {
-	me.RotateRad(DegToRad(angleDeg/2), axis)
+func (me *Vec3) RotateDeg(bag *Bag, angleDeg float64, axis *Vec3) {
+	me.RotateRad(bag, DegToRad(angleDeg/2), axis)
 }
 
-func (me *Vec3) RotateRad(angleRad float64, axis *Vec3) {
-	tmpQ, tmpQw, tmpQr, tmpQc := Quat{}, Quat{}, Quat{}, Quat{}
-	cos, sin := math.Cos(angleRad), math.Sin(angleRad)
-	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*sin, axis.Y*sin, axis.Z*sin, cos
-	tmpQc.SetFromConjugated(&tmpQr)
-	tmpQ.SetFromMult3(&tmpQr, me)
-	tmpQw.SetFromMult(&tmpQ, &tmpQc)
-	me.X, me.Y, me.Z = tmpQw.X, tmpQw.Y, tmpQw.Z
+//	Rotates this 3D vector angleRad radians around the specified axis.
+func (me *Vec3) RotateRad(bag *Bag, angleRad float64, axis *Vec3) {
+	bag.qfv = math.Sin(angleRad)
+	bag.v3r.tmpQr.X, bag.v3r.tmpQr.Y, bag.v3r.tmpQr.Z, bag.v3r.tmpQr.W = axis.X*bag.qfv, axis.Y*bag.qfv, axis.Z*bag.qfv, math.Cos(angleRad)
+	bag.v3r.tmpQc.SetFromConjugated(&bag.v3r.tmpQr)
+	bag.v3r.tmpQ.SetFromMult3(&bag.v3r.tmpQr, me)
+	bag.v3r.tmpQw.SetFromMult(&bag.v3r.tmpQ, &bag.v3r.tmpQc)
+	me.X, me.Y, me.Z = bag.v3r.tmpQw.X, bag.v3r.tmpQw.Y, bag.v3r.tmpQw.Z
 }
 
 //	Scales this 3D vector by factor.
@@ -225,6 +223,11 @@ func (me *Vec3) SetFromAddMult1(vec1, vec2 *Vec3, mul float64) {
 //	Sets each component of this 3D vector to the cosine of the corresponding component in vec.
 func (me *Vec3) SetFromCos(vec *Vec3) {
 	me.X, me.Y, me.Z = math.Cos(vec.X), math.Cos(vec.Y), math.Cos(vec.Z)
+}
+
+//	Modifies this Vec3 to represent the cross-product of its previous value and vec.
+func (me *Vec3) SetFromCross(vec *Vec3) {
+	me.X, me.Y, me.Z = (me.Y*vec.Z)-(me.Z*vec.Y), (me.Z*vec.X)-(me.X*vec.Z), (me.X*vec.Y)-(me.Y*vec.X)
 }
 
 //	Sets each component of this 3D vector to the radian equivalent of the degree angle stored in the corresponding component in vec.
@@ -355,7 +358,7 @@ func (me *Vec3) SubDot(vec *Vec3) float64 {
 	return ((me.X - vec.X) * (me.X - vec.X)) + ((me.Y - vec.Y) * (me.Y - vec.Y)) + ((me.Z - vec.Z) * (me.Z - vec.Z))
 }
 
-//	Returns a new 3D vector that represents the result of (this 3D vector divided by floorDiv) floored, scaled by mul.
+//	Returns a new 3D vector that represents the result of (this 3D vector divided by floorDiv) floored, then scaled by mul.
 func (me *Vec3) SubFloorDivMult(floorDiv, mul float64) *Vec3 {
 	return me.Sub(&Vec3{math.Floor(me.X/floorDiv) * mul, math.Floor(me.Y/floorDiv) * mul, math.Floor(me.Z/floorDiv) * mul})
 }

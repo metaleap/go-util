@@ -64,10 +64,11 @@ func UserHomeDirPath() (dirPath string) {
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifb(cond, ifTrue, ifFalse bool) bool {
-	if cond {
-		return ifTrue
-	}
-	return ifFalse
+	return (cond && ifTrue) || ((!cond) && ifFalse)
+	// if cond {
+	// 	return ifTrue
+	// }
+	// return ifFalse
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.

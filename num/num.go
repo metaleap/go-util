@@ -4,14 +4,35 @@ import (
 	"math"
 )
 
+//	You'll need to supply some Vec3, Quat and Mat4 methods with such a "Bag".
+//	It is recommended to keep a single Bag (per thread / goroutine!) for indefinite reuse.
+type Bag struct {
+	qfv float64
+	m4l struct {
+		tvN, tvU, tvV *Vec3
+	}
+	m4n struct {
+		i      int
+		m0     Mat4
+		m1, m2 *Mat4
+	}
+	m4p struct {
+		tfX, tfY float64
+	}
+	v3r struct {
+		tmpQ, tmpQw, tmpQr, tmpQc Quat
+	}
+}
+
 const (
-	Epsilon32 = math.SmallestNonzeroFloat32
-	Epsilon64 = math.SmallestNonzeroFloat64
 	PiDiv180  = math.Pi / 180
 	PiHalfDiv = 0.5 / math.Pi
 )
 
 var (
+	Epsilon32 = math.SmallestNonzeroFloat32
+	Epsilon64 = math.SmallestNonzeroFloat64
+
 	//	Contains the positive-infinity float64 returned by math.Inf(1).
 	Infinity = math.Inf(1)
 
@@ -136,13 +157,13 @@ func RadToDeg(rad float64) float64 {
 	return rad * PiDiv180
 }
 
-//	Returns math.Ceil(v) if fraction >= 0.5, otherwise returns math.Floor(v)
-func Round(v float64) float64 {
+//	Returns (the equivalent of) math.Ceil(v) if fraction >= 0.5, otherwise returns (the equivalent of) math.Floor(v).
+func Round(v float64) (fint float64) {
 	var frac float64
-	if _, frac = math.Modf(v); frac >= 0.5 {
-		return math.Ceil(v)
+	if fint, frac = math.Modf(v); frac >= 0.5 {
+		fint++
 	}
-	return math.Floor(v)
+	return
 }
 
 //	Clamps v between 0 and 1.
@@ -151,21 +172,24 @@ func Saturate(v float64) float64 {
 }
 
 //	Returns -1 if v is negative, 1 if v is positive, or 0 if v is zero.
-func Sign(v float64) float64 {
+func Sign(v float64) (sign float64) {
 	if v > 0 {
-		return 1
+		sign = 1
+	} else if v < 0 {
+		sign = -1
 	}
-	if v < 0 {
-		return -1
-	}
-	return 0
+	return
 	// return v / math.Abs(v)
 }
 
 //	Returns 0 if x < edge, otherwise returns 1.
-func Step(edge, x float64) int {
-	if x < edge {
-		return 0
+func Step(edge, x float64) (step int) {
+	if edge >= x {
+		step = 1
 	}
-	return 1
+	return
+	// if x < edge {
+	// 	return 0
+	// }
+	// return 1
 }

@@ -9,7 +9,12 @@ type Quat struct {
 	X, Y, Z, W float64
 }
 
-//	Conjugates this quaternion.
+func (me *Quat) Clone() (q *Quat) {
+	*q = *me
+	return
+}
+
+//	Conjugates this quaternion: swaps all signs for the X, Y and Z components only.
 func (me *Quat) Conjugate() {
 	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
 }
@@ -30,26 +35,24 @@ func (me *Quat) Magnitude() float64 {
 }
 
 //	Normalizes this quaternion.
-func (me *Quat) Normalize() {
-	tfQ := me.Magnitude()
-	if tfQ == 0 {
-		me.X, me.Y, me.Z = tfQ, tfQ, tfQ
+func (me *Quat) Normalize(bag *Bag) {
+	bag.qfv = me.Magnitude()
+	if bag.qfv == 0 {
+		me.X, me.Y, me.Z, me.W = 0, 0, 0, 0
 	} else {
-		tfQ = 1 / tfQ
-		me.X, me.Y, me.Z, me.W = me.X*tfQ, me.Y*tfQ, me.Z*tfQ, me.W*tfQ
+		bag.qfv = 1 / bag.qfv
+		me.X, me.Y, me.Z, me.W = me.X*bag.qfv, me.Y*bag.qfv, me.Z*bag.qfv, me.W*bag.qfv
 	}
 }
 
 //	Returns a new quaternion that is the normalized representation of this quaternion.
-func (me *Quat) Normalized() (q *Quat) {
-	quat := Quat{}
-	q = &quat
-	tfQ := me.Magnitude()
-	if tfQ == 0 {
-		return
+func (me *Quat) Normalized(bag *Bag) (q *Quat) {
+	q = &Quat{}
+	bag.qfv = me.Magnitude()
+	if bag.qfv != 0 {
+		bag.qfv = 1 / bag.qfv
+		q.X, q.Y, q.Z, q.W = me.X*bag.qfv, me.Y*bag.qfv, me.Z*bag.qfv, me.W*bag.qfv
 	}
-	tfQ = 1 / tfQ
-	quat.X, quat.Y, quat.Z, quat.W = me.X*tfQ, me.Y*tfQ, me.Z*tfQ, me.W*tfQ
 	return
 }
 
@@ -67,8 +70,24 @@ func (me *Quat) SetFromMult(l, r *Quat) {
 }
 
 //	Multiplies this quaternion's components with v.
-func (me *Quat) SetFromMult1(v float64) {
+func (me *Quat) Scale(v float64) {
 	me.X, me.Y, me.Z, me.W = me.X*v, me.Y*v, me.Z*v, me.W*v
+}
+
+//	Sets this quaternion to the result of multiplying all values in the specified 4x4 matrix with the specified 3D vector.
+func (me *Quat) MultMat4Vec3(mat *Mat4, vec *Vec3) {
+	me.X = (mat[0] * vec.X) + (mat[4] * vec.Y) + (mat[8] * vec.Z) + (mat[12] * 1)
+	me.Y = (mat[1] * vec.X) + (mat[5] * vec.Y) + (mat[9] * vec.Z) + (mat[13] * 1)
+	me.Z = (mat[2] * vec.X) + (mat[6] * vec.Y) + (mat[10] * vec.Z) + (mat[14] * 1)
+	me.W = (mat[3] * vec.X) + (mat[7] * vec.Y) + (mat[11] * vec.Z) + (mat[15] * 1)
+}
+
+//	Sets this quaternion to the result of multiplying all values in the specified 4x4 matrix with the specified quaternion.
+func (me *Quat) MultMat4Vec4(mat *Mat4, vec *Quat) {
+	me.X = (mat[0] * vec.X) + (mat[4] * vec.Y) + (mat[8] * vec.Z) + (mat[12] * vec.Y)
+	me.Y = (mat[1] * vec.X) + (mat[5] * vec.Y) + (mat[9] * vec.Z) + (mat[13] * vec.Y)
+	me.Z = (mat[2] * vec.X) + (mat[6] * vec.Y) + (mat[10] * vec.Z) + (mat[14] * vec.Y)
+	me.W = (mat[3] * vec.X) + (mat[7] * vec.Y) + (mat[11] * vec.Z) + (mat[15] * vec.Y)
 }
 
 //	Sets this quaternion to the result of multiplying quaternion q with vector v.
@@ -80,6 +99,6 @@ func (me *Quat) SetFromMult3(q *Quat, v *Vec3) {
 }
 
 //	Multiplies this quaternion with the specified matrix.
-func (me *Quat) SetFromMult4(mat *Mat4) {
-	*me = *(mat.Mult4(me))
+func (me *Quat) SetFromMultMat4(mat *Mat4) {
+	me.MultMat4Vec4(mat, me.Clone())
 }
