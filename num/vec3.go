@@ -24,6 +24,11 @@ func (me *Vec3) Add1(val float64) {
 	me.X, me.Y, me.Z = me.X+val, me.Y+val, me.Z+val
 }
 
+//	Adds the specified components to this 3D vector.
+func (me *Vec3) Add3(x, y, z float64) {
+	me.X, me.Y, me.Z = me.X+x, me.Y+y, me.Z+z
+}
+
 //	Returns true if all components of this 3D vector equal val.
 func (me *Vec3) AllEqual(val float64) bool {
 	return (me.X == val) && (me.Y == val) && (me.Z == val)
