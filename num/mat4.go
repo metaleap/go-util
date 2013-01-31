@@ -31,6 +31,13 @@ func (me *Mat4) Clear() {
 	*me = m4z
 }
 
+//	Returns a pointer to a newly allocated copy of me.
+func (me *Mat4) Clone() (mat *Mat4) {
+	mat = &Mat4{}
+	me.CopyTo(mat)
+	return
+}
+
 //	Sets this 4x4 matrix to the same values as mat.
 func (me *Mat4) CopyFrom(mat *Mat4) {
 	*me = *mat
