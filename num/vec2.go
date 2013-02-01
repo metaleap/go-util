@@ -1,4 +1,4 @@
-package num
+package unum
 
 import (
 	"math"

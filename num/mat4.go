@@ -1,4 +1,4 @@
-package num
+package unum
 
 import (
 	"math"
@@ -75,9 +75,12 @@ func (me *Mat4) LookAt(bag *Bag, lookTarget, worldUp *Vec3) {
 		me[2], me[6], me[10], me[14] = aFwd.X, aFwd.Y, aFwd.Z, -((aFwd.X * eyePos.X) + (aFwd.Y * eyePos.Y) + (aFwd.Z * eyePos.Z))
 		me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 	*/
-	bag.m4l.tvN = lookTarget.Normalized()
-	bag.m4l.tvU = worldUp.Normalized().Cross(lookTarget)
-	bag.m4l.tvV = bag.m4l.tvN.Cross(bag.m4l.tvU)
+	// bag.m4l.tvN = lookTarget.Normalized()
+	// bag.m4l.tvU = worldUp.Normalized().Cross(lookTarget)
+	// bag.m4l.tvV = bag.m4l.tvN.Cross(bag.m4l.tvU)
+	bag.m4l.tvN.SetFromNormalized(lookTarget)
+	bag.m4l.tvU.SetFromCrossOf(worldUp.Normalized(), lookTarget)
+	bag.m4l.tvV.SetFromCrossOf(&bag.m4l.tvN, &bag.m4l.tvU)
 	me[0], me[4], me[8], me[12] = bag.m4l.tvU.X, bag.m4l.tvU.Y, bag.m4l.tvU.Z, 0
 	me[1], me[5], me[9], me[13] = bag.m4l.tvV.X, bag.m4l.tvV.Y, bag.m4l.tvV.Z, 0
 	me[2], me[6], me[10], me[14] = bag.m4l.tvN.X, bag.m4l.tvN.Y, bag.m4l.tvN.Z, 0

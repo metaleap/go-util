@@ -1,4 +1,4 @@
-package num
+package unum
 
 //	Represents a 3x3 matrix.
 type Mat3 [9]float64

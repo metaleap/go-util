@@ -123,7 +123,7 @@ General helpers for working with graphics, imagery and picture sampling.
 		
 			
 			
-			<h2 id="Index2D">func <a href="/target/gfx.go?s=1625:1658#L62">Index2D</a></h2>
+			<h2 id="Index2D">func <a href="/target/gfx.go?s=1626:1659#L62">Index2D</a></h2>
 			<pre>func Index2D(x, y, ysize int) int</pre>
 			<p>
 If 2-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 2D coordinate...
@@ -133,7 +133,7 @@ If 2-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="Index3D">func <a href="/target/gfx.go?s=1838:1881#L67">Index3D</a></h2>
+			<h2 id="Index3D">func <a href="/target/gfx.go?s=1839:1882#L67">Index3D</a></h2>
 			<pre>func Index3D(x, y, z, xsize, ysize int) int</pre>
 			<p>
 If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
@@ -143,7 +143,7 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1973:2034#L72">SavePngImageFile</a></h2>
+			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1974:2035#L72">SavePngImageFile</a></h2>
 			<pre>func SavePngImageFile(img image.Image, filePath string) error</pre>
 			<p>
 Saves any given image as a local PNG file.
@@ -154,7 +154,7 @@ Saves any given image as a local PNG file.
 		
 			
 			
-			<h2 id="Rgba32">type <a href="/target/gfx.go?s=138:281#L1">Rgba32</a></h2>
+			<h2 id="Rgba32">type <a href="/target/gfx.go?s=139:282#L1">Rgba32</a></h2>
 			<pre>type Rgba32 struct {
     <span class="comment">//	Red component</span>
     R float32
@@ -178,7 +178,7 @@ Describes a literal color using four 32-bit floating-point numbers in RGBA order
 
 			
 				
-				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=473:517#L14">NewRgba32</a></h3>
+				<h3 id="NewRgba32">func <a href="/target/gfx.go?s=474:518#L14">NewRgba32</a></h3>
 				<pre>func NewRgba32(vals ...float64) (me *Rgba32)</pre>
 				<p>
 Converts the specified vals to a newly initialized Rgba32 instance.
@@ -193,7 +193,7 @@ A is set to 1 if vals[3] is not present.
 		
 			
 			
-			<h2 id="Rgba64">type <a href="/target/gfx.go?s=867:1010#L31">Rgba64</a></h2>
+			<h2 id="Rgba64">type <a href="/target/gfx.go?s=868:1011#L31">Rgba64</a></h2>
 			<pre>type Rgba64 struct {
     <span class="comment">//	Red component</span>
     R float64
@@ -217,7 +217,7 @@ Describes a literal color using four 64-bit floating-point numbers in RGBA order
 
 			
 				
-				<h3 id="NewRgba64">func <a href="/target/gfx.go?s=1202:1246#L45">NewRgba64</a></h3>
+				<h3 id="NewRgba64">func <a href="/target/gfx.go?s=1203:1247#L45">NewRgba64</a></h3>
 				<pre>func NewRgba64(vals ...float64) (me *Rgba64)</pre>
 				<p>
 Converts the specified vals to a newly initialized Rgba64 instance.
@@ -232,7 +232,7 @@ A is set to 1 if vals[3] is not present.
 		
 			
 			
-			<h2 id="SamplerWrapping">type <a href="/target/sampling.go?s=1494:2085#L24">SamplerWrapping</a></h2>
+			<h2 id="SamplerWrapping">type <a href="/target/sampling.go?s=1495:2086#L24">SamplerWrapping</a></h2>
 			<pre>type SamplerWrapping struct {
     <span class="comment">//	When reading past the edge of the texture address space</span>
     <span class="comment">//	based on the wrap modes involving clamps, this color takes over.</span>
@@ -263,7 +263,7 @@ Controls texture repeating and clamping.
 
 			
 				
-				<h3 id="NewSamplerWrapping">func <a href="/target/sampling.go?s=2244:2324#L44">NewSamplerWrapping</a></h3>
+				<h3 id="NewSamplerWrapping">func <a href="/target/sampling.go?s=2245:2325#L44">NewSamplerWrapping</a></h3>
 				<pre>func NewSamplerWrapping(stp WrapKind, borderColor *Rgba32) (me *SamplerWrapping)</pre>
 				<p>
 Initializes a new SamplerWrapping with the specified coordinate wrappings
@@ -277,7 +277,7 @@ and borderColor. If no borderColor is specified, black (0, 0, 0, 1) is used.
 		
 			
 			
-			<h2 id="WrapKind">type <a href="/target/sampling.go?s=75:92#L1">WrapKind</a></h2>
+			<h2 id="WrapKind">type <a href="/target/sampling.go?s=76:93#L1">WrapKind</a></h2>
 			<pre>type WrapKind int</pre>
 			<p>
 Categorizes the kinds of wrapping used in SamplerWrapping.

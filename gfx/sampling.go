@@ -1,4 +1,4 @@
-package gfx
+package ugfx
 
 //	Categorizes the kinds of wrapping used in SamplerWrapping.
 type WrapKind int

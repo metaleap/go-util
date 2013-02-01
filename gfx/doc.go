@@ -1,2 +1,2 @@
 //	General helpers for working with graphics, imagery and picture sampling.
-package gfx
+package ugfx

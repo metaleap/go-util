@@ -1,4 +1,4 @@
-package num
+package unum
 
 import (
 	"math"
@@ -9,7 +9,7 @@ import (
 type Bag struct {
 	qfv float64
 	m4l struct {
-		tvN, tvU, tvV *Vec3
+		tvN, tvU, tvV Vec3
 	}
 	m4n struct {
 		i      int

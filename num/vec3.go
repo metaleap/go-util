@@ -1,4 +1,4 @@
-package num
+package unum
 
 import (
 	"fmt"
@@ -152,9 +152,10 @@ func (me *Vec3) Normalize() {
 //	Returns a new 3D vector that represents this 3D vector, normalized.
 func (me *Vec3) Normalized() (vec *Vec3) {
 	vec = &Vec3{}
-	if tmpVal := me.Magnitude(); tmpVal != 0 {
-		vec.SetFromMult1(me, 1/tmpVal)
-	}
+	vec.SetFromNormalized(me)
+	// if tmpVal := me.Magnitude(); tmpVal != 0 {
+	// 	vec.SetFromMult1(me, 1/tmpVal)
+	// }
 	return
 }
 
@@ -235,6 +236,11 @@ func (me *Vec3) SetFromCross(vec *Vec3) {
 	me.X, me.Y, me.Z = (me.Y*vec.Z)-(me.Z*vec.Y), (me.Z*vec.X)-(me.X*vec.Z), (me.X*vec.Y)-(me.Y*vec.X)
 }
 
+//	Sets me to the cross product of one and two.
+func (me *Vec3) SetFromCrossOf(one, two *Vec3) {
+	me.X, me.Y, me.Z = (one.Y*two.Z)-(one.Z*two.Y), (one.Z*two.X)-(one.X*two.Z), (one.X*two.Y)-(one.Y*two.X)
+}
+
 //	Sets each component of this 3D vector to the radian equivalent of the degree angle stored in the corresponding component in vec.
 func (me *Vec3) SetFromDegToRad(deg *Vec3) {
 	me.X, me.Y, me.Z = DegToRad(deg.X), DegToRad(deg.Y), DegToRad(deg.Z)
@@ -289,6 +295,13 @@ func (me *Vec3) SetFromMult1Sub(vec1, vec2 *Vec3, mul float64) {
 //	Sets this 3D vector to vec with each component's sign reversed.
 func (me *Vec3) SetFromNeg(vec *Vec3) {
 	me.X, me.Y, me.Z = -vec.X, -vec.Y, -vec.Z
+}
+
+//	Sets me to the result  of normalizing vec.
+func (me *Vec3) SetFromNormalized(vec *Vec3) {
+	if tmpVal := vec.Magnitude(); tmpVal != 0 {
+		me.SetFromMult1(vec, 1/tmpVal)
+	}
 }
 
 //	Sets this 3D vector to pos rotated as expressed in rotCos and rotSin.
