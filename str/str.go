@@ -138,6 +138,23 @@ func InSliceAtIgnoreCase(vals []string, val string) int {
 	return -1
 }
 
+func IsAnyInSlice(slice []string, vals ...string) bool {
+	var big, small []string
+	if len(slice) > len(vals) {
+		big, small = slice, vals
+	} else {
+		big, small = vals, slice
+	}
+	for _, s1 := range big {
+		for _, s2 := range small {
+			if s1 == s2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 //	Returns true if str is ASCII-compatible.
 func IsAscii(str string) bool {
 	for _, c := range str {
