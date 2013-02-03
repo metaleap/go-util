@@ -9,6 +9,14 @@ import (
 )
 
 var (
+	OSNames = map[string]string{
+		"windows": "Windows",
+		"darwin":  "Mac OS X",
+		"linux":   "Linux",
+		"freebsd": "FreeBSD",
+		"":        "OS",
+	}
+
 	goPaths       [][]string
 	goPathsLenIs1 bool
 )
@@ -43,23 +51,6 @@ func GopathSrc(subDirNames ...string) (gps string) {
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
-}
-
-//	If err isn't nil, short-hand for log.Println(err.Error())
-func LogError(err error) {
-	if err != nil {
-		log.Println(err.Error())
-	}
-}
-
-//	Returns the path to the current user's home directory.
-//	Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
-//	Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
-func UserHomeDirPath() (dirPath string) {
-	if dirPath = os.ExpandEnv("$userprofile"); len(dirPath) == 0 {
-		dirPath = os.ExpandEnv("$HOME")
-	}
-	return
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -135,6 +126,20 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 	return ifFalse
 }
 
+//	If err isn't nil, short-hand for log.Println(err.Error())
+func LogError(err error) {
+	if err != nil {
+		log.Println(err.Error())
+	}
+}
+
+func OSName(goOS string) (name string) {
+	if name = OSNames[goOS]; len(name) == 0 {
+		name = OSNames[""]
+	}
+	return
+}
+
 //	Attempts to extract major and minor version components from a string that begins with a version number.
 //	Example: returns []int{3, 2} and float64(3.2) for a verstr that is "3.2.0 - Build 8.15.10.2761"
 func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
@@ -161,6 +166,16 @@ func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
 	}
 	if len(majorMinor) > 1 {
 		both += (float64(majorMinor[1]) * 0.1)
+	}
+	return
+}
+
+//	Returns the path to the current user's home directory.
+//	Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
+//	Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
+func UserHomeDirPath() (dirPath string) {
+	if dirPath = os.ExpandEnv("$userprofile"); len(dirPath) == 0 {
+		dirPath = os.ExpandEnv("$HOME")
 	}
 	return
 }
