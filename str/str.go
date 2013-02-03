@@ -76,9 +76,14 @@ func First(predicate func(s string) bool, step int, vals ...string) string {
 }
 
 //	Returns the first non-empty string in vals.
-//	step: see First() function.
-func FirstNonEmpty(step int, vals ...string) string {
-	return First(func(s string) bool { return len(s) > 0 }, step, vals...)
+func FirstNonEmpty(vals ...string) (val string) {
+	// return First(func(s string) bool { return len(s) > 0 }, step, vals...)
+	for _, val = range vals {
+		if len(val) > 0 {
+			return
+		}
+	}
+	return
 }
 
 //	Returns true if s starts with any one of the specified prefixes.
