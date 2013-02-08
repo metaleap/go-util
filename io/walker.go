@@ -4,9 +4,22 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 )
 
-type WalkerVisitor func(walker *DirWalker, fullPath string, isDir bool) (keepWalking bool)
+type WalkerVisitor func(walker *DirWalker, fullPath string, fileInfo os.FileInfo) (keepWalking bool)
+
+func NewFileVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor {
+	var tmpTime time.Time
+	return func(_ *DirWalker, _ string, fileInfo os.FileInfo) bool {
+		if fileInfo != nil && !fileInfo.IsDir() {
+			if tmpTime = fileInfo.ModTime(); tmpTime.UnixNano() > fileTime.UnixNano() {
+				*fileTime = tmpTime
+			}
+		}
+		return fileTime.UnixNano() <= testTime.UnixNano()
+	}
+}
 
 type DirWalker struct {
 	BreakOnError, VisitDirsFirst, VisitSubDirs bool
@@ -16,10 +29,10 @@ type DirWalker struct {
 func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker) {
 	me = &DirWalker{DirVisitor: dirVisitor, FileVisitor: fileVisitor, VisitSubDirs: true}
 	if me.DirVisitor == nil {
-		me.DirVisitor = func(_ *DirWalker, _ string, _ bool) bool { return true }
+		me.DirVisitor = func(_ *DirWalker, _ string, _ os.FileInfo) bool { return true }
 	}
 	if me.FileVisitor == nil {
-		me.FileVisitor = func(_ *DirWalker, _ string, _ bool) bool { return true }
+		me.FileVisitor = func(_ *DirWalker, _ string, _ os.FileInfo) bool { return true }
 	}
 	return
 }
@@ -30,7 +43,13 @@ func (me *DirWalker) Walk(dirPath string) (errs []error) {
 }
 
 func (me *DirWalker) walk(dirPath string, errs *[]error) {
-	if me.DirVisitor(me, dirPath, true) {
+	dirInfo, err := os.Stat(dirPath)
+	if err != nil {
+		if *errs = append(*errs, err); me.BreakOnError {
+			return
+		}
+	}
+	if me.DirVisitor(me, dirPath, dirInfo) {
 		if fileInfos, err := ioutil.ReadDir(dirPath); err == nil {
 			if me.VisitDirsFirst {
 				if !me.walkInfos(dirPath, fileInfos, true, me.DirVisitor, errs) {
@@ -55,7 +74,7 @@ func (me *DirWalker) walkInfos(dirPath string, fileInfos []os.FileInfo, isDir bo
 	var fullPath string
 	for _, fi := range fileInfos {
 		if fullPath = filepath.Join(dirPath, fi.Name()); fi.IsDir() == isDir {
-			if keepWalking = visitor(me, fullPath, isDir); !keepWalking {
+			if keepWalking = visitor(me, fullPath, fi); !keepWalking {
 				break
 			} else if isDir && me.VisitSubDirs {
 				me.walk(fullPath, errs)

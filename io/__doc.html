@@ -118,6 +118,9 @@ Various line-savers for common I/O needs.
 				
 				<dd><a href="#WalkerVisitor">type WalkerVisitor</a></dd>
 				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewFileVisitor_IsNewerThan">func NewFileVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</a></dd>
+				
 				
 			
 			
@@ -307,7 +310,7 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 		
 			
 			
-			<h2 id="DirWalker">type <a href="/target/walker.go?s=153:285#L1">DirWalker</a></h2>
+			<h2 id="DirWalker">type <a href="/target/walker.go?s=563:695#L14">DirWalker</a></h2>
 			<pre>type DirWalker struct {
     BreakOnError, VisitDirsFirst, VisitSubDirs bool
     DirVisitor, FileVisitor                    WalkerVisitor
@@ -322,7 +325,7 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 
 			
 				
-				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=287:359#L6">NewDirWalker</a></h3>
+				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=697:769#L19">NewDirWalker</a></h3>
 				<pre>func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)</pre>
 				
 				
@@ -330,7 +333,7 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 
 			
 				
-				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=674:730#L17">Walk</a></h3>
+				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=1098:1154#L30">Walk</a></h3>
 				<pre>func (me *DirWalker) Walk(dirPath string) (errs []error)</pre>
 				
 				
@@ -339,8 +342,8 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 		
 			
 			
-			<h2 id="WalkerVisitor">type <a href="/target/walker.go?s=61:151#L1">WalkerVisitor</a></h2>
-			<pre>type WalkerVisitor func(walker *DirWalker, fullPath string, isDir bool) (keepWalking bool)</pre>
+			<h2 id="WalkerVisitor">type <a href="/target/walker.go?s=69:169#L1">WalkerVisitor</a></h2>
+			<pre>type WalkerVisitor func(walker *DirWalker, fullPath string, fileInfo os.FileInfo) (keepWalking bool)</pre>
 			
 
 			
@@ -349,6 +352,12 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 
 			
 
+			
+				
+				<h3 id="NewFileVisitor_IsNewerThan">func <a href="/target/walker.go?s=171:257#L2">NewFileVisitor_IsNewerThan</a></h3>
+				<pre>func NewFileVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</pre>
+				
+				
 			
 
 			
