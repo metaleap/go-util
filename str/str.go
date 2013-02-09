@@ -122,6 +122,16 @@ func Ifs(cond bool, ifTrue string, ifFalse string) string {
 	return ifFalse
 }
 
+func IndexAny(s string, seps ...string) (pos int) {
+	pos = -1
+	for index, sep := range seps {
+		if index = strings.Index(s, sep); pos < 0 || (index >= 0 && index < pos) {
+			pos = index
+		}
+	}
+	return
+}
+
 //	Returns the position of val in vals.
 func InSliceAt(vals []string, val string) int {
 	for i, v := range vals {
