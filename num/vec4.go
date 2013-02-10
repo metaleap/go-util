@@ -9,6 +9,7 @@ type Quat struct {
 	X, Y, Z, W float64
 }
 
+//	Allocates and returns a copy of me.
 func (me *Quat) Clone() (q *Quat) {
 	*q = *me
 	return

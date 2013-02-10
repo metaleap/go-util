@@ -5,7 +5,7 @@ import (
 )
 
 //	You'll need to supply some Vec3, Quat and Mat4 methods with such a "Bag".
-//	It is recommended to keep a single Bag (per thread / goroutine!) for indefinite reuse.
+//	Keep a single Bag per thread/goroutine for indefinite reuse, instead of repeatedly allocating new ones on-demand.
 type Bag struct {
 	qfv float64
 	m4l struct {
@@ -30,14 +30,11 @@ const (
 )
 
 var (
-	Epsilon32 = math.SmallestNonzeroFloat32
-	Epsilon64 = math.SmallestNonzeroFloat64
-
-	//	Contains the positive-infinity float64 returned by math.Inf(1).
-	Infinity = math.Inf(1)
-
-	//	Contains the negative-infinity float64 returned by math.Inf(-1)
+	Infinity    = math.Inf(1)
 	NegInfinity = math.Inf(-1)
+
+	Epsilon32 = Nextafter32(1, Infinity) - 1
+	Epsilon64 = math.Nextafter(1, Infinity) - 1
 )
 
 //	Returns true if all vals equal test.
@@ -150,6 +147,21 @@ func Mini(v1, v2 int) int {
 //	Returns x if a is 0, y if a is 1, or a corresponding mix of both if a is between 0 and 1.
 func Mix(x, y, a float64) float64 {
 	return (x * y) + ((1 - y) * a)
+}
+
+//	A 32-bit version of math.Nextafter(x, y).
+func Nextafter32(x, y float64) (r float64) {
+	switch {
+	case x == y:
+		r = x
+	case x == 0:
+		r = math.Copysign(float64(math.Float32frombits(1)), float64(y))
+	case (y > x) == (x > 0):
+		r = float64(math.Float32frombits(math.Float32bits(float32(x)) + 1))
+	default:
+		r = float64(math.Float32frombits(math.Float32bits(float32(x)) - 1))
+	}
+	return
 }
 
 //	Converts the specified radians to degrees.

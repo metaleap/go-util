@@ -2,7 +2,6 @@ package unum
 
 import (
 	"math"
-	// "strconv"
 )
 
 //	A 2-dimensional vector.
@@ -56,6 +55,7 @@ func (me *Vec2) NormalizedScaled(factor float64) (vec *Vec2) {
 	// return Vec2{me.X * l * factor, me.Y * l * factor}
 }
 
+//	Multiplies all components in me with factor.
 func (me *Vec2) Scale(factor float64) {
 	me.X, me.Y = me.X*factor, me.Y*factor
 }

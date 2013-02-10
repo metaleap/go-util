@@ -5,10 +5,6 @@ import (
 	"math"
 )
 
-var (
-// tmpQ, tmpQw, tmpQr, tmpQc = Quat{}, Quat{}, Quat{}, Quat{}
-)
-
 //	Represented a 3-dimensional vector.
 type Vec3 struct {
 	X, Y, Z float64

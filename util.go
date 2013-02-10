@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	//	A map of GOOS-names to human-readable OS names, used by OSName().
 	OSNames = map[string]string{
 		"windows": "Windows",
 		"darwin":  "Mac OS X",
@@ -133,6 +134,7 @@ func LogError(err error) {
 	}
 }
 
+//	Returns the human-readable representation associated with the specified GOOS name in OSNames.
 func OSName(goOS string) (name string) {
 	if name = OSNames[goOS]; len(name) == 0 {
 		name = OSNames[""]

@@ -62,21 +62,23 @@ func Equivalent(one, two []string) bool {
 	return true
 }
 
-func ExtractAllIdentifiers(in, fromPrefix string) (identifiers []string) {
+//	Extracts all identifiers (no duplicates, ordered by occurrence) starting with prefix occurring in src.
+func ExtractAllIdentifiers(src, prefix string) (identifiers []string) {
 	minPos := 0
-	id := ExtractFirstIdentifier(in, fromPrefix, minPos)
+	id := ExtractFirstIdentifier(src, prefix, minPos)
 	for len(id) > 0 {
-		if minPos = strings.Index(in, id) + 1; !IsInSlice(identifiers, id) {
+		if minPos = strings.Index(src, id) + 1; !IsInSlice(identifiers, id) {
 			identifiers = append(identifiers, id)
 		}
-		id = ExtractFirstIdentifier(in, fromPrefix, minPos)
+		id = ExtractFirstIdentifier(src, prefix, minPos)
 	}
 	return
 }
 
-func ExtractFirstIdentifier(in, fromPrefix string, minPos int) (identifier string) {
-	sub := in[minPos:]
-	pos := strings.Index(sub, fromPrefix)
+//	Extracts the first occurrence (at or after minPos) of an identifier starting with prefix in src.
+func ExtractFirstIdentifier(src, prefix string, minPos int) (identifier string) {
+	sub := src[minPos:]
+	pos := strings.Index(sub, prefix)
 	if pos >= 0 {
 		for i, r := range sub[pos:] {
 			if !(unicode.IsNumber(r) || unicode.IsLetter(r) || r == '_') {
@@ -148,6 +150,7 @@ func Ifs(cond bool, ifTrue string, ifFalse string) string {
 	return ifFalse
 }
 
+//	For all seps, computes the index of first occurrence in s, then returns the smallest index.
 func IndexAny(s string, seps ...string) (pos int) {
 	pos = -1
 	for index, sep := range seps {
@@ -179,6 +182,7 @@ func InSliceAtIgnoreCase(vals []string, val string) int {
 	return -1
 }
 
+//	Returns whether one of the specified vals is contained in slice.
 func IsAnyInSlice(slice []string, vals ...string) bool {
 	var big, small []string
 	if len(slice) > len(vals) {

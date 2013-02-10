@@ -98,6 +98,9 @@ Various line-savers for common I/O needs.
 				<dd><a href="#SaveToFile">func SaveToFile(r io.Reader, filename string) (err error)</a></dd>
 			
 				
+				<dd><a href="#WalkerVisitorNoop">func WalkerVisitorNoop(_ *DirWalker, _ string, _ os.FileInfo) bool</a></dd>
+			
+				
 				<dd><a href="#WriteBinaryFile">func WriteBinaryFile(filePath string, contents []byte) error</a></dd>
 			
 				
@@ -119,7 +122,7 @@ Various line-savers for common I/O needs.
 				<dd><a href="#WalkerVisitor">type WalkerVisitor</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#NewFileVisitor_IsNewerThan">func NewFileVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#NewWalkerVisitor_IsNewerThan">func NewWalkerVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</a></dd>
 				
 				
 			
@@ -289,6 +292,16 @@ Performs an io.Copy() from the specified io.Reader to the specified local file.
 		
 			
 			
+			<h2 id="WalkerVisitorNoop">func <a href="/target/walker.go?s=498:564#L5">WalkerVisitorNoop</a></h2>
+			<pre>func WalkerVisitorNoop(_ *DirWalker, _ string, _ os.FileInfo) bool</pre>
+			<p>
+An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirWalker.FileVisitor during a DirWalker.Walk(). Returns true.
+</p>
+
+			
+		
+			
+			
 			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=6625:6685#L214">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath string, contents []byte) error</pre>
 			<p>
@@ -310,12 +323,32 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 		
 			
 			
-			<h2 id="DirWalker">type <a href="/target/walker.go?s=563:695#L14">DirWalker</a></h2>
+			<h2 id="DirWalker">type <a href="/target/walker.go?s=1296:2057#L25">DirWalker</a></h2>
 			<pre>type DirWalker struct {
-    BreakOnError, VisitDirsFirst, VisitSubDirs bool
-    DirVisitor, FileVisitor                    WalkerVisitor
+    <span class="comment">//	Walk() returns a slice of all errors encountered but</span>
+    <span class="comment">//	to cancel walking upon the first error, set this to true.</span>
+    BreakOnError bool
+
+    <span class="comment">//	After invoking DirVisitor on the specified directory, by default</span>
+    <span class="comment">//	its files get visited first before visiting its sub-directories.</span>
+    <span class="comment">//	If VisitDirsFirst is true, then files get visited last, after</span>
+    <span class="comment">//	having visited all sub-directories.</span>
+    VisitDirsFirst bool
+
+    <span class="comment">//	Defaults to true. If false, only the files in the specified directory</span>
+    <span class="comment">//	(and the directory itself) get visited, but no sub-directories.</span>
+    VisitSubDirs bool
+
+    <span class="comment">//	Called for every directory being visited during Walk().</span>
+    DirVisitor WalkerVisitor
+
+    <span class="comment">//	Called for every file being visited during Walk().</span>
+    FileVisitor WalkerVisitor
 }</pre>
-			
+			<p>
+Provides recursive directory walking with a variety of options.
+</p>
+
 
 			
 
@@ -325,26 +358,36 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 
 			
 				
-				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=697:769#L19">NewDirWalker</a></h3>
+				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=2142:2214#L48">NewDirWalker</a></h3>
 				<pre>func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)</pre>
-				
+				<p>
+Initializes and returns a new DirWalker with the specified (optional) visitors.
+</p>
+
 				
 			
 
 			
 				
-				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=1098:1154#L30">Walk</a></h3>
+				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=2372:2428#L54">Walk</a></h3>
 				<pre>func (me *DirWalker) Walk(dirPath string) (errs []error)</pre>
-				
+				<p>
+Initiates me walking through the specified directory.
+</p>
+
 				
 				
 			
 		
 			
 			
-			<h2 id="WalkerVisitor">type <a href="/target/walker.go?s=69:169#L1">WalkerVisitor</a></h2>
+			<h2 id="WalkerVisitor">type <a href="/target/walker.go?s=254:354#L2">WalkerVisitor</a></h2>
 			<pre>type WalkerVisitor func(walker *DirWalker, fullPath string, fileInfo os.FileInfo) (keepWalking bool)</pre>
-			
+			<p>
+Used for DirWalker.DirVisitor and DirWalker.FileVisitor. Always check fileInfo for nil!
+Always return keepWalking as true unless you want to immediately terminate a Walk() early.
+</p>
+
 
 			
 
@@ -354,9 +397,14 @@ A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or str
 
 			
 				
-				<h3 id="NewFileVisitor_IsNewerThan">func <a href="/target/walker.go?s=171:257#L2">NewFileVisitor_IsNewerThan</a></h3>
-				<pre>func NewFileVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</pre>
-				
+				<h3 id="NewWalkerVisitor_IsNewerThan">func <a href="/target/walker.go?s=856:944#L12">NewWalkerVisitor_IsNewerThan</a></h3>
+				<pre>func NewWalkerVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</pre>
+				<p>
+Returns a new WalkerVisitor that during a DirWalker.Walk() tracks FileInfo.ModTime() for all visited files
+and/or directories, always storing the newest one in fileTime, and terminating early as soon as fileTime
+records a value higher than the specified testTime.
+</p>
+
 				
 			
 
