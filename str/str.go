@@ -62,6 +62,32 @@ func Equivalent(one, two []string) bool {
 	return true
 }
 
+func ExtractAllIdentifiers(in, fromPrefix string) (identifiers []string) {
+	minPos := 0
+	id := ExtractFirstIdentifier(in, fromPrefix, minPos)
+	for len(id) > 0 {
+		if minPos = strings.Index(in, id) + 1; !IsInSlice(identifiers, id) {
+			identifiers = append(identifiers, id)
+		}
+		id = ExtractFirstIdentifier(in, fromPrefix, minPos)
+	}
+	return
+}
+
+func ExtractFirstIdentifier(in, fromPrefix string, minPos int) (identifier string) {
+	sub := in[minPos:]
+	pos := strings.Index(sub, fromPrefix)
+	if pos >= 0 {
+		for i, r := range sub[pos:] {
+			if !(unicode.IsNumber(r) || unicode.IsLetter(r) || r == '_') {
+				identifier = sub[pos : pos+i]
+				break
+			}
+		}
+	}
+	return
+}
+
 //	Returns the first string in vals to match the specified predicate.
 //	step: 1 to test all values. A higher value to skip n values after each test. Negative for reverse slice traversal. Or use 0 to get stuck in an infinite loop.
 func First(predicate func(s string) bool, step int, vals ...string) string {
