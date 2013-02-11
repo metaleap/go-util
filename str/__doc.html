@@ -132,6 +132,9 @@ Various line-savers for common string-processing needs.
 				<dd><a href="#LettersOnly">func LettersOnly(s string) (ret string)</a></dd>
 			
 				
+				<dd><a href="#MapToSlice">func MapToSlice(m map[string]bool, more ...string) (slice []string)</a></dd>
+			
+				
 				<dd><a href="#MatchSimplePattern">func MatchSimplePattern(s string, patterns ...string) string</a></dd>
 			
 				
@@ -171,6 +174,17 @@ Various line-savers for common string-processing needs.
 				<dd><a href="#Without">func Without(slice []string, keepOrder bool, withoutVals ...string) []string</a></dd>
 			
 			
+				
+				<dd><a href="#Buffer">type Buffer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Write">func (me *Buffer) Write(format string, fmtArgs ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Writeln">func (me *Buffer) Writeln(format string, fmtArgs ...interface{})</a></dd>
+				
+			
 			
 		</dl>
 
@@ -180,6 +194,8 @@ Various line-savers for common string-processing needs.
 			<h4>Package files</h4>
 			<p>
 			<span style="font-size:90%">
+			
+				<a href="/target/buf.go">buf.go</a>
 			
 				<a href="/target/doc.go">doc.go</a>
 			
@@ -435,7 +451,17 @@ Returns a string representation of s with all non-Letter-runes removed.
 		
 			
 			
-			<h2 id="MatchSimplePattern">func <a href="/target/str.go?s=6542:6602#L260">MatchSimplePattern</a></h2>
+			<h2 id="MapToSlice">func <a href="/target/str.go?s=6390:6457#L259">MapToSlice</a></h2>
+			<pre>func MapToSlice(m map[string]bool, more ...string) (slice []string)</pre>
+			<p>
+Makes a new string slice and fills it: first with all values in more, then with all keys in m.
+</p>
+
+			
+		
+			
+			
+			<h2 id="MatchSimplePattern">func <a href="/target/str.go?s=6873:6933#L275">MatchSimplePattern</a></h2>
 			<pre>func MatchSimplePattern(s string, patterns ...string) string</pre>
 			<p>
 Checks s against the specified simple-patterns and returns the first matching pattern encountered, or &#34;&#34; if there is no match.
@@ -446,7 +472,7 @@ Checks s against the specified simple-patterns and returns the first matching pa
 		
 			
 			
-			<h2 id="NonEmpties">func <a href="/target/str.go?s=6977:7049#L270">NonEmpties</a></h2>
+			<h2 id="NonEmpties">func <a href="/target/str.go?s=7308:7380#L285">NonEmpties</a></h2>
 			<pre>func NonEmpties(breakAtFirstEmpty bool, vals ...string) (slice []string)</pre>
 			<p>
 Returns a slice that contains the non-empty strings in vals.
@@ -456,7 +482,7 @@ Returns a slice that contains the non-empty strings in vals.
 		
 			
 			
-			<h2 id="Pluralize">func <a href="/target/str.go?s=7557:7588#L285">Pluralize</a></h2>
+			<h2 id="Pluralize">func <a href="/target/str.go?s=7888:7919#L300">Pluralize</a></h2>
 			<pre>func Pluralize(s string) string</pre>
 			<p>
 A most simplistic (not linguistically-correct) English-language pluralizer that may be useful for code or doc generation.
@@ -469,7 +495,7 @@ Otherwise, appends &#34;s&#34;.
 		
 			
 			
-			<h2 id="PrefixWithSep">func <a href="/target/str.go?s=7863:7911#L296">PrefixWithSep</a></h2>
+			<h2 id="PrefixWithSep">func <a href="/target/str.go?s=8194:8242#L311">PrefixWithSep</a></h2>
 			<pre>func PrefixWithSep(prefix, sep, v string) string</pre>
 			<p>
 Prepends prefix + sep to v only if prefix isn&#39;t empty.
@@ -479,7 +505,7 @@ Prepends prefix + sep to v only if prefix isn&#39;t empty.
 		
 			
 			
-			<h2 id="PrependIf">func <a href="/target/str.go?s=8041:8075#L304">PrependIf</a></h2>
+			<h2 id="PrependIf">func <a href="/target/str.go?s=8372:8406#L319">PrependIf</a></h2>
 			<pre>func PrependIf(s, p string) string</pre>
 			<p>
 Prepends p to s only if s doesn&#39;t already have that prefix.
@@ -489,7 +515,7 @@ Prepends p to s only if s doesn&#39;t already have that prefix.
 		
 			
 			
-			<h2 id="Replace">func <a href="/target/str.go?s=8234:8290#L312">Replace</a></h2>
+			<h2 id="Replace">func <a href="/target/str.go?s=8565:8621#L327">Replace</a></h2>
 			<pre>func Replace(str string, repls map[string]string) string</pre>
 			<p>
 Replaces in str all occurrences of all repls map keys with their associated (mapped) value.
@@ -499,7 +525,7 @@ Replaces in str all occurrences of all repls map keys with their associated (map
 		
 			
 			
-			<h2 id="SafeIdentifier">func <a href="/target/str.go?s=8449:8491#L320">SafeIdentifier</a></h2>
+			<h2 id="SafeIdentifier">func <a href="/target/str.go?s=8780:8822#L335">SafeIdentifier</a></h2>
 			<pre>func SafeIdentifier(s string) (ret string)</pre>
 			<p>
 Creates a Pascal-cased &#34;identifier&#34; version of the specified string.
@@ -509,7 +535,7 @@ Creates a Pascal-cased &#34;identifier&#34; version of the specified string.
 		
 			
 			
-			<h2 id="Split">func <a href="/target/str.go?s=9029:9066#L344">Split</a></h2>
+			<h2 id="Split">func <a href="/target/str.go?s=9360:9397#L359">Split</a></h2>
 			<pre>func Split(v, s string) (sl []string)</pre>
 			<p>
 Returns an empty slice is v is emtpy, otherwise like strings.Split()
@@ -519,7 +545,7 @@ Returns an empty slice is v is emtpy, otherwise like strings.Split()
 		
 			
 			
-			<h2 id="StripPrefix">func <a href="/target/str.go?s=9165:9208#L352">StripPrefix</a></h2>
+			<h2 id="StripPrefix">func <a href="/target/str.go?s=9496:9539#L367">StripPrefix</a></h2>
 			<pre>func StripPrefix(val, prefix string) string</pre>
 			<p>
 Strips prefix off val if possible.
@@ -529,7 +555,7 @@ Strips prefix off val if possible.
 		
 			
 			
-			<h2 id="StripSuffix">func <a href="/target/str.go?s=9331:9374#L360">StripSuffix</a></h2>
+			<h2 id="StripSuffix">func <a href="/target/str.go?s=9662:9705#L375">StripSuffix</a></h2>
 			<pre>func StripSuffix(val, suffix string) string</pre>
 			<p>
 Strips suffix off val if possible.
@@ -539,7 +565,7 @@ Strips suffix off val if possible.
 		
 			
 			
-			<h2 id="ToLowerIfUpper">func <a href="/target/str.go?s=10430:10466#L414">ToLowerIfUpper</a></h2>
+			<h2 id="ToLowerIfUpper">func <a href="/target/str.go?s=10761:10797#L429">ToLowerIfUpper</a></h2>
 			<pre>func ToLowerIfUpper(s string) string</pre>
 			<p>
 Returns the lower-case representation of s only if it is currently fully upper-case as per IsUpper().
@@ -549,7 +575,7 @@ Returns the lower-case representation of s only if it is currently fully upper-c
 		
 			
 			
-			<h2 id="ToUpperIfLower">func <a href="/target/str.go?s=10635:10671#L422">ToUpperIfLower</a></h2>
+			<h2 id="ToUpperIfLower">func <a href="/target/str.go?s=10966:11002#L437">ToUpperIfLower</a></h2>
 			<pre>func ToUpperIfLower(s string) string</pre>
 			<p>
 Returns the upper-case representation of s only if it is currently fully lower-case as per IsLower().
@@ -559,7 +585,7 @@ Returns the upper-case representation of s only if it is currently fully lower-c
 		
 			
 			
-			<h2 id="Without">func <a href="/target/str.go?s=10774:10850#L430">Without</a></h2>
+			<h2 id="Without">func <a href="/target/str.go?s=11105:11181#L445">Without</a></h2>
 			<pre>func Without(slice []string, keepOrder bool, withoutVals ...string) []string</pre>
 			<p>
 Removes all withoutVals from slice.
@@ -567,6 +593,47 @@ Removes all withoutVals from slice.
 
 			
 		
+		
+			
+			
+			<h2 id="Buffer">type <a href="/target/buf.go?s=85:121#L1">Buffer</a></h2>
+			<pre>type Buffer struct {
+    bytes.Buffer
+}</pre>
+			<p>
+A convenience wrapper for bytes.Buffer.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Buffer.Write">func (*Buffer) <a href="/target/buf.go?s=199:261#L4">Write</a></h3>
+				<pre>func (me *Buffer) Write(format string, fmtArgs ...interface{})</pre>
+				<p>
+Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format, fmtArgs...))
+</p>
+
+				
+				
+			
+				
+				<h3 id="Buffer.Writeln">func (*Buffer) <a href="/target/buf.go?s=448:512#L12">Writeln</a></h3>
+				<pre>func (me *Buffer) Writeln(format string, fmtArgs ...interface{})</pre>
+				<p>
+Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs...))
+</p>
+
+				
+				
+			
 		
 		</div>
 	

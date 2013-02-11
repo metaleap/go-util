@@ -265,6 +265,21 @@ func LettersOnly(s string) (ret string) {
 	return
 }
 
+//	Makes a new string slice and fills it: first with all values in more, then with all keys in m.
+func MapToSlice(m map[string]bool, more ...string) (slice []string) {
+	i, s := 0, ""
+	slice = make([]string, len(m)+len(more))
+	for _, s = range more {
+		slice[i] = s
+		i++
+	}
+	for s, _ = range m {
+		slice[i] = s
+		i++
+	}
+	return
+}
+
 //	Checks s against the specified simple-patterns and returns the first matching pattern encountered, or "" if there is no match.
 //	(A "simple-pattern" is a string that can optionally have one leading or trailing (or both) asterisk ('*') wildcard.)
 func MatchSimplePattern(s string, patterns ...string) string {
