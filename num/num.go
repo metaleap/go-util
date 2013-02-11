@@ -149,12 +149,16 @@ func Mix(x, y, a float64) float64 {
 	return (x * y) + ((1 - y) * a)
 }
 
-//	A 32-bit version of math.Nextafter(x, y).
+//	https://groups.google.com/forum/?fromgroups=#!topic/golang-nuts/dVtKN8QLUNM
 func Nextafter32(x, y float64) (r float64) {
 	switch {
+	case math.IsNaN(x) || math.IsNaN(y):
+		r = math.NaN()
 	case x == y:
 		r = x
 	case x == 0:
+		// const sign = 1 << 31
+		// r = math.Float32frombits(1 | (math.Float32bits(y) & sign))
 		r = math.Copysign(float64(math.Float32frombits(1)), float64(y))
 	case (y > x) == (x > 0):
 		r = float64(math.Float32frombits(math.Float32bits(float32(x)) + 1))
