@@ -8,6 +8,16 @@ import (
 	ugo "github.com/metaleap/go-util"
 )
 
+//	Appends s to sl only if sl does not already contain s.
+func AppendUnique(sl *[]string, s string) {
+	for _, str := range *sl {
+		if str == s {
+			return
+		}
+	}
+	*sl = append(*sl, s)
+}
+
 //	Does a strings.Join() on the specified string values.
 func Concat(vals ...string) string {
 	return strings.Join(vals, "")
@@ -261,21 +271,6 @@ func LettersOnly(s string) (ret string) {
 		if unicode.IsLetter(r) {
 			ret += string(r)
 		}
-	}
-	return
-}
-
-//	Makes a new string slice and fills it: first with all values in more, then with all keys in m.
-func MapToSlice(m map[string]bool, more ...string) (slice []string) {
-	i, s := 0, ""
-	slice = make([]string, len(m)+len(more))
-	for _, s = range more {
-		slice[i] = s
-		i++
-	}
-	for s, _ = range m {
-		slice[i] = s
-		i++
 	}
 	return
 }

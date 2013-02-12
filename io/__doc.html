@@ -302,20 +302,22 @@ An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirW
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=6625:6685#L214">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=6677:6737#L215">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath string, contents []byte) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
+Also ensures the target file&#39;s directory exists.
 </p>
 
 			
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/io.go?s=6845:6896#L219">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=6990:7041#L222">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents string) error</pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
+Also ensures the target file&#39;s directory exists.
 </p>
 
 			

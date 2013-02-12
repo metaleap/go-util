@@ -221,11 +221,14 @@ func SaveToFile(r io.Reader, filename string) (err error) {
 }
 
 //	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
+//	Also ensures the target file's directory exists.
 func WriteBinaryFile(filePath string, contents []byte) error {
+	EnsureDirExists(filepath.Dir(filePath))
 	return ioutil.WriteFile(filePath, contents, ModePerm)
 }
 
 //	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
+//	Also ensures the target file's directory exists.
 func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))
 }
