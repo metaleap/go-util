@@ -4,18 +4,19 @@ package unum
 type Mat3 [9]float64
 
 var (
-	m3id Mat3
+	//	The 3x3 identity matrix.
+	Mat3Identity Mat3
 )
 
 func init() {
-	m3id[0], m3id[3], m3id[6] = 1, 0, 0
-	m3id[1], m3id[4], m3id[7] = 0, 1, 0
-	m3id[2], m3id[5], m3id[8] = 0, 0, 1
+	Mat3Identity[0], Mat3Identity[3], Mat3Identity[6] = 1, 0, 0
+	Mat3Identity[1], Mat3Identity[4], Mat3Identity[7] = 0, 1, 0
+	Mat3Identity[2], Mat3Identity[5], Mat3Identity[8] = 0, 0, 1
 }
 
-//	Sets this 3x3 matrix to the 3x3 identity matrix.
+//	Sets this 3x3 matrix to Mat3Identity.
 func (me *Mat3) Identity() {
-	*me = m3id
+	*me = Mat3Identity
 }
 
 //	Transposes this 3x3 matrix.

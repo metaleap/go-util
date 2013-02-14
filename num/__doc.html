@@ -662,7 +662,7 @@ Returns true if math.Mod(v, m) is zero
 		
 			
 			
-			<h2 id="Mat3Identities">func <a href="/target/mat3.go?s=654:688#L24">Mat3Identities</a></h2>
+			<h2 id="Mat3Identities">func <a href="/target/mat3.go?s=760:794#L25">Mat3Identities</a></h2>
 			<pre>func Mat3Identities(mats ...*Mat3)</pre>
 			<p>
 Calls the Identity() method on all specified mats.
@@ -672,7 +672,7 @@ Calls the Identity() method on all specified mats.
 		
 			
 			
-			<h2 id="Mat4Identities">func <a href="/target/mat4.go?s=11517:11551#L200">Mat4Identities</a></h2>
+			<h2 id="Mat4Identities">func <a href="/target/mat4.go?s=11685:11719#L203">Mat4Identities</a></h2>
 			<pre>func Mat4Identities(mats ...*Mat4)</pre>
 			<p>
 Calls the Identity() method on all specified mats.
@@ -795,12 +795,18 @@ Represents a 3x3 matrix.
 			
 
 			
+				<pre>var (
+    <span class="comment">//	The 3x3 identity matrix.</span>
+    Mat3Identity Mat3
+)</pre>
+				
+			
 
 			
 
 			
 				
-				<h3 id="NewMat3Identity">func <a href="/target/mat3.go?s=780:814#L31">NewMat3Identity</a></h3>
+				<h3 id="NewMat3Identity">func <a href="/target/mat3.go?s=886:920#L32">NewMat3Identity</a></h3>
 				<pre>func NewMat3Identity() (mat *Mat3)</pre>
 				<p>
 Returns a new 3x3 identity matrix.
@@ -811,17 +817,17 @@ Returns a new 3x3 identity matrix.
 
 			
 				
-				<h3 id="Mat3.Identity">func (*Mat3) <a href="/target/mat3.go?s=264:290#L7">Identity</a></h3>
+				<h3 id="Mat3.Identity">func (*Mat3) <a href="/target/mat3.go?s=362:388#L8">Identity</a></h3>
 				<pre>func (me *Mat3) Identity()</pre>
 				<p>
-Sets this 3x3 matrix to the 3x3 identity matrix.
+Sets this 3x3 matrix to Mat3Identity.
 </p>
 
 				
 				
 			
 				
-				<h3 id="Mat3.Transpose">func (*Mat3) <a href="/target/mat3.go?s=339:366#L12">Transpose</a></h3>
+				<h3 id="Mat3.Transpose">func (*Mat3) <a href="/target/mat3.go?s=445:472#L13">Transpose</a></h3>
 				<pre>func (me *Mat3) Transpose()</pre>
 				<p>
 Transposes this 3x3 matrix.
@@ -843,12 +849,18 @@ Represents a 4x4 column-major matrix.
 			
 
 			
+				<pre>var (
+    <span class="comment">//	The 4x4 identity matrix.</span>
+    Mat4Identity Mat4
+)</pre>
+				
+			
 
 			
 
 			
 				
-				<h3 id="NewMat4Add">func <a href="/target/mat4.go?s=11675:11714#L207">NewMat4Add</a></h3>
+				<h3 id="NewMat4Add">func <a href="/target/mat4.go?s=11843:11882#L210">NewMat4Add</a></h3>
 				<pre>func NewMat4Add(a, b *Mat4) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix representing the result of adding a to b.
@@ -857,7 +869,7 @@ Returns a new 4x4 matrix representing the result of adding a to b.
 				
 			
 				
-				<h3 id="NewMat4Frustum">func <a href="/target/mat4.go?s=12133:12209#L217">NewMat4Frustum</a></h3>
+				<h3 id="NewMat4Frustum">func <a href="/target/mat4.go?s=12301:12377#L220">NewMat4Frustum</a></h3>
 				<pre>func NewMat4Frustum(left, right, bottom, top, near, far float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix representing the specified frustum.
@@ -866,7 +878,7 @@ Returns a new 4x4 matrix representing the specified frustum.
 				
 			
 				
-				<h3 id="NewMat4Identity">func <a href="/target/mat4.go?s=12350:12384#L224">NewMat4Identity</a></h3>
+				<h3 id="NewMat4Identity">func <a href="/target/mat4.go?s=12518:12552#L227">NewMat4Identity</a></h3>
 				<pre>func NewMat4Identity() (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix representing the identity matrix.
@@ -875,7 +887,7 @@ Returns a new 4x4 matrix representing the identity matrix.
 				
 			
 				
-				<h3 id="NewMat4LookAt">func <a href="/target/mat4.go?s=12500:12567#L231">NewMat4LookAt</a></h3>
+				<h3 id="NewMat4LookAt">func <a href="/target/mat4.go?s=12668:12735#L234">NewMat4LookAt</a></h3>
 				<pre>func NewMat4LookAt(bag *Bag, lookTarget, worldUp *Vec3) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix representing the specified look-at matrix.
@@ -884,7 +896,7 @@ Returns a new 4x4 matrix representing the specified look-at matrix.
 				
 			
 				
-				<h3 id="NewMat4Mult1">func <a href="/target/mat4.go?s=12725:12774#L238">NewMat4Mult1</a></h3>
+				<h3 id="NewMat4Mult1">func <a href="/target/mat4.go?s=12893:12942#L241">NewMat4Mult1</a></h3>
 				<pre>func NewMat4Mult1(m *Mat4, v float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix representing the result of multiplying all values in m with v.
@@ -893,7 +905,7 @@ Returns a new 4x4 matrix representing the result of multiplying all values in m 
 				
 			
 				
-				<h3 id="NewMat4Mult4">func <a href="/target/mat4.go?s=13159:13204#L248">NewMat4Mult4</a></h3>
+				<h3 id="NewMat4Mult4">func <a href="/target/mat4.go?s=13327:13372#L251">NewMat4Mult4</a></h3>
 				<pre>func NewMat4Mult4(one, two *Mat4) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the result of multiplying one with two.
@@ -902,7 +914,7 @@ Returns a new 4x4 matrix that represents the result of multiplying one with two.
 				
 			
 				
-				<h3 id="NewMat4MultN">func <a href="/target/mat4.go?s=13358:13412#L255">NewMat4MultN</a></h3>
+				<h3 id="NewMat4MultN">func <a href="/target/mat4.go?s=13526:13580#L258">NewMat4MultN</a></h3>
 				<pre>func NewMat4MultN(bag *Bag, mats ...*Mat4) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the result of multiplying all mats with one another.
@@ -911,7 +923,7 @@ Returns a new 4x4 matrix that represents the result of multiplying all mats with
 				
 			
 				
-				<h3 id="NewMat4Perspective">func <a href="/target/mat4.go?s=13562:13640#L262">NewMat4Perspective</a></h3>
+				<h3 id="NewMat4Perspective">func <a href="/target/mat4.go?s=13730:13808#L265">NewMat4Perspective</a></h3>
 				<pre>func NewMat4Perspective(bag *Bag, fovY, aspect, near, far float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the specified perspective-projection matrix.
@@ -920,7 +932,7 @@ Returns a new 4x4 matrix that represents the specified perspective-projection ma
 				
 			
 				
-				<h3 id="NewMat4RotationX">func <a href="/target/mat4.go?s=13928:13984#L275">NewMat4RotationX</a></h3>
+				<h3 id="NewMat4RotationX">func <a href="/target/mat4.go?s=14096:14152#L278">NewMat4RotationX</a></h3>
 				<pre>func NewMat4RotationX(bag *Bag, rad float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the X asis.
@@ -929,7 +941,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4RotationY">func <a href="/target/mat4.go?s=14129:14185#L282">NewMat4RotationY</a></h3>
+				<h3 id="NewMat4RotationY">func <a href="/target/mat4.go?s=14297:14353#L285">NewMat4RotationY</a></h3>
 				<pre>func NewMat4RotationY(bag *Bag, rad float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the Y asis.
@@ -938,7 +950,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4RotationZ">func <a href="/target/mat4.go?s=14330:14386#L289">NewMat4RotationZ</a></h3>
+				<h3 id="NewMat4RotationZ">func <a href="/target/mat4.go?s=14498:14554#L292">NewMat4RotationZ</a></h3>
 				<pre>func NewMat4RotationZ(bag *Bag, rad float64) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the Z asis.
@@ -947,7 +959,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4Scaling">func <a href="/target/mat4.go?s=14520:14562#L296">NewMat4Scaling</a></h3>
+				<h3 id="NewMat4Scaling">func <a href="/target/mat4.go?s=14688:14730#L299">NewMat4Scaling</a></h3>
 				<pre>func NewMat4Scaling(vec *Vec3) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a transformation of &#34;scale by vec&#34;.
@@ -956,7 +968,7 @@ Returns a new 4x4 matrix that represents a transformation of &#34;scale by vec&#
 				
 			
 				
-				<h3 id="NewMat4Sub">func <a href="/target/mat4.go?s=14664:14703#L303">NewMat4Sub</a></h3>
+				<h3 id="NewMat4Sub">func <a href="/target/mat4.go?s=14832:14871#L306">NewMat4Sub</a></h3>
 				<pre>func NewMat4Sub(a, b *Mat4) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a minus b.
@@ -965,7 +977,7 @@ Returns a new 4x4 matrix that represents a minus b.
 				
 			
 				
-				<h3 id="NewMat4Translation">func <a href="/target/mat4.go?s=15142:15188#L313">NewMat4Translation</a></h3>
+				<h3 id="NewMat4Translation">func <a href="/target/mat4.go?s=15310:15356#L316">NewMat4Translation</a></h3>
 				<pre>func NewMat4Translation(vec *Vec3) (mat *Mat4)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a transformation of &#34;translate by vec&#34;.
@@ -976,7 +988,7 @@ Returns a new 4x4 matrix that represents a transformation of &#34;translate by v
 
 			
 				
-				<h3 id="Mat4.Add">func (*Mat4) <a href="/target/mat4.go?s=374:404#L12">Add</a></h3>
+				<h3 id="Mat4.Add">func (*Mat4) <a href="/target/mat4.go?s=545:575#L15">Add</a></h3>
 				<pre>func (me *Mat4) Add(mat *Mat4)</pre>
 				<p>
 Adds mat to this 4x4 matrix.
@@ -986,7 +998,7 @@ Adds mat to this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Clear">func (*Mat4) <a href="/target/mat4.go?s=795:818#L20">Clear</a></h3>
+				<h3 id="Mat4.Clear">func (*Mat4) <a href="/target/mat4.go?s=966:989#L23">Clear</a></h3>
 				<pre>func (me *Mat4) Clear()</pre>
 				<p>
 Zeroes this 4x4 matrix.
@@ -996,7 +1008,7 @@ Zeroes this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Clone">func (*Mat4) <a href="/target/mat4.go?s=889:924#L25">Clone</a></h3>
+				<h3 id="Mat4.Clone">func (*Mat4) <a href="/target/mat4.go?s=1060:1095#L28">Clone</a></h3>
 				<pre>func (me *Mat4) Clone() (mat *Mat4)</pre>
 				<p>
 Returns a pointer to a newly allocated copy of me.
@@ -1006,7 +1018,7 @@ Returns a pointer to a newly allocated copy of me.
 				
 			
 				
-				<h3 id="Mat4.CopyFrom">func (*Mat4) <a href="/target/mat4.go?s=1020:1055#L32">CopyFrom</a></h3>
+				<h3 id="Mat4.CopyFrom">func (*Mat4) <a href="/target/mat4.go?s=1191:1226#L35">CopyFrom</a></h3>
 				<pre>func (me *Mat4) CopyFrom(mat *Mat4)</pre>
 				<p>
 Sets this 4x4 matrix to the same values as mat.
@@ -1016,7 +1028,7 @@ Sets this 4x4 matrix to the same values as mat.
 				
 			
 				
-				<h3 id="Mat4.CopyTo">func (*Mat4) <a href="/target/mat4.go?s=1124:1157#L37">CopyTo</a></h3>
+				<h3 id="Mat4.CopyTo">func (*Mat4) <a href="/target/mat4.go?s=1295:1328#L40">CopyTo</a></h3>
 				<pre>func (me *Mat4) CopyTo(mat *Mat4)</pre>
 				<p>
 Sets mat to the same values as this 4x4 matrix.
@@ -1026,7 +1038,7 @@ Sets mat to the same values as this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Frustum">func (*Mat4) <a href="/target/mat4.go?s=1235:1303#L42">Frustum</a></h3>
+				<h3 id="Mat4.Frustum">func (*Mat4) <a href="/target/mat4.go?s=1406:1474#L45">Frustum</a></h3>
 				<pre>func (me *Mat4) Frustum(left, right, bottom, top, near, far float64)</pre>
 				<p>
 Sets this 4x4 matrix to represent the specified frustum.
@@ -1036,17 +1048,17 @@ Sets this 4x4 matrix to represent the specified frustum.
 				
 			
 				
-				<h3 id="Mat4.Identity">func (*Mat4) <a href="/target/mat4.go?s=1706:1732#L50">Identity</a></h3>
+				<h3 id="Mat4.Identity">func (*Mat4) <a href="/target/mat4.go?s=1866:1892#L53">Identity</a></h3>
 				<pre>func (me *Mat4) Identity()</pre>
 				<p>
-Sets this 4x4 matrix to the 4x4 identity matrix.
+Sets this 4x4 matrix to Mat4Identity.
 </p>
 
 				
 				
 			
 				
-				<h3 id="Mat4.LookAt">func (*Mat4) <a href="/target/mat4.go?s=1807:1866#L55">LookAt</a></h3>
+				<h3 id="Mat4.LookAt">func (*Mat4) <a href="/target/mat4.go?s=1975:2034#L58">LookAt</a></h3>
 				<pre>func (me *Mat4) LookAt(bag *Bag, lookTarget, worldUp *Vec3)</pre>
 				<p>
 Sets this 4x4 matrix to the specified look-at matrix.
@@ -1056,7 +1068,7 @@ Sets this 4x4 matrix to the specified look-at matrix.
 				
 			
 				
-				<h3 id="Mat4.Mult1">func (*Mat4) <a href="/target/mat4.go?s=3429:3461#L81">Mult1</a></h3>
+				<h3 id="Mat4.Mult1">func (*Mat4) <a href="/target/mat4.go?s=3597:3629#L84">Mult1</a></h3>
 				<pre>func (me *Mat4) Mult1(v float64)</pre>
 				<p>
 Multiplies all values in this 4x4 matrix with v.
@@ -1066,7 +1078,7 @@ Multiplies all values in this 4x4 matrix with v.
 				
 			
 				
-				<h3 id="Mat4.Perspective">func (*Mat4) <a href="/target/mat4.go?s=3811:3881#L89">Perspective</a></h3>
+				<h3 id="Mat4.Perspective">func (*Mat4) <a href="/target/mat4.go?s=3979:4049#L92">Perspective</a></h3>
 				<pre>func (me *Mat4) Perspective(bag *Bag, fovY, aspect, near, far float64)</pre>
 				<p>
 Sets this 4x4 matrix to the specified perspective-projection matrix.
@@ -1076,7 +1088,7 @@ Sets this 4x4 matrix to the specified perspective-projection matrix.
 				
 			
 				
-				<h3 id="Mat4.RotationX">func (*Mat4) <a href="/target/mat4.go?s=4764:4812#L108">RotationX</a></h3>
+				<h3 id="Mat4.RotationX">func (*Mat4) <a href="/target/mat4.go?s=4932:4980#L111">RotationX</a></h3>
 				<pre>func (me *Mat4) RotationX(bag *Bag, rad float64)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the X asis&#34;.
@@ -1086,7 +1098,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.RotationY">func (*Mat4) <a href="/target/mat4.go?s=5184:5232#L117">RotationY</a></h3>
+				<h3 id="Mat4.RotationY">func (*Mat4) <a href="/target/mat4.go?s=5352:5400#L120">RotationY</a></h3>
 				<pre>func (me *Mat4) RotationY(bag *Bag, rad float64)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the Y asis&#34;.
@@ -1096,7 +1108,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.RotationZ">func (*Mat4) <a href="/target/mat4.go?s=5604:5652#L126">RotationZ</a></h3>
+				<h3 id="Mat4.RotationZ">func (*Mat4) <a href="/target/mat4.go?s=5772:5820#L129">RotationZ</a></h3>
 				<pre>func (me *Mat4) RotationZ(bag *Bag, rad float64)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the Z asis&#34;.
@@ -1106,7 +1118,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.Scaling">func (*Mat4) <a href="/target/mat4.go?s=6005:6039#L135">Scaling</a></h3>
+				<h3 id="Mat4.Scaling">func (*Mat4) <a href="/target/mat4.go?s=6173:6207#L138">Scaling</a></h3>
 				<pre>func (me *Mat4) Scaling(vec *Vec3)</pre>
 				<p>
 Sets this 4x4 matrix to a transformation matrix representing &#34;scale by vec&#34;
@@ -1116,7 +1128,7 @@ Sets this 4x4 matrix to a transformation matrix representing &#34;scale by vec&#
 				
 			
 				
-				<h3 id="Mat4.SetFromMult4">func (*Mat4) <a href="/target/mat4.go?s=6294:6338#L143">SetFromMult4</a></h3>
+				<h3 id="Mat4.SetFromMult4">func (*Mat4) <a href="/target/mat4.go?s=6462:6506#L146">SetFromMult4</a></h3>
 				<pre>func (me *Mat4) SetFromMult4(one, two *Mat4)</pre>
 				<p>
 Sets this 4x4 matrix to the result of multiplying one with two.
@@ -1126,7 +1138,7 @@ Sets this 4x4 matrix to the result of multiplying one with two.
 				
 			
 				
-				<h3 id="Mat4.SetFromMultN">func (*Mat4) <a href="/target/mat4.go?s=7648:7701#L151">SetFromMultN</a></h3>
+				<h3 id="Mat4.SetFromMultN">func (*Mat4) <a href="/target/mat4.go?s=7816:7869#L154">SetFromMultN</a></h3>
 				<pre>func (me *Mat4) SetFromMultN(bag *Bag, mats ...*Mat4)</pre>
 				<p>
 Sets this 4x4 matrix to the result of multiplying all the specified mats with one another.
@@ -1136,7 +1148,7 @@ Sets this 4x4 matrix to the result of multiplying all the specified mats with on
 				
 			
 				
-				<h3 id="Mat4.Sub">func (*Mat4) <a href="/target/mat4.go?s=10069:10099#L167">Sub</a></h3>
+				<h3 id="Mat4.Sub">func (*Mat4) <a href="/target/mat4.go?s=10237:10267#L170">Sub</a></h3>
 				<pre>func (me *Mat4) Sub(mat *Mat4)</pre>
 				<p>
 Subtracts mat from this 4x4 matrix.
@@ -1146,7 +1158,7 @@ Subtracts mat from this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.ToInverseMat3">func (*Mat4) <a href="/target/mat4.go?s=10612:10652#L176">ToInverseMat3</a></h3>
+				<h3 id="Mat4.ToInverseMat3">func (*Mat4) <a href="/target/mat4.go?s=10780:10820#L179">ToInverseMat3</a></h3>
 				<pre>func (me *Mat4) ToInverseMat3(mat *Mat3)</pre>
 				<p>
 Sets the specified 3x3 matrix to the inverse of me.
@@ -1157,7 +1169,7 @@ This method is currently in &#34;not needed right now and not sure if actually c
 				
 			
 				
-				<h3 id="Mat4.Translation">func (*Mat4) <a href="/target/mat4.go?s=11237:11275#L192">Translation</a></h3>
+				<h3 id="Mat4.Translation">func (*Mat4) <a href="/target/mat4.go?s=11405:11443#L195">Translation</a></h3>
 				<pre>func (me *Mat4) Translation(vec *Vec3)</pre>
 				<p>
 Sets this 4x4 matrix to a transformation matrix representing &#34;translate by vec&#34;

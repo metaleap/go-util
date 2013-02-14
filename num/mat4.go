@@ -8,14 +8,17 @@ import (
 type Mat4 [16]float64
 
 var (
-	m4id, m4z Mat4
+	//	The 4x4 identity matrix.
+	Mat4Identity Mat4
+
+	m4z Mat4
 )
 
 func init() {
-	m4id[0], m4id[4], m4id[8], m4id[12] = 1, 0, 0, 0
-	m4id[1], m4id[5], m4id[9], m4id[13] = 0, 1, 0, 0
-	m4id[2], m4id[6], m4id[10], m4id[14] = 0, 0, 1, 0
-	m4id[3], m4id[7], m4id[11], m4id[15] = 0, 0, 0, 1
+	Mat4Identity[0], Mat4Identity[4], Mat4Identity[8], Mat4Identity[12] = 1, 0, 0, 0
+	Mat4Identity[1], Mat4Identity[5], Mat4Identity[9], Mat4Identity[13] = 0, 1, 0, 0
+	Mat4Identity[2], Mat4Identity[6], Mat4Identity[10], Mat4Identity[14] = 0, 0, 1, 0
+	Mat4Identity[3], Mat4Identity[7], Mat4Identity[11], Mat4Identity[15] = 0, 0, 0, 1
 }
 
 //	Adds mat to this 4x4 matrix.
@@ -56,9 +59,9 @@ func (me *Mat4) Frustum(left, right, bottom, top, near, far float64) {
 	me[3], me[7], me[11], me[15] = 0, 0, -1, 0
 }
 
-//	Sets this 4x4 matrix to the 4x4 identity matrix.
+//	Sets this 4x4 matrix to Mat4Identity.
 func (me *Mat4) Identity() {
-	*me = m4id
+	*me = Mat4Identity
 }
 
 //	Sets this 4x4 matrix to the specified look-at matrix.
