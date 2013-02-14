@@ -60,6 +60,9 @@ General helpers for working with graphics, imagery and picture sampling.
 			
 			
 				
+				<dd><a href="#FlipVertical">func FlipVertical(src image.Image, dst Image)</a></dd>
+			
+				
 				<dd><a href="#Index2D">func Index2D(x, y, ysize int) int</a></dd>
 			
 				
@@ -68,6 +71,14 @@ General helpers for working with graphics, imagery and picture sampling.
 				
 				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
 			
+			
+				
+				<dd><a href="#Image">type Image</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CloneImage">func CloneImage(src image.Image, copyPixels bool) (dst Image)</a></dd>
+				
+				
 			
 				
 				<dd><a href="#Rgba32">type Rgba32</a></dd>
@@ -112,6 +123,8 @@ General helpers for working with graphics, imagery and picture sampling.
 			
 				<a href="/target/gfx.go">gfx.go</a>
 			
+				<a href="/target/img.go">img.go</a>
+			
 				<a href="/target/sampling.go">sampling.go</a>
 			
 			</span>
@@ -120,6 +133,13 @@ General helpers for working with graphics, imagery and picture sampling.
 	
 		
 		
+		
+			
+			
+			<h2 id="FlipVertical">func <a href="/target/img.go?s=1360:1405#L57">FlipVertical</a></h2>
+			<pre>func FlipVertical(src image.Image, dst Image)</pre>
+			
+			
 		
 			
 			
@@ -151,6 +171,30 @@ Saves any given image as a local PNG file.
 
 			
 		
+		
+			
+			
+			<h2 id="Image">type <a href="/target/img.go?s=50:102#L1">Image</a></h2>
+			<pre>type Image interface {
+    Set(int, int, color.Color)
+}</pre>
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="CloneImage">func <a href="/target/img.go?s=104:165#L2">CloneImage</a></h3>
+				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Image)</pre>
+				
+				
+			
+
+			
 		
 			
 			
