@@ -60,7 +60,7 @@ General helpers for working with graphics, imagery and picture sampling.
 			
 			
 				
-				<dd><a href="#FlipVertical">func FlipVertical(src image.Image, dst Image)</a></dd>
+				<dd><a href="#FlipVertical">func FlipVertical(src image.Image, dst Picture)</a></dd>
 			
 				
 				<dd><a href="#Index2D">func Index2D(x, y, ysize int) int</a></dd>
@@ -71,12 +71,15 @@ General helpers for working with graphics, imagery and picture sampling.
 				
 				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
 			
+				
+				<dd><a href="#SrgbToLinear">func SrgbToLinear(src image.Image, dst Picture)</a></dd>
+			
 			
 				
-				<dd><a href="#Image">type Image</a></dd>
+				<dd><a href="#Picture">type Picture</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#CloneImage">func CloneImage(src image.Image, copyPixels bool) (dst Image)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#CloneImage">func CloneImage(src image.Image, copyPixels bool) (dst Picture)</a></dd>
 				
 				
 			
@@ -136,9 +139,13 @@ General helpers for working with graphics, imagery and picture sampling.
 		
 			
 			
-			<h2 id="FlipVertical">func <a href="/target/img.go?s=1360:1405#L57">FlipVertical</a></h2>
-			<pre>func FlipVertical(src image.Image, dst Image)</pre>
-			
+			<h2 id="FlipVertical">func <a href="/target/img.go?s=1887:1934#L68">FlipVertical</a></h2>
+			<pre>func FlipVertical(src image.Image, dst Picture)</pre>
+			<p>
+Sets dst to the vertically-inverted picture of src.
+dst must have at least the same width and height as src and shouldn&#39;t be the same pointer as src.
+</p>
+
 			
 		
 			
@@ -171,14 +178,27 @@ Saves any given image as a local PNG file.
 
 			
 		
+			
+			
+			<h2 id="SrgbToLinear">func <a href="/target/img.go?s=2165:2212#L83">SrgbToLinear</a></h2>
+			<pre>func SrgbToLinear(src image.Image, dst Picture)</pre>
+			
+			
+		
 		
 			
 			
-			<h2 id="Image">type <a href="/target/img.go?s=50:102#L1">Image</a></h2>
-			<pre>type Image interface {
+			<h2 id="Picture">type <a href="/target/img.go?s=154:267#L2">Picture</a></h2>
+			<pre>type Picture interface {
+    image.Image
+
+    <span class="comment">//	Set pixel at x,y to the specified color.</span>
     Set(int, int, color.Color)
 }</pre>
-			
+			<p>
+The interface that the image package was missing...
+</p>
+
 
 			
 
@@ -188,9 +208,13 @@ Saves any given image as a local PNG file.
 
 			
 				
-				<h3 id="CloneImage">func <a href="/target/img.go?s=104:165#L2">CloneImage</a></h3>
-				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Image)</pre>
-				
+				<h3 id="CloneImage">func <a href="/target/img.go?s=473:536#L11">CloneImage</a></h3>
+				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Picture)</pre>
+				<p>
+Creates and returns a copy of src.
+If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an empty/black image of the same dimensions, color format, stride/offset/etc as src.
+</p>
+
 				
 			
 
