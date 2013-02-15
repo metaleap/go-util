@@ -1,6 +1,7 @@
 package ugo
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,6 +18,8 @@ var (
 		"freebsd": "FreeBSD",
 		"":        "OS",
 	}
+
+	LogErrorFormat = "%v"
 
 	goPaths       [][]string
 	goPathsLenIs1 bool
@@ -130,7 +133,7 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 //	If err isn't nil, short-hand for log.Println(err.Error())
 func LogError(err error) {
 	if err != nil {
-		log.Println(err.Error())
+		log.Println(fmt.Sprintf(LogErrorFormat, err))
 	}
 }
 
