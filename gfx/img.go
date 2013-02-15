@@ -19,54 +19,44 @@ type Picture interface {
 //	Creates and returns a copy of src.
 //	If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an empty/black image of the same dimensions, color format, stride/offset/etc as src.
 func CloneImage(src image.Image, copyPixels bool) (dst Picture) {
+	makePix := func(pix []uint8) (cp []uint8) {
+		if cp = make([]uint8, len(pix)); copyPixels {
+			copy(cp, pix)
+		}
+		return
+	}
 	switch pic := src.(type) {
 	case *image.Alpha:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.Alpha16:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.Gray:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.Gray16:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.NRGBA:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.NRGBA64:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.RGBA:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	case *image.RGBA64:
 		clone := *pic
-		if clone.Pix = make([]uint8, len(pic.Pix)); copyPixels {
-			copy(clone.Pix, pic.Pix)
-		}
+		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	default:
 	}
