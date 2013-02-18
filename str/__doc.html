@@ -213,7 +213,7 @@ Various line-savers for common string-processing needs.
 			
 				<a href="/target/doc.go">doc.go</a>
 			
-				<a href="/target/match.go">match.go</a>
+				<a href="/target/matcher.go">matcher.go</a>
 			
 				<a href="/target/str.go">str.go</a>
 			
@@ -632,11 +632,15 @@ Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs
 		
 			
 			
-			<h2 id="Matcher">type <a href="/target/match.go?s=111:162#L1">Matcher</a></h2>
+			<h2 id="Matcher">type <a href="/target/matcher.go?s=259:310#L3">Matcher</a></h2>
 			<pre>type Matcher struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
-			
+			<p>
+Matches a string against &#34;simple-patterns&#34;.
+Simple-patterns are strings that can have *-wildcards only at the beginning, at the end, or both.
+</p>
+
 
 			
 
@@ -646,38 +650,54 @@ Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs
 
 			
 				
-				<h3 id="NewMatcher">func <a href="/target/match.go?s=164:213#L5">NewMatcher</a></h3>
+				<h3 id="NewMatcher">func <a href="/target/matcher.go?s=382:431#L8">NewMatcher</a></h3>
 				<pre>func NewMatcher(patterns ...string) (me *Matcher)</pre>
-				
+				<p>
+Initializes and returns a new Matcher with the specified patterns.
+</p>
+
 				
 			
 
 			
 				
-				<h3 id="Matcher.AddPattern">func (*Matcher) <a href="/target/match.go?s=296:335#L13">AddPattern</a></h3>
+				<h3 id="Matcher.AddPattern">func (*Matcher) <a href="/target/matcher.go?s=551:590#L17">AddPattern</a></h3>
 				<pre>func (me *Matcher) AddPattern(s string)</pre>
-				
+				<p>
+Adds the specified pattern to me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/match.go?s=636:681#L25">HasWildcardPatterns</a></h3>
+				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=980:1025#L30">HasWildcardPatterns</a></h3>
 				<pre>func (me *Matcher) HasWildcardPatterns() bool</pre>
-				
+				<p>
+Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/match.go?s=829:870#L34">IsMatch</a></h3>
+				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=1263:1304#L40">IsMatch</a></h3>
 				<pre>func (me *Matcher) IsMatch(s string) bool</pre>
-				
+				<p>
+Convenience short-hand that informs whether Match(s) returns a non-empty result value.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Matcher.Match">func (*Matcher) <a href="/target/match.go?s=905:946#L38">Match</a></h3>
+				<h3 id="Matcher.Match">func (*Matcher) <a href="/target/matcher.go?s=1471:1512#L46">Match</a></h3>
 				<pre>func (me *Matcher) Match(s string) string</pre>
-				
+				<p>
+Matches s against all patterns in me.
+Returns the first pattern (minus wildcards) that matches s, or &#34;&#34; if there is no match.
+</p>
+
 				
 				
 			
