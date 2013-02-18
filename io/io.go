@@ -20,9 +20,10 @@ var (
 //	Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
 func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
 	var fileInfos []os.FileInfo
+	var matcher = ustr.NewMatcher(keepNamePatterns...)
 	if fileInfos, err = ioutil.ReadDir(path); err == nil {
 		for _, fi := range fileInfos {
-			if fn := fi.Name(); !ustr.IsSimplePatternMatch(fn, keepNamePatterns...) {
+			if fn := fi.Name(); !matcher.IsMatch(fn) {
 				if err = os.RemoveAll(filepath.Join(path, fn)); err != nil {
 					return
 				}
