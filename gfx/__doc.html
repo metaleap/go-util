@@ -58,8 +58,6 @@ General helpers for working with graphics, imagery and picture sampling.
 			<dl>
 			
 			
-				<dd><a href="#pkg-variables">Variables</a></dd>
-			
 			
 				
 				<dd><a href="#Index2D">func Index2D(x, y, ysize int) int</a></dd>
@@ -68,7 +66,7 @@ General helpers for working with graphics, imagery and picture sampling.
 				<dd><a href="#Index3D">func Index3D(x, y, z, xsize, ysize int) int</a></dd>
 			
 				
-				<dd><a href="#Process">func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</a></dd>
+				<dd><a href="#PreprocessImage">func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</a></dd>
 			
 				
 				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
@@ -135,14 +133,6 @@ General helpers for working with graphics, imagery and picture sampling.
 	
 		
 		
-			<h2 id="pkg-variables">Variables</h2>
-			
-				<pre>var (
-    ProcessParallel = true
-)</pre>
-				
-			
-		
 		
 			
 			
@@ -166,8 +156,8 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="Process">func <a href="/target/img.go?s=1418:1490#L61">Process</a></h2>
-			<pre>func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</pre>
+			<h2 id="PreprocessImage">func <a href="/target/img.go?s=1546:1626#L65">PreprocessImage</a></h2>
+			<pre>func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</pre>
 			
 			
 		
@@ -184,7 +174,7 @@ Saves any given image as a local PNG file.
 		
 			
 			
-			<h2 id="Picture">type <a href="/target/img.go?s=195:308#L7">Picture</a></h2>
+			<h2 id="Picture">type <a href="/target/img.go?s=176:289#L4">Picture</a></h2>
 			<pre>type Picture interface {
     image.Image
 
@@ -204,11 +194,12 @@ The interface that the image package was missing...
 
 			
 				
-				<h3 id="CloneImage">func <a href="/target/img.go?s=514:577#L16">CloneImage</a></h3>
+				<h3 id="CloneImage">func <a href="/target/img.go?s=498:561#L14">CloneImage</a></h3>
 				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Picture)</pre>
 				<p>
 Creates and returns a copy of src.
-If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an empty/black image of the same dimensions, color format, stride/offset/etc as src.
+If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an
+empty/black image of the same dimensions, color format, stride/offset/etc as src.
 </p>
 
 				

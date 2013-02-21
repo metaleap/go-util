@@ -3,14 +3,11 @@ package ugfx
 import (
 	"image"
 	"image/color"
+	"image/draw"
 	"math"
 	"sync"
 
 	unum "github.com/metaleap/go-util/num"
-)
-
-var (
-	ProcessParallel = true
 )
 
 //	The interface that the image package was missing...
@@ -22,7 +19,8 @@ type Picture interface {
 }
 
 //	Creates and returns a copy of src.
-//	If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an empty/black image of the same dimensions, color format, stride/offset/etc as src.
+//	If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an
+//	empty/black image of the same dimensions, color format, stride/offset/etc as src.
 func CloneImage(src image.Image, copyPixels bool) (dst Picture) {
 	makePix := func(pix []uint8) (cp []uint8) {
 		if cp = make([]uint8, len(pix)); copyPixels {
@@ -64,11 +62,18 @@ func CloneImage(src image.Image, copyPixels bool) (dst Picture) {
 		clone.Pix = makePix(pic.Pix)
 		dst = &clone
 	default:
+		rect := src.Bounds()
+		tmpImg := image.NewRGBA(rect)
+		if copyPixels {
+			draw.Draw(tmpImg, rect, src, rect.Min, draw.Src)
+		}
+		dst = tmpImg
 	}
 	return
 }
 
-func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
+func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
+	const preprocessParallel = true
 	var wg sync.WaitGroup
 	srgbToLinear := func(c *uint8) {
 		var f float64
@@ -81,7 +86,7 @@ func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
 	}
 	dstY, width, height := -1, src.Bounds().Dx(), src.Bounds().Dy()
 	workRow := func(y, dy int) {
-		if ProcessParallel {
+		if preprocessParallel {
 			defer wg.Done()
 		}
 		for x := 0; x < width; x++ {
@@ -107,14 +112,14 @@ func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
 		} else {
 			dstY = y
 		}
-		if ProcessParallel {
+		if preprocessParallel {
 			wg.Add(1)
 			go workRow(y, dstY)
 		} else {
 			workRow(y, dstY)
 		}
 	}
-	if ProcessParallel {
+	if preprocessParallel {
 		wg.Wait()
 	}
 }
