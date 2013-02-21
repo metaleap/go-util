@@ -34,7 +34,7 @@ func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
 }
 
 //	Copies all files and directories inside srcDirPath to destDirPath.
-func CopyAll(srcDirPath, destDirPath string) (err error) {
+func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error) {
 	var (
 		srcPath, destPath string
 		fileInfos         []os.FileInfo
@@ -43,7 +43,9 @@ func CopyAll(srcDirPath, destDirPath string) (err error) {
 		EnsureDirExists(destDirPath)
 		for _, fi := range fileInfos {
 			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(destDirPath, fi.Name()); fi.IsDir() {
-				CopyAll(srcPath, destPath)
+				if skipDirs == nil || !skipDirs.IsMatch(fi.Name()) {
+					CopyAll(srcPath, destPath, skipDirs)
+				}
 			} else {
 				CopyFile(srcPath, destPath)
 			}
