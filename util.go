@@ -1,7 +1,9 @@
 package ugo
 
 import (
+	"encoding/base64"
 	"fmt"
+	"hash/fnv"
 	"log"
 	"os"
 	"path/filepath"
@@ -55,6 +57,12 @@ func GopathSrc(subDirNames ...string) (gps string) {
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
+}
+
+func Hash(in string) string {
+	h := fnv.New64a()
+	h.Write([]byte(in))
+	return base64.URLEncoding.EncodeToString(h.Sum(nil))
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.

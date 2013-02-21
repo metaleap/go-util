@@ -76,7 +76,7 @@ General helpers for working with graphics, imagery and picture sampling.
 				<dd><a href="#Picture">type Picture</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#CloneImage">func CloneImage(src image.Image, copyPixels bool) (dst Picture)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#CloneImage">func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte)</a></dd>
 				
 				
 			
@@ -156,7 +156,7 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="PreprocessImage">func <a href="/target/img.go?s=1546:1626#L65">PreprocessImage</a></h2>
+			<h2 id="PreprocessImage">func <a href="/target/img.go?s=1700:1780#L65">PreprocessImage</a></h2>
 			<pre>func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</pre>
 			
 			
@@ -194,8 +194,8 @@ The interface that the image package was missing...
 
 			
 				
-				<h3 id="CloneImage">func <a href="/target/img.go?s=498:561#L14">CloneImage</a></h3>
-				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Picture)</pre>
+				<h3 id="CloneImage">func <a href="/target/img.go?s=498:573#L14">CloneImage</a></h3>
+				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte)</pre>
 				<p>
 Creates and returns a copy of src.
 If copyPixels is true, pixels in src are copied to dst, otherwise dst will be an
