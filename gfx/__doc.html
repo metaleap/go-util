@@ -58,9 +58,8 @@ General helpers for working with graphics, imagery and picture sampling.
 			<dl>
 			
 			
+				<dd><a href="#pkg-variables">Variables</a></dd>
 			
-				
-				<dd><a href="#FlipVertical">func FlipVertical(src image.Image, dst Picture)</a></dd>
 			
 				
 				<dd><a href="#Index2D">func Index2D(x, y, ysize int) int</a></dd>
@@ -69,10 +68,10 @@ General helpers for working with graphics, imagery and picture sampling.
 				<dd><a href="#Index3D">func Index3D(x, y, z, xsize, ysize int) int</a></dd>
 			
 				
-				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
+				<dd><a href="#Process">func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</a></dd>
 			
 				
-				<dd><a href="#SrgbToLinear">func SrgbToLinear(src image.Image, dst Picture)</a></dd>
+				<dd><a href="#SavePngImageFile">func SavePngImageFile(img image.Image, filePath string) error</a></dd>
 			
 			
 				
@@ -136,17 +135,14 @@ General helpers for working with graphics, imagery and picture sampling.
 	
 		
 		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+    ProcessParallel = true
+)</pre>
+				
+			
 		
-			
-			
-			<h2 id="FlipVertical">func <a href="/target/img.go?s=1533:1580#L58">FlipVertical</a></h2>
-			<pre>func FlipVertical(src image.Image, dst Picture)</pre>
-			<p>
-Sets dst to the vertically-inverted picture of src.
-dst must have at least the same width and height as src and shouldn&#39;t be the same pointer as src.
-</p>
-
-			
 		
 			
 			
@@ -170,6 +166,13 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
+			<h2 id="Process">func <a href="/target/img.go?s=1418:1490#L61">Process</a></h2>
+			<pre>func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</pre>
+			
+			
+		
+			
+			
 			<h2 id="SavePngImageFile">func <a href="/target/gfx.go?s=1974:2035#L72">SavePngImageFile</a></h2>
 			<pre>func SavePngImageFile(img image.Image, filePath string) error</pre>
 			<p>
@@ -178,17 +181,10 @@ Saves any given image as a local PNG file.
 
 			
 		
-			
-			
-			<h2 id="SrgbToLinear">func <a href="/target/img.go?s=1811:1858#L73">SrgbToLinear</a></h2>
-			<pre>func SrgbToLinear(src image.Image, dst Picture)</pre>
-			
-			
-		
 		
 			
 			
-			<h2 id="Picture">type <a href="/target/img.go?s=154:267#L2">Picture</a></h2>
+			<h2 id="Picture">type <a href="/target/img.go?s=195:308#L7">Picture</a></h2>
 			<pre>type Picture interface {
     image.Image
 
@@ -208,7 +204,7 @@ The interface that the image package was missing...
 
 			
 				
-				<h3 id="CloneImage">func <a href="/target/img.go?s=473:536#L11">CloneImage</a></h3>
+				<h3 id="CloneImage">func <a href="/target/img.go?s=514:577#L16">CloneImage</a></h3>
 				<pre>func CloneImage(src image.Image, copyPixels bool) (dst Picture)</pre>
 				<p>
 Creates and returns a copy of src.

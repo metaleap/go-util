@@ -4,8 +4,13 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"sync"
 
 	unum "github.com/metaleap/go-util/num"
+)
+
+var (
+	ProcessParallel = true
 )
 
 //	The interface that the image package was missing...
@@ -63,29 +68,10 @@ func CloneImage(src image.Image, copyPixels bool) (dst Picture) {
 	return
 }
 
-//	Sets dst to the vertically-inverted picture of src.
-//	dst must have at least the same width and height as src and shouldn't be the same pointer as src.
-func FlipVertical(src image.Image, dst Picture) {
-	var (
-		col  color.Color
-		dstY int
-	)
-	width, height := src.Bounds().Dx(), src.Bounds().Dy()
-	for y := height - 1; y >= 0; y-- {
-		for x := 0; x < width; x++ {
-			col = src.At(x, y)
-			dst.Set(x, dstY, col)
-		}
-		dstY++
-	}
-}
-
-func SrgbToLinear(src image.Image, dst Picture) {
-	var (
-		col color.RGBA
-		f   float64
-	)
-	conv := func(c *uint8) {
+func Process(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
+	var wg sync.WaitGroup
+	srgbToLinear := func(c *uint8) {
+		var f float64
 		if f = unum.Din1(float64(*c), 255); f > 0.04045 {
 			f = math.Pow((f+0.055)/1.055, 2.4)
 		} else {
@@ -93,14 +79,42 @@ func SrgbToLinear(src image.Image, dst Picture) {
 		}
 		*c = uint8(f * 255)
 	}
-	width, height := src.Bounds().Dx(), src.Bounds().Dy()
-	for x := 0; x < width; x++ {
-		for y := 0; y < height; y++ {
-			col = color.RGBAModel.Convert(src.At(x, y)).(color.RGBA)
-			conv(&col.R)
-			conv(&col.G)
-			conv(&col.B)
-			dst.Set(x, y, col)
+	dstY, width, height := -1, src.Bounds().Dx(), src.Bounds().Dy()
+	workRow := func(y, dy int) {
+		if ProcessParallel {
+			defer wg.Done()
 		}
+		for x := 0; x < width; x++ {
+			col := src.At(x, y)
+			if toLinear || toBgra {
+				rgba := color.RGBAModel.Convert(col).(color.RGBA)
+				if toBgra {
+					rgba.R, rgba.B = rgba.B, rgba.R
+				}
+				if toLinear {
+					srgbToLinear(&rgba.R)
+					srgbToLinear(&rgba.G)
+					srgbToLinear(&rgba.B)
+				}
+				col = rgba
+			}
+			dst.Set(x, dy, col)
+		}
+	}
+	for y := height - 1; y >= 0; y-- {
+		if flipY {
+			dstY++
+		} else {
+			dstY = y
+		}
+		if ProcessParallel {
+			wg.Add(1)
+			go workRow(y, dstY)
+		} else {
+			workRow(y, dstY)
+		}
+	}
+	if ProcessParallel {
+		wg.Wait()
 	}
 }
