@@ -34,6 +34,7 @@ func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
 }
 
 //	Copies all files and directories inside srcDirPath to destDirPath.
+//	All sub-directories whose name is matched by skipDirs (optional) are skipped.
 func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error) {
 	var (
 		srcPath, destPath string

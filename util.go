@@ -3,7 +3,7 @@ package ugo
 import (
 	"encoding/base64"
 	"fmt"
-	"hash/fnv"
+	"hash"
 	"log"
 	"os"
 	"path/filepath"
@@ -21,6 +21,7 @@ var (
 		"":        "OS",
 	}
 
+	//	The string format used in LogError().
 	LogErrorFormat = "%v"
 
 	goPaths       [][]string
@@ -59,9 +60,9 @@ func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
 }
 
-func Hash(in string) string {
-	h := fnv.New64a()
-	h.Write([]byte(in))
+//	Returns the base64.URLEncoding of the result of the specified Hash for the specified str.
+func Hash(h hash.Hash, str string) string {
+	h.Write([]byte(str))
 	return base64.URLEncoding.EncodeToString(h.Sum(nil))
 }
 

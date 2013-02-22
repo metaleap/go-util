@@ -72,6 +72,11 @@ func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte) {
 	return
 }
 
+//	Processes the specified Image and writes the result to the specified Picture.
+//	Unless flipY is true, dst and src may well be the same object.
+//	If flipY is true, all pixel rows are inverted (dst becomes src vertically mirrored).
+//	If toBgra is true, all pixels' red and green components are swapped.
+//	If toLinear is true, all pixels are converted from gamma/sRGB to linear space.
 func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
 	const preprocessParallel = true
 	var wg sync.WaitGroup

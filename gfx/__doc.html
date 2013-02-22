@@ -156,9 +156,16 @@ If 3-dimensions are represented in a 1-dimensional linear array, this function p
 		
 			
 			
-			<h2 id="PreprocessImage">func <a href="/target/img.go?s=1700:1780#L65">PreprocessImage</a></h2>
+			<h2 id="PreprocessImage">func <a href="/target/img.go?s=2089:2169#L70">PreprocessImage</a></h2>
 			<pre>func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool)</pre>
-			
+			<p>
+Processes the specified Image and writes the result to the specified Picture.
+Unless flipY is true, dst and src may well be the same object.
+If flipY is true, all pixel rows are inverted (dst becomes src vertically mirrored).
+If toBgra is true, all pixels&#39; red and green components are swapped.
+If toLinear is true, all pixels are converted from gamma/sRGB to linear space.
+</p>
+
 			
 		
 			
