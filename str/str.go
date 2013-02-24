@@ -18,6 +18,15 @@ func AppendUnique(sl *[]string, s string) {
 	*sl = append(*sl, s)
 }
 
+//	Sets all values in m to the empty string.
+func ClearMap(m map[string]string) {
+	for k, v := range m {
+		if len(v) > 0 {
+			m[k] = v[:0]
+		}
+	}
+}
+
 //	Does a strings.Join() on the specified string values.
 func Concat(vals ...string) string {
 	return strings.Join(vals, "")
