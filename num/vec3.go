@@ -136,6 +136,10 @@ func (me *Vec3) Mult1(val float64) *Vec3 {
 	return &Vec3{me.X * val, me.Y * val, me.Z * val}
 }
 
+func (me *Vec3) Negated() *Vec3 {
+	return &Vec3{-me.X, -me.Y, -me.Z}
+}
+
 //	Normalizes this 3D vector.
 func (me *Vec3) Normalize() {
 	if tmpVal := me.Magnitude(); tmpVal == 0 {
@@ -163,18 +167,19 @@ func (me *Vec3) NormalizedScaled(factor float64) (vec *Vec3) {
 }
 
 //	Rotates this 3D vector angleDeg degrees around the specified axis.
-func (me *Vec3) RotateDeg(bag *Bag, angleDeg float64, axis *Vec3) {
-	me.RotateRad(bag, DegToRad(angleDeg/2), axis)
+func (me *Vec3) RotateDeg(angleDeg float64, axis *Vec3) {
+	me.RotateRad(DegToRad(angleDeg/2), axis)
 }
 
 //	Rotates this 3D vector angleRad radians around the specified axis.
-func (me *Vec3) RotateRad(bag *Bag, angleRad float64, axis *Vec3) {
-	bag.qfv = math.Sin(angleRad)
-	bag.v3r.tmpQr.X, bag.v3r.tmpQr.Y, bag.v3r.tmpQr.Z, bag.v3r.tmpQr.W = axis.X*bag.qfv, axis.Y*bag.qfv, axis.Z*bag.qfv, math.Cos(angleRad)
-	bag.v3r.tmpQc.SetFromConjugated(&bag.v3r.tmpQr)
-	bag.v3r.tmpQ.SetFromMult3(&bag.v3r.tmpQr, me)
-	bag.v3r.tmpQw.SetFromMult(&bag.v3r.tmpQ, &bag.v3r.tmpQc)
-	me.X, me.Y, me.Z = bag.v3r.tmpQw.X, bag.v3r.tmpQw.Y, bag.v3r.tmpQw.Z
+func (me *Vec3) RotateRad(angleRad float64, axis *Vec3) {
+	var tmpQ, tmpQw, tmpQr, tmpQc Quat
+	sin := math.Sin(angleRad)
+	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*sin, axis.Y*sin, axis.Z*sin, math.Cos(angleRad)
+	tmpQc.SetFromConjugated(&tmpQr)
+	tmpQ.SetFromMult3(&tmpQr, me)
+	tmpQw.SetFromMult(&tmpQ, &tmpQc)
+	me.X, me.Y, me.Z = tmpQw.X, tmpQw.Y, tmpQw.Z
 }
 
 //	Scales this 3D vector by factor.

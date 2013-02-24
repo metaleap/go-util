@@ -36,25 +36,23 @@ func (me *Quat) Magnitude() float64 {
 }
 
 //	Normalizes this quaternion.
-func (me *Quat) Normalize(bag *Bag) {
-	bag.qfv = me.Magnitude()
-	if bag.qfv == 0 {
+func (me *Quat) Normalize() {
+	if mag := me.Magnitude(); mag == 0 {
 		me.X, me.Y, me.Z, me.W = 0, 0, 0, 0
 	} else {
-		bag.qfv = 1 / bag.qfv
-		me.X, me.Y, me.Z, me.W = me.X*bag.qfv, me.Y*bag.qfv, me.Z*bag.qfv, me.W*bag.qfv
+		mag = 1 / mag
+		me.X, me.Y, me.Z, me.W = me.X*mag, me.Y*mag, me.Z*mag, me.W*mag
 	}
 }
 
 //	Returns a new quaternion that is the normalized representation of this quaternion.
-func (me *Quat) Normalized(bag *Bag) (q *Quat) {
-	q = &Quat{}
-	bag.qfv = me.Magnitude()
-	if bag.qfv != 0 {
-		bag.qfv = 1 / bag.qfv
-		q.X, q.Y, q.Z, q.W = me.X*bag.qfv, me.Y*bag.qfv, me.Z*bag.qfv, me.W*bag.qfv
+func (me *Quat) Normalized() *Quat {
+	var q Quat
+	if mag := me.Magnitude(); mag != 0 {
+		mag = 1 / mag
+		q.X, q.Y, q.Z, q.W = me.X*mag, me.Y*mag, me.Z*mag, me.W*mag
 	}
-	return
+	return &q
 }
 
 //	Sets this quaternion to the conjugated representation of c.

@@ -55,6 +55,9 @@ func (me *Matcher) IsMatch(s string) bool {
 //	Returns the first pattern (minus wildcards) that matches s, or "" if there is no match.
 func (me *Matcher) Match(s string) string {
 	for _, mp := range me.patterns {
+		if s == mp.pattern {
+			return mp.pattern
+		}
 		if len(mp.prefix) > 0 && strings.HasPrefix(s, mp.prefix) {
 			return mp.prefix
 		}
@@ -63,9 +66,6 @@ func (me *Matcher) Match(s string) string {
 		}
 		if len(mp.contains) > 0 && strings.Contains(s, mp.contains) {
 			return mp.contains
-		}
-		if s == mp.pattern {
-			return mp.pattern
 		}
 	}
 	return ""

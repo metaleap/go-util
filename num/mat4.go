@@ -65,7 +65,8 @@ func (me *Mat4) Identity() {
 }
 
 //	Sets this 4x4 matrix to the specified look-at matrix.
-func (me *Mat4) LookAt(bag *Bag, lookTarget, worldUp *Vec3) {
+func (me *Mat4) LookAt(lookTarget, worldUp *Vec3) {
+	var tvN, tvU, tvV Vec3
 	/*
 		var aFwd, aSide, aUp = &Vec3 { eyePos.X - lookTarget.X, eyePos.Y - lookTarget.Y, eyePos.Z - lookTarget.Z }, &Vec3 {}, &Vec3 {}
 		aFwd.Normalize()
@@ -78,15 +79,15 @@ func (me *Mat4) LookAt(bag *Bag, lookTarget, worldUp *Vec3) {
 		me[2], me[6], me[10], me[14] = aFwd.X, aFwd.Y, aFwd.Z, -((aFwd.X * eyePos.X) + (aFwd.Y * eyePos.Y) + (aFwd.Z * eyePos.Z))
 		me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 	*/
-	// bag.m4l.tvN = lookTarget.Normalized()
-	// bag.m4l.tvU = worldUp.Normalized().Cross(lookTarget)
-	// bag.m4l.tvV = bag.m4l.tvN.Cross(bag.m4l.tvU)
-	bag.m4l.tvN.SetFromNormalized(lookTarget)
-	bag.m4l.tvU.SetFromCrossOf(worldUp.Normalized(), lookTarget)
-	bag.m4l.tvV.SetFromCrossOf(&bag.m4l.tvN, &bag.m4l.tvU)
-	me[0], me[4], me[8], me[12] = bag.m4l.tvU.X, bag.m4l.tvU.Y, bag.m4l.tvU.Z, 0
-	me[1], me[5], me[9], me[13] = bag.m4l.tvV.X, bag.m4l.tvV.Y, bag.m4l.tvV.Z, 0
-	me[2], me[6], me[10], me[14] = bag.m4l.tvN.X, bag.m4l.tvN.Y, bag.m4l.tvN.Z, 0
+	// tvN = lookTarget.Normalized()
+	// tvU = worldUp.Normalized().Cross(lookTarget)
+	// tvV = tvN.Cross(tvU)
+	tvN.SetFromNormalized(lookTarget)
+	tvU.SetFromCrossOf(worldUp.Normalized(), lookTarget)
+	tvV.SetFromCrossOf(&tvN, &tvU)
+	me[0], me[4], me[8], me[12] = tvU.X, tvU.Y, tvU.Z, 0
+	me[1], me[5], me[9], me[13] = tvV.X, tvV.Y, tvV.Z, 0
+	me[2], me[6], me[10], me[14] = tvN.X, tvN.Y, tvN.Z, 0
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
 
@@ -99,10 +100,10 @@ func (me *Mat4) Mult1(v float64) {
 }
 
 //	Sets this 4x4 matrix to the specified perspective-projection matrix.
-func (me *Mat4) Perspective(bag *Bag, fovY, aspect, near, far float64) {
-	bag.m4p.tfY = near * math.Tan(fovY*math.Pi/360)
-	bag.m4p.tfX = bag.m4p.tfY * aspect
-	me.Frustum(-bag.m4p.tfX, bag.m4p.tfX, -bag.m4p.tfY, bag.m4p.tfY, near, far)
+func (me *Mat4) Perspective(fovY, aspect, near, far float64) {
+	tfY := near * math.Tan(fovY*math.Pi/360)
+	tfX := tfY * aspect
+	me.Frustum(-tfX, tfX, -tfY, tfY, near, far)
 }
 
 /*
@@ -118,28 +119,28 @@ func (me *Mat4) Rotation (rad float64, axes *Vec3) {
 */
 
 //	Sets this 4x4 matrix to a rotation matrix representing "rotate rad radians around the X asis".
-func (me *Mat4) RotationX(bag *Bag, rad float64) {
-	bag.m4p.tfX, bag.m4p.tfY = math.Cos(rad), math.Sin(rad)
+func (me *Mat4) RotationX(rad float64) {
+	cos, sin := math.Cos(rad), math.Sin(rad)
 	me[0], me[4], me[8], me[12] = 1, 0, 0, 0
-	me[1], me[5], me[9], me[13] = 0, bag.m4p.tfX, -bag.m4p.tfY, 0
-	me[2], me[6], me[10], me[14] = 0, bag.m4p.tfY, bag.m4p.tfX, 0
+	me[1], me[5], me[9], me[13] = 0, cos, -sin, 0
+	me[2], me[6], me[10], me[14] = 0, sin, cos, 0
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
 
 //	Sets this 4x4 matrix to a rotation matrix representing "rotate rad radians around the Y asis".
-func (me *Mat4) RotationY(bag *Bag, rad float64) {
-	bag.m4p.tfX, bag.m4p.tfY = math.Cos(rad), math.Sin(rad)
-	me[0], me[4], me[8], me[12] = bag.m4p.tfX, 0, bag.m4p.tfY, 0
+func (me *Mat4) RotationY(rad float64) {
+	cos, sin := math.Cos(rad), math.Sin(rad)
+	me[0], me[4], me[8], me[12] = cos, 0, sin, 0
 	me[1], me[5], me[9], me[13] = 0, 1, 0, 0
-	me[2], me[6], me[10], me[14] = -bag.m4p.tfY, 0, bag.m4p.tfX, 0
+	me[2], me[6], me[10], me[14] = -sin, 0, cos, 0
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
 
 //	Sets this 4x4 matrix to a rotation matrix representing "rotate rad radians around the Z asis".
-func (me *Mat4) RotationZ(bag *Bag, rad float64) {
-	bag.m4p.tfX, bag.m4p.tfY = math.Cos(rad), math.Sin(rad)
-	me[0], me[4], me[8], me[12] = bag.m4p.tfX, -bag.m4p.tfY, 0, 0
-	me[1], me[5], me[9], me[13] = bag.m4p.tfY, bag.m4p.tfX, 0, 0
+func (me *Mat4) RotationZ(rad float64) {
+	cos, sin := math.Cos(rad), math.Sin(rad)
+	me[0], me[4], me[8], me[12] = cos, -sin, 0, 0
+	me[1], me[5], me[9], me[13] = sin, cos, 0, 0
 	me[2], me[6], me[10], me[14] = 0, 0, 1, 0
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
@@ -161,19 +162,23 @@ func (me *Mat4) SetFromMult4(one, two *Mat4) {
 }
 
 //	Sets this 4x4 matrix to the result of multiplying all the specified mats with one another.
-func (me *Mat4) SetFromMultN(bag *Bag, mats ...*Mat4) {
-	bag.m4n.m0.Clear()
-	bag.m4n.m1 = mats[0]
-	for bag.m4n.i = 1; bag.m4n.i < len(mats); bag.m4n.i++ {
-		if bag.m4n.m2 = mats[bag.m4n.i]; bag.m4n.m2 != nil {
-			me[0], me[4], me[8], me[12] = (bag.m4n.m1[0]*bag.m4n.m2[0])+(bag.m4n.m1[4]*bag.m4n.m2[1])+(bag.m4n.m1[8]*bag.m4n.m2[2])+(bag.m4n.m1[12]*bag.m4n.m2[3]), (bag.m4n.m1[0]*bag.m4n.m2[4])+(bag.m4n.m1[4]*bag.m4n.m2[5])+(bag.m4n.m1[8]*bag.m4n.m2[6])+(bag.m4n.m1[12]*bag.m4n.m2[7]), (bag.m4n.m1[0]*bag.m4n.m2[8])+(bag.m4n.m1[4]*bag.m4n.m2[9])+(bag.m4n.m1[8]*bag.m4n.m2[10])+(bag.m4n.m1[12]*bag.m4n.m2[11]), (bag.m4n.m1[0]*bag.m4n.m2[12])+(bag.m4n.m1[4]*bag.m4n.m2[13])+(bag.m4n.m1[8]*bag.m4n.m2[14])+(bag.m4n.m1[12]*bag.m4n.m2[15])
-			me[1], me[5], me[9], me[13] = (bag.m4n.m1[1]*bag.m4n.m2[0])+(bag.m4n.m1[5]*bag.m4n.m2[1])+(bag.m4n.m1[9]*bag.m4n.m2[2])+(bag.m4n.m1[13]*bag.m4n.m2[3]), (bag.m4n.m1[1]*bag.m4n.m2[4])+(bag.m4n.m1[5]*bag.m4n.m2[5])+(bag.m4n.m1[9]*bag.m4n.m2[6])+(bag.m4n.m1[13]*bag.m4n.m2[7]), (bag.m4n.m1[1]*bag.m4n.m2[8])+(bag.m4n.m1[5]*bag.m4n.m2[9])+(bag.m4n.m1[9]*bag.m4n.m2[10])+(bag.m4n.m1[13]*bag.m4n.m2[11]), (bag.m4n.m1[1]*bag.m4n.m2[12])+(bag.m4n.m1[5]*bag.m4n.m2[13])+(bag.m4n.m1[9]*bag.m4n.m2[14])+(bag.m4n.m1[13]*bag.m4n.m2[15])
-			me[2], me[6], me[10], me[14] = (bag.m4n.m1[2]*bag.m4n.m2[0])+(bag.m4n.m1[6]*bag.m4n.m2[1])+(bag.m4n.m1[10]*bag.m4n.m2[2])+(bag.m4n.m1[14]*bag.m4n.m2[3]), (bag.m4n.m1[2]*bag.m4n.m2[4])+(bag.m4n.m1[6]*bag.m4n.m2[5])+(bag.m4n.m1[10]*bag.m4n.m2[6])+(bag.m4n.m1[14]*bag.m4n.m2[7]), (bag.m4n.m1[2]*bag.m4n.m2[8])+(bag.m4n.m1[6]*bag.m4n.m2[9])+(bag.m4n.m1[10]*bag.m4n.m2[10])+(bag.m4n.m1[14]*bag.m4n.m2[11]), (bag.m4n.m1[2]*bag.m4n.m2[12])+(bag.m4n.m1[6]*bag.m4n.m2[13])+(bag.m4n.m1[10]*bag.m4n.m2[14])+(bag.m4n.m1[14]*bag.m4n.m2[15])
-			me[3], me[7], me[11], me[15] = (bag.m4n.m1[3]*bag.m4n.m2[0])+(bag.m4n.m1[7]*bag.m4n.m2[1])+(bag.m4n.m1[11]*bag.m4n.m2[2])+(bag.m4n.m1[15]*bag.m4n.m2[3]), (bag.m4n.m1[3]*bag.m4n.m2[4])+(bag.m4n.m1[7]*bag.m4n.m2[5])+(bag.m4n.m1[11]*bag.m4n.m2[6])+(bag.m4n.m1[15]*bag.m4n.m2[7]), (bag.m4n.m1[3]*bag.m4n.m2[8])+(bag.m4n.m1[7]*bag.m4n.m2[9])+(bag.m4n.m1[11]*bag.m4n.m2[10])+(bag.m4n.m1[15]*bag.m4n.m2[11]), (bag.m4n.m1[3]*bag.m4n.m2[12])+(bag.m4n.m1[7]*bag.m4n.m2[13])+(bag.m4n.m1[11]*bag.m4n.m2[14])+(bag.m4n.m1[15]*bag.m4n.m2[15])
-			bag.m4n.m0 = *me
-			bag.m4n.m1 = &bag.m4n.m0
+func (me *Mat4) SetFromMultN(mats ...*Mat4) {
+	var (
+		m0     Mat4
+		m1, m2 *Mat4
+	)
+	m1 = mats[0]
+	for i := 1; i < len(mats); i++ {
+		if m2 = mats[i]; m2 != nil {
+			me[0], me[4], me[8], me[12] = (m1[0]*m2[0])+(m1[4]*m2[1])+(m1[8]*m2[2])+(m1[12]*m2[3]), (m1[0]*m2[4])+(m1[4]*m2[5])+(m1[8]*m2[6])+(m1[12]*m2[7]), (m1[0]*m2[8])+(m1[4]*m2[9])+(m1[8]*m2[10])+(m1[12]*m2[11]), (m1[0]*m2[12])+(m1[4]*m2[13])+(m1[8]*m2[14])+(m1[12]*m2[15])
+			me[1], me[5], me[9], me[13] = (m1[1]*m2[0])+(m1[5]*m2[1])+(m1[9]*m2[2])+(m1[13]*m2[3]), (m1[1]*m2[4])+(m1[5]*m2[5])+(m1[9]*m2[6])+(m1[13]*m2[7]), (m1[1]*m2[8])+(m1[5]*m2[9])+(m1[9]*m2[10])+(m1[13]*m2[11]), (m1[1]*m2[12])+(m1[5]*m2[13])+(m1[9]*m2[14])+(m1[13]*m2[15])
+			me[2], me[6], me[10], me[14] = (m1[2]*m2[0])+(m1[6]*m2[1])+(m1[10]*m2[2])+(m1[14]*m2[3]), (m1[2]*m2[4])+(m1[6]*m2[5])+(m1[10]*m2[6])+(m1[14]*m2[7]), (m1[2]*m2[8])+(m1[6]*m2[9])+(m1[10]*m2[10])+(m1[14]*m2[11]), (m1[2]*m2[12])+(m1[6]*m2[13])+(m1[10]*m2[14])+(m1[14]*m2[15])
+			me[3], me[7], me[11], me[15] = (m1[3]*m2[0])+(m1[7]*m2[1])+(m1[11]*m2[2])+(m1[15]*m2[3]), (m1[3]*m2[4])+(m1[7]*m2[5])+(m1[11]*m2[6])+(m1[15]*m2[7]), (m1[3]*m2[8])+(m1[7]*m2[9])+(m1[11]*m2[10])+(m1[15]*m2[11]), (m1[3]*m2[12])+(m1[7]*m2[13])+(m1[11]*m2[14])+(m1[15]*m2[15])
+			m0 = *me
+			m1 = &m0
 		}
 	}
+	m1, m2 = nil, nil
 }
 
 //	Subtracts mat from this 4x4 matrix.
@@ -241,9 +246,9 @@ func NewMat4Identity() (mat *Mat4) {
 }
 
 //	Returns a new 4x4 matrix representing the specified look-at matrix.
-func NewMat4LookAt(bag *Bag, lookTarget, worldUp *Vec3) (mat *Mat4) {
+func NewMat4LookAt(lookTarget, worldUp *Vec3) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.LookAt(bag, lookTarget, worldUp)
+	mat.LookAt(lookTarget, worldUp)
 	return
 }
 
@@ -265,16 +270,16 @@ func NewMat4Mult4(one, two *Mat4) (mat *Mat4) {
 }
 
 //	Returns a new 4x4 matrix that represents the result of multiplying all mats with one another.
-func NewMat4MultN(bag *Bag, mats ...*Mat4) (mat *Mat4) {
+func NewMat4MultN(mats ...*Mat4) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.SetFromMultN(bag, mats...)
+	mat.SetFromMultN(mats...)
 	return
 }
 
 //	Returns a new 4x4 matrix that represents the specified perspective-projection matrix.
-func NewMat4Perspective(bag *Bag, fovY, aspect, near, far float64) (mat *Mat4) {
+func NewMat4Perspective(fovY, aspect, near, far float64) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.Perspective(bag, fovY, aspect, near, far)
+	mat.Perspective(fovY, aspect, near, far)
 	return
 }
 
@@ -285,23 +290,23 @@ func NewMat4Rotation (rad float64, axes *Vec3) *Mat4 {
 */
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the X asis.
-func NewMat4RotationX(bag *Bag, rad float64) (mat *Mat4) {
+func NewMat4RotationX(rad float64) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.RotationX(bag, rad)
+	mat.RotationX(rad)
 	return
 }
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the Y asis.
-func NewMat4RotationY(bag *Bag, rad float64) (mat *Mat4) {
+func NewMat4RotationY(rad float64) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.RotationY(bag, rad)
+	mat.RotationY(rad)
 	return
 }
 
 //	Returns a new 4x4 matrix that representing a rotation of rad radians around the Z asis.
-func NewMat4RotationZ(bag *Bag, rad float64) (mat *Mat4) {
+func NewMat4RotationZ(rad float64) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.RotationZ(bag, rad)
+	mat.RotationZ(rad)
 	return
 }
 

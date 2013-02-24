@@ -4,26 +4,6 @@ import (
 	"math"
 )
 
-//	You'll need to supply some Vec3, Quat and Mat4 methods with such a "Bag".
-//	Keep a single Bag per thread/goroutine for indefinite reuse, instead of repeatedly allocating new ones on-demand.
-type Bag struct {
-	qfv float64
-	m4l struct {
-		tvN, tvU, tvV Vec3
-	}
-	m4n struct {
-		i      int
-		m0     Mat4
-		m1, m2 *Mat4
-	}
-	m4p struct {
-		tfX, tfY float64
-	}
-	v3r struct {
-		tmpQ, tmpQw, tmpQr, tmpQc Quat
-	}
-}
-
 const (
 	PiDiv180  = math.Pi / 180
 	PiHalfDiv = 0.5 / math.Pi
