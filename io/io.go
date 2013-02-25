@@ -90,8 +90,8 @@ func EnsureDirExists(path string) (err error) {
 //	deleteZipFile: deletes the ZIP archive file upon successful extraction.
 func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error {
 	var (
-		fnames      []string = nil
-		fnprefix    string   = ""
+		fnames      []string
+		fnprefix    string
 		efile       *os.File
 		zfile       *zip.File
 		zfileReader io.ReadCloser

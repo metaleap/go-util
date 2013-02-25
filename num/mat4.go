@@ -178,7 +178,6 @@ func (me *Mat4) SetFromMultN(mats ...*Mat4) {
 			m1 = &m0
 		}
 	}
-	m1, m2 = nil, nil
 }
 
 //	Subtracts mat from this 4x4 matrix.
