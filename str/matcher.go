@@ -11,35 +11,31 @@ type matcherPattern struct {
 //	Matches a string against "simple-patterns".
 //	Simple-patterns are strings that can have *-wildcards only at the beginning, at the end, or both.
 type Matcher struct {
-	patterns []*matcherPattern
-}
-
-//	Initializes and returns a new Matcher with the specified patterns.
-func NewMatcher(patterns ...string) (me *Matcher) {
-	me = &Matcher{}
-	for _, s := range patterns {
-		me.AddPattern(s)
-	}
-	return
+	patterns []matcherPattern
 }
 
 //	Adds the specified pattern to me.
-func (me *Matcher) AddPattern(s string) {
-	mp := &matcherPattern{pattern: s}
-	if strings.HasPrefix(s, "*") && strings.HasSuffix(s, "*") {
-		mp.contains = s[1 : len(s)-1]
-	} else if strings.HasPrefix(s, "*") {
-		mp.suffix = s[1:]
-	} else if strings.HasSuffix(s, "*") {
-		mp.prefix = s[:len(s)-1]
+func (me *Matcher) AddPatterns(patterns ...string) {
+	var s string
+	patts := make([]matcherPattern, len(patterns))
+	for i := 0; i < len(patterns); i++ {
+		s = patterns[i]
+		patts[i].pattern = s
+		if strings.HasPrefix(s, "*") && strings.HasSuffix(s, "*") {
+			patts[i].contains = s[1 : len(s)-1]
+		} else if strings.HasPrefix(s, "*") {
+			patts[i].suffix = s[1:]
+		} else if strings.HasSuffix(s, "*") {
+			patts[i].prefix = s[:len(s)-1]
+		}
 	}
-	me.patterns = append(me.patterns, mp)
+	me.patterns = append(me.patterns, patts...)
 }
 
 //	Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
 func (me *Matcher) HasWildcardPatterns() bool {
-	for _, mp := range me.patterns {
-		if len(mp.contains) > 0 || len(mp.prefix) > 0 || len(mp.suffix) > 0 {
+	for i := 0; i < len(me.patterns); i++ {
+		if len(me.patterns[i].contains) > 0 || len(me.patterns[i].prefix) > 0 || len(me.patterns[i].suffix) > 0 {
 			return true
 		}
 	}
@@ -54,18 +50,18 @@ func (me *Matcher) IsMatch(s string) bool {
 //	Matches s against all patterns in me.
 //	Returns the first pattern (minus wildcards) that matches s, or "" if there is no match.
 func (me *Matcher) Match(s string) string {
-	for _, mp := range me.patterns {
-		if s == mp.pattern {
-			return mp.pattern
+	for i := 0; i < len(me.patterns); i++ {
+		if s == me.patterns[i].pattern {
+			return me.patterns[i].pattern
 		}
-		if len(mp.prefix) > 0 && strings.HasPrefix(s, mp.prefix) {
-			return mp.prefix
+		if len(me.patterns[i].prefix) > 0 && strings.HasPrefix(s, me.patterns[i].prefix) {
+			return me.patterns[i].prefix
 		}
-		if len(mp.suffix) > 0 && strings.HasSuffix(s, mp.suffix) {
-			return mp.suffix
+		if len(me.patterns[i].suffix) > 0 && strings.HasSuffix(s, me.patterns[i].suffix) {
+			return me.patterns[i].suffix
 		}
-		if len(mp.contains) > 0 && strings.Contains(s, mp.contains) {
-			return mp.contains
+		if len(me.patterns[i].contains) > 0 && strings.Contains(s, me.patterns[i].contains) {
+			return me.patterns[i].contains
 		}
 	}
 	return ""

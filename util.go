@@ -12,27 +12,11 @@ import (
 )
 
 var (
-	//	A map of GOOS-names to human-readable OS names, used by OSName().
-	OSNames = map[string]string{
-		"windows": "Windows",
-		"darwin":  "Mac OS X",
-		"linux":   "Linux",
-		"freebsd": "FreeBSD",
-		"":        "OS",
-	}
-
 	//	The string format used in LogError().
 	LogErrorFormat = "%v"
-
-	goPaths       [][]string
-	goPathsLenIs1 bool
 )
 
 func init() {
-	for _, gp := range strings.Split(os.Getenv("GOPATH"), string(os.PathListSeparator)) {
-		goPaths = append(goPaths, []string{gp, "src"})
-	}
-	goPathsLenIs1 = (len(goPaths) == 1)
 }
 
 func dirExists(path string) bool {
@@ -42,12 +26,17 @@ func dirExists(path string) bool {
 	return false
 }
 
+func GoPaths() []string {
+	return strings.Split(os.Getenv("GOPATH"), string(os.PathListSeparator))
+}
+
 //	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
 //	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
 func GopathSrc(subDirNames ...string) (gps string) {
-	var gp []string
-	for _, gp = range goPaths {
-		if gps = filepath.Join(append(gp, subDirNames...)...); goPathsLenIs1 || dirExists(gps) {
+	gp := []string{"", "src"}
+	for _, goPath := range GoPaths() {
+		gp[0] = goPath
+		if gps = filepath.Join(append(gp, subDirNames...)...); dirExists(gps) {
 			break
 		}
 	}
@@ -148,8 +137,17 @@ func LogError(err error) {
 
 //	Returns the human-readable representation associated with the specified GOOS name in OSNames.
 func OSName(goOS string) (name string) {
-	if name = OSNames[goOS]; len(name) == 0 {
-		name = OSNames[""]
+	switch goOS {
+	case "windows":
+		return "Windows"
+	case "darwin":
+		return "Mac OS X"
+	case "linux":
+		return "Linux"
+	case "freebsd":
+		return "FreeBSD"
+	default:
+		return "OS"
 	}
 	return
 }
