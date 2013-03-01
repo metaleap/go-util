@@ -8,14 +8,14 @@ import (
 	ugo "github.com/metaleap/go-util"
 )
 
-//	Appends s to sl only if sl does not already contain s.
-func AppendUnique(sl *[]string, s string) {
-	for _, str := range *sl {
-		if str == s {
+//	Appends v to sl only if sl does not already contain v.
+func AppendUnique(sl *[]string, v string) {
+	for _, slv := range *sl {
+		if slv == v {
 			return
 		}
 	}
-	*sl = append(*sl, s)
+	*sl = append(*sl, v)
 }
 
 //	Sets all values in m to the empty string.
