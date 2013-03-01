@@ -195,9 +195,6 @@ Various line-savers for common string-processing needs.
 					
 					<dd>&nbsp; &nbsp; <a href="#Matcher.IsMatch">func (me *Matcher) IsMatch(s string) bool</a></dd>
 				
-					
-					<dd>&nbsp; &nbsp; <a href="#Matcher.Match">func (me *Matcher) Match(s string) string</a></dd>
-				
 			
 			
 		</dl>
@@ -642,7 +639,7 @@ Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs
 		
 			
 			
-			<h2 id="Matcher">type <a href="/target/matcher.go?s=259:309#L3">Matcher</a></h2>
+			<h2 id="Matcher">type <a href="/target/matcher.go?s=259:332#L3">Matcher</a></h2>
 			<pre>type Matcher struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
@@ -662,7 +659,7 @@ Simple-patterns are strings that can have *-wildcards only at the beginning, at 
 
 			
 				
-				<h3 id="Matcher.AddPatterns">func (*Matcher) <a href="/target/matcher.go?s=348:398#L8">AddPatterns</a></h3>
+				<h3 id="Matcher.AddPatterns">func (*Matcher) <a href="/target/matcher.go?s=371:421#L9">AddPatterns</a></h3>
 				<pre>func (me *Matcher) AddPatterns(patterns ...string)</pre>
 				<p>
 Adds the specified pattern to me.
@@ -672,7 +669,7 @@ Adds the specified pattern to me.
 				
 			
 				
-				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=928:973#L26">HasWildcardPatterns</a></h3>
+				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=1071:1116#L30">HasWildcardPatterns</a></h3>
 				<pre>func (me *Matcher) HasWildcardPatterns() bool</pre>
 				<p>
 Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
@@ -682,21 +679,10 @@ Returns whether any of the patterns specified for this Matcher contains a *-wild
 				
 			
 				
-				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=1254:1295#L36">IsMatch</a></h3>
+				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=1187:1228#L35">IsMatch</a></h3>
 				<pre>func (me *Matcher) IsMatch(s string) bool</pre>
 				<p>
-Convenience short-hand that informs whether Match(s) returns a non-empty result value.
-</p>
-
-				
-				
-			
-				
-				<h3 id="Matcher.Match">func (*Matcher) <a href="/target/matcher.go?s=1462:1503#L42">Match</a></h3>
-				<pre>func (me *Matcher) Match(s string) string</pre>
-				<p>
 Matches s against all patterns in me.
-Returns the first pattern (minus wildcards) that matches s, or &#34;&#34; if there is no match.
 </p>
 
 				
