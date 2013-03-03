@@ -22,6 +22,18 @@ func IntAt(slice []int, val int) int {
 	return -1
 }
 
+func IntEnsureCap(ref *[]int, capacity int) {
+	if cap(*ref) < capacity {
+		IntSetCap(ref, capacity)
+	}
+}
+
+func IntEnsureLen(ref *[]int, length int) {
+	if len(*ref) < length {
+		IntSetLen(ref, length)
+	}
+}
+
 //	Returns true if one and two only contain identical values, regardless of ordering.
 func IntEquivalent(one, two []int) bool {
 	if len(one) != len(two) {
@@ -62,6 +74,18 @@ func IntRemove(ref *[]int, v int, all bool) {
 			}
 		}
 	}
+}
+
+func IntSetCap(ref *[]int, capacity int) {
+	nu := make([]int, len(*ref), capacity)
+	copy(nu, *ref)
+	*ref = nu
+}
+
+func IntSetLen(ref *[]int, length int) {
+	nu := make([]int, length)
+	copy(nu, *ref)
+	*ref = nu
 }
 
 //	Removes all withoutVals from slice.

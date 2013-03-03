@@ -20,6 +20,18 @@ func __N__At(slice []__T__, val __T__) int {
 	return -1
 }
 
+func __N__EnsureCap(ref *[]__T__, capacity int) {
+	if cap(*ref) < capacity {
+		__N__SetCap(ref, capacity)
+	}
+}
+
+func __N__EnsureLen(ref *[]__T__, length int) {
+	if len(*ref) < length {
+		__N__SetLen(ref, length)
+	}
+}
+
 //	Returns true if one and two only contain identical values, regardless of ordering.
 func __N__Equivalent(one, two []__T__) bool {
 	if len(one) != len(two) {
@@ -60,6 +72,18 @@ func __N__Remove(ref *[]__T__, v __T__, all bool) {
 			}
 		}
 	}
+}
+
+func __N__SetCap(ref *[]__T__, capacity int) {
+	nu := make([]__T__, len(*ref), capacity)
+	copy(nu, *ref)
+	*ref = nu
+}
+
+func __N__SetLen(ref *[]__T__, length int) {
+	nu := make([]__T__, length)
+	copy(nu, *ref)
+	*ref = nu
 }
 
 //	Removes all withoutVals from slice.

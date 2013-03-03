@@ -1,29 +1,9 @@
 package uslice
 
-import (
-	"strings"
-)
-
-//	Returns the position of lower-case val in lower-case vals.
-func StrAtIgnoreCase(vals []string, val string) int {
-	lv := strings.ToLower(val)
-	for i, v := range vals {
-		if (v == val) || (strings.ToLower(v) == lv) {
-			return i
-		}
-	}
-	return -1
-}
-
-//	Returns true if lower-case val is in lower-case vals.
-func StrHasIgnoreCase(vals []string, val string) bool {
-	return StrAtIgnoreCase(vals, val) >= 0
-}
-
-//#begin-gt -gen.gt N:Str T:string
+//#begin-gt -gen.gt N:Bool T:bool
 
 //	Appends v to sl only if sl does not already contain v.
-func StrAppendUnique(ref *[]string, v string) {
+func BoolAppendUnique(ref *[]bool, v bool) {
 	for _, sv := range *ref {
 		if sv == v {
 			return
@@ -33,7 +13,7 @@ func StrAppendUnique(ref *[]string, v string) {
 }
 
 //	Returns the position of val in slice.
-func StrAt(slice []string, val string) int {
+func BoolAt(slice []bool, val bool) int {
 	for i, v := range slice {
 		if v == val {
 			return i
@@ -42,25 +22,25 @@ func StrAt(slice []string, val string) int {
 	return -1
 }
 
-func StrEnsureCap(ref *[]string, capacity int) {
+func BoolEnsureCap(ref *[]bool, capacity int) {
 	if cap(*ref) < capacity {
-		StrSetCap(ref, capacity)
+		BoolSetCap(ref, capacity)
 	}
 }
 
-func StrEnsureLen(ref *[]string, length int) {
+func BoolEnsureLen(ref *[]bool, length int) {
 	if len(*ref) < length {
-		StrSetLen(ref, length)
+		BoolSetLen(ref, length)
 	}
 }
 
 //	Returns true if one and two only contain identical values, regardless of ordering.
-func StrEquivalent(one, two []string) bool {
+func BoolEquivalent(one, two []bool) bool {
 	if len(one) != len(two) {
 		return false
 	}
 	for _, v := range one {
-		if StrAt(two, v) < 0 {
+		if BoolAt(two, v) < 0 {
 			return false
 		}
 	}
@@ -68,12 +48,12 @@ func StrEquivalent(one, two []string) bool {
 }
 
 //	Returns true if val is in slice.
-func StrHas(slice []string, val string) bool {
-	return StrAt(slice, val) >= 0
+func BoolHas(slice []bool, val bool) bool {
+	return BoolAt(slice, val) >= 0
 }
 
 //	Returns whether one of the specified vals is contained in slice.
-func StrHasAny(slice []string, vals ...string) bool {
+func BoolHasAny(slice []bool, vals ...bool) bool {
 	for _, v1 := range vals {
 		for _, v2 := range slice {
 			if v1 == v2 {
@@ -84,7 +64,7 @@ func StrHasAny(slice []string, vals ...string) bool {
 	return false
 }
 
-func StrRemove(ref *[]string, v string, all bool) {
+func BoolRemove(ref *[]bool, v bool, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
 			before, after := (*ref)[:i], (*ref)[i+1:]
@@ -96,23 +76,23 @@ func StrRemove(ref *[]string, v string, all bool) {
 	}
 }
 
-func StrSetCap(ref *[]string, capacity int) {
-	nu := make([]string, len(*ref), capacity)
+func BoolSetCap(ref *[]bool, capacity int) {
+	nu := make([]bool, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-func StrSetLen(ref *[]string, length int) {
-	nu := make([]string, length)
+func BoolSetLen(ref *[]bool, length int) {
+	nu := make([]bool, length)
 	copy(nu, *ref)
 	*ref = nu
 }
 
 //	Removes all withoutVals from slice.
-func StrWithout(slice []string, keepOrder bool, withoutVals ...string) []string {
+func BoolWithout(slice []bool, keepOrder bool, withoutVals ...bool) []bool {
 	if len(withoutVals) > 0 {
 		for _, w := range withoutVals {
-			for pos := StrAt(slice, w); pos >= 0; pos = StrAt(slice, w) {
+			for pos := BoolAt(slice, w); pos >= 0; pos = BoolAt(slice, w) {
 				if keepOrder {
 					slice = append(slice[:pos], slice[pos+1:]...)
 				} else {
