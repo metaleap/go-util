@@ -1,0 +1,303 @@
+<html>
+	<head>
+		<title>Package github.com/metaleap/go-util/slice</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="http://golang.org/doc/style.css" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://golang.org/doc/godocs.js"></script>
+	</head>
+	<body>
+		<div id="page" class="wide">
+		<div class="container">
+		<h1>Package github.com/metaleap/go-util/slice</h1>
+		<div id="nav"></div>
+		<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util/slice"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index">Index</a></dd>
+			
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Typed-slice pseudo-generic utilities
+</p>
+
+			</div>
+		</div>
+		
+	
+		<h2 id="pkg-index">Index</h2>
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+		<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#IntAppendUnique">func IntAppendUnique(ref *[]int, v int)</a></dd>
+			
+				
+				<dd><a href="#IntAt">func IntAt(slice []int, val int) int</a></dd>
+			
+				
+				<dd><a href="#IntEquivalent">func IntEquivalent(one, two []int) bool</a></dd>
+			
+				
+				<dd><a href="#IntHas">func IntHas(slice []int, val int) bool</a></dd>
+			
+				
+				<dd><a href="#IntHasAny">func IntHasAny(slice []int, vals ...int) bool</a></dd>
+			
+				
+				<dd><a href="#IntRemove">func IntRemove(ref *[]int, v int, all bool)</a></dd>
+			
+				
+				<dd><a href="#IntWithout">func IntWithout(slice []int, keepOrder bool, withoutVals ...int) []int</a></dd>
+			
+				
+				<dd><a href="#StrAppendUnique">func StrAppendUnique(ref *[]string, v string)</a></dd>
+			
+				
+				<dd><a href="#StrAt">func StrAt(slice []string, val string) int</a></dd>
+			
+				
+				<dd><a href="#StrAtIgnoreCase">func StrAtIgnoreCase(vals []string, val string) int</a></dd>
+			
+				
+				<dd><a href="#StrEquivalent">func StrEquivalent(one, two []string) bool</a></dd>
+			
+				
+				<dd><a href="#StrHas">func StrHas(slice []string, val string) bool</a></dd>
+			
+				
+				<dd><a href="#StrHasAny">func StrHasAny(slice []string, vals ...string) bool</a></dd>
+			
+				
+				<dd><a href="#StrHasIgnoreCase">func StrHasIgnoreCase(vals []string, val string) bool</a></dd>
+			
+				
+				<dd><a href="#StrRemove">func StrRemove(ref *[]string, v string, all bool)</a></dd>
+			
+				
+				<dd><a href="#StrWithout">func StrWithout(slice []string, keepOrder bool, withoutVals ...string) []string</a></dd>
+			
+			
+			
+		</dl>
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/int.gt.go">int.gt.go</a>
+			
+				<a href="/target/str.gt.go">str.gt.go</a>
+			
+			</span>
+			</p>
+		
+	
+		
+		
+		
+			
+			
+			<h2 id="IntAppendUnique">func <a href="/target/int.gt.go?s=107:146#L1">IntAppendUnique</a></h2>
+			<pre>func IntAppendUnique(ref *[]int, v int)</pre>
+			<p>
+Appends v to sl only if sl does not already contain v.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IntAt">func <a href="/target/int.gt.go?s=276:312#L6">IntAt</a></h2>
+			<pre>func IntAt(slice []int, val int) int</pre>
+			<p>
+Returns the position of val in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IntEquivalent">func <a href="/target/int.gt.go?s=477:516#L16">IntEquivalent</a></h2>
+			<pre>func IntEquivalent(one, two []int) bool</pre>
+			<p>
+Returns true if one and two only contain identical values, regardless of ordering.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IntHas">func <a href="/target/int.gt.go?s=689:727#L29">IntHas</a></h2>
+			<pre>func IntHas(slice []int, val int) bool</pre>
+			<p>
+Returns true if val is in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IntHasAny">func <a href="/target/int.gt.go?s=832:877#L34">IntHasAny</a></h2>
+			<pre>func IntHasAny(slice []int, vals ...int) bool</pre>
+			<p>
+Returns whether one of the specified vals is contained in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IntRemove">func <a href="/target/int.gt.go?s=998:1041#L45">IntRemove</a></h2>
+			<pre>func IntRemove(ref *[]int, v int, all bool)</pre>
+			
+			
+		
+			
+			
+			<h2 id="IntWithout">func <a href="/target/int.gt.go?s=1257:1327#L58">IntWithout</a></h2>
+			<pre>func IntWithout(slice []int, keepOrder bool, withoutVals ...int) []int</pre>
+			<p>
+Removes all withoutVals from slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrAppendUnique">func <a href="/target/str.gt.go?s=540:585#L16">StrAppendUnique</a></h2>
+			<pre>func StrAppendUnique(ref *[]string, v string)</pre>
+			<p>
+Appends v to sl only if sl does not already contain v.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrAt">func <a href="/target/str.gt.go?s=715:757#L26">StrAt</a></h2>
+			<pre>func StrAt(slice []string, val string) int</pre>
+			<p>
+Returns the position of val in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrAtIgnoreCase">func <a href="/target/str.gt.go?s=101:152#L1">StrAtIgnoreCase</a></h2>
+			<pre>func StrAtIgnoreCase(vals []string, val string) int</pre>
+			<p>
+Returns the position of lower-case val in lower-case vals.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrEquivalent">func <a href="/target/str.gt.go?s=922:964#L36">StrEquivalent</a></h2>
+			<pre>func StrEquivalent(one, two []string) bool</pre>
+			<p>
+Returns true if one and two only contain identical values, regardless of ordering.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrHas">func <a href="/target/str.gt.go?s=1137:1181#L49">StrHas</a></h2>
+			<pre>func StrHas(slice []string, val string) bool</pre>
+			<p>
+Returns true if val is in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrHasAny">func <a href="/target/str.gt.go?s=1286:1337#L54">StrHasAny</a></h2>
+			<pre>func StrHasAny(slice []string, vals ...string) bool</pre>
+			<p>
+Returns whether one of the specified vals is contained in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrHasIgnoreCase">func <a href="/target/str.gt.go?s=347:400#L9">StrHasIgnoreCase</a></h2>
+			<pre>func StrHasIgnoreCase(vals []string, val string) bool</pre>
+			<p>
+Returns true if lower-case val is in lower-case vals.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StrRemove">func <a href="/target/str.gt.go?s=1458:1507#L65">StrRemove</a></h2>
+			<pre>func StrRemove(ref *[]string, v string, all bool)</pre>
+			
+			
+		
+			
+			
+			<h2 id="StrWithout">func <a href="/target/str.gt.go?s=1723:1802#L78">StrWithout</a></h2>
+			<pre>func StrWithout(slice []string, keepOrder bool, withoutVals ...string) []string</pre>
+			<p>
+Removes all withoutVals from slice.
+</p>
+
+			
+		
+		
+		</div>
+	
+
+	
+
+
+
+
+
+
+
+
+		</div></div>
+	</body>
+</html>

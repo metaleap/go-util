@@ -6,17 +6,8 @@ import (
 	"unicode"
 
 	ugo "github.com/metaleap/go-util"
+	usl "github.com/metaleap/go-util/slice"
 )
-
-//	Appends v to sl only if sl does not already contain v.
-func AppendUnique(sl *[]string, v string) {
-	for _, slv := range *sl {
-		if slv == v {
-			return
-		}
-	}
-	*sl = append(*sl, v)
-}
 
 //	Sets all values in m to the empty string.
 func ClearMap(m map[string]string) {
@@ -66,27 +57,12 @@ func Distance(s1, s2 string) int {
 	return d[len(s1)][len(s2)]
 }
 
-//	Returns true if one and two contain the same strings, regardless of their respective slice positions.
-func Equivalent(one, two []string) bool {
-	if len(one) != len(two) {
-		return false
-	}
-	if len(one) > 0 {
-		for _, v := range one {
-			if InSliceAt(two, v) < 0 {
-				return false
-			}
-		}
-	}
-	return true
-}
-
 //	Extracts all identifiers (no duplicates, ordered by occurrence) starting with prefix occurring in src.
 func ExtractAllIdentifiers(src, prefix string) (identifiers []string) {
 	minPos := 0
 	id := ExtractFirstIdentifier(src, prefix, minPos)
 	for len(id) > 0 {
-		if minPos = strings.Index(src, id) + 1; !IsInSlice(identifiers, id) {
+		if minPos = strings.Index(src, id) + 1; !usl.StrHas(identifiers, id) {
 			identifiers = append(identifiers, id)
 		}
 		id = ExtractFirstIdentifier(src, prefix, minPos)
@@ -180,45 +156,6 @@ func IndexAny(s string, seps ...string) (pos int) {
 	return
 }
 
-//	Returns the position of val in vals.
-func InSliceAt(vals []string, val string) int {
-	for i, v := range vals {
-		if v == val {
-			return i
-		}
-	}
-	return -1
-}
-
-//	Returns the position of lower-case val in lower-case vals.
-func InSliceAtIgnoreCase(vals []string, val string) int {
-	lv := strings.ToLower(val)
-	for i, v := range vals {
-		if (v == val) || (strings.ToLower(v) == lv) {
-			return i
-		}
-	}
-	return -1
-}
-
-//	Returns whether one of the specified vals is contained in slice.
-func IsAnyInSlice(slice []string, vals ...string) bool {
-	var big, small []string
-	if len(slice) > len(vals) {
-		big, small = slice, vals
-	} else {
-		big, small = vals, slice
-	}
-	for _, s1 := range big {
-		for _, s2 := range small {
-			if s1 == s2 {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 //	Returns true if str is ASCII-compatible.
 func IsAscii(str string) bool {
 	for _, c := range str {
@@ -227,16 +164,6 @@ func IsAscii(str string) bool {
 		}
 	}
 	return true
-}
-
-//	Returns true if val is in vals.
-func IsInSlice(vals []string, val string) bool {
-	return InSliceAt(vals, val) >= 0
-}
-
-//	Returns true if lower-case val is in lower-case vals.
-func IsInSliceIgnoreCase(vals []string, val string) bool {
-	return InSliceAtIgnoreCase(vals, val) >= 0
 }
 
 //	Returns true if all Letter-runes in s are lower-case.
@@ -437,21 +364,4 @@ func ToUpperIfLower(s string) string {
 		return strings.ToUpper(s)
 	}
 	return s
-}
-
-//	Removes all withoutVals from slice.
-func Without(slice []string, keepOrder bool, withoutVals ...string) []string {
-	if len(withoutVals) > 0 {
-		for _, w := range withoutVals {
-			for pos := InSliceAt(slice, w); pos >= 0; pos = InSliceAt(slice, w) {
-				if keepOrder {
-					slice = append(slice[:pos], slice[pos+1:]...)
-				} else {
-					slice[pos] = slice[len(slice)-1]
-					slice = slice[:len(slice)-1]
-				}
-			}
-		}
-	}
-	return slice
 }

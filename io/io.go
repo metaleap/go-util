@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	usl "github.com/metaleap/go-util/slice"
 	ustr "github.com/metaleap/go-util/str"
 )
 
@@ -110,7 +111,7 @@ func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileN
 				}
 			}
 			for _, zfile = range unzip.File {
-				if (fnames == nil) || (ustr.InSliceAt(fnames, zfile.FileHeader.Name) >= 0) {
+				if (fnames == nil) || (usl.StrAt(fnames, zfile.FileHeader.Name) >= 0) {
 					zfileReader, err = zfile.Open()
 					if zfileReader != nil {
 						if err == nil {

@@ -1,0 +1,80 @@
+package gt
+
+//	Appends v to sl only if sl does not already contain v.
+func __N__AppendUnique(ref *[]__T__, v __T__) {
+	for _, sv := range *ref {
+		if sv == v {
+			return
+		}
+	}
+	*ref = append(*ref, v)
+}
+
+//	Returns the position of val in slice.
+func __N__At(slice []__T__, val __T__) int {
+	for i, v := range slice {
+		if v == val {
+			return i
+		}
+	}
+	return -1
+}
+
+//	Returns true if one and two only contain identical values, regardless of ordering.
+func __N__Equivalent(one, two []__T__) bool {
+	if len(one) != len(two) {
+		return false
+	}
+	for _, v := range one {
+		if __N__At(two, v) < 0 {
+			return false
+		}
+	}
+	return true
+}
+
+//	Returns true if val is in slice.
+func __N__Has(slice []__T__, val __T__) bool {
+	return __N__At(slice, val) >= 0
+}
+
+//	Returns whether one of the specified vals is contained in slice.
+func __N__HasAny(slice []__T__, vals ...__T__) bool {
+	for _, v1 := range vals {
+		for _, v2 := range slice {
+			if v1 == v2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func __N__Remove(ref *[]__T__, v __T__, all bool) {
+	for i := 0; i < len(*ref); i++ {
+		if (*ref)[i] == v {
+			before, after := (*ref)[:i], (*ref)[i+1:]
+			*ref = append(before, after...)
+			if !all {
+				break
+			}
+		}
+	}
+}
+
+//	Removes all withoutVals from slice.
+func __N__Without(slice []__T__, keepOrder bool, withoutVals ...__T__) []__T__ {
+	if len(withoutVals) > 0 {
+		for _, w := range withoutVals {
+			for pos := __N__At(slice, w); pos >= 0; pos = __N__At(slice, w) {
+				if keepOrder {
+					slice = append(slice[:pos], slice[pos+1:]...)
+				} else {
+					slice[pos] = slice[len(slice)-1]
+					slice = slice[:len(slice)-1]
+				}
+			}
+		}
+	}
+	return slice
+}
