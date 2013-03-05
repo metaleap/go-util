@@ -15,6 +15,10 @@ func (me *Vec3) Add(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X+vec.X, me.Y+vec.Y, me.Z+vec.Z
 }
 
+func (me *Vec3) AddTo(vec *Vec3) *Vec3 {
+	return &Vec3{me.X + vec.X, me.Y + vec.Y, me.Z + vec.Z}
+}
+
 //	Adds val to all components of this 3D vector.
 func (me *Vec3) Add1(val float64) {
 	me.X, me.Y, me.Z = me.X+val, me.Y+val, me.Z+val
@@ -61,6 +65,10 @@ func (me *Vec3) CrossNormalized(vec *Vec3) (r *Vec3) {
 	//	&Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
 	r.Normalize()
 	return
+}
+
+func (me *Vec3) DistanceFrom(vec *Vec3) float64 {
+	return math.Sqrt(me.SubDot(vec))
 }
 
 //	Returns a new 3D vector that represents this 3D vector divided by vec.
@@ -114,6 +122,10 @@ func (me *Vec3) MakeFinite(vec *Vec3) {
 	if math.IsInf(me.Z, 0) {
 		me.Z = vec.Z
 	}
+}
+
+func (me *Vec3) ManhattanDistanceFrom(vec *Vec3) float64 {
+	return math.Abs(vec.X-me.X) + math.Abs(vec.Y-me.Y) + math.Abs(vec.Z-me.Z)
 }
 
 //	Returns the biggest component of this 3D vector.

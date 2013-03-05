@@ -93,6 +93,39 @@ Typed-slice pseudo-generic utilities
 				<dd><a href="#BoolWithout">func BoolWithout(slice []bool, keepOrder bool, withoutVals ...bool) []bool</a></dd>
 			
 				
+				<dd><a href="#F64AppendUnique">func F64AppendUnique(ref *[]float64, v float64)</a></dd>
+			
+				
+				<dd><a href="#F64At">func F64At(slice []float64, val float64) int</a></dd>
+			
+				
+				<dd><a href="#F64EnsureCap">func F64EnsureCap(ref *[]float64, capacity int)</a></dd>
+			
+				
+				<dd><a href="#F64EnsureLen">func F64EnsureLen(ref *[]float64, length int)</a></dd>
+			
+				
+				<dd><a href="#F64Equivalent">func F64Equivalent(one, two []float64) bool</a></dd>
+			
+				
+				<dd><a href="#F64Has">func F64Has(slice []float64, val float64) bool</a></dd>
+			
+				
+				<dd><a href="#F64HasAny">func F64HasAny(slice []float64, vals ...float64) bool</a></dd>
+			
+				
+				<dd><a href="#F64Remove">func F64Remove(ref *[]float64, v float64, all bool)</a></dd>
+			
+				
+				<dd><a href="#F64SetCap">func F64SetCap(ref *[]float64, capacity int)</a></dd>
+			
+				
+				<dd><a href="#F64SetLen">func F64SetLen(ref *[]float64, length int)</a></dd>
+			
+				
+				<dd><a href="#F64Without">func F64Without(slice []float64, keepOrder bool, withoutVals ...float64) []float64</a></dd>
+			
+				
 				<dd><a href="#IntAppendUnique">func IntAppendUnique(ref *[]int, v int)</a></dd>
 			
 				
@@ -178,6 +211,8 @@ Typed-slice pseudo-generic utilities
 				<a href="/target/bool.gt.go">bool.gt.go</a>
 			
 				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/float64.gt.go">float64.gt.go</a>
 			
 				<a href="/target/int.gt.go">int.gt.go</a>
 			
@@ -279,6 +314,101 @@ Returns whether one of the specified vals is contained in slice.
 			
 			<h2 id="BoolWithout">func <a href="/target/bool.gt.go?s=1707:1781#L82">BoolWithout</a></h2>
 			<pre>func BoolWithout(slice []bool, keepOrder bool, withoutVals ...bool) []bool</pre>
+			<p>
+Removes all withoutVals from slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64AppendUnique">func <a href="/target/float64.gt.go?s=111:158#L1">F64AppendUnique</a></h2>
+			<pre>func F64AppendUnique(ref *[]float64, v float64)</pre>
+			<p>
+Appends v to sl only if sl does not already contain v.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64At">func <a href="/target/float64.gt.go?s=288:332#L6">F64At</a></h2>
+			<pre>func F64At(slice []float64, val float64) int</pre>
+			<p>
+Returns the position of val in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64EnsureCap">func <a href="/target/float64.gt.go?s=411:458#L15">F64EnsureCap</a></h2>
+			<pre>func F64EnsureCap(ref *[]float64, capacity int)</pre>
+			
+			
+		
+			
+			
+			<h2 id="F64EnsureLen">func <a href="/target/float64.gt.go?s=521:566#L21">F64EnsureLen</a></h2>
+			<pre>func F64EnsureLen(ref *[]float64, length int)</pre>
+			
+			
+		
+			
+			
+			<h2 id="F64Equivalent">func <a href="/target/float64.gt.go?s=711:754#L28">F64Equivalent</a></h2>
+			<pre>func F64Equivalent(one, two []float64) bool</pre>
+			<p>
+Returns true if one and two only contain identical values, regardless of ordering.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64Has">func <a href="/target/float64.gt.go?s=927:973#L41">F64Has</a></h2>
+			<pre>func F64Has(slice []float64, val float64) bool</pre>
+			<p>
+Returns true if val is in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64HasAny">func <a href="/target/float64.gt.go?s=1078:1131#L46">F64HasAny</a></h2>
+			<pre>func F64HasAny(slice []float64, vals ...float64) bool</pre>
+			<p>
+Returns whether one of the specified vals is contained in slice.
+</p>
+
+			
+		
+			
+			
+			<h2 id="F64Remove">func <a href="/target/float64.gt.go?s=1252:1303#L57">F64Remove</a></h2>
+			<pre>func F64Remove(ref *[]float64, v float64, all bool)</pre>
+			
+			
+		
+			
+			
+			<h2 id="F64SetCap">func <a href="/target/float64.gt.go?s=1480:1524#L69">F64SetCap</a></h2>
+			<pre>func F64SetCap(ref *[]float64, capacity int)</pre>
+			
+			
+		
+			
+			
+			<h2 id="F64SetLen">func <a href="/target/float64.gt.go?s=1601:1643#L75">F64SetLen</a></h2>
+			<pre>func F64SetLen(ref *[]float64, length int)</pre>
+			
+			
+		
+			
+			
+			<h2 id="F64Without">func <a href="/target/float64.gt.go?s=1746:1828#L82">F64Without</a></h2>
+			<pre>func F64Without(slice []float64, keepOrder bool, withoutVals ...float64) []float64</pre>
 			<p>
 Removes all withoutVals from slice.
 </p>
