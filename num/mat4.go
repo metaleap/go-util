@@ -100,10 +100,23 @@ func (me *Mat4) Mult1(v float64) {
 }
 
 //	Sets this 4x4 matrix to the specified perspective-projection matrix.
-func (me *Mat4) Perspective(fovY, aspect, near, far float64) {
-	tfY := near * math.Tan(fovY*math.Pi/360)
-	tfX := tfY * aspect
-	me.Frustum(-tfX, tfX, -tfY, tfY, near, far)
+//	a: aspect ratio. n: near-plane. f: far-plane.
+func (me *Mat4) Perspective(fovY, a, n, f float64) {
+	s := 1 / math.Tan(DegToRad(fovY)/2) // scaling
+	me[0], me[4], me[8], me[12] = s/a, 0, 0, 0
+	me[1], me[5], me[9], me[13] = 0, s, 0, 0
+	me[2], me[6], me[10], me[14] = 0, 0, (f+n)/(n-f), (2*f*n)/(n-f)
+	me[3], me[7], me[11], me[15] = 0, 0, -1, 0
+
+	// me[0] = s / a
+	// me[5] = s
+	// me[10] = (f + n) / (n - f)
+	// me[14] = (2 * f * n) / (n - f)
+	// me[11] = -1
+
+	// tfY := n * math.Tan(fovY*math.Pi/360)
+	// tfX := tfY * a
+	// me.Frustum(-tfX, tfX, -tfY, tfY, n, f)
 }
 
 /*

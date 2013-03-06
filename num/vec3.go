@@ -10,6 +10,10 @@ type Vec3 struct {
 	X, Y, Z float64
 }
 
+func (me *Vec3) AbsMax() float64 {
+	return math.Max(math.Abs(me.X), math.Max(math.Abs(me.Y), math.Abs(me.Z)))
+}
+
 //	Adds vec to this 3D vector.
 func (me *Vec3) Add(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X+vec.X, me.Y+vec.Y, me.Z+vec.Z
@@ -69,6 +73,10 @@ func (me *Vec3) CrossNormalized(vec *Vec3) (r *Vec3) {
 
 func (me *Vec3) DistanceFrom(vec *Vec3) float64 {
 	return math.Sqrt(me.SubDot(vec))
+}
+
+func (me *Vec3) DistanceFromZero() float64 {
+	return math.Sqrt(me.Dot(me))
 }
 
 //	Returns a new 3D vector that represents this 3D vector divided by vec.
@@ -136,6 +144,27 @@ func (me *Vec3) Max() float64 {
 //	Returns the smallest component of this 3D vector.
 func (me *Vec3) Min() float64 {
 	return math.Min(me.X, math.Min(me.Y, me.Z))
+}
+
+func (me *Vec3) SetMinMax(min, max *Vec3) {
+	if me.X < min.X {
+		min.X = me.X
+	}
+	if me.X > max.X {
+		max.X = me.X
+	}
+	if me.Y < min.Y {
+		min.Y = me.Y
+	}
+	if me.Y > max.Y {
+		max.Y = me.Y
+	}
+	if me.Z < min.Z {
+		min.Z = me.Z
+	}
+	if me.Z > max.Z {
+		max.Z = me.Z
+	}
 }
 
 //	Returns a new 3D vector that represents this 3D vector multiplied with vec.
@@ -306,7 +335,7 @@ func (me *Vec3) SetFromMult1Sub(vec1, vec2 *Vec3, mul float64) {
 }
 
 //	Sets this 3D vector to vec with each component's sign reversed.
-func (me *Vec3) SetFromNeg(vec *Vec3) {
+func (me *Vec3) SetFromSwapSign(vec *Vec3) {
 	me.X, me.Y, me.Z = -vec.X, -vec.Y, -vec.Z
 }
 
@@ -364,6 +393,14 @@ func (me *Vec3) SetFromSubMult1(vec1, vec2 *Vec3, mul float64) {
 	me.X, me.Y, me.Z = vec1.X-(vec2.X*mul), vec1.Y-(vec2.Y*mul), vec1.Z-(vec2.Z*mul)
 }
 
+func (me *Vec3) SetToMax() {
+	me.X, me.Y, me.Z = math.MaxFloat64, math.MaxFloat64, math.MaxFloat64
+}
+
+func (me *Vec3) SetToMin() {
+	me.X, me.Y, me.Z = -math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64
+}
+
 //	Returns a 3D vector where each component indicates the sign of this 3D vector's corresponding component.
 func (me *Vec3) Sign() *Vec3 {
 	return &Vec3{Sign(me.X), Sign(me.Y), Sign(me.Z)}
@@ -412,6 +449,10 @@ func (me *Vec3) SubVec(vec *Vec3) {
 //	Reverses the sign of each of this 3D vector's components.
 func (me *Vec3) SwapSigns() {
 	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
+}
+
+func (me *Vec3) SwappedSigns() *Vec3 {
+	return &Vec3{-me.X, -me.Y, -me.Z}
 }
 
 /*
