@@ -58,6 +58,10 @@ func (me *Vec3) AllLessOrEqual(vec *Vec3) bool {
 	return (me.X <= vec.X) && (me.Y <= vec.Y) && (me.Z <= vec.Z)
 }
 
+func (me *Vec3) Clear() {
+	me.X, me.Y, me.Z = 0, 0, 0
+}
+
 //	Returns a new 3D vector that represents the cross-product of this 3D vector and vec.
 func (me *Vec3) Cross(vec *Vec3) *Vec3 {
 	return &Vec3{(me.Y * vec.Z) - (me.Z * vec.Y), (me.Z * vec.X) - (me.X * vec.Z), (me.X * vec.Y) - (me.Y * vec.X)}
@@ -172,9 +176,18 @@ func (me *Vec3) Mult(vec *Vec3) *Vec3 {
 	return &Vec3{me.X * vec.X, me.Y * vec.Y, me.Z * vec.Z}
 }
 
+func (me *Vec3) Times(x, y, z float64) *Vec3 {
+	return &Vec3{me.X * x, me.Y * y, me.Z * z}
+}
+
 //	Returns a new 3D vector that represents this 3D vector's components each multipled with val.
 func (me *Vec3) Mult1(val float64) *Vec3 {
 	return &Vec3{me.X * val, me.Y * val, me.Z * val}
+}
+
+//	Reverses the sign of each of this 3D vector's components.
+func (me *Vec3) Negate() {
+	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
 }
 
 func (me *Vec3) Negated() *Vec3 {
@@ -444,15 +457,6 @@ func (me *Vec3) SubMult(vec *Vec3, val float64) *Vec3 {
 //	Subtracts vec from this 3D vector.
 func (me *Vec3) SubVec(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X-vec.X, me.Y-vec.Y, me.Z-vec.Z
-}
-
-//	Reverses the sign of each of this 3D vector's components.
-func (me *Vec3) SwapSigns() {
-	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
-}
-
-func (me *Vec3) SwappedSigns() *Vec3 {
-	return &Vec3{-me.X, -me.Y, -me.Z}
 }
 
 /*

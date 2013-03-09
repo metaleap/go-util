@@ -64,24 +64,20 @@ func (me *Mat4) Identity() {
 	*me = Mat4Identity
 }
 
-//	Sets this 4x4 matrix to the specified look-at matrix.
-func (me *Mat4) LookAt(lookTarget, worldUp *Vec3) {
+func (me *Mat4) Lookat(eyePos, lookTarget, upVec *Vec3) {
+	l := lookTarget.Sub(eyePos)
+	l.Normalize()
+	s := l.Cross(upVec)
+	s.Normalize()
+	u := s.Cross(l)
+	me[0], me[4], me[8], me[12] = s.X, u.X, -l.X, -eyePos.X
+	me[1], me[5], me[9], me[13] = s.Y, u.Y, -l.Y, -eyePos.Y
+	me[2], me[6], me[10], me[14] = s.Z, u.Z, -l.Z, -eyePos.Z
+	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
+}
+
+func (me *Mat4) Orient(lookTarget, worldUp *Vec3) {
 	var tvN, tvU, tvV Vec3
-	/*
-		var aFwd, aSide, aUp = &Vec3 { eyePos.X - lookTarget.X, eyePos.Y - lookTarget.Y, eyePos.Z - lookTarget.Z }, &Vec3 {}, &Vec3 {}
-		aFwd.Normalize()
-		aSide.X, aSide.Y, aSide.Z = (worldUp.Y * aFwd.Z) - (worldUp.Z * aFwd.Y), (worldUp.Z * aFwd.X) - (worldUp.X * aFwd.Z), (worldUp.X * aFwd.Y) - (worldUp.Y * aFwd.X)
-		aSide.Normalize()
-		aUp.X, aUp.Y, aUp.Z = (aFwd.Y * aSide.Z) - (aFwd.Z * aSide.Y), (aFwd.Z * aSide.X) - (aFwd.X * aSide.Z), (aFwd.X * aSide.Y) - (aFwd.Y * aSide.X)
-		aUp.Normalize()
-		me[0], me[4], me[8], me[12] = aSide.X, aSide.Y, aSide.Z, -((aSide.X * eyePos.X) + (aSide.Y * eyePos.Y) + (aSide.Z * eyePos.Z))
-		me[1], me[5], me[9], me[13] = aUp.X, aUp.Y, aUp.Z, -((aUp.X * eyePos.X) + (aUp.Y * eyePos.Y) + (aUp.Z * eyePos.Z))
-		me[2], me[6], me[10], me[14] = aFwd.X, aFwd.Y, aFwd.Z, -((aFwd.X * eyePos.X) + (aFwd.Y * eyePos.Y) + (aFwd.Z * eyePos.Z))
-		me[3], me[7], me[11], me[15] = 0, 0, 0, 1
-	*/
-	// tvN = lookTarget.Normalized()
-	// tvU = worldUp.Normalized().Cross(lookTarget)
-	// tvV = tvN.Cross(tvU)
 	tvN.SetFromNormalized(lookTarget)
 	tvU.SetFromCrossOf(worldUp.Normalized(), lookTarget)
 	tvV.SetFromCrossOf(&tvN, &tvU)
@@ -100,23 +96,15 @@ func (me *Mat4) Mult1(v float64) {
 }
 
 //	Sets this 4x4 matrix to the specified perspective-projection matrix.
-//	a: aspect ratio. n: near-plane. f: far-plane.
-func (me *Mat4) Perspective(fovY, a, n, f float64) {
-	s := 1 / math.Tan(DegToRad(fovY)/2) // scaling
+//	fovYRad: vertical field-of-view angle in radians. a: aspect ratio. n: near-plane. f: far-plane.
+func (me *Mat4) Perspective(fovYDeg, a, n, f float64) (fovYRadHalf float64) {
+	fovYRadHalf = DegToRad(fovYDeg) * 0.5
+	s := 1 / math.Tan(fovYRadHalf) // scaling
 	me[0], me[4], me[8], me[12] = s/a, 0, 0, 0
 	me[1], me[5], me[9], me[13] = 0, s, 0, 0
 	me[2], me[6], me[10], me[14] = 0, 0, (f+n)/(n-f), (2*f*n)/(n-f)
 	me[3], me[7], me[11], me[15] = 0, 0, -1, 0
-
-	// me[0] = s / a
-	// me[5] = s
-	// me[10] = (f + n) / (n - f)
-	// me[14] = (2 * f * n) / (n - f)
-	// me[11] = -1
-
-	// tfY := n * math.Tan(fovY*math.Pi/360)
-	// tfX := tfY * a
-	// me.Frustum(-tfX, tfX, -tfY, tfY, n, f)
+	return
 }
 
 /*
@@ -257,10 +245,15 @@ func NewMat4Identity() (mat *Mat4) {
 	return
 }
 
-//	Returns a new 4x4 matrix representing the specified look-at matrix.
-func NewMat4LookAt(lookTarget, worldUp *Vec3) (mat *Mat4) {
+func NewMat4Orient(lookTarget, worldUp *Vec3) (mat *Mat4) {
 	mat = &Mat4{}
-	mat.LookAt(lookTarget, worldUp)
+	mat.Orient(lookTarget, worldUp)
+	return
+}
+
+func NewMat4Lookat(eyePos, lookTarget, upVec *Vec3) (mat *Mat4) {
+	mat = &Mat4{}
+	mat.Lookat(eyePos, lookTarget, upVec)
 	return
 }
 

@@ -6,6 +6,7 @@ import (
 
 const (
 	PiDiv180  = math.Pi / 180
+	PiDiv360  = math.Pi / 360
 	PiHalfDiv = 0.5 / math.Pi
 )
 

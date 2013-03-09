@@ -1,36 +1,36 @@
 //	http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
 package uhash
 
-func Fnv1(ints []int) (h int) {
+func Fnv1(vals []int) (h int) {
 	var ui uint64 = 14695981039346656037
 	h = int(ui)
-	for _, v := range ints {
-		h = (h * 16777619) ^ v
+	for i := 0; i < len(vals); i++ {
+		h = (h * 16777619) ^ vals[i]
 	}
 	return
 }
 
-func Fnv1a(ints []int) (h int) {
+func Fnv1a(vals []int) (h int) {
 	var ui uint64 = 14695981039346656037
 	h = int(ui)
-	for _, v := range ints {
-		h = (h ^ v) * 16777619
+	for i := 0; i < len(vals); i++ {
+		h = (h ^ vals[i]) * 16777619
 	}
 	return
 }
 
-func ModifiedBernstein(ints []int) (h int) {
+func ModifiedBernstein(vals []int) (h int) {
 	h = 0
-	for _, v := range ints {
-		h = 33*h ^ v
+	for i := 0; i < len(vals); i++ {
+		h = 33*h ^ vals[i]
 	}
 	return
 }
 
-func OneAtATime(ints []int) (h int) {
+func OneAtATime(vals []int) (h int) {
 	h = 0
-	for _, v := range ints {
-		h += v
+	for i := 0; i < len(vals); i++ {
+		h += vals[i]
 		h += (h << 10)
 		h ^= (h >> 6)
 	}
@@ -40,18 +40,18 @@ func OneAtATime(ints []int) (h int) {
 	return
 }
 
-func RotatingXor(ints []int) (h int) {
+func RotatingXor(vals []int) (h int) {
 	h = 0
-	for _, v := range ints {
-		h = (h << 4) ^ (h >> 28) ^ v
+	for i := 0; i < len(vals); i++ {
+		h = (h << 4) ^ (h >> 28) ^ vals[i]
 	}
 	return
 }
 
-func RotatingAdd(ints []int) (h int) {
+func RotatingAdd(vals []int) (h int) {
 	h = 0
-	for _, v := range ints {
-		h ^= (h << 5) + (h >> 2) + v
+	for i := 0; i < len(vals); i++ {
+		h ^= (h << 5) + (h >> 2) + vals[i]
 	}
 	return
 }
