@@ -227,7 +227,7 @@ func (me *Vec3) RotateDeg(angleDeg float64, axis *Vec3) {
 
 //	Rotates this 3D vector angleRad radians around the specified axis.
 func (me *Vec3) RotateRad(angleRad float64, axis *Vec3) {
-	var tmpQ, tmpQw, tmpQr, tmpQc Quat
+	var tmpQ, tmpQw, tmpQr, tmpQc Vec4
 	sin := math.Sin(angleRad)
 	tmpQr.X, tmpQr.Y, tmpQr.Z, tmpQr.W = axis.X*sin, axis.Y*sin, axis.Z*sin, math.Cos(angleRad)
 	tmpQc.SetFromConjugated(&tmpQr)
@@ -457,6 +457,28 @@ func (me *Vec3) SubMult(vec *Vec3, val float64) *Vec3 {
 //	Subtracts vec from this 3D vector.
 func (me *Vec3) SubVec(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X-vec.X, me.Y-vec.Y, me.Z-vec.Z
+}
+
+func (me *Vec3) TransformCoord(mat *Mat4) {
+	var q Vec4
+	q.MultMat4Vec3(mat, me)
+	q.W = 1 / q.W
+	me.X, me.Y, me.Z = q.X*q.W, q.Y*q.W, q.Z*q.W
+}
+
+func (me *Vec3) TransformNormal(mat *Mat4, absMat bool) {
+	m11, m21, m31 := mat[0], mat[1], mat[2]
+	m12, m22, m32 := mat[4], mat[5], mat[6]
+	m13, m23, m33 := mat[8], mat[9], mat[10]
+	if absMat {
+		m11, m21, m31 = math.Abs(m11), math.Abs(m21), math.Abs(m31)
+		m12, m22, m32 = math.Abs(m12), math.Abs(m22), math.Abs(m32)
+		m13, m23, m33 = math.Abs(m13), math.Abs(m23), math.Abs(m33)
+	}
+	x := ((me.X * m11) + (me.Y * m21)) + (me.Z * m31)
+	y := ((me.X * m12) + (me.Y * m22)) + (me.Z * m32)
+	z := ((me.X * m13) + (me.Y * m23)) + (me.Z * m33)
+	me.X, me.Y, me.Z = x, y, z
 }
 
 /*
