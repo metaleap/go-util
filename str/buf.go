@@ -20,5 +20,6 @@ func (me *Buffer) Write(format string, fmtArgs ...interface{}) {
 
 //	Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+"\n", fmtArgs...))
 func (me *Buffer) Writeln(format string, fmtArgs ...interface{}) {
-	me.Write(format+"\n", fmtArgs...)
+	me.Write(format, fmtArgs...)
+	me.Buffer.WriteString("\n")
 }

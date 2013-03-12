@@ -1,7 +1,6 @@
 package unum
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -180,11 +179,6 @@ func (me *Vec3) Times(x, y, z float64) *Vec3 {
 	return &Vec3{me.X * x, me.Y * y, me.Z * z}
 }
 
-//	Returns a new 3D vector that represents this 3D vector's components each multipled with val.
-func (me *Vec3) Mult1(val float64) *Vec3 {
-	return &Vec3{me.X * val, me.Y * val, me.Z * val}
-}
-
 //	Reverses the sign of each of this 3D vector's components.
 func (me *Vec3) Negate() {
 	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
@@ -271,14 +265,22 @@ func (me *Vec3) SetFromAdd(vec1, vec2 *Vec3) {
 	me.X, me.Y, me.Z = vec1.X+vec2.X, vec1.Y+vec2.Y, vec1.Z+vec2.Z
 }
 
+func (me *Vec3) SetFromAddAdd(a, b, c *Vec3) {
+	me.X, me.Y, me.Z = a.X+b.X+c.X, a.Y+b.Y+c.Y, a.Z+b.Z+c.Z
+}
+
 //	Sets this 3D vector to the result of multiplying mul1 with mul2, then adding add.
 func (me *Vec3) SetFromAddMult(add, mul1, mul2 *Vec3) {
 	me.X, me.Y, me.Z = add.X+(mul1.X*mul2.X), add.Y+(mul1.Y*mul2.Y), add.Z+(mul1.Z*mul2.Z)
 }
 
 //	Sets this 3D vector to the result of scaling vec2 by mul, then adding vec1.
-func (me *Vec3) SetFromAddMult1(vec1, vec2 *Vec3, mul float64) {
-	me.X, me.Y, me.Z = vec1.X+(vec2.X*mul), vec1.Y+(vec2.Y*mul), vec1.Z+(vec2.Z*mul)
+func (me *Vec3) SetFromAddScaled(vec1, vec2 *Vec3, mul float64) {
+	me.X, me.Y, me.Z = vec1.X+vec2.X*mul, vec1.Y+vec2.Y*mul, vec1.Z+vec2.Z*mul
+}
+
+func (me *Vec3) SetFromAddSub(a, b, c *Vec3) {
+	me.X, me.Y, me.Z = a.X+b.X-c.X, a.Y+b.Y-c.Y, a.Z+b.Z-c.Z
 }
 
 //	Sets each component of this 3D vector to the cosine of the corresponding component in vec.
@@ -338,12 +340,12 @@ func (me *Vec3) SetFromMult(v1, v2 *Vec3) {
 }
 
 //	Sets this 3D vector to the result of vec scaled by mul.
-func (me *Vec3) SetFromMult1(vec *Vec3, mul float64) {
+func (me *Vec3) SetFromScaled(vec *Vec3, mul float64) {
 	me.X, me.Y, me.Z = vec.X*mul, vec.Y*mul, vec.Z*mul
 }
 
 //	Sets this 3D vector to the result of (vec1 minus vec2), scaled by mul.
-func (me *Vec3) SetFromMult1Sub(vec1, vec2 *Vec3, mul float64) {
+func (me *Vec3) SetFromScaledSub(vec1, vec2 *Vec3, mul float64) {
 	me.X, me.Y, me.Z = (vec1.X-vec2.X)*mul, (vec1.Y-vec2.Y)*mul, (vec1.Z-vec2.Z)*mul
 }
 
@@ -355,7 +357,7 @@ func (me *Vec3) SetFromSwapSign(vec *Vec3) {
 //	Sets me to the result  of normalizing vec.
 func (me *Vec3) SetFromNormalized(vec *Vec3) {
 	if tmpVal := vec.Magnitude(); tmpVal != 0 {
-		me.SetFromMult1(vec, 1/tmpVal)
+		me.SetFromScaled(vec, 1/tmpVal)
 	}
 }
 
@@ -396,14 +398,21 @@ func (me *Vec3) SetFromSub(vec1, vec2 *Vec3) {
 	me.X, me.Y, me.Z = vec1.X-vec2.X, vec1.Y-vec2.Y, vec1.Z-vec2.Z
 }
 
+func (me *Vec3) SetFromSubAdd(a, b, c *Vec3) {
+	me.X, me.Y, me.Z = a.X-b.X+c.X, a.Y-b.Y+c.Y, a.Z-b.Z+c.Z
+}
+
+func (me *Vec3) SetFromSubScaled(v1, v2 *Vec3, v2Scale float64) {
+	me.X, me.Y, me.Z = v1.X-v2.X*v2Scale, v1.Y-v2.Y*v2Scale, v1.Z-v2.Z*v2Scale
+}
+
+func (me *Vec3) SetFromSubSub(a, b, c *Vec3) {
+	me.X, me.Y, me.Z = a.X-b.X-c.X, a.Y-b.Y-c.Y, a.Z-b.Z-c.Z
+}
+
 //	Sets this 3D vector to the result of (sub1 minus sub2), scaled by mul.
 func (me *Vec3) SetFromSubMult(sub1, sub2, mul *Vec3) {
 	me.X, me.Y, me.Z = (sub1.X-sub2.X)*mul.X, (sub1.Y-sub2.Y)*mul.Y, (sub1.Z-sub2.Z)*mul.Z
-}
-
-//	Sets this 3D vector to the result of sub1 minus (vec2 scaled by mul).
-func (me *Vec3) SetFromSubMult1(vec1, vec2 *Vec3, mul float64) {
-	me.X, me.Y, me.Z = vec1.X-(vec2.X*mul), vec1.Y-(vec2.Y*mul), vec1.Z-(vec2.Z*mul)
 }
 
 func (me *Vec3) SetToMax() {
@@ -421,7 +430,7 @@ func (me *Vec3) Sign() *Vec3 {
 
 //	Returns a string representation of this 3D vector.
 func (me *Vec3) String() string {
-	return fmt.Sprintf("{X: %6.2f Y:%6.2f Z:%6.2f}", me.X, me.Y, me.Z)
+	return strf("{X:%1.2f Y:%1.2f Z:%1.2f}", me.X, me.Y, me.Z)
 }
 
 //	Returns a new 3D vector that represents (this 3D vector minus vec).
@@ -450,7 +459,7 @@ func (me *Vec3) SubFrom(val float64) *Vec3 {
 }
 
 //	Returns a new 3D vector that represents (this 3D vector minus vec), scaled by val.
-func (me *Vec3) SubMult(vec *Vec3, val float64) *Vec3 {
+func (me *Vec3) SubScaled(vec *Vec3, val float64) *Vec3 {
 	return &Vec3{(me.X - vec.X) * val, (me.Y - vec.Y) * val, (me.Z - vec.Z) * val}
 }
 

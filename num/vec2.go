@@ -65,6 +65,10 @@ func (me *Vec2) Scaled(factor float64) *Vec2 {
 	return &Vec2{me.X * factor, me.Y * factor}
 }
 
+func (me *Vec2) String() string {
+	return strf("{X:%1.2f Y:%1.2f}", me.X, me.Y)
+}
+
 //	Returns a new 2D vector that represents this 2D vector with vec subtracted.
 func (me *Vec2) Sub(vec *Vec2) *Vec2 {
 	return &Vec2{me.X - vec.X, me.Y - vec.Y}

@@ -1,6 +1,7 @@
 package unum
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -189,4 +190,8 @@ func Step(edge, x float64) (step int) {
 	// 	return 0
 	// }
 	// return 1
+}
+
+func strf(format string, args ...interface{}) string {
+	return fmt.Sprintf(format, args...)
 }

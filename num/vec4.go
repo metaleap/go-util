@@ -41,6 +41,11 @@ func (me *Vec4) Normalize() {
 	}
 }
 
+func (me *Vec4) NormalizeFrom(magnitude float64) {
+	magnitude = 1 / magnitude
+	me.X, me.Y, me.Z, me.W = me.X*magnitude, me.Y*magnitude, me.Z*magnitude, me.W*magnitude
+}
+
 func (me *Vec4) Normalized() *Vec4 {
 	var q Vec4
 	if mag := me.Magnitude(); mag != 0 {
@@ -88,4 +93,9 @@ func (me *Vec4) SetFromMult3(q *Vec4, v *Vec3) {
 
 func (me *Vec4) SetFromMultMat4(mat *Mat4) {
 	me.MultMat4Vec4(mat, me.Clone())
+}
+
+//	Returns a string representation of this 3D vector.
+func (me *Vec4) String() string {
+	return strf("{X:%1.2f Y:%1.2f Z:%1.2f W:%1.2f}", me.X, me.Y, me.Z, me.W)
 }
