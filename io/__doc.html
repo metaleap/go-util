@@ -24,7 +24,412 @@
 	correspond to Go identifiers).
 -->
 
-	2013/05/18 21:26:17 packageText.Execute: template: package.html:13:7: executing "package.html" at <$.IsPkg>: IsPkg is not a field of struct type *main.PageInfo
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util/io"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Various line-savers for common I/O needs.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#ClearDirectory">func ClearDirectory(path string, keepNamePatterns ...string) (err error)</a></dd>
+			
+				
+				<dd><a href="#CopyAll">func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error)</a></dd>
+			
+				
+				<dd><a href="#CopyFile">func CopyFile(srcFilePath, destFilePath string) (err error)</a></dd>
+			
+				
+				<dd><a href="#DirExists">func DirExists(path string) bool</a></dd>
+			
+				
+				<dd><a href="#EnsureDirExists">func EnsureDirExists(path string) (err error)</a></dd>
+			
+				
+				<dd><a href="#ExtractZipFile">func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error</a></dd>
+			
+				
+				<dd><a href="#FileExists">func FileExists(path string) bool</a></dd>
+			
+				
+				<dd><a href="#FindFileInfo">func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, fileInfo *os.FileInfo)</a></dd>
+			
+				
+				<dd><a href="#ReadBinaryFile">func ReadBinaryFile(filePath string, panicOnError bool) []byte</a></dd>
+			
+				
+				<dd><a href="#ReadFromBinary">func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool</a></dd>
+			
+				
+				<dd><a href="#ReadTextFile">func ReadTextFile(filePath string, panicOnError bool, defVal string) string</a></dd>
+			
+				
+				<dd><a href="#SaveToFile">func SaveToFile(r io.Reader, filename string) (err error)</a></dd>
+			
+				
+				<dd><a href="#WalkerVisitorNoop">func WalkerVisitorNoop(_ *DirWalker, _ string, _ os.FileInfo) bool</a></dd>
+			
+				
+				<dd><a href="#WriteBinaryFile">func WriteBinaryFile(filePath string, contents []byte) error</a></dd>
+			
+				
+				<dd><a href="#WriteTextFile">func WriteTextFile(filePath, contents string) error</a></dd>
+			
+			
+				
+				<dd><a href="#DirWalker">type DirWalker</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewDirWalker">func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DirWalker.Walk">func (me *DirWalker) Walk(dirPath string) (errs []error)</a></dd>
+				
+			
+				
+				<dd><a href="#WalkerVisitor">type WalkerVisitor</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWalkerVisitor_IsNewerThan">func NewWalkerVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/io.go">io.go</a>
+			
+				<a href="/target/walker.go">walker.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+    <span class="comment">//	The permission bits used in EnsureDirExists(), WriteBinaryFile() and WriteTextFile()</span>
+    <span id="ModePerm">ModePerm</span> = <a href="/pkg/os/">os</a>.<a href="/pkg/os/#ModePerm">ModePerm</a>
+)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="ClearDirectory">func <a href="/target/io.go?s=430:502#L12">ClearDirectory</a></h2>
+			<pre>func ClearDirectory(path <a href="/pkg/builtin/#string">string</a>, keepNamePatterns ...<a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CopyAll">func <a href="/target/io.go?s=994:1074#L30">CopyAll</a></h2>
+			<pre>func CopyAll(srcDirPath, destDirPath <a href="/pkg/builtin/#string">string</a>, skipDirs *<a href="/pkg/github.com/metaleap/go-util/str/">ustr</a>.<a href="/pkg/github.com/metaleap/go-util/str/#Matcher">Matcher</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Copies all files and directories inside srcDirPath to destDirPath.
+All sub-directories whose name is matched by skipDirs (optional) are skipped.
+</p>
+
+			
+		
+			
+			
+			<h2 id="CopyFile">func <a href="/target/io.go?s=1689:1748#L51">CopyFile</a></h2>
+			<pre>func CopyFile(srcFilePath, destFilePath <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Performs an io.Copy from the specified local source file to the specified local destination file.
+</p>
+
+			
+		
+			
+			
+			<h2 id="DirExists">func <a href="/target/io.go?s=1959:1991#L62">DirExists</a></h2>
+			<pre>func DirExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if a directory exists at the specified path.
+</p>
+
+			
+		
+			
+			
+			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2160:2205#L70">EnsureDirExists</a></h2>
+			<pre>func EnsureDirExists(path <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+If a directory does not exist at the specified path, attempts to create it.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=2611:2745#L83">ExtractZipFile</a></h2>
+			<pre>func ExtractZipFile(zipFilePath, targetDirPath <a href="/pkg/builtin/#string">string</a>, deleteZipFile <a href="/pkg/builtin/#bool">bool</a>, fileNamesPrefix <a href="/pkg/builtin/#string">string</a>, fileNamesToExtract ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+Extracts a ZIP archive to the local file system.
+zipFilePath: full file path to the ZIP archive file.
+targetDirPath: directory path where un-zipped archive contents are extracted to.
+deleteZipFile: deletes the ZIP archive file upon successful extraction.
+</p>
+
+			
+		
+			
+			
+			<h2 id="FileExists">func <a href="/target/io.go?s=3963:3996#L133">FileExists</a></h2>
+			<pre>func FileExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if a file (not a directory) exists at the specified path.
+</p>
+
+			
+		
+			
+			
+			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4327:4475#L142">FindFileInfo</a></h2>
+			<pre>func FindFileInfo(dirPath <a href="/pkg/builtin/#string">string</a>, fileBaseName <a href="/pkg/builtin/#string">string</a>, fileExts []<a href="/pkg/builtin/#string">string</a>, tryLower <a href="/pkg/builtin/#bool">bool</a>, tryUpper <a href="/pkg/builtin/#bool">bool</a>) (fullFilePath <a href="/pkg/builtin/#string">string</a>, fileInfo *<a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>)</pre>
+			<p>
+If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
+The tryLower and tryUpper flags also test for upper-case and lower-case variants of the specified fileBaseName.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5230:5292#L170">ReadBinaryFile</a></h2>
+			<pre>func ReadBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Reads and returns the binary contents of a file with non-idiomatic error handling:
+filePath: full local file path
+panicOnError: true to panic() if an error occurred reading the file
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=5637:5746#L180">ReadFromBinary</a></h2>
+			<pre>func ReadFromBinary(readSeeker <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a>, offset <a href="/pkg/builtin/#int64">int64</a>, byteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>, ptr interface{}) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
+Returns false if data could not be successfully read as specified, otherwise true.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6256:6331#L195">ReadTextFile</a></h2>
+			<pre>func ReadTextFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>, defVal <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Reads and returns the contents of a text file with non-idiomatic error handling:
+filePath: full local file path
+panicOnError: true to panic() if an error occurred reading the file, or false to return defVal in the case of error
+defVal: the string value to return if the file couldn&#39;t be read successfully
+</p>
+
+			
+		
+			
+			
+			<h2 id="SaveToFile">func <a href="/target/io.go?s=6570:6627#L207">SaveToFile</a></h2>
+			<pre>func SaveToFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, filename <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Performs an io.Copy() from the specified io.Reader to the specified local file.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WalkerVisitorNoop">func <a href="/target/walker.go?s=498:564#L5">WalkerVisitorNoop</a></h2>
+			<pre>func WalkerVisitorNoop(_ *<a href="#DirWalker">DirWalker</a>, _ <a href="/pkg/builtin/#string">string</a>, _ <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirWalker.FileVisitor during a DirWalker.Walk(). Returns true.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=6916:6976#L221">WriteBinaryFile</a></h2>
+			<pre>func WriteBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, contents []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
+Also ensures the target file&#39;s directory exists.
+</p>
+
+			
+		
+			
+			
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7229:7280#L228">WriteTextFile</a></h2>
+			<pre>func WriteTextFile(filePath, contents <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
+Also ensures the target file&#39;s directory exists.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="DirWalker">type <a href="/target/walker.go?s=1296:2057#L25">DirWalker</a></h2>
+			<pre>type DirWalker struct {
+    <span class="comment">//	Walk() returns a slice of all errors encountered but</span>
+    <span class="comment">//	to cancel walking upon the first error, set this to true.</span>
+    BreakOnError <a href="/pkg/builtin/#bool">bool</a>
+
+    <span class="comment">//	After invoking DirVisitor on the specified directory, by default</span>
+    <span class="comment">//	its files get visited first before visiting its sub-directories.</span>
+    <span class="comment">//	If VisitDirsFirst is true, then files get visited last, after</span>
+    <span class="comment">//	having visited all sub-directories.</span>
+    VisitDirsFirst <a href="/pkg/builtin/#bool">bool</a>
+
+    <span class="comment">//	Defaults to true. If false, only the files in the specified directory</span>
+    <span class="comment">//	(and the directory itself) get visited, but no sub-directories.</span>
+    VisitSubDirs <a href="/pkg/builtin/#bool">bool</a>
+
+    <span class="comment">//	Called for every directory being visited during Walk().</span>
+    DirVisitor <a href="#WalkerVisitor">WalkerVisitor</a>
+
+    <span class="comment">//	Called for every file being visited during Walk().</span>
+    FileVisitor <a href="#WalkerVisitor">WalkerVisitor</a>
+}</pre>
+			<p>
+Provides recursive directory walking with a variety of options.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=2142:2214#L48">NewDirWalker</a></h3>
+				<pre>func NewDirWalker(dirVisitor, fileVisitor <a href="#WalkerVisitor">WalkerVisitor</a>) (me *<a href="#DirWalker">DirWalker</a>)</pre>
+				<p>
+Initializes and returns a new DirWalker with the specified (optional) visitors.
+</p>
+
+				
+			
+
+			
+				
+				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=2372:2428#L54">Walk</a></h3>
+				<pre>func (me *<a href="#DirWalker">DirWalker</a>) Walk(dirPath <a href="/pkg/builtin/#string">string</a>) (errs []<a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Initiates me walking through the specified directory.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="WalkerVisitor">type <a href="/target/walker.go?s=254:354#L2">WalkerVisitor</a></h2>
+			<pre>type WalkerVisitor func(walker *<a href="#DirWalker">DirWalker</a>, fullPath <a href="/pkg/builtin/#string">string</a>, fileInfo <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>) (keepWalking <a href="/pkg/builtin/#bool">bool</a>)</pre>
+			<p>
+Used for DirWalker.DirVisitor and DirWalker.FileVisitor. Always check fileInfo for nil!
+Always return keepWalking as true unless you want to immediately terminate a Walk() early.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="NewWalkerVisitor_IsNewerThan">func <a href="/target/walker.go?s=856:944#L12">NewWalkerVisitor_IsNewerThan</a></h3>
+				<pre>func NewWalkerVisitor_IsNewerThan(testTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>, fileTime *<a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>) <a href="#WalkerVisitor">WalkerVisitor</a></pre>
+				<p>
+Returns a new WalkerVisitor that during a DirWalker.Walk() tracks FileInfo.ModTime() for all visited files
+and/or directories, always storing the newest one in fileTime, and terminating early as soon as fileTime
+records a value higher than the specified testTime.
+</p>
+
+				
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
 
 		</div></div>
 	</body>

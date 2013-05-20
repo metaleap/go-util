@@ -24,7 +24,394 @@
 	correspond to Go identifiers).
 -->
 
-	2013/05/18 21:26:53 packageText.Execute: template: package.html:13:7: executing "package.html" at <$.IsPkg>: IsPkg is not a field of struct type *main.PageInfo
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+A tiny assortement of occasionally-useful Go utilities.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#GoPaths">func GoPaths() []string</a></dd>
+			
+				
+				<dd><a href="#GopathSrc">func GopathSrc(subDirNames ...string) (gps string)</a></dd>
+			
+				
+				<dd><a href="#GopathSrcGithub">func GopathSrcGithub(gitHubName string, subDirNames ...string) string</a></dd>
+			
+				
+				<dd><a href="#Hash">func Hash(h hash.Hash, str string) string</a></dd>
+			
+				
+				<dd><a href="#Ifb">func Ifb(cond, ifTrue, ifFalse bool) bool</a></dd>
+			
+				
+				<dd><a href="#Ifd">func Ifd(cond bool, ifTrue, ifFalse float64) float64</a></dd>
+			
+				
+				<dd><a href="#Ifi">func Ifi(cond bool, ifTrue, ifFalse int) int</a></dd>
+			
+				
+				<dd><a href="#Ifi16">func Ifi16(cond bool, ifTrue, ifFalse int16) int16</a></dd>
+			
+				
+				<dd><a href="#Ifi32">func Ifi32(cond bool, ifTrue, ifFalse int32) int32</a></dd>
+			
+				
+				<dd><a href="#Ifi64">func Ifi64(cond bool, ifTrue, ifFalse int64) int64</a></dd>
+			
+				
+				<dd><a href="#Ifs">func Ifs(cond bool, ifTrue string, ifFalse string) string</a></dd>
+			
+				
+				<dd><a href="#Ifu32">func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32</a></dd>
+			
+				
+				<dd><a href="#Ifu64">func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64</a></dd>
+			
+				
+				<dd><a href="#LogError">func LogError(err error)</a></dd>
+			
+				
+				<dd><a href="#OSName">func OSName(goOS string) (name string)</a></dd>
+			
+				
+				<dd><a href="#ParseVersion">func ParseVersion(verstr string) (majorMinor [2]int, both float64)</a></dd>
+			
+				
+				<dd><a href="#UserHomeDirPath">func UserHomeDirPath() (dirPath string)</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/util.go">util.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+    <span class="comment">//	The string format used in LogError().</span>
+    <span id="LogErrorFormat">LogErrorFormat</span> = &#34;%v&#34;
+)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="GoPaths">func <a href="/target/util.go?s=324:347#L19">GoPaths</a></h2>
+			<pre>func GoPaths() []<a href="/pkg/builtin/#string">string</a></pre>
+			
+			
+		
+			
+			
+			<h2 id="GopathSrc">func <a href="/target/util.go?s=638:688#L25">GopathSrc</a></h2>
+			<pre>func GopathSrc(subDirNames ...<a href="/pkg/builtin/#string">string</a>) (gps <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
+Example: util.GopathSrc(&#34;tools&#34;, &#34;importers&#34;, &#34;sql&#34;) = &#34;c:\gd\src\tools\importers\sql&#34; if $GOPATH is c:\gd.
+</p>
+
+			
+		
+			
+			
+			<h2 id="GopathSrcGithub">func <a href="/target/util.go?s=1114:1183#L38">GopathSrcGithub</a></h2>
+			<pre>func GopathSrcGithub(gitHubName <a href="/pkg/builtin/#string">string</a>, subDirNames ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
+Example: util.GopathSrcGithub(&#34;metaleap&#34;, &#34;go-util&#34;, &#34;num&#34;) = &#34;c:\gd\src\github.com\metaleap\go-util\num&#34; if $GOPATH is c:\gd.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Hash">func <a href="/target/util.go?s=1363:1404#L43">Hash</a></h2>
+			<pre>func Hash(h <a href="/pkg/hash/">hash</a>.<a href="/pkg/hash/#Hash">Hash</a>, str <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns the base64.URLEncoding of the result of the specified Hash for the specified str.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifb">func <a href="/target/util.go?s=1548:1589#L49">Ifb</a></h2>
+			<pre>func Ifb(cond, ifTrue, ifFalse <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifd">func <a href="/target/util.go?s=1764:1816#L58">Ifd</a></h2>
+			<pre>func Ifd(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi">func <a href="/target/util.go?s=1930:1974#L66">Ifi</a></h2>
+			<pre>func Ifi(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi16">func <a href="/target/util.go?s=2088:2138#L74">Ifi16</a></h2>
+			<pre>func Ifi16(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int16">int16</a>) <a href="/pkg/builtin/#int16">int16</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi32">func <a href="/target/util.go?s=2252:2302#L82">Ifi32</a></h2>
+			<pre>func Ifi32(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int32">int32</a>) <a href="/pkg/builtin/#int32">int32</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifi64">func <a href="/target/util.go?s=2416:2466#L90">Ifi64</a></h2>
+			<pre>func Ifi64(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int64">int64</a>) <a href="/pkg/builtin/#int64">int64</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifs">func <a href="/target/util.go?s=2580:2637#L98">Ifs</a></h2>
+			<pre>func Ifs(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue <a href="/pkg/builtin/#string">string</a>, ifFalse <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifu32">func <a href="/target/util.go?s=2751:2803#L106">Ifu32</a></h2>
+			<pre>func Ifu32(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#uint32">uint32</a>) <a href="/pkg/builtin/#uint32">uint32</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifu64">func <a href="/target/util.go?s=2917:2969#L114">Ifu64</a></h2>
+			<pre>func Ifu64(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#uint64">uint64</a>) <a href="/pkg/builtin/#uint64">uint64</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LogError">func <a href="/target/util.go?s=3082:3106#L122">LogError</a></h2>
+			<pre>func LogError(err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+If err isn&#39;t nil, short-hand for log.Println(err.Error())
+</p>
+
+			
+		
+			
+			
+			<h2 id="OSName">func <a href="/target/util.go?s=3277:3315#L129">OSName</a></h2>
+			<pre>func OSName(goOS <a href="/pkg/builtin/#string">string</a>) (name <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns the human-readable representation associated with the specified GOOS name in OSNames.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=3717:3783#L147">ParseVersion</a></h2>
+			<pre>func ParseVersion(verstr <a href="/pkg/builtin/#string">string</a>) (majorMinor [2]<a href="/pkg/builtin/#int">int</a>, both <a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+Attempts to extract major and minor version components from a string that begins with a version number.
+Example: returns []int{3, 2} and float64(3.2) for a verstr that is &#34;3.2.0 - Build 8.15.10.2761&#34;
+</p>
+
+			
+		
+			
+			
+			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=4521:4560#L178">UserHomeDirPath</a></h2>
+			<pre>func UserHomeDirPath() (dirPath <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns the path to the current user&#39;s home directory.
+Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
+Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
+</p>
+
+			
+		
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	<table class="dir">
+	<tr>
+	<th>Name</th>
+	<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	<th style="text-align: left; width: auto">Synopsis</th>
+	</tr>
+	
+		<tr>
+		<td><a href="..">..</a></td>
+		</tr>
+	
+	
+		
+			<tr>
+			<td class="name"><a href="gfx/">gfx</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="hash/">hash</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="io/">io</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="net/">net</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="num/">num</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="slice/">slice</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+		
+			<tr>
+			<td class="name"><a href="str/">str</a></td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td style="width: auto"></td>
+			</tr>
+		
+	
+	</table>
+	
+
+
+
 
 		</div></div>
 	</body>

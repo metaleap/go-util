@@ -24,7 +24,586 @@
 	correspond to Go identifiers).
 -->
 
-	2013/05/18 21:26:49 packageText.Execute: template: package.html:13:7: executing "package.html" at <$.IsPkg>: IsPkg is not a field of struct type *main.PageInfo
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/metaleap/go-util/str"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Various line-savers for common string-processing needs.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#ClearMap">func ClearMap(m map[string]string)</a></dd>
+			
+				
+				<dd><a href="#Concat">func Concat(vals ...string) string</a></dd>
+			
+				
+				<dd><a href="#ContainsOnce">func ContainsOnce(str1, str2 string) bool</a></dd>
+			
+				
+				<dd><a href="#Distance">func Distance(s1, s2 string) int</a></dd>
+			
+				
+				<dd><a href="#ExtractAllIdentifiers">func ExtractAllIdentifiers(src, prefix string) (identifiers []string)</a></dd>
+			
+				
+				<dd><a href="#ExtractFirstIdentifier">func ExtractFirstIdentifier(src, prefix string, minPos int) (identifier string)</a></dd>
+			
+				
+				<dd><a href="#First">func First(predicate func(s string) bool, step int, vals ...string) string</a></dd>
+			
+				
+				<dd><a href="#FirstNonEmpty">func FirstNonEmpty(vals ...string) (val string)</a></dd>
+			
+				
+				<dd><a href="#HasAnyPrefix">func HasAnyPrefix(s string, prefixes ...string) bool</a></dd>
+			
+				
+				<dd><a href="#HasAnySuffix">func HasAnySuffix(s string, suffixes ...string) bool</a></dd>
+			
+				
+				<dd><a href="#Ifm">func Ifm(cond bool, ifTrue, ifFalse map[string]string) map[string]string</a></dd>
+			
+				
+				<dd><a href="#Ifs">func Ifs(cond bool, ifTrue string, ifFalse string) string</a></dd>
+			
+				
+				<dd><a href="#IndexAny">func IndexAny(s string, seps ...string) (pos int)</a></dd>
+			
+				
+				<dd><a href="#IsAscii">func IsAscii(str string) bool</a></dd>
+			
+				
+				<dd><a href="#IsLower">func IsLower(s string) bool</a></dd>
+			
+				
+				<dd><a href="#IsOneOf">func IsOneOf(s string, all ...string) bool</a></dd>
+			
+				
+				<dd><a href="#IsUpper">func IsUpper(s string) bool</a></dd>
+			
+				
+				<dd><a href="#LettersOnly">func LettersOnly(s string) (ret string)</a></dd>
+			
+				
+				<dd><a href="#NonEmpties">func NonEmpties(breakAtFirstEmpty bool, vals ...string) (slice []string)</a></dd>
+			
+				
+				<dd><a href="#Pluralize">func Pluralize(s string) string</a></dd>
+			
+				
+				<dd><a href="#PrefixWithSep">func PrefixWithSep(prefix, sep, v string) string</a></dd>
+			
+				
+				<dd><a href="#PrependIf">func PrependIf(s, p string) string</a></dd>
+			
+				
+				<dd><a href="#Replace">func Replace(str string, repls map[string]string) string</a></dd>
+			
+				
+				<dd><a href="#SafeIdentifier">func SafeIdentifier(s string) (ret string)</a></dd>
+			
+				
+				<dd><a href="#Split">func Split(v, s string) (sl []string)</a></dd>
+			
+				
+				<dd><a href="#StripPrefix">func StripPrefix(val, prefix string) string</a></dd>
+			
+				
+				<dd><a href="#StripSuffix">func StripSuffix(val, suffix string) string</a></dd>
+			
+				
+				<dd><a href="#ToLowerIfUpper">func ToLowerIfUpper(s string) string</a></dd>
+			
+				
+				<dd><a href="#ToUpperIfLower">func ToUpperIfLower(s string) string</a></dd>
+			
+			
+				
+				<dd><a href="#Buffer">type Buffer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Write">func (me *Buffer) Write(format string, fmtArgs ...interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Writeln">func (me *Buffer) Writeln(format string, fmtArgs ...interface{})</a></dd>
+				
+			
+				
+				<dd><a href="#Matcher">type Matcher</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Matcher.AddPatterns">func (me *Matcher) AddPatterns(patterns ...string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Matcher.HasWildcardPatterns">func (me *Matcher) HasWildcardPatterns() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Matcher.IsMatch">func (me *Matcher) IsMatch(s string) bool</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/target/buf.go">buf.go</a>
+			
+				<a href="/target/doc.go">doc.go</a>
+			
+				<a href="/target/matcher.go">matcher.go</a>
+			
+				<a href="/target/str.go">str.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+		
+		
+			
+			
+			<h2 id="ClearMap">func <a href="/target/str.go?s=178:212#L3">ClearMap</a></h2>
+			<pre>func ClearMap(m map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Sets all values in m to the empty string.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Concat">func <a href="/target/str.go?s=339:373#L12">Concat</a></h2>
+			<pre>func Concat(vals ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Does a strings.Join() on the specified string values.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ContainsOnce">func <a href="/target/str.go?s=469:510#L17">ContainsOnce</a></h2>
+			<pre>func ContainsOnce(str1, str2 <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if str2 is contained in str1 exactly once.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Distance">func <a href="/target/str.go?s=699:731#L26">Distance</a></h2>
+			<pre>func Distance(s1, s2 <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+A simple string-similarity algorithm.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ExtractAllIdentifiers">func <a href="/target/str.go?s=1377:1446#L51">ExtractAllIdentifiers</a></h2>
+			<pre>func ExtractAllIdentifiers(src, prefix <a href="/pkg/builtin/#string">string</a>) (identifiers []<a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Extracts all identifiers (no duplicates, ordered by occurrence) starting with prefix occurring in src.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ExtractFirstIdentifier">func <a href="/target/str.go?s=1815:1894#L64">ExtractFirstIdentifier</a></h2>
+			<pre>func ExtractFirstIdentifier(src, prefix <a href="/pkg/builtin/#string">string</a>, minPos <a href="/pkg/builtin/#int">int</a>) (identifier <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Extracts the first occurrence (at or after minPos) of an identifier starting with prefix in src.
+</p>
+
+			
+		
+			
+			
+			<h2 id="First">func <a href="/target/str.go?s=2364:2438#L80">First</a></h2>
+			<pre>func First(predicate func(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a>, step <a href="/pkg/builtin/#int">int</a>, vals ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns the first string in vals to match the specified predicate.
+step: 1 to test all values. A higher value to skip n values after each test. Negative for reverse slice traversal. Or use 0 to get stuck in an infinite loop.
+</p>
+
+			
+		
+			
+			
+			<h2 id="FirstNonEmpty">func <a href="/target/str.go?s=2671:2718#L92">FirstNonEmpty</a></h2>
+			<pre>func FirstNonEmpty(vals ...<a href="/pkg/builtin/#string">string</a>) (val <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns the first non-empty string in vals.
+</p>
+
+			
+		
+			
+			
+			<h2 id="HasAnyPrefix">func <a href="/target/str.go?s=2939:2991#L103">HasAnyPrefix</a></h2>
+			<pre>func HasAnyPrefix(s <a href="/pkg/builtin/#string">string</a>, prefixes ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if s starts with any one of the specified prefixes.
+</p>
+
+			
+		
+			
+			
+			<h2 id="HasAnySuffix">func <a href="/target/str.go?s=3170:3222#L113">HasAnySuffix</a></h2>
+			<pre>func HasAnySuffix(s <a href="/pkg/builtin/#string">string</a>, suffixes ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if s ends with any one of the specified suffixes.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifm">func <a href="/target/str.go?s=3397:3469#L123">Ifm</a></h2>
+			<pre>func Ifm(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a>) map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Ifs">func <a href="/target/str.go?s=3583:3640#L131">Ifs</a></h2>
+			<pre>func Ifs(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue <a href="/pkg/builtin/#string">string</a>, ifFalse <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns ifTrue if cond is true, otherwise returns ifFalse.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IndexAny">func <a href="/target/str.go?s=3787:3836#L139">IndexAny</a></h2>
+			<pre>func IndexAny(s <a href="/pkg/builtin/#string">string</a>, seps ...<a href="/pkg/builtin/#string">string</a>) (pos <a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+For all seps, computes the index of first occurrence in s, then returns the smallest index.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsAscii">func <a href="/target/str.go?s=4035:4064#L150">IsAscii</a></h2>
+			<pre>func IsAscii(str <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if str is ASCII-compatible.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsLower">func <a href="/target/str.go?s=4216:4243#L160">IsLower</a></h2>
+			<pre>func IsLower(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if all Letter-runes in s are lower-case.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsOneOf">func <a href="/target/str.go?s=4390:4432#L170">IsOneOf</a></h2>
+			<pre>func IsOneOf(s <a href="/pkg/builtin/#string">string</a>, all ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if s is in all.
+</p>
+
+			
+		
+			
+			
+			<h2 id="IsUpper">func <a href="/target/str.go?s=4570:4597#L180">IsUpper</a></h2>
+			<pre>func IsUpper(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Returns true if all Letter-runes in s are upper-case.
+</p>
+
+			
+		
+			
+			
+			<h2 id="LettersOnly">func <a href="/target/str.go?s=4787:4826#L190">LettersOnly</a></h2>
+			<pre>func LettersOnly(s <a href="/pkg/builtin/#string">string</a>) (ret <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns a string representation of s with all non-Letter-runes removed.
+</p>
+
+			
+		
+			
+			
+			<h2 id="NonEmpties">func <a href="/target/str.go?s=4981:5053#L200">NonEmpties</a></h2>
+			<pre>func NonEmpties(breakAtFirstEmpty <a href="/pkg/builtin/#bool">bool</a>, vals ...<a href="/pkg/builtin/#string">string</a>) (slice []<a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns a slice that contains the non-empty strings in vals.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Pluralize">func <a href="/target/str.go?s=5561:5592#L215">Pluralize</a></h2>
+			<pre>func Pluralize(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+A most simplistic (not linguistically-correct) English-language pluralizer that may be useful for code or doc generation.
+If s ends with &#34;s&#34;, only appends &#34;es&#34;: bus -&gt; buses, mess -&gt; messes
+If s ends with &#34;y&#34; (but not &#34;ay&#34;, &#34;ey&#34;, &#34;oy&#34;, &#34;uy&#34; or &#34;iy&#34;), removes &#34;y&#34; and appends &#34;ies&#34;: autonomy -&gt; autonomies, dictionary -&gt; dictionaries etc.
+Otherwise, appends &#34;s&#34;.
+</p>
+
+			
+		
+			
+			
+			<h2 id="PrefixWithSep">func <a href="/target/str.go?s=5867:5915#L226">PrefixWithSep</a></h2>
+			<pre>func PrefixWithSep(prefix, sep, v <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Prepends prefix + sep to v only if prefix isn&#39;t empty.
+</p>
+
+			
+		
+			
+			
+			<h2 id="PrependIf">func <a href="/target/str.go?s=6045:6079#L234">PrependIf</a></h2>
+			<pre>func PrependIf(s, p <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Prepends p to s only if s doesn&#39;t already have that prefix.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Replace">func <a href="/target/str.go?s=6238:6294#L242">Replace</a></h2>
+			<pre>func Replace(str <a href="/pkg/builtin/#string">string</a>, repls map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Replaces in str all occurrences of all repls map keys with their associated (mapped) value.
+</p>
+
+			
+		
+			
+			
+			<h2 id="SafeIdentifier">func <a href="/target/str.go?s=6453:6495#L250">SafeIdentifier</a></h2>
+			<pre>func SafeIdentifier(s <a href="/pkg/builtin/#string">string</a>) (ret <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Creates a Pascal-cased &#34;identifier&#34; version of the specified string.
+</p>
+
+			
+		
+			
+			
+			<h2 id="Split">func <a href="/target/str.go?s=7033:7070#L274">Split</a></h2>
+			<pre>func Split(v, s <a href="/pkg/builtin/#string">string</a>) (sl []<a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Returns an empty slice is v is emtpy, otherwise like strings.Split()
+</p>
+
+			
+		
+			
+			
+			<h2 id="StripPrefix">func <a href="/target/str.go?s=7169:7212#L282">StripPrefix</a></h2>
+			<pre>func StripPrefix(val, prefix <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Strips prefix off val if possible.
+</p>
+
+			
+		
+			
+			
+			<h2 id="StripSuffix">func <a href="/target/str.go?s=7335:7378#L290">StripSuffix</a></h2>
+			<pre>func StripSuffix(val, suffix <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Strips suffix off val if possible.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ToLowerIfUpper">func <a href="/target/str.go?s=8434:8470#L344">ToLowerIfUpper</a></h2>
+			<pre>func ToLowerIfUpper(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns the lower-case representation of s only if it is currently fully upper-case as per IsUpper().
+</p>
+
+			
+		
+			
+			
+			<h2 id="ToUpperIfLower">func <a href="/target/str.go?s=8639:8675#L352">ToUpperIfLower</a></h2>
+			<pre>func ToUpperIfLower(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+Returns the upper-case representation of s only if it is currently fully lower-case as per IsLower().
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Buffer">type <a href="/target/buf.go?s=85:121#L1">Buffer</a></h2>
+			<pre>type Buffer struct {
+    <a href="/pkg/bytes/">bytes</a>.<a href="/pkg/bytes/#Buffer">Buffer</a>
+}</pre>
+			<p>
+A convenience wrapper for bytes.Buffer.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Buffer.Write">func (*Buffer) <a href="/target/buf.go?s=199:261#L4">Write</a></h3>
+				<pre>func (me *<a href="#Buffer">Buffer</a>) Write(format <a href="/pkg/builtin/#string">string</a>, fmtArgs ...interface{})</pre>
+				<p>
+Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format, fmtArgs...))
+</p>
+
+				
+				
+			
+				
+				<h3 id="Buffer.Writeln">func (*Buffer) <a href="/target/buf.go?s=448:512#L12">Writeln</a></h3>
+				<pre>func (me *<a href="#Buffer">Buffer</a>) Writeln(format <a href="/pkg/builtin/#string">string</a>, fmtArgs ...interface{})</pre>
+				<p>
+Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs...))
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Matcher">type <a href="/target/matcher.go?s=259:332#L3">Matcher</a></h2>
+			<pre>type Matcher struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Matches a string against &#34;simple-patterns&#34;.
+Simple-patterns are strings that can have *-wildcards only at the beginning, at the end, or both.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Matcher.AddPatterns">func (*Matcher) <a href="/target/matcher.go?s=371:421#L9">AddPatterns</a></h3>
+				<pre>func (me *<a href="#Matcher">Matcher</a>) AddPatterns(patterns ...<a href="/pkg/builtin/#string">string</a>)</pre>
+				<p>
+Adds the specified pattern to me.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=1071:1116#L30">HasWildcardPatterns</a></h3>
+				<pre>func (me *<a href="#Matcher">Matcher</a>) HasWildcardPatterns() <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=1187:1228#L35">IsMatch</a></h3>
+				<pre>func (me *<a href="#Matcher">Matcher</a>) IsMatch(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Matches s against all patterns in me.
+</p>
+
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
 
 		</div></div>
 	</body>
