@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/howeyc/fsnotify"
+
 	usl "github.com/metaleap/go-util/slice"
 	ustr "github.com/metaleap/go-util/str"
 )
@@ -199,9 +201,6 @@ func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.Byt
 }
 
 //	Reads and returns the contents of a text file with non-idiomatic error handling:
-//	filePath: full local file path
-//	panicOnError: true to panic() if an error occurred reading the file, or false to return defVal in the case of error
-//	defVal: the string value to return if the file couldn't be read successfully
 func ReadTextFile(filePath string, panicOnError bool, defVal string) string {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err == nil {
@@ -221,6 +220,34 @@ func SaveToFile(r io.Reader, filename string) (err error) {
 		defer file.Close()
 		if err == nil {
 			_, err = io.Copy(file, r)
+		}
+	}
+	return
+}
+
+type WatcherEvent func(evt *fsnotify.FileEvent, err error) (stopWatching bool)
+
+func WatchDirectory(dirPath string, onEvent WatcherEvent) (me *fsnotify.Watcher, err error) {
+	if me, err = fsnotify.NewWatcher(); err == nil {
+		if err = me.Watch(dirPath); err == nil {
+			go func() {
+				var (
+					evt *fsnotify.FileEvent
+					err error
+				)
+				for {
+					select {
+					case evt = <-me.Event:
+						if onEvent(evt, nil) {
+							break
+						}
+					case err = <-me.Error:
+						if onEvent(nil, err) {
+							break
+						}
+					}
+				}
+			}()
 		}
 	}
 	return
