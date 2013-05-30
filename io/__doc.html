@@ -177,7 +177,7 @@ Various line-savers for common I/O needs.
 		
 			
 			
-			<h2 id="ClearDirectory">func <a href="/target/io.go?s=461:533#L14">ClearDirectory</a></h2>
+			<h2 id="ClearDirectory">func <a href="/target/io.go?s=462:534#L14">ClearDirectory</a></h2>
 			<pre>func ClearDirectory(path <a href="/pkg/builtin/#string">string</a>, keepNamePatterns ...<a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
@@ -187,7 +187,7 @@ Removes any children contained in path, except those whose name matches any of t
 		
 			
 			
-			<h2 id="CopyAll">func <a href="/target/io.go?s=1025:1105#L32">CopyAll</a></h2>
+			<h2 id="CopyAll">func <a href="/target/io.go?s=1026:1106#L32">CopyAll</a></h2>
 			<pre>func CopyAll(srcDirPath, destDirPath <a href="/pkg/builtin/#string">string</a>, skipDirs *<a href="/pkg/github.com/metaleap/go-util/str/">ustr</a>.<a href="/pkg/github.com/metaleap/go-util/str/#Matcher">Matcher</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Copies all files and directories inside srcDirPath to destDirPath.
@@ -198,7 +198,7 @@ All sub-directories whose name is matched by skipDirs (optional) are skipped.
 		
 			
 			
-			<h2 id="CopyFile">func <a href="/target/io.go?s=1720:1779#L53">CopyFile</a></h2>
+			<h2 id="CopyFile">func <a href="/target/io.go?s=1721:1780#L53">CopyFile</a></h2>
 			<pre>func CopyFile(srcFilePath, destFilePath <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy from the specified local source file to the specified local destination file.
@@ -208,7 +208,7 @@ Performs an io.Copy from the specified local source file to the specified local 
 		
 			
 			
-			<h2 id="DirExists">func <a href="/target/io.go?s=1990:2022#L64">DirExists</a></h2>
+			<h2 id="DirExists">func <a href="/target/io.go?s=1991:2023#L64">DirExists</a></h2>
 			<pre>func DirExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns true if a directory exists at the specified path.
@@ -218,7 +218,7 @@ Returns true if a directory exists at the specified path.
 		
 			
 			
-			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2191:2236#L72">EnsureDirExists</a></h2>
+			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2192:2237#L72">EnsureDirExists</a></h2>
 			<pre>func EnsureDirExists(path <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 If a directory does not exist at the specified path, attempts to create it.
@@ -228,7 +228,7 @@ If a directory does not exist at the specified path, attempts to create it.
 		
 			
 			
-			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=2642:2776#L85">ExtractZipFile</a></h2>
+			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=2643:2777#L85">ExtractZipFile</a></h2>
 			<pre>func ExtractZipFile(zipFilePath, targetDirPath <a href="/pkg/builtin/#string">string</a>, deleteZipFile <a href="/pkg/builtin/#bool">bool</a>, fileNamesPrefix <a href="/pkg/builtin/#string">string</a>, fileNamesToExtract ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 Extracts a ZIP archive to the local file system.
@@ -241,7 +241,7 @@ deleteZipFile: deletes the ZIP archive file upon successful extraction.
 		
 			
 			
-			<h2 id="FileExists">func <a href="/target/io.go?s=3994:4027#L135">FileExists</a></h2>
+			<h2 id="FileExists">func <a href="/target/io.go?s=3995:4028#L135">FileExists</a></h2>
 			<pre>func FileExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns true if a file (not a directory) exists at the specified path.
@@ -251,7 +251,7 @@ Returns true if a file (not a directory) exists at the specified path.
 		
 			
 			
-			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4358:4506#L144">FindFileInfo</a></h2>
+			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4359:4507#L144">FindFileInfo</a></h2>
 			<pre>func FindFileInfo(dirPath <a href="/pkg/builtin/#string">string</a>, fileBaseName <a href="/pkg/builtin/#string">string</a>, fileExts []<a href="/pkg/builtin/#string">string</a>, tryLower <a href="/pkg/builtin/#bool">bool</a>, tryUpper <a href="/pkg/builtin/#bool">bool</a>) (fullFilePath <a href="/pkg/builtin/#string">string</a>, fileInfo *<a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>)</pre>
 			<p>
 If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
@@ -262,7 +262,7 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5261:5323#L172">ReadBinaryFile</a></h2>
+			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5262:5324#L172">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -274,7 +274,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=5668:5777#L182">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=5669:5778#L182">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a>, offset <a href="/pkg/builtin/#int64">int64</a>, byteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>, ptr interface{}) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -285,7 +285,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6054:6129#L194">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6055:6130#L194">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>, defVal <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -295,7 +295,7 @@ Reads and returns the contents of a text file with non-idiomatic error handling:
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/io.go?s=6368:6425#L206">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/io.go?s=6369:6426#L206">SaveToFile</a></h2>
 			<pre>func SaveToFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, filename <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -315,14 +315,14 @@ An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirW
 		
 			
 			
-			<h2 id="WatchDirectory">func <a href="/target/io.go?s=6664:6755#L220">WatchDirectory</a></h2>
-			<pre>func WatchDirectory(dirPath <a href="/pkg/builtin/#string">string</a>, onEvent <a href="#WatcherEvent">WatcherEvent</a>) (me *<a href="/pkg/github.com/howeyc/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/howeyc/fsnotify/#Watcher">Watcher</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<h2 id="WatchDirectory">func <a href="/target/io.go?s=6665:6756#L220">WatchDirectory</a></h2>
+			<pre>func WatchDirectory(dirPath <a href="/pkg/builtin/#string">string</a>, onEvent <a href="#WatcherEvent">WatcherEvent</a>) (me *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#Watcher">Watcher</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 			
 			
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7277:7337#L249">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7275:7335#L248">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, contents []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -333,7 +333,7 @@ Also ensures the target file&#39;s directory exists.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7590:7641#L256">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7588:7639#L255">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
@@ -434,8 +434,8 @@ records a value higher than the specified testTime.
 		
 			
 			
-			<h2 id="WatcherEvent">type <a href="/target/io.go?s=6584:6662#L218">WatcherEvent</a></h2>
-			<pre>type WatcherEvent func(evt *<a href="/pkg/github.com/howeyc/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/howeyc/fsnotify/#FileEvent">FileEvent</a>, err <a href="/pkg/builtin/#error">error</a>) (keepWatching <a href="/pkg/builtin/#bool">bool</a>)</pre>
+			<h2 id="WatcherEvent">type <a href="/target/io.go?s=6585:6663#L218">WatcherEvent</a></h2>
+			<pre>type WatcherEvent func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>, err <a href="/pkg/builtin/#error">error</a>) (stopWatching <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			
 
 			

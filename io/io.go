@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/howeyc/fsnotify"
+	"github.com/goforks/fsnotify"
 
 	usl "github.com/metaleap/go-util/slice"
 	ustr "github.com/metaleap/go-util/str"
