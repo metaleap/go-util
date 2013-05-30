@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/goforks/fsnotify"
-
 	usl "github.com/metaleap/go-util/slice"
 	ustr "github.com/metaleap/go-util/str"
 )
@@ -220,34 +218,6 @@ func SaveToFile(r io.Reader, filename string) (err error) {
 		defer file.Close()
 		if err == nil {
 			_, err = io.Copy(file, r)
-		}
-	}
-	return
-}
-
-type WatcherEvent func(evt *fsnotify.FileEvent, err error) (stopWatching bool)
-
-func WatchDirectory(dirPath string, onEvent WatcherEvent) (me *fsnotify.Watcher, err error) {
-	if me, err = fsnotify.NewWatcher(); err == nil {
-		if err = me.Watch(dirPath); err == nil {
-			go func() {
-				var (
-					evt *fsnotify.FileEvent
-					err error
-				)
-				for {
-					select {
-					case evt = <-me.Event:
-						if onEvent(evt, nil) {
-							break
-						}
-					case err = <-me.Error:
-						if onEvent(nil, err) {
-							break
-						}
-					}
-				}
-			}()
 		}
 	}
 	return
