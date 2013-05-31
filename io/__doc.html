@@ -117,7 +117,7 @@ Various line-savers for common I/O needs.
 				<dd><a href="#DirWalker">type DirWalker</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#NewDirWalker">func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#NewDirWalker">func NewDirWalker(deep bool, dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)</a></dd>
 				
 				
 					
@@ -133,11 +133,6 @@ Various line-savers for common I/O needs.
 				
 			
 				
-				<dd><a href="#WatchEventHandler">type WatchEventHandler</a></dd>
-				
-				
-			
-				
 				<dd><a href="#Watcher">type Watcher</a></dd>
 				
 					
@@ -148,10 +143,10 @@ Various line-savers for common I/O needs.
 					<dd>&nbsp; &nbsp; <a href="#Watcher.Go">func (me *Watcher) Go()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchDir">func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler WatchEventHandler)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchDir">func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func())</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchFile">func (me *Watcher) WatchFile(filePath string, runHandlerNow bool, handler WatchEventHandler)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchFiles">func (me *Watcher) WatchFiles(dirPath, fileNamePattern string, runHandlerNow bool, handler func(string))</a></dd>
 				
 			
 			
@@ -354,7 +349,7 @@ Also ensures the target file&#39;s directory exists.
 		
 			
 			
-			<h2 id="DirWalker">type <a href="/target/walker.go?s=1296:2057#L25">DirWalker</a></h2>
+			<h2 id="DirWalker">type <a href="/target/walker.go?s=1296:2039#L25">DirWalker</a></h2>
 			<pre>type DirWalker struct {
     <span class="comment">//	Walk() returns a slice of all errors encountered but</span>
     <span class="comment">//	to cancel walking upon the first error, set this to true.</span>
@@ -366,7 +361,7 @@ Also ensures the target file&#39;s directory exists.
     <span class="comment">//	having visited all sub-directories.</span>
     VisitDirsFirst <a href="/pkg/builtin/#bool">bool</a>
 
-    <span class="comment">//	Defaults to true. If false, only the files in the specified directory</span>
+    <span class="comment">//	If false, only the files in the specified directory</span>
     <span class="comment">//	(and the directory itself) get visited, but no sub-directories.</span>
     VisitSubDirs <a href="/pkg/builtin/#bool">bool</a>
 
@@ -389,10 +384,11 @@ Provides recursive directory walking with a variety of options.
 
 			
 				
-				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=2142:2214#L48">NewDirWalker</a></h3>
-				<pre>func NewDirWalker(dirVisitor, fileVisitor <a href="#WalkerVisitor">WalkerVisitor</a>) (me *<a href="#DirWalker">DirWalker</a>)</pre>
+				<h3 id="NewDirWalker">func <a href="/target/walker.go?s=2174:2257#L49">NewDirWalker</a></h3>
+				<pre>func NewDirWalker(deep <a href="/pkg/builtin/#bool">bool</a>, dirVisitor, fileVisitor <a href="#WalkerVisitor">WalkerVisitor</a>) (me *<a href="#DirWalker">DirWalker</a>)</pre>
 				<p>
 Initializes and returns a new DirWalker with the specified (optional) visitors.
+The deep argument sets the VisitSubDirs field.
 </p>
 
 				
@@ -400,7 +396,7 @@ Initializes and returns a new DirWalker with the specified (optional) visitors.
 
 			
 				
-				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=2372:2428#L54">Walk</a></h3>
+				<h3 id="DirWalker.Walk">func (*DirWalker) <a href="/target/walker.go?s=2415:2471#L55">Walk</a></h3>
 				<pre>func (me *<a href="#DirWalker">DirWalker</a>) Walk(dirPath <a href="/pkg/builtin/#string">string</a>) (errs []<a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Initiates me walking through the specified directory.
@@ -443,29 +439,13 @@ records a value higher than the specified testTime.
 		
 			
 			
-			<h2 id="WatchEventHandler">type <a href="/target/watcher.go?s=74:126#L1">WatchEventHandler</a></h2>
-			<pre>type WatchEventHandler func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>)</pre>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-		
-			
-			
-			<h2 id="Watcher">type <a href="/target/watcher.go?s=128:326#L1">Watcher</a></h2>
+			<h2 id="Watcher">type <a href="/target/watcher.go?s=121:324#L2">Watcher</a></h2>
 			<pre>type Watcher struct {
     *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#Watcher">Watcher</a>
-    OnEvent      []<a href="#WatchEventHandler">WatchEventHandler</a>
+    OnEvent      []func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>)
     OnError      []func(err <a href="/pkg/builtin/#error">error</a>)
-    DirHandlers  map[<a href="/pkg/builtin/#string">string</a>][]<a href="#WatchEventHandler">WatchEventHandler</a>
-    FileHandlers map[<a href="/pkg/builtin/#string">string</a>][]<a href="#WatchEventHandler">WatchEventHandler</a>
+    DirHandlers  map[<a href="/pkg/builtin/#string">string</a>][]func()
+    FileHandlers map[<a href="/pkg/builtin/#string">string</a>][]func(filePath <a href="/pkg/builtin/#string">string</a>)
 }</pre>
 			
 
@@ -477,7 +457,7 @@ records a value higher than the specified testTime.
 
 			
 				
-				<h3 id="NewWatcher">func <a href="/target/watcher.go?s=328:370#L9">NewWatcher</a></h3>
+				<h3 id="NewWatcher">func <a href="/target/watcher.go?s=326:368#L10">NewWatcher</a></h3>
 				<pre>func NewWatcher() (me *<a href="#Watcher">Watcher</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				
 				
@@ -485,22 +465,22 @@ records a value higher than the specified testTime.
 
 			
 				
-				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher.go?s=566:589#L17">Go</a></h3>
+				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher.go?s=548:571#L18">Go</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) Go()</pre>
 				
 				
 				
 			
 				
-				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher.go?s=1057:1147#L45">WatchDir</a></h3>
-				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchDir(dirPath <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler <a href="#WatchEventHandler">WatchEventHandler</a>)</pre>
+				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher.go?s=1219:1298#L52">WatchDir</a></h3>
+				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchDir(dirPath <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func())</pre>
 				
 				
 				
 			
 				
-				<h3 id="Watcher.WatchFile">func (*Watcher) <a href="/target/watcher.go?s=1308:1400#L56">WatchFile</a></h3>
-				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchFile(filePath <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler <a href="#WatchEventHandler">WatchEventHandler</a>)</pre>
+				<h3 id="Watcher.WatchFiles">func (*Watcher) <a href="/target/watcher.go?s=1491:1595#L64">WatchFiles</a></h3>
+				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchFiles(dirPath, fileNamePattern <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func(<a href="/pkg/builtin/#string">string</a>))</pre>
 				
 				
 				

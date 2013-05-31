@@ -43,7 +43,7 @@ type DirWalker struct {
 	//	having visited all sub-directories.
 	VisitDirsFirst bool
 
-	//	Defaults to true. If false, only the files in the specified directory
+	//	If false, only the files in the specified directory
 	//	(and the directory itself) get visited, but no sub-directories.
 	VisitSubDirs bool
 
@@ -55,18 +55,19 @@ type DirWalker struct {
 }
 
 //	Initializes and returns a new DirWalker with the specified (optional) visitors.
-func NewDirWalker(dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker) {
-	me = &DirWalker{DirVisitor: dirVisitor, FileVisitor: fileVisitor, VisitSubDirs: true}
+//	The deep argument sets the VisitSubDirs field.
+func NewDirWalker(deep bool, dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker) {
+	me = &DirWalker{DirVisitor: dirVisitor, FileVisitor: fileVisitor, VisitSubDirs: deep}
 	return
 }
 
 //	Initiates me walking through the specified directory.
 func (me *DirWalker) Walk(dirPath string) (errs []error) {
-	me.walk(dirPath, &errs)
+	me.walk(true, dirPath, &errs)
 	return
 }
 
-func (me *DirWalker) walk(dirPath string, errs *[]error) {
+func (me *DirWalker) walk(walkSelf bool, dirPath string, errs *[]error) {
 	dirInfo, err := os.Stat(dirPath)
 	if err != nil {
 		if *errs = append(*errs, err); me.BreakOnError {
@@ -80,7 +81,12 @@ func (me *DirWalker) walk(dirPath string, errs *[]error) {
 	if fileVisitor == nil {
 		fileVisitor = WalkerVisitorNoop
 	}
-	if dirVisitor(me, dirPath, dirInfo) {
+	if walkSelf {
+		walkSelf = dirVisitor(me, dirPath, dirInfo)
+	} else {
+		walkSelf = true
+	}
+	if walkSelf {
 		if fileInfos, err := ioutil.ReadDir(dirPath); err == nil {
 			if me.VisitDirsFirst {
 				if !me.walkInfos(dirPath, fileInfos, true, dirVisitor, errs) {
@@ -103,12 +109,13 @@ func (me *DirWalker) walk(dirPath string, errs *[]error) {
 
 func (me *DirWalker) walkInfos(dirPath string, fileInfos []os.FileInfo, isDir bool, visitor WalkerVisitor, errs *[]error) (keepWalking bool) {
 	var fullPath string
+	keepWalking = true
 	for _, fi := range fileInfos {
 		if fullPath = filepath.Join(dirPath, fi.Name()); fi.IsDir() == isDir {
 			if keepWalking = visitor(me, fullPath, fi); !keepWalking {
 				break
 			} else if isDir && me.VisitSubDirs {
-				me.walk(fullPath, errs)
+				me.walk(false, fullPath, errs)
 			}
 		}
 	}

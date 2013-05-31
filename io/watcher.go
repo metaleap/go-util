@@ -1,23 +1,24 @@
 package uio
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/goforks/fsnotify"
-)
 
-type WatchEventHandler func(evt *fsnotify.FileEvent)
+	ustr "github.com/metaleap/go-util/str"
+)
 
 type Watcher struct {
 	*fsnotify.Watcher
-	OnEvent      []WatchEventHandler
+	OnEvent      []func(evt *fsnotify.FileEvent)
 	OnError      []func(err error)
-	DirHandlers  map[string][]WatchEventHandler
-	FileHandlers map[string][]WatchEventHandler
+	DirHandlers  map[string][]func()
+	FileHandlers map[string][]func(filePath string)
 }
 
 func NewWatcher() (me *Watcher, err error) {
-	me = &Watcher{DirHandlers: map[string][]WatchEventHandler{}, FileHandlers: map[string][]WatchEventHandler{}}
+	me = &Watcher{DirHandlers: map[string][]func(){}, FileHandlers: map[string][]func(string){}}
 	if me.Watcher, err = fsnotify.NewWatcher(); err != nil {
 		me = nil
 	}
@@ -25,11 +26,6 @@ func NewWatcher() (me *Watcher, err error) {
 }
 
 func (me *Watcher) Go() {
-	onAll := func(all []WatchEventHandler, evt *fsnotify.FileEvent) {
-		for _, on := range all {
-			on(evt)
-		}
-	}
 	var (
 		evt *fsnotify.FileEvent
 		err error
@@ -38,9 +34,20 @@ func (me *Watcher) Go() {
 		select {
 		case evt = <-me.Event:
 			if evt != nil {
-				onAll(me.OnEvent, evt)
-				onAll(me.DirHandlers[filepath.Dir(evt.Name)], evt)
-				onAll(me.FileHandlers[evt.Name], evt)
+				for _, on := range me.OnEvent {
+					on(evt)
+				}
+				dirPath := filepath.Dir(evt.Name)
+				for _, on := range me.DirHandlers[dirPath] {
+					on()
+				}
+				for filePathPattern, handlers := range me.FileHandlers {
+					if filepath.Dir(evt.Name) == dirPath && ustr.MatchesAny(filepath.Base(evt.Name), filepath.Base(filePathPattern)) {
+						for _, on := range handlers {
+							on(evt.Name)
+						}
+					}
+				}
 			}
 		case err = <-me.Error:
 			if err != nil {
@@ -52,25 +59,32 @@ func (me *Watcher) Go() {
 	}
 }
 
-func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler WatchEventHandler) {
+func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func()) {
+	dirPath = filepath.Clean(dirPath)
 	all, ok := me.DirHandlers[dirPath]
 	if !ok {
 		me.Watch(dirPath)
 	}
 	me.DirHandlers[dirPath] = append(all, handler)
 	if runHandlerNow {
-		handler(nil)
+		handler()
 	}
 }
 
-func (me *Watcher) WatchFile(filePath string, runHandlerNow bool, handler WatchEventHandler) {
-	dirPath := filepath.Dir(filePath)
+func (me *Watcher) WatchFiles(dirPath, fileNamePattern string, runHandlerNow bool, handler func(string)) {
+	dirPath = filepath.Clean(dirPath)
+	filePath := filepath.Join(dirPath, fileNamePattern)
 	if _, ok := me.DirHandlers[dirPath]; !ok {
 		me.Watch(dirPath)
-		me.DirHandlers[dirPath] = []WatchEventHandler{}
+		me.DirHandlers[dirPath] = []func(){}
 	}
 	me.FileHandlers[filePath] = append(me.FileHandlers[filePath], handler)
 	if runHandlerNow {
-		handler(nil)
+		var m ustr.Matcher
+		m.AddPatterns(fileNamePattern)
+		NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
+			handler(fullPath)
+			return true
+		}).Walk(dirPath)
 	}
 }

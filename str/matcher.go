@@ -4,6 +4,12 @@ import (
 	"strings"
 )
 
+func MatchesAny(value string, patterns ...string) bool {
+	var m Matcher
+	m.AddPatterns(patterns...)
+	return m.IsMatch(value)
+}
+
 type matcherPattern struct {
 	pattern, prefix, suffix, contains string
 }
