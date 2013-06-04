@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/goforks/fsnotify"
+	"github.com/howeyc/fsnotify"
 
 	ustr "github.com/metaleap/go-util/str"
 )
