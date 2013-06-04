@@ -83,7 +83,9 @@ func (me *Watcher) WatchFiles(dirPath, fileNamePattern string, runHandlerNow boo
 		var m ustr.Matcher
 		m.AddPatterns(fileNamePattern)
 		NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
-			handler(fullPath)
+			if m.IsMatch(filepath.Base(fullPath)) {
+				handler(fullPath)
+			}
 			return true
 		}).Walk(dirPath)
 	}
