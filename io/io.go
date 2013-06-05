@@ -76,6 +76,22 @@ func DirExists(path string) bool {
 	return false
 }
 
+func DirsFilesExist(dirPath string, dirOrFileNames ...string) (allExist bool) {
+	allExist = true
+	var (
+		err  error
+		stat os.FileInfo
+	)
+	for _, name := range dirOrFileNames {
+		if stat, err = os.Stat(filepath.Join(dirPath, name)); err != nil || stat == nil {
+			allExist = false
+			break
+		}
+
+	}
+	return
+}
+
 //	If a directory does not exist at the specified path, attempts to create it.
 func EnsureDirExists(path string) (err error) {
 	if !DirExists(path) {
