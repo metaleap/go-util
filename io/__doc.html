@@ -140,6 +140,9 @@ Various line-savers for common I/O needs.
 				
 				
 					
+					<dd>&nbsp; &nbsp; <a href="#Watcher.Close">func (me *Watcher) Close() error</a></dd>
+				
+					
 					<dd>&nbsp; &nbsp; <a href="#Watcher.Go">func (me *Watcher) Go()</a></dd>
 				
 					
@@ -166,7 +169,7 @@ Various line-savers for common I/O needs.
 			
 				<a href="/target/walker.go">walker.go</a>
 			
-				<a href="/target/watcher.go">watcher.go</a>
+				<a href="/target/watcher_unsafe.go">watcher_unsafe.go</a>
 			
 			</span>
 			</p>
@@ -439,10 +442,10 @@ records a value higher than the specified testTime.
 		
 			
 			
-			<h2 id="Watcher">type <a href="/target/watcher.go?s=122:325#L2">Watcher</a></h2>
+			<h2 id="Watcher">type <a href="/target/watcher_unsafe.go?s=143:346#L4">Watcher</a></h2>
 			<pre>type Watcher struct {
-    *<a href="/pkg/github.com/metaleap/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/metaleap/fsnotify/#Watcher">Watcher</a>
-    OnEvent      []func(evt *<a href="/pkg/github.com/metaleap/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/metaleap/fsnotify/#FileEvent">FileEvent</a>)
+    *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#Watcher">Watcher</a>
+    OnEvent      []func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>)
     OnError      []func(err <a href="/pkg/builtin/#error">error</a>)
     DirHandlers  map[<a href="/pkg/builtin/#string">string</a>][]func()
     FileHandlers map[<a href="/pkg/builtin/#string">string</a>][]func(filePath <a href="/pkg/builtin/#string">string</a>)
@@ -457,7 +460,7 @@ records a value higher than the specified testTime.
 
 			
 				
-				<h3 id="NewWatcher">func <a href="/target/watcher.go?s=327:369#L10">NewWatcher</a></h3>
+				<h3 id="NewWatcher">func <a href="/target/watcher_unsafe.go?s=348:390#L12">NewWatcher</a></h3>
 				<pre>func NewWatcher() (me *<a href="#Watcher">Watcher</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				
 				
@@ -465,21 +468,28 @@ records a value higher than the specified testTime.
 
 			
 				
-				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher.go?s=549:572#L18">Go</a></h3>
+				<h3 id="Watcher.Close">func (*Watcher) <a href="/target/watcher_unsafe.go?s=539:571#L18">Close</a></h3>
+				<pre>func (me *<a href="#Watcher">Watcher</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				
+				
+				
+			
+				
+				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher_unsafe.go?s=604:627#L22">Go</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) Go()</pre>
 				
 				
 				
 			
 				
-				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher.go?s=1220:1299#L52">WatchDir</a></h3>
+				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1275:1354#L56">WatchDir</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchDir(dirPath <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func())</pre>
 				
 				
 				
 			
 				
-				<h3 id="Watcher.WatchFiles">func (*Watcher) <a href="/target/watcher.go?s=1492:1596#L64">WatchFiles</a></h3>
+				<h3 id="Watcher.WatchFiles">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1547:1651#L68">WatchFiles</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchFiles(dirPath, fileNamePattern <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func(<a href="/pkg/builtin/#string">string</a>))</pre>
 				
 				

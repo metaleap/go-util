@@ -1,3 +1,5 @@
+// +build !appengine
+
 package uio
 
 import (
@@ -19,10 +21,12 @@ type Watcher struct {
 
 func NewWatcher() (me *Watcher, err error) {
 	me = &Watcher{DirHandlers: map[string][]func(){}, FileHandlers: map[string][]func(string){}}
-	if me.Watcher, err = fsnotify.NewWatcher(); err != nil {
-		me = nil
-	}
+	me.Watcher, err = fsnotify.NewWatcher()
 	return
+}
+
+func (me *Watcher) Close() error {
+	return me.Watcher.Close()
 }
 
 func (me *Watcher) Go() {
