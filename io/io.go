@@ -251,3 +251,14 @@ func WriteBinaryFile(filePath string, contents []byte) error {
 func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))
 }
+
+func watchFilesRunHandler(dirPath, fileNamePattern string, handler func(string)) {
+	var m ustr.Matcher
+	m.AddPatterns(fileNamePattern)
+	NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
+		if m.IsMatch(filepath.Base(fullPath)) {
+			handler(fullPath)
+		}
+		return true
+	}).Walk(dirPath)
+}

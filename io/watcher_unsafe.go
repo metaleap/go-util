@@ -3,7 +3,6 @@
 package uio
 
 import (
-	"os"
 	"path/filepath"
 
 	"github.com/goforks/fsnotify"
@@ -84,13 +83,6 @@ func (me *Watcher) WatchFiles(dirPath, fileNamePattern string, runHandlerNow boo
 	}
 	me.FileHandlers[filePath] = append(me.FileHandlers[filePath], handler)
 	if runHandlerNow {
-		var m ustr.Matcher
-		m.AddPatterns(fileNamePattern)
-		NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
-			if m.IsMatch(filepath.Base(fullPath)) {
-				handler(fullPath)
-			}
-			return true
-		}).Walk(dirPath)
+		watchFilesRunHandler(dirPath, fileNamePattern, handler)
 	}
 }
