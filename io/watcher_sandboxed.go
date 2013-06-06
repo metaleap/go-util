@@ -3,10 +3,7 @@
 package uio
 
 import (
-	"os"
 	"path/filepath"
-
-	ustr "github.com/metaleap/go-util/str"
 )
 
 type Watcher struct {
