@@ -18,6 +18,7 @@ var (
 	ModePerm = os.ModePerm
 )
 
+/*
 //	Implements io.Writer and discards/ingores all Write() calls.
 type DiscardWriter struct {
 }
@@ -26,6 +27,7 @@ type DiscardWriter struct {
 func (_ *DiscardWriter) Write(_ []byte) (int, error) {
 	return 0, nil
 }
+*/
 
 //	Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
 func ClearDirectory(path string, keepNamePatterns ...string) (err error) {

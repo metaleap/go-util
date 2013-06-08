@@ -128,14 +128,6 @@ Various line-savers for common I/O needs.
 				
 			
 				
-				<dd><a href="#DiscardWriter">type DiscardWriter</a></dd>
-				
-				
-					
-					<dd>&nbsp; &nbsp; <a href="#DiscardWriter.Write">func (_ *DiscardWriter) Write(_ []byte) (int, error)</a></dd>
-				
-			
-				
 				<dd><a href="#WalkerVisitor">type WalkerVisitor</a></dd>
 				
 					
@@ -199,7 +191,7 @@ Various line-savers for common I/O needs.
 		
 			
 			
-			<h2 id="ClearDirectory">func <a href="/target/io.go?s=607:679#L21">ClearDirectory</a></h2>
+			<h2 id="ClearDirectory">func <a href="/target/io.go?s=613:685#L23">ClearDirectory</a></h2>
 			<pre>func ClearDirectory(path <a href="/pkg/builtin/#string">string</a>, keepNamePatterns ...<a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
@@ -209,7 +201,7 @@ Removes any children contained in path, except those whose name matches any of t
 		
 			
 			
-			<h2 id="CopyAll">func <a href="/target/io.go?s=1171:1251#L39">CopyAll</a></h2>
+			<h2 id="CopyAll">func <a href="/target/io.go?s=1177:1257#L41">CopyAll</a></h2>
 			<pre>func CopyAll(srcDirPath, destDirPath <a href="/pkg/builtin/#string">string</a>, skipDirs *<a href="/pkg/github.com/metaleap/go-util/str/">ustr</a>.<a href="/pkg/github.com/metaleap/go-util/str/#Matcher">Matcher</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Copies all files and directories inside srcDirPath to destDirPath.
@@ -220,7 +212,7 @@ All sub-directories whose name is matched by skipDirs (optional) are skipped.
 		
 			
 			
-			<h2 id="CopyFile">func <a href="/target/io.go?s=1866:1925#L60">CopyFile</a></h2>
+			<h2 id="CopyFile">func <a href="/target/io.go?s=1872:1931#L62">CopyFile</a></h2>
 			<pre>func CopyFile(srcFilePath, destFilePath <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy from the specified local source file to the specified local destination file.
@@ -230,7 +222,7 @@ Performs an io.Copy from the specified local source file to the specified local 
 		
 			
 			
-			<h2 id="DirExists">func <a href="/target/io.go?s=2136:2168#L71">DirExists</a></h2>
+			<h2 id="DirExists">func <a href="/target/io.go?s=2142:2174#L73">DirExists</a></h2>
 			<pre>func DirExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns true if a directory exists at the specified path.
@@ -240,7 +232,7 @@ Returns true if a directory exists at the specified path.
 		
 			
 			
-			<h2 id="DirsFilesExist">func <a href="/target/io.go?s=2314:2391#L79">DirsFilesExist</a></h2>
+			<h2 id="DirsFilesExist">func <a href="/target/io.go?s=2320:2397#L81">DirsFilesExist</a></h2>
 			<pre>func DirsFilesExist(dirPath <a href="/pkg/builtin/#string">string</a>, dirOrFileNames ...<a href="/pkg/builtin/#string">string</a>) (allExist <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 Returns true if all dirOrFileNames exist in dirPath.
@@ -250,7 +242,7 @@ Returns true if all dirOrFileNames exist in dirPath.
 		
 			
 			
-			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2703:2748#L96">EnsureDirExists</a></h2>
+			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2709:2754#L98">EnsureDirExists</a></h2>
 			<pre>func EnsureDirExists(path <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 If a directory does not exist at the specified path, attempts to create it.
@@ -260,7 +252,7 @@ If a directory does not exist at the specified path, attempts to create it.
 		
 			
 			
-			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=3154:3288#L109">ExtractZipFile</a></h2>
+			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=3160:3294#L111">ExtractZipFile</a></h2>
 			<pre>func ExtractZipFile(zipFilePath, targetDirPath <a href="/pkg/builtin/#string">string</a>, deleteZipFile <a href="/pkg/builtin/#bool">bool</a>, fileNamesPrefix <a href="/pkg/builtin/#string">string</a>, fileNamesToExtract ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 Extracts a ZIP archive to the local file system.
@@ -273,7 +265,7 @@ deleteZipFile: deletes the ZIP archive file upon successful extraction.
 		
 			
 			
-			<h2 id="FileExists">func <a href="/target/io.go?s=4506:4539#L159">FileExists</a></h2>
+			<h2 id="FileExists">func <a href="/target/io.go?s=4512:4545#L161">FileExists</a></h2>
 			<pre>func FileExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns true if a file (not a directory) exists at the specified path.
@@ -283,7 +275,7 @@ Returns true if a file (not a directory) exists at the specified path.
 		
 			
 			
-			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4870:5018#L168">FindFileInfo</a></h2>
+			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4876:5024#L170">FindFileInfo</a></h2>
 			<pre>func FindFileInfo(dirPath <a href="/pkg/builtin/#string">string</a>, fileBaseName <a href="/pkg/builtin/#string">string</a>, fileExts []<a href="/pkg/builtin/#string">string</a>, tryLower <a href="/pkg/builtin/#bool">bool</a>, tryUpper <a href="/pkg/builtin/#bool">bool</a>) (fullFilePath <a href="/pkg/builtin/#string">string</a>, fileInfo *<a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>)</pre>
 			<p>
 If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
@@ -294,7 +286,7 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5773:5835#L196">ReadBinaryFile</a></h2>
+			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5779:5841#L198">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -306,7 +298,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=6180:6289#L206">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=6186:6295#L208">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a>, offset <a href="/pkg/builtin/#int64">int64</a>, byteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>, ptr interface{}) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -317,7 +309,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6566:6641#L218">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6572:6647#L220">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>, defVal <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -327,7 +319,7 @@ Reads and returns the contents of a text file with non-idiomatic error handling:
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/io.go?s=6880:6937#L230">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/io.go?s=6886:6943#L232">SaveToFile</a></h2>
 			<pre>func SaveToFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, filename <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -347,7 +339,7 @@ An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirW
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7226:7286#L244">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7232:7292#L246">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, contents []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -358,7 +350,7 @@ Also ensures the target file&#39;s directory exists.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7539:7590#L251">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7545:7596#L253">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
@@ -421,36 +413,6 @@ The deep argument sets the VisitSubDirs field.
 				<pre>func (me *<a href="#DirWalker">DirWalker</a>) Walk(dirPath <a href="/pkg/builtin/#string">string</a>) (errs []<a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Initiates me walking through the specified directory.
-</p>
-
-				
-				
-			
-		
-			
-			
-			<h2 id="DiscardWriter">type <a href="/target/io.go?s=380:409#L12">DiscardWriter</a></h2>
-			<pre>type DiscardWriter struct {
-}</pre>
-			<p>
-Implements io.Writer and discards/ingores all Write() calls.
-</p>
-
-
-			
-
-			
-
-			
-
-			
-
-			
-				
-				<h3 id="DiscardWriter.Write">func (*DiscardWriter) <a href="/target/io.go?s=420:472#L16">Write</a></h3>
-				<pre>func (_ *<a href="#DiscardWriter">DiscardWriter</a>) Write(_ []<a href="/pkg/builtin/#byte">byte</a>) (<a href="/pkg/builtin/#int">int</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
-				<p>
-No-op
 </p>
 
 				
