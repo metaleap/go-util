@@ -22,12 +22,14 @@ func IntAt(slice []int, val int) int {
 	return -1
 }
 
+//	Calls IntSetCap() only if the current capacity of *ref is less than the specified capacity.
 func IntEnsureCap(ref *[]int, capacity int) {
 	if cap(*ref) < capacity {
 		IntSetCap(ref, capacity)
 	}
 }
 
+//	Calls IntSetLen only if the current length of *ref is less than the specified length.
 func IntEnsureLen(ref *[]int, length int) {
 	if len(*ref) < length {
 		IntSetLen(ref, length)
@@ -64,6 +66,7 @@ func IntHasAny(slice []int, vals ...int) bool {
 	return false
 }
 
+//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
 func IntRemove(ref *[]int, v int, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -76,12 +79,14 @@ func IntRemove(ref *[]int, v int, all bool) {
 	}
 }
 
+//	Sets *ref to a copy of *ref with the specified capacity.
 func IntSetCap(ref *[]int, capacity int) {
 	nu := make([]int, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
+//	Sets *ref to a copy of *ref with the specified length.
 func IntSetLen(ref *[]int, length int) {
 	nu := make([]int, length)
 	copy(nu, *ref)

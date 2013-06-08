@@ -21,6 +21,7 @@ func init() {
 	Mat4Identity[3], Mat4Identity[7], Mat4Identity[11], Mat4Identity[15] = 0, 0, 0, 1
 }
 
+//	Returns a Mat4 where each cell represents the absolute value of the corresponding cell in me.
 func (me *Mat4) Abs() (abs *Mat4) {
 	abs = new(Mat4)
 	for i := 0; i < len(*me); i++ {
@@ -72,6 +73,7 @@ func (me *Mat4) Identity() {
 	*me = Mat4Identity
 }
 
+//	Sets me to the "look-at matrix" computed from the specified vectors.
 func (me *Mat4) Lookat(eyePos, lookTarget, upVec *Vec3) {
 	l := lookTarget.Sub(eyePos)
 	l.Normalize()
@@ -84,6 +86,7 @@ func (me *Mat4) Lookat(eyePos, lookTarget, upVec *Vec3) {
 	me[3], me[7], me[11], me[15] = 0, 0, 0, 1
 }
 
+//	Sets me to the "orientation matrix" computed from the specified vectors.
 func (me *Mat4) Orient(lookTarget, worldUp *Vec3) {
 	var tvN, tvU, tvV Vec3
 	tvN.SetFromNormalized(lookTarget)
@@ -189,6 +192,7 @@ func (me *Mat4) SetFromMultN(mats ...*Mat4) {
 	}
 }
 
+//	Sets me to the transpose of mat.
 func (me *Mat4) SetFromTransposeOf(mat *Mat4) {
 	me[0], me[4], me[8], me[12] = mat[0], mat[1], mat[2], mat[3]
 	me[1], me[5], me[9], me[13] = mat[4], mat[5], mat[6], mat[7]
@@ -196,6 +200,7 @@ func (me *Mat4) SetFromTransposeOf(mat *Mat4) {
 	me[3], me[7], me[11], me[15] = mat[12], mat[13], mat[14], mat[15]
 }
 
+//	Returns the transpose of me.
 func (me *Mat4) Transposed() (mat *Mat4) {
 	mat = new(Mat4)
 	mat.SetFromTransposeOf(me)
@@ -266,12 +271,14 @@ func NewMat4Identity() (mat *Mat4) {
 	return
 }
 
+//	Returns a new 4x4 matrix representing the "orientation matrix" computed from the specified vectors.
 func NewMat4Orient(lookTarget, worldUp *Vec3) (mat *Mat4) {
 	mat = new(Mat4)
 	mat.Orient(lookTarget, worldUp)
 	return
 }
 
+//	Returns a new 4x4 matrix representing the "look-at matrix" computed from the specified vectors.
 func NewMat4Lookat(eyePos, lookTarget, upVec *Vec3) (mat *Mat4) {
 	mat = new(Mat4)
 	mat.Lookat(eyePos, lookTarget, upVec)

@@ -1,2 +1,2 @@
-//	Typed-slice pseudo-generic utilities
+//	'Pseudo-generic' typed-slice utilities
 package uslice

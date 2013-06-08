@@ -1,9 +1,7 @@
 package ugo
 
 import (
-	"encoding/base64"
 	"fmt"
-	"hash"
 	"log"
 	"os"
 	"path/filepath"
@@ -20,12 +18,11 @@ func init() {
 }
 
 func dirExists(path string) bool {
-	if stat, err := os.Stat(path); err == nil {
-		return stat.IsDir()
-	}
-	return false
+	stat, err := os.Stat(path)
+	return err == nil && stat.IsDir()
 }
 
+//	Returns all paths listed in the GOPATH environment variable.
 func GoPaths() []string {
 	return strings.Split(os.Getenv("GOPATH"), string(os.PathListSeparator))
 }
@@ -34,7 +31,7 @@ func GoPaths() []string {
 //	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
 func GopathSrc(subDirNames ...string) (gps string) {
 	gp := []string{"", "src"}
-	for _, goPath := range GoPaths() {
+	for _, goPath := range GoPaths() { // in 99% of setups there's only 1 GOPATH, but hey..
 		gp[0] = goPath
 		if gps = filepath.Join(append(gp, subDirNames...)...); dirExists(gps) {
 			break
@@ -46,13 +43,7 @@ func GopathSrc(subDirNames ...string) (gps string) {
 //	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
-	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
-}
-
-//	Returns the base64.URLEncoding of the result of the specified Hash for the specified str.
-func Hash(h hash.Hash, str string) string {
-	h.Write([]byte(str))
-	return base64.URLEncoding.EncodeToString(h.Sum(nil))
+	return filepath.Join("github.com", gitHubName, GopathSrc(subDirNames...))
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -128,7 +119,7 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 	return ifFalse
 }
 
-//	If err isn't nil, short-hand for log.Println(err.Error())
+//	A convenience short-hand for log.Println(fmt.Sprintf(LogErrorFormat, err)) if err isn't nil.
 func LogError(err error) {
 	if err != nil {
 		log.Println(fmt.Sprintf(LogErrorFormat, err))
@@ -184,10 +175,10 @@ func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
 
 //	Returns the path to the current user's home directory.
 //	Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
-//	Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
+//	Specifically, returns the value of either the $userprofile (Windows) or the $HOME (others) environment variable, whichever one is set.
 func UserHomeDirPath() (dirPath string) {
-	if dirPath = os.ExpandEnv("$userprofile"); len(dirPath) == 0 {
-		dirPath = os.ExpandEnv("$HOME")
+	if dirPath = os.Getenv("userprofile"); len(dirPath) == 0 {
+		dirPath = os.Getenv("HOME")
 	}
 	return
 }

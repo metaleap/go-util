@@ -20,12 +20,14 @@ func __N__At(slice []__T__, val __T__) int {
 	return -1
 }
 
+//	Calls __N__SetCap() only if the current capacity of *ref is less than the specified capacity.
 func __N__EnsureCap(ref *[]__T__, capacity int) {
 	if cap(*ref) < capacity {
 		__N__SetCap(ref, capacity)
 	}
 }
 
+//	Calls __N__SetLen only if the current length of *ref is less than the specified length.
 func __N__EnsureLen(ref *[]__T__, length int) {
 	if len(*ref) < length {
 		__N__SetLen(ref, length)
@@ -62,6 +64,7 @@ func __N__HasAny(slice []__T__, vals ...__T__) bool {
 	return false
 }
 
+//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
 func __N__Remove(ref *[]__T__, v __T__, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -74,12 +77,14 @@ func __N__Remove(ref *[]__T__, v __T__, all bool) {
 	}
 }
 
+//	Sets *ref to a copy of *ref with the specified capacity.
 func __N__SetCap(ref *[]__T__, capacity int) {
 	nu := make([]__T__, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
+//	Sets *ref to a copy of *ref with the specified length.
 func __N__SetLen(ref *[]__T__, length int) {
 	nu := make([]__T__, length)
 	copy(nu, *ref)

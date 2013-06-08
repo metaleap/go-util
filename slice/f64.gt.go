@@ -22,12 +22,14 @@ func F64At(slice []float64, val float64) int {
 	return -1
 }
 
+//	Calls F64SetCap() only if the current capacity of *ref is less than the specified capacity.
 func F64EnsureCap(ref *[]float64, capacity int) {
 	if cap(*ref) < capacity {
 		F64SetCap(ref, capacity)
 	}
 }
 
+//	Calls F64SetLen only if the current length of *ref is less than the specified length.
 func F64EnsureLen(ref *[]float64, length int) {
 	if len(*ref) < length {
 		F64SetLen(ref, length)
@@ -64,6 +66,7 @@ func F64HasAny(slice []float64, vals ...float64) bool {
 	return false
 }
 
+//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
 func F64Remove(ref *[]float64, v float64, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -76,12 +79,14 @@ func F64Remove(ref *[]float64, v float64, all bool) {
 	}
 }
 
+//	Sets *ref to a copy of *ref with the specified capacity.
 func F64SetCap(ref *[]float64, capacity int) {
 	nu := make([]float64, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
+//	Sets *ref to a copy of *ref with the specified length.
 func F64SetLen(ref *[]float64, length int) {
 	nu := make([]float64, length)
 	copy(nu, *ref)

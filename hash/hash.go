@@ -1,6 +1,20 @@
-//	http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
 package uhash
 
+import (
+	"encoding/base64"
+	"hash"
+)
+
+//	Returns the enc's (or if nil, the base64.URLEncoding's) string-encoding of the specified Hash h for data.
+func EncodeToString(h hash.Hash, data []byte, enc *base64.Encoding) string {
+	h.Write(data)
+	if enc == nil {
+		enc = base64.URLEncoding
+	}
+	return enc.EncodeToString(h.Sum(nil))
+}
+
+//	Fowler/Noll/Vo '1'
 func Fnv1(vals []int) (h int) {
 	var ui uint64 = 14695981039346656037
 	h = int(ui)
@@ -10,6 +24,7 @@ func Fnv1(vals []int) (h int) {
 	return
 }
 
+//	Fowler/Noll/Vo '1a'
 func Fnv1a(vals []int) (h int) {
 	var ui uint64 = 14695981039346656037
 	h = int(ui)
@@ -19,6 +34,7 @@ func Fnv1a(vals []int) (h int) {
 	return
 }
 
+//	A minor update to Bernstein's hash replaces addition with XOR for the combining step.
 func ModifiedBernstein(vals []int) (h int) {
 	h = 0
 	for i := 0; i < len(vals); i++ {
@@ -27,6 +43,7 @@ func ModifiedBernstein(vals []int) (h int) {
 	return
 }
 
+//	Bob Jenkins
 func OneAtATime(vals []int) (h int) {
 	h = 0
 	for i := 0; i < len(vals); i++ {
@@ -40,6 +57,7 @@ func OneAtATime(vals []int) (h int) {
 	return
 }
 
+//	The rotating hash with XOR
 func RotatingXor(vals []int) (h int) {
 	h = 0
 	for i := 0; i < len(vals); i++ {
@@ -48,6 +66,7 @@ func RotatingXor(vals []int) (h int) {
 	return
 }
 
+//	The rotating hash with SUM
 func RotatingAdd(vals []int) (h int) {
 	h = 0
 	for i := 0; i < len(vals); i++ {

@@ -4,6 +4,7 @@ import (
 	"strings"
 )
 
+//	Uses a Matcher to determine whether value matches any one of the specified simple-patterns.
 func MatchesAny(value string, patterns ...string) bool {
 	var m Matcher
 	m.AddPatterns(patterns...)
@@ -14,14 +15,22 @@ type matcherPattern struct {
 	pattern, prefix, suffix, contains string
 }
 
-//	Matches a string against "simple-patterns".
-//	Simple-patterns are strings that can have *-wildcards only at the beginning, at the end, or both.
+//	Matches a string against 'simple-patterns': patterns that can have asterisk (*) wildcards only
+//	at the beginning ("ends-with"), at the end ("begins-with"), or both ("contains"), or not at all ("equals").
+//
+//	For more complex pattern-matching needs, go and unleash the full force of regular expressions.
+//	But I found that in a big portion of pattern-matching use-cases, I'm just doing "begins-or-ends-or-contains-or-equals" testing.
+//	Hence the conception of the 'simple-pattern'.
+//
+//	There is also an alternative Pattern type in this package. Use Matcher to match strings against multiple patterns
+//	at once, especially if the patterns don't change often and the matchings occur frequently / repeatedly.
+//	In simpler, rarer one-off matchings, Pattern may be used for simpler "setup-less" matching.
 type Matcher struct {
 	patterns     []matcherPattern
 	hasWildcards bool
 }
 
-//	Adds the specified pattern to me.
+//	Adds the specified simple-pattern to me.
 func (me *Matcher) AddPatterns(patterns ...string) {
 	var s string
 	patts := make([]matcherPattern, len(patterns))
@@ -42,7 +51,7 @@ func (me *Matcher) AddPatterns(patterns ...string) {
 	me.patterns = append(me.patterns, patts...)
 }
 
-//	Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
+//	Returns whether any of the simple-patterns specified for this Matcher contains a *-wildcard.
 func (me *Matcher) HasWildcardPatterns() bool {
 	return me.hasWildcards
 }
@@ -66,4 +75,44 @@ func (me *Matcher) IsMatch(s string) bool {
 		}
 	}
 	return false
+}
+
+//	An 'leaner' alternative to Matcher (see type docs for Matcher). This represents a
+//	single 'simple-pattern' and provides matching methods for one or multiple values.
+type Pattern string
+
+//	Returns true if all specified values match this simple-pattern.
+func (me Pattern) AllMatch(values ...string) (allMatch bool) {
+	allMatch = true
+	for _, val := range values {
+		if !me.IsMatch(val) {
+			allMatch = false
+			break
+		}
+	}
+	return
+}
+
+//	Returns the first of the specified values to match this simple-pattern, or empty if none of them match.
+func (me Pattern) AnyMatches(values ...string) (firstMatch string) {
+	for _, val := range values {
+		if me.IsMatch(val) {
+			firstMatch = val
+			break
+		}
+	}
+	return
+}
+
+//	Returns true if the specified value matches this simple-pattern.
+func (me Pattern) IsMatch(value string) bool {
+	prefix, suffix := len(me) > 0 && me[0] == '*', len(me) > 0 && me[len(me)-1] == '*'
+	if prefix && suffix {
+		return len(me) == 1 || strings.Contains(value, string(me)[1:len(me)-2])
+	} else if prefix {
+		return strings.HasSuffix(value, string(me)[1:])
+	} else if suffix {
+		return strings.HasPrefix(value, string(me)[:len(me)-1])
+	}
+	return value == string(me)
 }

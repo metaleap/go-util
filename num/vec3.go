@@ -9,6 +9,7 @@ type Vec3 struct {
 	X, Y, Z float64
 }
 
+//	Returns the maximum of the absolute values of all vector components in me.
 func (me *Vec3) AbsMax() float64 {
 	return math.Max(math.Abs(me.X), math.Max(math.Abs(me.Y), math.Abs(me.Z)))
 }
@@ -18,6 +19,7 @@ func (me *Vec3) Add(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X+vec.X, me.Y+vec.Y, me.Z+vec.Z
 }
 
+//	Returns the sum of me and vec.
 func (me *Vec3) AddTo(vec *Vec3) *Vec3 {
 	return &Vec3{me.X + vec.X, me.Y + vec.Y, me.Z + vec.Z}
 }
@@ -57,6 +59,7 @@ func (me *Vec3) AllLessOrEqual(vec *Vec3) bool {
 	return (me.X <= vec.X) && (me.Y <= vec.Y) && (me.Z <= vec.Z)
 }
 
+//	Zeroes all components in me.
 func (me *Vec3) Clear() {
 	me.X, me.Y, me.Z = 0, 0, 0
 }
@@ -74,10 +77,12 @@ func (me *Vec3) CrossNormalized(vec *Vec3) (r *Vec3) {
 	return
 }
 
+//	Returns the distance of me from vec.
 func (me *Vec3) DistanceFrom(vec *Vec3) float64 {
 	return math.Sqrt(me.SubDot(vec))
 }
 
+//	Returns the distance of me from the 'center' (zero).
 func (me *Vec3) DistanceFromZero() float64 {
 	return math.Sqrt(me.Dot(me))
 }
@@ -135,6 +140,7 @@ func (me *Vec3) MakeFinite(vec *Vec3) {
 	}
 }
 
+//	Returns the "manhattan distance" of me from vec.
 func (me *Vec3) ManhattanDistanceFrom(vec *Vec3) float64 {
 	return math.Abs(vec.X-me.X) + math.Abs(vec.Y-me.Y) + math.Abs(vec.Z-me.Z)
 }
@@ -149,7 +155,8 @@ func (me *Vec3) Min() float64 {
 	return math.Min(me.X, math.Min(me.Y, me.Z))
 }
 
-func (me *Vec3) SetMinMax(min, max *Vec3) {
+//	Clamps all components in me between min and max.
+func (me *Vec3) Clamp(min, max *Vec3) {
 	if me.X < min.X {
 		min.X = me.X
 	}
@@ -175,6 +182,7 @@ func (me *Vec3) Mult(vec *Vec3) *Vec3 {
 	return &Vec3{me.X * vec.X, me.Y * vec.Y, me.Z * vec.Z}
 }
 
+//	Returns a vector with each component in me multiplied by the corresponding specified factor.
 func (me *Vec3) Times(x, y, z float64) *Vec3 {
 	return &Vec3{me.X * x, me.Y * y, me.Z * z}
 }
@@ -184,6 +192,7 @@ func (me *Vec3) Negate() {
 	me.X, me.Y, me.Z = -me.X, -me.Y, -me.Z
 }
 
+//	Returns a vector with each component representing the negative (sign inverted) corresponding component in me.
 func (me *Vec3) Negated() *Vec3 {
 	return &Vec3{-me.X, -me.Y, -me.Z}
 }
@@ -265,6 +274,7 @@ func (me *Vec3) SetFromAdd(vec1, vec2 *Vec3) {
 	me.X, me.Y, me.Z = vec1.X+vec2.X, vec1.Y+vec2.Y, vec1.Z+vec2.Z
 }
 
+//	Sets each vector component in me to the sum of the corresponding a+b+c component.
 func (me *Vec3) SetFromAddAdd(a, b, c *Vec3) {
 	me.X, me.Y, me.Z = a.X+b.X+c.X, a.Y+b.Y+c.Y, a.Z+b.Z+c.Z
 }
@@ -279,6 +289,7 @@ func (me *Vec3) SetFromAddScaled(vec1, vec2 *Vec3, mul float64) {
 	me.X, me.Y, me.Z = vec1.X+vec2.X*mul, vec1.Y+vec2.Y*mul, vec1.Z+vec2.Z*mul
 }
 
+//	Sets each vector component in me to the result of the corresponding a+b-c component.
 func (me *Vec3) SetFromAddSub(a, b, c *Vec3) {
 	me.X, me.Y, me.Z = a.X+b.X-c.X, a.Y+b.Y-c.Y, a.Z+b.Z-c.Z
 }
@@ -398,14 +409,17 @@ func (me *Vec3) SetFromSub(vec1, vec2 *Vec3) {
 	me.X, me.Y, me.Z = vec1.X-vec2.X, vec1.Y-vec2.Y, vec1.Z-vec2.Z
 }
 
+//	Sets each vector component in me to the result of the corresponding a-b+c component.
 func (me *Vec3) SetFromSubAdd(a, b, c *Vec3) {
 	me.X, me.Y, me.Z = a.X-b.X+c.X, a.Y-b.Y+c.Y, a.Z-b.Z+c.Z
 }
 
+//	Sets each vector component in me to the result of the corresponding v1-v2*v2Scale component.
 func (me *Vec3) SetFromSubScaled(v1, v2 *Vec3, v2Scale float64) {
 	me.X, me.Y, me.Z = v1.X-v2.X*v2Scale, v1.Y-v2.Y*v2Scale, v1.Z-v2.Z*v2Scale
 }
 
+//	Sets each vector component in me to the result of the corresponding a-b-c component.
 func (me *Vec3) SetFromSubSub(a, b, c *Vec3) {
 	me.X, me.Y, me.Z = a.X-b.X-c.X, a.Y-b.Y-c.Y, a.Z-b.Z-c.Z
 }
@@ -415,10 +429,12 @@ func (me *Vec3) SetFromSubMult(sub1, sub2, mul *Vec3) {
 	me.X, me.Y, me.Z = (sub1.X-sub2.X)*mul.X, (sub1.Y-sub2.Y)*mul.Y, (sub1.Z-sub2.Z)*mul.Z
 }
 
+//	Sets all components in me to math.MaxFloat64.
 func (me *Vec3) SetToMax() {
 	me.X, me.Y, me.Z = math.MaxFloat64, math.MaxFloat64, math.MaxFloat64
 }
 
+//	Sets all components in me to -math.MaxFloat64.
 func (me *Vec3) SetToMin() {
 	me.X, me.Y, me.Z = -math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64
 }
@@ -468,6 +484,7 @@ func (me *Vec3) SubVec(vec *Vec3) {
 	me.X, me.Y, me.Z = me.X-vec.X, me.Y-vec.Y, me.Z-vec.Z
 }
 
+//	Transform this coordinate vector according to the specified transformation matrix.
 func (me *Vec3) TransformCoord(mat *Mat4) {
 	var q Vec4
 	q.MultMat4Vec3(mat, me)
@@ -475,6 +492,7 @@ func (me *Vec3) TransformCoord(mat *Mat4) {
 	me.X, me.Y, me.Z = q.X*q.W, q.Y*q.W, q.Z*q.W
 }
 
+//	Transform this normal vector according to the specified transformation matrix.
 func (me *Vec3) TransformNormal(mat *Mat4, absMat bool) {
 	m11, m21, m31 := mat[0], mat[1], mat[2]
 	m12, m22, m32 := mat[4], mat[5], mat[6]

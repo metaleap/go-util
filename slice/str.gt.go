@@ -42,12 +42,14 @@ func StrAt(slice []string, val string) int {
 	return -1
 }
 
+//	Calls StrSetCap() only if the current capacity of *ref is less than the specified capacity.
 func StrEnsureCap(ref *[]string, capacity int) {
 	if cap(*ref) < capacity {
 		StrSetCap(ref, capacity)
 	}
 }
 
+//	Calls StrSetLen only if the current length of *ref is less than the specified length.
 func StrEnsureLen(ref *[]string, length int) {
 	if len(*ref) < length {
 		StrSetLen(ref, length)
@@ -84,6 +86,7 @@ func StrHasAny(slice []string, vals ...string) bool {
 	return false
 }
 
+//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
 func StrRemove(ref *[]string, v string, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -96,12 +99,14 @@ func StrRemove(ref *[]string, v string, all bool) {
 	}
 }
 
+//	Sets *ref to a copy of *ref with the specified capacity.
 func StrSetCap(ref *[]string, capacity int) {
 	nu := make([]string, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
+//	Sets *ref to a copy of *ref with the specified length.
 func StrSetLen(ref *[]string, length int) {
 	nu := make([]string, length)
 	copy(nu, *ref)

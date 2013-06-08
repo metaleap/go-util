@@ -22,12 +22,14 @@ func BoolAt(slice []bool, val bool) int {
 	return -1
 }
 
+//	Calls BoolSetCap() only if the current capacity of *ref is less than the specified capacity.
 func BoolEnsureCap(ref *[]bool, capacity int) {
 	if cap(*ref) < capacity {
 		BoolSetCap(ref, capacity)
 	}
 }
 
+//	Calls BoolSetLen only if the current length of *ref is less than the specified length.
 func BoolEnsureLen(ref *[]bool, length int) {
 	if len(*ref) < length {
 		BoolSetLen(ref, length)
@@ -64,6 +66,7 @@ func BoolHasAny(slice []bool, vals ...bool) bool {
 	return false
 }
 
+//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
 func BoolRemove(ref *[]bool, v bool, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -76,12 +79,14 @@ func BoolRemove(ref *[]bool, v bool, all bool) {
 	}
 }
 
+//	Sets *ref to a copy of *ref with the specified capacity.
 func BoolSetCap(ref *[]bool, capacity int) {
 	nu := make([]bool, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
+//	Sets *ref to a copy of *ref with the specified length.
 func BoolSetLen(ref *[]bool, length int) {
 	nu := make([]bool, length)
 	copy(nu, *ref)

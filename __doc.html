@@ -79,9 +79,6 @@ A tiny assortement of occasionally-useful Go utilities.
 				<dd><a href="#GopathSrcGithub">func GopathSrcGithub(gitHubName string, subDirNames ...string) string</a></dd>
 			
 				
-				<dd><a href="#Hash">func Hash(h hash.Hash, str string) string</a></dd>
-			
-				
 				<dd><a href="#Ifb">func Ifb(cond, ifTrue, ifFalse bool) bool</a></dd>
 			
 				
@@ -156,14 +153,17 @@ A tiny assortement of occasionally-useful Go utilities.
 		
 			
 			
-			<h2 id="GoPaths">func <a href="/target/util.go?s=324:347#L19">GoPaths</a></h2>
+			<h2 id="GoPaths">func <a href="/target/util.go?s=340:363#L16">GoPaths</a></h2>
 			<pre>func GoPaths() []<a href="/pkg/builtin/#string">string</a></pre>
-			
+			<p>
+Returns all paths listed in the GOPATH environment variable.
+</p>
+
 			
 		
 			
 			
-			<h2 id="GopathSrc">func <a href="/target/util.go?s=638:688#L25">GopathSrc</a></h2>
+			<h2 id="GopathSrc">func <a href="/target/util.go?s=654:704#L22">GopathSrc</a></h2>
 			<pre>func GopathSrc(subDirNames ...<a href="/pkg/builtin/#string">string</a>) (gps <a href="/pkg/builtin/#string">string</a>)</pre>
 			<p>
 Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
@@ -174,7 +174,7 @@ Example: util.GopathSrc(&#34;tools&#34;, &#34;importers&#34;, &#34;sql&#34;) = &
 		
 			
 			
-			<h2 id="GopathSrcGithub">func <a href="/target/util.go?s=1114:1183#L38">GopathSrcGithub</a></h2>
+			<h2 id="GopathSrcGithub">func <a href="/target/util.go?s=1183:1252#L35">GopathSrcGithub</a></h2>
 			<pre>func GopathSrcGithub(gitHubName <a href="/pkg/builtin/#string">string</a>, subDirNames ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
@@ -185,17 +185,7 @@ Example: util.GopathSrcGithub(&#34;metaleap&#34;, &#34;go-util&#34;, &#34;num&#3
 		
 			
 			
-			<h2 id="Hash">func <a href="/target/util.go?s=1363:1404#L43">Hash</a></h2>
-			<pre>func Hash(h <a href="/pkg/hash/">hash</a>.<a href="/pkg/hash/#Hash">Hash</a>, str <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
-			<p>
-Returns the base64.URLEncoding of the result of the specified Hash for the specified str.
-</p>
-
-			
-		
-			
-			
-			<h2 id="Ifb">func <a href="/target/util.go?s=1548:1589#L49">Ifb</a></h2>
+			<h2 id="Ifb">func <a href="/target/util.go?s=1395:1436#L40">Ifb</a></h2>
 			<pre>func Ifb(cond, ifTrue, ifFalse <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -205,7 +195,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifd">func <a href="/target/util.go?s=1764:1816#L58">Ifd</a></h2>
+			<h2 id="Ifd">func <a href="/target/util.go?s=1611:1663#L49">Ifd</a></h2>
 			<pre>func Ifd(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -215,7 +205,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi">func <a href="/target/util.go?s=1930:1974#L66">Ifi</a></h2>
+			<h2 id="Ifi">func <a href="/target/util.go?s=1777:1821#L57">Ifi</a></h2>
 			<pre>func Ifi(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -225,7 +215,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi16">func <a href="/target/util.go?s=2088:2138#L74">Ifi16</a></h2>
+			<h2 id="Ifi16">func <a href="/target/util.go?s=1935:1985#L65">Ifi16</a></h2>
 			<pre>func Ifi16(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int16">int16</a>) <a href="/pkg/builtin/#int16">int16</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -235,7 +225,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi32">func <a href="/target/util.go?s=2252:2302#L82">Ifi32</a></h2>
+			<h2 id="Ifi32">func <a href="/target/util.go?s=2099:2149#L73">Ifi32</a></h2>
 			<pre>func Ifi32(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int32">int32</a>) <a href="/pkg/builtin/#int32">int32</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -245,7 +235,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifi64">func <a href="/target/util.go?s=2416:2466#L90">Ifi64</a></h2>
+			<h2 id="Ifi64">func <a href="/target/util.go?s=2263:2313#L81">Ifi64</a></h2>
 			<pre>func Ifi64(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#int64">int64</a>) <a href="/pkg/builtin/#int64">int64</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -255,7 +245,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifs">func <a href="/target/util.go?s=2580:2637#L98">Ifs</a></h2>
+			<h2 id="Ifs">func <a href="/target/util.go?s=2427:2484#L89">Ifs</a></h2>
 			<pre>func Ifs(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue <a href="/pkg/builtin/#string">string</a>, ifFalse <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -265,7 +255,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifu32">func <a href="/target/util.go?s=2751:2803#L106">Ifu32</a></h2>
+			<h2 id="Ifu32">func <a href="/target/util.go?s=2598:2650#L97">Ifu32</a></h2>
 			<pre>func Ifu32(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#uint32">uint32</a>) <a href="/pkg/builtin/#uint32">uint32</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -275,7 +265,7 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="Ifu64">func <a href="/target/util.go?s=2917:2969#L114">Ifu64</a></h2>
+			<h2 id="Ifu64">func <a href="/target/util.go?s=2764:2816#L105">Ifu64</a></h2>
 			<pre>func Ifu64(cond <a href="/pkg/builtin/#bool">bool</a>, ifTrue, ifFalse <a href="/pkg/builtin/#uint64">uint64</a>) <a href="/pkg/builtin/#uint64">uint64</a></pre>
 			<p>
 Returns ifTrue if cond is true, otherwise returns ifFalse.
@@ -285,17 +275,17 @@ Returns ifTrue if cond is true, otherwise returns ifFalse.
 		
 			
 			
-			<h2 id="LogError">func <a href="/target/util.go?s=3082:3106#L122">LogError</a></h2>
+			<h2 id="LogError">func <a href="/target/util.go?s=2964:2988#L113">LogError</a></h2>
 			<pre>func LogError(err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
-If err isn&#39;t nil, short-hand for log.Println(err.Error())
+A convenience short-hand for log.Println(fmt.Sprintf(LogErrorFormat, err)) if err isn&#39;t nil.
 </p>
 
 			
 		
 			
 			
-			<h2 id="OSName">func <a href="/target/util.go?s=3277:3315#L129">OSName</a></h2>
+			<h2 id="OSName">func <a href="/target/util.go?s=3159:3197#L120">OSName</a></h2>
 			<pre>func OSName(goOS <a href="/pkg/builtin/#string">string</a>) (name <a href="/pkg/builtin/#string">string</a>)</pre>
 			<p>
 Returns the human-readable representation associated with the specified GOOS name in OSNames.
@@ -305,7 +295,7 @@ Returns the human-readable representation associated with the specified GOOS nam
 		
 			
 			
-			<h2 id="ParseVersion">func <a href="/target/util.go?s=3717:3783#L147">ParseVersion</a></h2>
+			<h2 id="ParseVersion">func <a href="/target/util.go?s=3599:3665#L138">ParseVersion</a></h2>
 			<pre>func ParseVersion(verstr <a href="/pkg/builtin/#string">string</a>) (majorMinor [2]<a href="/pkg/builtin/#int">int</a>, both <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 Attempts to extract major and minor version components from a string that begins with a version number.
@@ -316,12 +306,12 @@ Example: returns []int{3, 2} and float64(3.2) for a verstr that is &#34;3.2.0 - 
 		
 			
 			
-			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=4521:4560#L178">UserHomeDirPath</a></h2>
+			<h2 id="UserHomeDirPath">func <a href="/target/util.go?s=4422:4461#L169">UserHomeDirPath</a></h2>
 			<pre>func UserHomeDirPath() (dirPath <a href="/pkg/builtin/#string">string</a>)</pre>
 			<p>
 Returns the path to the current user&#39;s home directory.
 Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
-Specifically, returns the value of either the $userprofile or the $HOME environment variable, whichever one is set.
+Specifically, returns the value of either the $userprofile (Windows) or the $HOME (others) environment variable, whichever one is set.
 </p>
 
 			

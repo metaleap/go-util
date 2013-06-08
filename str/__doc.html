@@ -181,6 +181,20 @@ Various line-savers for common string-processing needs.
 					<dd>&nbsp; &nbsp; <a href="#Matcher.IsMatch">func (me *Matcher) IsMatch(s string) bool</a></dd>
 				
 			
+				
+				<dd><a href="#Pattern">type Pattern</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Pattern.AllMatch">func (me Pattern) AllMatch(values ...string) (allMatch bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Pattern.AnyMatches">func (me Pattern) AnyMatches(values ...string) (firstMatch string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Pattern.IsMatch">func (me Pattern) IsMatch(value string) bool</a></dd>
+				
+			
 			
 			</dl>
 			</div><!-- #manual-nav -->
@@ -392,9 +406,12 @@ Returns a string representation of s with all non-Letter-runes removed.
 		
 			
 			
-			<h2 id="MatchesAny">func <a href="/target/matcher.go?s=37:91#L1">MatchesAny</a></h2>
+			<h2 id="MatchesAny">func <a href="/target/matcher.go?s=132:186#L1">MatchesAny</a></h2>
 			<pre>func MatchesAny(value <a href="/pkg/builtin/#string">string</a>, patterns ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
-			
+			<p>
+Uses a Matcher to determine whether value matches any one of the specified simple-patterns.
+</p>
+
 			
 		
 			
@@ -532,20 +549,20 @@ A convenience wrapper for bytes.Buffer.
 
 			
 				
-				<h3 id="Buffer.Write">func (*Buffer) <a href="/target/buf.go?s=199:261#L4">Write</a></h3>
+				<h3 id="Buffer.Write">func (*Buffer) <a href="/target/buf.go?s=211:273#L4">Write</a></h3>
 				<pre>func (me *<a href="#Buffer">Buffer</a>) Write(format <a href="/pkg/builtin/#string">string</a>, fmtArgs ...interface{})</pre>
 				<p>
-Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format, fmtArgs...))
+Convenience short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format, fmtArgs...))
 </p>
 
 				
 				
 			
 				
-				<h3 id="Buffer.Writeln">func (*Buffer) <a href="/target/buf.go?s=448:512#L12">Writeln</a></h3>
+				<h3 id="Buffer.Writeln">func (*Buffer) <a href="/target/buf.go?s=472:536#L12">Writeln</a></h3>
 				<pre>func (me *<a href="#Buffer">Buffer</a>) Writeln(format <a href="/pkg/builtin/#string">string</a>, fmtArgs ...interface{})</pre>
 				<p>
-Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs...))
+Convenience short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs...))
 </p>
 
 				
@@ -554,13 +571,23 @@ Short-hand for bytes.Buffer.WriteString(fmt.Sprintf(format+&#34;\n&#34;, fmtArgs
 		
 			
 			
-			<h2 id="Matcher">type <a href="/target/matcher.go?s=387:460#L9">Matcher</a></h2>
+			<h2 id="Matcher">type <a href="/target/matcher.go?s=1146:1219#L18">Matcher</a></h2>
 			<pre>type Matcher struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
-Matches a string against &#34;simple-patterns&#34;.
-Simple-patterns are strings that can have *-wildcards only at the beginning, at the end, or both.
+Matches a string against &#39;simple-patterns&#39;: patterns that can have asterisk (*) wildcards only
+at the beginning (&#34;ends-with&#34;), at the end (&#34;begins-with&#34;), or both (&#34;contains&#34;), or not at all (&#34;equals&#34;).
+</p>
+<p>
+For more complex pattern-matching needs, go and unleash the full force of regular expressions.
+But I found that in a big portion of pattern-matching use-cases, I&#39;m just doing &#34;begins-or-ends-or-contains-or-equals&#34; testing.
+Hence the conception of the &#39;simple-pattern&#39;.
+</p>
+<p>
+There is also an alternative Pattern type in this package. Use Matcher to match strings against multiple patterns
+at once, especially if the patterns don&#39;t change often and the matchings occur frequently / repeatedly.
+In simpler, rarer one-off matchings, Pattern may be used for simpler &#34;setup-less&#34; matching.
 </p>
 
 
@@ -574,30 +601,80 @@ Simple-patterns are strings that can have *-wildcards only at the beginning, at 
 
 			
 				
-				<h3 id="Matcher.AddPatterns">func (*Matcher) <a href="/target/matcher.go?s=499:549#L15">AddPatterns</a></h3>
+				<h3 id="Matcher.AddPatterns">func (*Matcher) <a href="/target/matcher.go?s=1265:1315#L24">AddPatterns</a></h3>
 				<pre>func (me *<a href="#Matcher">Matcher</a>) AddPatterns(patterns ...<a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
-Adds the specified pattern to me.
+Adds the specified simple-pattern to me.
 </p>
 
 				
 				
 			
 				
-				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=1199:1244#L36">HasWildcardPatterns</a></h3>
+				<h3 id="Matcher.HasWildcardPatterns">func (*Matcher) <a href="/target/matcher.go?s=1972:2017#L45">HasWildcardPatterns</a></h3>
 				<pre>func (me *<a href="#Matcher">Matcher</a>) HasWildcardPatterns() <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
-Returns whether any of the patterns specified for this Matcher contains a *-wildcard.
+Returns whether any of the simple-patterns specified for this Matcher contains a *-wildcard.
 </p>
 
 				
 				
 			
 				
-				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=1315:1356#L41">IsMatch</a></h3>
+				<h3 id="Matcher.IsMatch">func (*Matcher) <a href="/target/matcher.go?s=2088:2129#L50">IsMatch</a></h3>
 				<pre>func (me *<a href="#Matcher">Matcher</a>) IsMatch(s <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Matches s against all patterns in me.
+</p>
+
+				
+				
+			
+		
+			
+			
+			<h2 id="Pattern">type <a href="/target/matcher.go?s=2768:2787#L72">Pattern</a></h2>
+			<pre>type Pattern <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+An &#39;leaner&#39; alternative to Matcher (see type docs for Matcher). This represents a
+single &#39;simple-pattern&#39; and provides matching methods for one or multiple values.
+</p>
+
+
+			
+
+			
+
+			
+
+			
+
+			
+				
+				<h3 id="Pattern.AllMatch">func (Pattern) <a href="/target/matcher.go?s=2856:2916#L75">AllMatch</a></h3>
+				<pre>func (me <a href="#Pattern">Pattern</a>) AllMatch(values ...<a href="/pkg/builtin/#string">string</a>) (allMatch <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Returns true if all specified values match this simple-pattern.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Pattern.AnyMatches">func (Pattern) <a href="/target/matcher.go?s=3144:3210#L87">AnyMatches</a></h3>
+				<pre>func (me <a href="#Pattern">Pattern</a>) AnyMatches(values ...<a href="/pkg/builtin/#string">string</a>) (firstMatch <a href="/pkg/builtin/#string">string</a>)</pre>
+				<p>
+Returns the first of the specified values to match this simple-pattern, or empty if none of them match.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Pattern.IsMatch">func (Pattern) <a href="/target/matcher.go?s=3381:3425#L98">IsMatch</a></h3>
+				<pre>func (me <a href="#Pattern">Pattern</a>) IsMatch(value <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Returns true if the specified value matches this simple-pattern.
 </p>
 
 				

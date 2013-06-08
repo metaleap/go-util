@@ -333,6 +333,9 @@ A few maths-helpers, plus vectors, matrices and quaternions.
 					<dd>&nbsp; &nbsp; <a href="#Vec3.AllLessOrEqual">func (me *Vec3) AllLessOrEqual(vec *Vec3) bool</a></dd>
 				
 					
+					<dd>&nbsp; &nbsp; <a href="#Vec3.Clamp">func (me *Vec3) Clamp(min, max *Vec3)</a></dd>
+				
+					
 					<dd>&nbsp; &nbsp; <a href="#Vec3.Clear">func (me *Vec3) Clear()</a></dd>
 				
 					
@@ -499,9 +502,6 @@ A few maths-helpers, plus vectors, matrices and quaternions.
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Vec3.SetFromSwapSign">func (me *Vec3) SetFromSwapSign(vec *Vec3)</a></dd>
-				
-					
-					<dd>&nbsp; &nbsp; <a href="#Vec3.SetMinMax">func (me *Vec3) SetMinMax(min, max *Vec3)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Vec3.SetToMax">func (me *Vec3) SetToMax()</a></dd>
@@ -749,7 +749,7 @@ Calls the Identity() method on all specified mats.
 		
 			
 			
-			<h2 id="Mat4Identities">func <a href="/target/mat4.go?s=10334:10368#L229">Mat4Identities</a></h2>
+			<h2 id="Mat4Identities">func <a href="/target/mat4.go?s=10647:10681#L234">Mat4Identities</a></h2>
 			<pre>func Mat4Identities(mats ...*<a href="#Mat4">Mat4</a>)</pre>
 			<p>
 Calls the Identity() method on all specified mats.
@@ -915,7 +915,7 @@ Represents a 4x4 column-major matrix.
 
 			
 				
-				<h3 id="NewMat4Add">func <a href="/target/mat4.go?s=10492:10531#L236">NewMat4Add</a></h3>
+				<h3 id="NewMat4Add">func <a href="/target/mat4.go?s=10805:10844#L241">NewMat4Add</a></h3>
 				<pre>func NewMat4Add(a, b *<a href="#Mat4">Mat4</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix representing the result of adding a to b.
@@ -924,7 +924,7 @@ Returns a new 4x4 matrix representing the result of adding a to b.
 				
 			
 				
-				<h3 id="NewMat4Frustum">func <a href="/target/mat4.go?s=10952:11028#L246">NewMat4Frustum</a></h3>
+				<h3 id="NewMat4Frustum">func <a href="/target/mat4.go?s=11265:11341#L251">NewMat4Frustum</a></h3>
 				<pre>func NewMat4Frustum(left, right, bottom, top, near, far <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix representing the specified frustum.
@@ -933,7 +933,7 @@ Returns a new 4x4 matrix representing the specified frustum.
 				
 			
 				
-				<h3 id="NewMat4Identity">func <a href="/target/mat4.go?s=11171:11205#L253">NewMat4Identity</a></h3>
+				<h3 id="NewMat4Identity">func <a href="/target/mat4.go?s=11484:11518#L258">NewMat4Identity</a></h3>
 				<pre>func NewMat4Identity() (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix representing the identity matrix.
@@ -942,13 +942,16 @@ Returns a new 4x4 matrix representing the identity matrix.
 				
 			
 				
-				<h3 id="NewMat4Lookat">func <a href="/target/mat4.go?s=11373:11436#L265">NewMat4Lookat</a></h3>
+				<h3 id="NewMat4Lookat">func <a href="/target/mat4.go?s=11888:11951#L272">NewMat4Lookat</a></h3>
 				<pre>func NewMat4Lookat(eyePos, lookTarget, upVec *<a href="#Vec3">Vec3</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Returns a new 4x4 matrix representing the &#34;look-at matrix&#34; computed from the specified vectors.
+</p>
+
 				
 			
 				
-				<h3 id="NewMat4Mult1">func <a href="/target/mat4.go?s=11597:11646#L272">NewMat4Mult1</a></h3>
+				<h3 id="NewMat4Mult1">func <a href="/target/mat4.go?s=12112:12161#L279">NewMat4Mult1</a></h3>
 				<pre>func NewMat4Mult1(m *<a href="#Mat4">Mat4</a>, v <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix representing the result of multiplying all values in m with v.
@@ -957,7 +960,7 @@ Returns a new 4x4 matrix representing the result of multiplying all values in m 
 				
 			
 				
-				<h3 id="NewMat4Mult4">func <a href="/target/mat4.go?s=12033:12078#L282">NewMat4Mult4</a></h3>
+				<h3 id="NewMat4Mult4">func <a href="/target/mat4.go?s=12548:12593#L289">NewMat4Mult4</a></h3>
 				<pre>func NewMat4Mult4(one, two *<a href="#Mat4">Mat4</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the result of multiplying one with two.
@@ -966,7 +969,7 @@ Returns a new 4x4 matrix that represents the result of multiplying one with two.
 				
 			
 				
-				<h3 id="NewMat4MultN">func <a href="/target/mat4.go?s=12234:12278#L289">NewMat4MultN</a></h3>
+				<h3 id="NewMat4MultN">func <a href="/target/mat4.go?s=12749:12793#L296">NewMat4MultN</a></h3>
 				<pre>func NewMat4MultN(mats ...*<a href="#Mat4">Mat4</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the result of multiplying all mats with one another.
@@ -975,13 +978,16 @@ Returns a new 4x4 matrix that represents the result of multiplying all mats with
 				
 			
 				
-				<h3 id="NewMat4Orient">func <a href="/target/mat4.go?s=11252:11309#L259">NewMat4Orient</a></h3>
+				<h3 id="NewMat4Orient">func <a href="/target/mat4.go?s=11668:11725#L265">NewMat4Orient</a></h3>
 				<pre>func NewMat4Orient(lookTarget, worldUp *<a href="#Vec3">Vec3</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Returns a new 4x4 matrix representing the &#34;orientation matrix&#34; computed from the specified vectors.
+</p>
+
 				
 			
 				
-				<h3 id="NewMat4Perspective">func <a href="/target/mat4.go?s=12425:12493#L296">NewMat4Perspective</a></h3>
+				<h3 id="NewMat4Perspective">func <a href="/target/mat4.go?s=12940:13008#L303">NewMat4Perspective</a></h3>
 				<pre>func NewMat4Perspective(fovY, aspect, near, far <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents the specified perspective-projection matrix.
@@ -990,7 +996,7 @@ Returns a new 4x4 matrix that represents the specified perspective-projection ma
 				
 			
 				
-				<h3 id="NewMat4RotationX">func <a href="/target/mat4.go?s=12778:12824#L309">NewMat4RotationX</a></h3>
+				<h3 id="NewMat4RotationX">func <a href="/target/mat4.go?s=13293:13339#L316">NewMat4RotationX</a></h3>
 				<pre>func NewMat4RotationX(rad <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the X asis.
@@ -999,7 +1005,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4RotationY">func <a href="/target/mat4.go?s=12966:13012#L316">NewMat4RotationY</a></h3>
+				<h3 id="NewMat4RotationY">func <a href="/target/mat4.go?s=13481:13527#L323">NewMat4RotationY</a></h3>
 				<pre>func NewMat4RotationY(rad <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the Y asis.
@@ -1008,7 +1014,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4RotationZ">func <a href="/target/mat4.go?s=13154:13200#L323">NewMat4RotationZ</a></h3>
+				<h3 id="NewMat4RotationZ">func <a href="/target/mat4.go?s=13669:13715#L330">NewMat4RotationZ</a></h3>
 				<pre>func NewMat4RotationZ(rad <a href="/pkg/builtin/#float64">float64</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that representing a rotation of rad radians around the Z asis.
@@ -1017,7 +1023,7 @@ Returns a new 4x4 matrix that representing a rotation of rad radians around the 
 				
 			
 				
-				<h3 id="NewMat4Scaling">func <a href="/target/mat4.go?s=13331:13373#L330">NewMat4Scaling</a></h3>
+				<h3 id="NewMat4Scaling">func <a href="/target/mat4.go?s=13846:13888#L337">NewMat4Scaling</a></h3>
 				<pre>func NewMat4Scaling(vec *<a href="#Vec3">Vec3</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a transformation of &#34;scale by vec&#34;.
@@ -1026,7 +1032,7 @@ Returns a new 4x4 matrix that represents a transformation of &#34;scale by vec&#
 				
 			
 				
-				<h3 id="NewMat4Sub">func <a href="/target/mat4.go?s=13477:13516#L337">NewMat4Sub</a></h3>
+				<h3 id="NewMat4Sub">func <a href="/target/mat4.go?s=13992:14031#L344">NewMat4Sub</a></h3>
 				<pre>func NewMat4Sub(a, b *<a href="#Mat4">Mat4</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a minus b.
@@ -1035,7 +1041,7 @@ Returns a new 4x4 matrix that represents a minus b.
 				
 			
 				
-				<h3 id="NewMat4Translation">func <a href="/target/mat4.go?s=13957:14003#L347">NewMat4Translation</a></h3>
+				<h3 id="NewMat4Translation">func <a href="/target/mat4.go?s=14472:14518#L354">NewMat4Translation</a></h3>
 				<pre>func NewMat4Translation(vec *<a href="#Vec3">Vec3</a>) (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a new 4x4 matrix that represents a transformation of &#34;translate by vec&#34;.
@@ -1046,14 +1052,17 @@ Returns a new 4x4 matrix that represents a transformation of &#34;translate by v
 
 			
 				
-				<h3 id="Mat4.Abs">func (*Mat4) <a href="/target/mat4.go?s=513:546#L14">Abs</a></h3>
+				<h3 id="Mat4.Abs">func (*Mat4) <a href="/target/mat4.go?s=610:643#L15">Abs</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Abs() (abs *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Returns a Mat4 where each cell represents the absolute value of the corresponding cell in me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Mat4.Add">func (*Mat4) <a href="/target/mat4.go?s=672:702#L23">Add</a></h3>
+				<h3 id="Mat4.Add">func (*Mat4) <a href="/target/mat4.go?s=769:799#L24">Add</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Add(mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Adds mat to this 4x4 matrix.
@@ -1063,7 +1072,7 @@ Adds mat to this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Clear">func (*Mat4) <a href="/target/mat4.go?s=1093:1116#L31">Clear</a></h3>
+				<h3 id="Mat4.Clear">func (*Mat4) <a href="/target/mat4.go?s=1190:1213#L32">Clear</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Clear()</pre>
 				<p>
 Zeroes this 4x4 matrix.
@@ -1073,7 +1082,7 @@ Zeroes this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Clone">func (*Mat4) <a href="/target/mat4.go?s=1187:1222#L36">Clone</a></h3>
+				<h3 id="Mat4.Clone">func (*Mat4) <a href="/target/mat4.go?s=1284:1319#L37">Clone</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Clone() (mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Returns a pointer to a newly allocated copy of me.
@@ -1083,7 +1092,7 @@ Returns a pointer to a newly allocated copy of me.
 				
 			
 				
-				<h3 id="Mat4.CopyFrom">func (*Mat4) <a href="/target/mat4.go?s=1320:1355#L43">CopyFrom</a></h3>
+				<h3 id="Mat4.CopyFrom">func (*Mat4) <a href="/target/mat4.go?s=1417:1452#L44">CopyFrom</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) CopyFrom(mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Sets this 4x4 matrix to the same values as mat.
@@ -1093,7 +1102,7 @@ Sets this 4x4 matrix to the same values as mat.
 				
 			
 				
-				<h3 id="Mat4.CopyTo">func (*Mat4) <a href="/target/mat4.go?s=1424:1457#L48">CopyTo</a></h3>
+				<h3 id="Mat4.CopyTo">func (*Mat4) <a href="/target/mat4.go?s=1521:1554#L49">CopyTo</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) CopyTo(mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Sets mat to the same values as this 4x4 matrix.
@@ -1103,7 +1112,7 @@ Sets mat to the same values as this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.Frustum">func (*Mat4) <a href="/target/mat4.go?s=1535:1603#L53">Frustum</a></h3>
+				<h3 id="Mat4.Frustum">func (*Mat4) <a href="/target/mat4.go?s=1632:1700#L54">Frustum</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Frustum(left, right, bottom, top, near, far <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 4x4 matrix to represent the specified frustum.
@@ -1113,7 +1122,7 @@ Sets this 4x4 matrix to represent the specified frustum.
 				
 			
 				
-				<h3 id="Mat4.Identity">func (*Mat4) <a href="/target/mat4.go?s=1995:2021#L61">Identity</a></h3>
+				<h3 id="Mat4.Identity">func (*Mat4) <a href="/target/mat4.go?s=2092:2118#L62">Identity</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Identity()</pre>
 				<p>
 Sets this 4x4 matrix to Mat4Identity.
@@ -1123,14 +1132,17 @@ Sets this 4x4 matrix to Mat4Identity.
 				
 			
 				
-				<h3 id="Mat4.Lookat">func (*Mat4) <a href="/target/mat4.go?s=2047:2102#L65">Lookat</a></h3>
+				<h3 id="Mat4.Lookat">func (*Mat4) <a href="/target/mat4.go?s=2216:2271#L67">Lookat</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Lookat(eyePos, lookTarget, upVec *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets me to the &#34;look-at matrix&#34; computed from the specified vectors.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Mat4.Mult1">func (*Mat4) <a href="/target/mat4.go?s=2878:2910#L89">Mult1</a></h3>
+				<h3 id="Mat4.Mult1">func (*Mat4) <a href="/target/mat4.go?s=3123:3155#L92">Mult1</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Mult1(v <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Multiplies all values in this 4x4 matrix with v.
@@ -1140,14 +1152,17 @@ Multiplies all values in this 4x4 matrix with v.
 				
 			
 				
-				<h3 id="Mat4.Orient">func (*Mat4) <a href="/target/mat4.go?s=2420:2469#L77">Orient</a></h3>
+				<h3 id="Mat4.Orient">func (*Mat4) <a href="/target/mat4.go?s=2665:2714#L80">Orient</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Orient(lookTarget, worldUp *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets me to the &#34;orientation matrix&#34; computed from the specified vectors.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Mat4.Perspective">func (*Mat4) <a href="/target/mat4.go?s=3359:3434#L98">Perspective</a></h3>
+				<h3 id="Mat4.Perspective">func (*Mat4) <a href="/target/mat4.go?s=3604:3679#L101">Perspective</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Perspective(fovYDeg, a, n, f <a href="/pkg/builtin/#float64">float64</a>) (fovYRadHalf <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 4x4 matrix to the specified perspective-projection matrix.
@@ -1158,7 +1173,7 @@ fovYRad: vertical field-of-view angle in radians. a: aspect ratio. n: near-plane
 				
 			
 				
-				<h3 id="Mat4.RotationX">func (*Mat4) <a href="/target/mat4.go?s=4440:4478#L121">RotationX</a></h3>
+				<h3 id="Mat4.RotationX">func (*Mat4) <a href="/target/mat4.go?s=4685:4723#L124">RotationX</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) RotationX(rad <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the X asis&#34;.
@@ -1168,7 +1183,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.RotationY">func (*Mat4) <a href="/target/mat4.go?s=4803:4841#L130">RotationY</a></h3>
+				<h3 id="Mat4.RotationY">func (*Mat4) <a href="/target/mat4.go?s=5048:5086#L133">RotationY</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) RotationY(rad <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the Y asis&#34;.
@@ -1178,7 +1193,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.RotationZ">func (*Mat4) <a href="/target/mat4.go?s=5166:5204#L139">RotationZ</a></h3>
+				<h3 id="Mat4.RotationZ">func (*Mat4) <a href="/target/mat4.go?s=5411:5449#L142">RotationZ</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) RotationZ(rad <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians around the Z asis&#34;.
@@ -1188,7 +1203,7 @@ Sets this 4x4 matrix to a rotation matrix representing &#34;rotate rad radians a
 				
 			
 				
-				<h3 id="Mat4.Scaling">func (*Mat4) <a href="/target/mat4.go?s=5510:5544#L148">Scaling</a></h3>
+				<h3 id="Mat4.Scaling">func (*Mat4) <a href="/target/mat4.go?s=5755:5789#L151">Scaling</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Scaling(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 4x4 matrix to a transformation matrix representing &#34;scale by vec&#34;
@@ -1198,7 +1213,7 @@ Sets this 4x4 matrix to a transformation matrix representing &#34;scale by vec&#
 				
 			
 				
-				<h3 id="Mat4.SetFromMult4">func (*Mat4) <a href="/target/mat4.go?s=5799:5843#L156">SetFromMult4</a></h3>
+				<h3 id="Mat4.SetFromMult4">func (*Mat4) <a href="/target/mat4.go?s=6044:6088#L159">SetFromMult4</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) SetFromMult4(one, two *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Sets this 4x4 matrix to the result of multiplying one with two.
@@ -1208,7 +1223,7 @@ Sets this 4x4 matrix to the result of multiplying one with two.
 				
 			
 				
-				<h3 id="Mat4.SetFromMultN">func (*Mat4) <a href="/target/mat4.go?s=7153:7196#L164">SetFromMultN</a></h3>
+				<h3 id="Mat4.SetFromMultN">func (*Mat4) <a href="/target/mat4.go?s=7398:7441#L167">SetFromMultN</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) SetFromMultN(mats ...*<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Sets this 4x4 matrix to the result of multiplying all the specified mats with one another.
@@ -1218,14 +1233,17 @@ Sets this 4x4 matrix to the result of multiplying all the specified mats with on
 				
 			
 				
-				<h3 id="Mat4.SetFromTransposeOf">func (*Mat4) <a href="/target/mat4.go?s=8441:8486#L182">SetFromTransposeOf</a></h3>
+				<h3 id="Mat4.SetFromTransposeOf">func (*Mat4) <a href="/target/mat4.go?s=8722:8767#L186">SetFromTransposeOf</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) SetFromTransposeOf(mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Sets me to the transpose of mat.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Mat4.Sub">func (*Mat4) <a href="/target/mat4.go?s=8886:8916#L196">Sub</a></h3>
+				<h3 id="Mat4.Sub">func (*Mat4) <a href="/target/mat4.go?s=9199:9229#L201">Sub</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Sub(mat *<a href="#Mat4">Mat4</a>)</pre>
 				<p>
 Subtracts mat from this 4x4 matrix.
@@ -1235,7 +1253,7 @@ Subtracts mat from this 4x4 matrix.
 				
 			
 				
-				<h3 id="Mat4.ToInverseMat3">func (*Mat4) <a href="/target/mat4.go?s=9429:9469#L205">ToInverseMat3</a></h3>
+				<h3 id="Mat4.ToInverseMat3">func (*Mat4) <a href="/target/mat4.go?s=9742:9782#L210">ToInverseMat3</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) ToInverseMat3(mat *<a href="#Mat3">Mat3</a>)</pre>
 				<p>
 Sets the specified 3x3 matrix to the inverse of me.
@@ -1246,7 +1264,7 @@ This method is currently in &#34;not needed right now and not sure if actually c
 				
 			
 				
-				<h3 id="Mat4.Translation">func (*Mat4) <a href="/target/mat4.go?s=10054:10092#L221">Translation</a></h3>
+				<h3 id="Mat4.Translation">func (*Mat4) <a href="/target/mat4.go?s=10367:10405#L226">Translation</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Translation(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 4x4 matrix to a transformation matrix representing &#34;translate by vec&#34;
@@ -1256,9 +1274,12 @@ Sets this 4x4 matrix to a transformation matrix representing &#34;translate by v
 				
 			
 				
-				<h3 id="Mat4.Transposed">func (*Mat4) <a href="/target/mat4.go?s=8748:8788#L189">Transposed</a></h3>
+				<h3 id="Mat4.Transposed">func (*Mat4) <a href="/target/mat4.go?s=9061:9101#L194">Transposed</a></h3>
 				<pre>func (me *<a href="#Mat4">Mat4</a>) Transposed() (mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Returns the transpose of me.
+</p>
+
 				
 				
 			
@@ -1420,14 +1441,17 @@ Represented a 3-dimensional vector.
 
 			
 				
-				<h3 id="Vec3.AbsMax">func (*Vec3) <a href="/target/vec3.go?s=112:144#L2">AbsMax</a></h3>
+				<h3 id="Vec3.AbsMax">func (*Vec3) <a href="/target/vec3.go?s=190:222#L3">AbsMax</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AbsMax() <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the maximum of the absolute values of all vector components in me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Add">func (*Vec3) <a href="/target/vec3.go?s=256:286#L7">Add</a></h3>
+				<h3 id="Vec3.Add">func (*Vec3) <a href="/target/vec3.go?s=334:364#L8">Add</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Add(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Adds vec to this 3D vector.
@@ -1437,7 +1461,7 @@ Adds vec to this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Add1">func (*Vec3) <a href="/target/vec3.go?s=496:529#L16">Add1</a></h3>
+				<h3 id="Vec3.Add1">func (*Vec3) <a href="/target/vec3.go?s=608:641#L18">Add1</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Add1(val <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Adds val to all components of this 3D vector.
@@ -1447,7 +1471,7 @@ Adds val to all components of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Add3">func (*Vec3) <a href="/target/vec3.go?s=636:673#L21">Add3</a></h3>
+				<h3 id="Vec3.Add3">func (*Vec3) <a href="/target/vec3.go?s=748:785#L23">Add3</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Add3(x, y, z <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Adds the specified components to this 3D vector.
@@ -1457,14 +1481,17 @@ Adds the specified components to this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.AddTo">func (*Vec3) <a href="/target/vec3.go?s=347:385#L11">AddTo</a></h3>
+				<h3 id="Vec3.AddTo">func (*Vec3) <a href="/target/vec3.go?s=459:497#L13">AddTo</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AddTo(vec *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
-				
+				<p>
+Returns the sum of me and vec.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.AllEqual">func (*Vec3) <a href="/target/vec3.go?s=785:827#L26">AllEqual</a></h3>
+				<h3 id="Vec3.AllEqual">func (*Vec3) <a href="/target/vec3.go?s=897:939#L28">AllEqual</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AllEqual(val <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if all components of this 3D vector equal val.
@@ -1474,7 +1501,7 @@ Returns true if all components of this 3D vector equal val.
 				
 			
 				
-				<h3 id="Vec3.AllGreaterOrEqual">func (*Vec3) <a href="/target/vec3.go?s=956:1005#L31">AllGreaterOrEqual</a></h3>
+				<h3 id="Vec3.AllGreaterOrEqual">func (*Vec3) <a href="/target/vec3.go?s=1068:1117#L33">AllGreaterOrEqual</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AllGreaterOrEqual(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if this 3D vector is greater than or equal to vec.
@@ -1484,7 +1511,7 @@ Returns true if this 3D vector is greater than or equal to vec.
 				
 			
 				
-				<h3 id="Vec3.AllInRange">func (*Vec3) <a href="/target/vec3.go?s=1159:1208#L36">AllInRange</a></h3>
+				<h3 id="Vec3.AllInRange">func (*Vec3) <a href="/target/vec3.go?s=1271:1320#L38">AllInRange</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AllInRange(min, max <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if this 3D vector is greater than or equal to min, and less than max.
@@ -1494,7 +1521,7 @@ Returns true if this 3D vector is greater than or equal to min, and less than ma
 				
 			
 				
-				<h3 id="Vec3.AllInside">func (*Vec3) <a href="/target/vec3.go?s=1391:1437#L41">AllInside</a></h3>
+				<h3 id="Vec3.AllInside">func (*Vec3) <a href="/target/vec3.go?s=1503:1549#L43">AllInside</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AllInside(min, max *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if this 3D vector is greater than min and less than max.
@@ -1504,7 +1531,7 @@ Returns true if this 3D vector is greater than min and less than max.
 				
 			
 				
-				<h3 id="Vec3.AllLessOrEqual">func (*Vec3) <a href="/target/vec3.go?s=1620:1666#L46">AllLessOrEqual</a></h3>
+				<h3 id="Vec3.AllLessOrEqual">func (*Vec3) <a href="/target/vec3.go?s=1732:1778#L48">AllLessOrEqual</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) AllLessOrEqual(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if this 3D vector is less than or equal to vec.
@@ -1514,14 +1541,27 @@ Returns true if this 3D vector is less than or equal to vec.
 				
 			
 				
-				<h3 id="Vec3.Clear">func (*Vec3) <a href="/target/vec3.go?s=1734:1757#L50">Clear</a></h3>
-				<pre>func (me *<a href="#Vec3">Vec3</a>) Clear()</pre>
-				
+				<h3 id="Vec3.Clamp">func (*Vec3) <a href="/target/vec3.go?s=4807:4844#L149">Clamp</a></h3>
+				<pre>func (me *<a href="#Vec3">Vec3</a>) Clamp(min, max *<a href="#Vec3">Vec3</a>)</pre>
+				<p>
+Clamps all components in me between min and max.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Cross">func (*Vec3) <a href="/target/vec3.go?s=1879:1917#L55">Cross</a></h3>
+				<h3 id="Vec3.Clear">func (*Vec3) <a href="/target/vec3.go?s=1878:1901#L53">Clear</a></h3>
+				<pre>func (me *<a href="#Vec3">Vec3</a>) Clear()</pre>
+				<p>
+Zeroes all components in me.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Vec3.Cross">func (*Vec3) <a href="/target/vec3.go?s=2023:2061#L58">Cross</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Cross(vec *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents the cross-product of this 3D vector and vec.
@@ -1531,7 +1571,7 @@ Returns a new 3D vector that represents the cross-product of this 3D vector and 
 				
 			
 				
-				<h3 id="Vec3.CrossNormalized">func (*Vec3) <a href="/target/vec3.go?s=2136:2188#L60">CrossNormalized</a></h3>
+				<h3 id="Vec3.CrossNormalized">func (*Vec3) <a href="/target/vec3.go?s=2280:2332#L63">CrossNormalized</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) CrossNormalized(vec *<a href="#Vec3">Vec3</a>) (r *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Returns a new 3D vector that represents the cross-product of this 3D vector and vec, normalized.
@@ -1541,21 +1581,27 @@ Returns a new 3D vector that represents the cross-product of this 3D vector and 
 				
 			
 				
-				<h3 id="Vec3.DistanceFrom">func (*Vec3) <a href="/target/vec3.go?s=2367:2414#L67">DistanceFrom</a></h3>
+				<h3 id="Vec3.DistanceFrom">func (*Vec3) <a href="/target/vec3.go?s=2551:2598#L71">DistanceFrom</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) DistanceFrom(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the distance of me from vec.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.DistanceFromZero">func (*Vec3) <a href="/target/vec3.go?s=2454:2496#L71">DistanceFromZero</a></h3>
+				<h3 id="Vec3.DistanceFromZero">func (*Vec3) <a href="/target/vec3.go?s=2694:2736#L76">DistanceFromZero</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) DistanceFromZero() <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the distance of me from the &#39;center&#39; (zero).
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Div">func (*Vec3) <a href="/target/vec3.go?s=2606:2642#L76">Div</a></h3>
+				<h3 id="Vec3.Div">func (*Vec3) <a href="/target/vec3.go?s=2846:2882#L81">Div</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Div(vec *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector divided by vec.
@@ -1565,7 +1611,7 @@ Returns a new 3D vector that represents this 3D vector divided by vec.
 				
 			
 				
-				<h3 id="Vec3.Div1">func (*Vec3) <a href="/target/vec3.go?s=2795:2834#L81">Div1</a></h3>
+				<h3 id="Vec3.Div1">func (*Vec3) <a href="/target/vec3.go?s=3035:3074#L86">Div1</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Div1(val <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector&#39;s components all divided by val.
@@ -1575,7 +1621,7 @@ Returns a new 3D vector that represents this 3D vector&#39;s components all divi
 				
 			
 				
-				<h3 id="Vec3.Dot">func (*Vec3) <a href="/target/vec3.go?s=2944:2982#L86">Dot</a></h3>
+				<h3 id="Vec3.Dot">func (*Vec3) <a href="/target/vec3.go?s=3184:3222#L91">Dot</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Dot(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the dot product of this 3D vector and vec.
@@ -1585,7 +1631,7 @@ Returns the dot product of this 3D vector and vec.
 				
 			
 				
-				<h3 id="Vec3.DotSub">func (*Vec3) <a href="/target/vec3.go?s=3113:3161#L91">DotSub</a></h3>
+				<h3 id="Vec3.DotSub">func (*Vec3) <a href="/target/vec3.go?s=3353:3401#L96">DotSub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) DotSub(vec1, vec2 *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the dot product of this 3D vector and (vec1 minus vec2).
@@ -1595,7 +1641,7 @@ Returns the dot product of this 3D vector and (vec1 minus vec2).
 				
 			
 				
-				<h3 id="Vec3.Equals">func (*Vec3) <a href="/target/vec3.go?s=3306:3344#L96">Equals</a></h3>
+				<h3 id="Vec3.Equals">func (*Vec3) <a href="/target/vec3.go?s=3546:3584#L101">Equals</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Equals(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Returns true if this 3D vector equals vec.
@@ -1605,7 +1651,7 @@ Returns true if this 3D vector equals vec.
 				
 			
 				
-				<h3 id="Vec3.Inv">func (*Vec3) <a href="/target/vec3.go?s=3454:3481#L101">Inv</a></h3>
+				<h3 id="Vec3.Inv">func (*Vec3) <a href="/target/vec3.go?s=3694:3721#L106">Inv</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Inv() *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns the inverse of this 3D vector.
@@ -1615,7 +1661,7 @@ Returns the inverse of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Length">func (*Vec3) <a href="/target/vec3.go?s=3572:3604#L106">Length</a></h3>
+				<h3 id="Vec3.Length">func (*Vec3) <a href="/target/vec3.go?s=3812:3844#L111">Length</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Length() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the length of this 3D vector.
@@ -1625,7 +1671,7 @@ Returns the length of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Magnitude">func (*Vec3) <a href="/target/vec3.go?s=3708:3743#L111">Magnitude</a></h3>
+				<h3 id="Vec3.Magnitude">func (*Vec3) <a href="/target/vec3.go?s=3948:3983#L116">Magnitude</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Magnitude() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the magnitude of this 3D vector.
@@ -1635,7 +1681,7 @@ Returns the magnitude of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.MakeFinite">func (*Vec3) <a href="/target/vec3.go?s=3886:3923#L116">MakeFinite</a></h3>
+				<h3 id="Vec3.MakeFinite">func (*Vec3) <a href="/target/vec3.go?s=4126:4163#L121">MakeFinite</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) MakeFinite(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets each component of this 3D vector to the corresponding component in vec if the former is infinity.
@@ -1645,14 +1691,17 @@ Sets each component of this 3D vector to the corresponding component in vec if t
 				
 			
 				
-				<h3 id="Vec3.ManhattanDistanceFrom">func (*Vec3) <a href="/target/vec3.go?s=4061:4117#L128">ManhattanDistanceFrom</a></h3>
+				<h3 id="Vec3.ManhattanDistanceFrom">func (*Vec3) <a href="/target/vec3.go?s=4353:4409#L134">ManhattanDistanceFrom</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) ManhattanDistanceFrom(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the &#34;manhattan distance&#34; of me from vec.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Max">func (*Vec3) <a href="/target/vec3.go?s=4250:4279#L133">Max</a></h3>
+				<h3 id="Vec3.Max">func (*Vec3) <a href="/target/vec3.go?s=4542:4571#L139">Max</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Max() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the biggest component of this 3D vector.
@@ -1662,7 +1711,7 @@ Returns the biggest component of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Min">func (*Vec3) <a href="/target/vec3.go?s=4383:4412#L138">Min</a></h3>
+				<h3 id="Vec3.Min">func (*Vec3) <a href="/target/vec3.go?s=4675:4704#L144">Min</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Min() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the smallest component of this 3D vector.
@@ -1672,7 +1721,7 @@ Returns the smallest component of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Mult">func (*Vec3) <a href="/target/vec3.go?s=4811:4848#L164">Mult</a></h3>
+				<h3 id="Vec3.Mult">func (*Vec3) <a href="/target/vec3.go?s=5151:5188#L171">Mult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Mult(vec *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector multiplied with vec.
@@ -1682,7 +1731,7 @@ Returns a new 3D vector that represents this 3D vector multiplied with vec.
 				
 			
 				
-				<h3 id="Vec3.Negate">func (*Vec3) <a href="/target/vec3.go?s=5065:5089#L173">Negate</a></h3>
+				<h3 id="Vec3.Negate">func (*Vec3) <a href="/target/vec3.go?s=5501:5525#L181">Negate</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Negate()</pre>
 				<p>
 Reverses the sign of each of this 3D vector&#39;s components.
@@ -1692,14 +1741,17 @@ Reverses the sign of each of this 3D vector&#39;s components.
 				
 			
 				
-				<h3 id="Vec3.Negated">func (*Vec3) <a href="/target/vec3.go?s=5135:5166#L177">Negated</a></h3>
+				<h3 id="Vec3.Negated">func (*Vec3) <a href="/target/vec3.go?s=5684:5715#L186">Negated</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Negated() *<a href="#Vec3">Vec3</a></pre>
-				
+				<p>
+Returns a vector with each component representing the negative (sign inverted) corresponding component in me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Normalize">func (*Vec3) <a href="/target/vec3.go?s=5237:5264#L182">Normalize</a></h3>
+				<h3 id="Vec3.Normalize">func (*Vec3) <a href="/target/vec3.go?s=5786:5813#L191">Normalize</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Normalize()</pre>
 				<p>
 Normalizes this 3D vector.
@@ -1709,7 +1761,7 @@ Normalizes this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Normalized">func (*Vec3) <a href="/target/vec3.go?s=5450:5490#L191">Normalized</a></h3>
+				<h3 id="Vec3.Normalized">func (*Vec3) <a href="/target/vec3.go?s=5999:6039#L200">Normalized</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Normalized() (vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector, normalized.
@@ -1719,7 +1771,7 @@ Returns a new 3D vector that represents this 3D vector, normalized.
 				
 			
 				
-				<h3 id="Vec3.NormalizedScaled">func (*Vec3) <a href="/target/vec3.go?s=5729:5789#L201">NormalizedScaled</a></h3>
+				<h3 id="Vec3.NormalizedScaled">func (*Vec3) <a href="/target/vec3.go?s=6278:6338#L210">NormalizedScaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) NormalizedScaled(factor <a href="/pkg/builtin/#float64">float64</a>) (vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector, normalized, then scaled by factor.
@@ -1729,7 +1781,7 @@ Returns a new 3D vector that represents this 3D vector, normalized, then scaled 
 				
 			
 				
-				<h3 id="Vec3.RotateDeg">func (*Vec3) <a href="/target/vec3.go?s=5915:5970#L208">RotateDeg</a></h3>
+				<h3 id="Vec3.RotateDeg">func (*Vec3) <a href="/target/vec3.go?s=6464:6519#L217">RotateDeg</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) RotateDeg(angleDeg <a href="/pkg/builtin/#float64">float64</a>, axis *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Rotates this 3D vector angleDeg degrees around the specified axis.
@@ -1739,7 +1791,7 @@ Rotates this 3D vector angleDeg degrees around the specified axis.
 				
 			
 				
-				<h3 id="Vec3.RotateRad">func (*Vec3) <a href="/target/vec3.go?s=6088:6143#L213">RotateRad</a></h3>
+				<h3 id="Vec3.RotateRad">func (*Vec3) <a href="/target/vec3.go?s=6637:6692#L222">RotateRad</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) RotateRad(angleRad <a href="/pkg/builtin/#float64">float64</a>, axis *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Rotates this 3D vector angleRad radians around the specified axis.
@@ -1749,7 +1801,7 @@ Rotates this 3D vector angleRad radians around the specified axis.
 				
 			
 				
-				<h3 id="Vec3.Scale">func (*Vec3) <a href="/target/vec3.go?s=6485:6522#L224">Scale</a></h3>
+				<h3 id="Vec3.Scale">func (*Vec3) <a href="/target/vec3.go?s=7034:7071#L233">Scale</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Scale(factor <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Scales this 3D vector by factor.
@@ -1759,7 +1811,7 @@ Scales this 3D vector by factor.
 				
 			
 				
-				<h3 id="Vec3.ScaleAdd">func (*Vec3) <a href="/target/vec3.go?s=6637:6680#L229">ScaleAdd</a></h3>
+				<h3 id="Vec3.ScaleAdd">func (*Vec3) <a href="/target/vec3.go?s=7186:7229#L238">ScaleAdd</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) ScaleAdd(factor, add *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Scales this 3D vector by factor, then adds add.
@@ -1769,7 +1821,7 @@ Scales this 3D vector by factor, then adds add.
 				
 			
 				
-				<h3 id="Vec3.Scaled">func (*Vec3) <a href="/target/vec3.go?s=6850:6894#L234">Scaled</a></h3>
+				<h3 id="Vec3.Scaled">func (*Vec3) <a href="/target/vec3.go?s=7399:7443#L243">Scaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Scaled(factor <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector scaled by factor.
@@ -1779,7 +1831,7 @@ Returns a new 3D vector that represents this 3D vector scaled by factor.
 				
 			
 				
-				<h3 id="Vec3.ScaledAdded">func (*Vec3) <a href="/target/vec3.go?s=7051:7111#L239">ScaledAdded</a></h3>
+				<h3 id="Vec3.ScaledAdded">func (*Vec3) <a href="/target/vec3.go?s=7600:7660#L248">ScaledAdded</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) ScaledAdded(factor <a href="/pkg/builtin/#float64">float64</a>, add *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents this 3D vector scaled by factor, then add added.
@@ -1789,7 +1841,7 @@ Returns a new 3D vector that represents this 3D vector scaled by factor, then ad
 				
 			
 				
-				<h3 id="Vec3.Set">func (*Vec3) <a href="/target/vec3.go?s=7271:7307#L244">Set</a></h3>
+				<h3 id="Vec3.Set">func (*Vec3) <a href="/target/vec3.go?s=7820:7856#L253">Set</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Set(x, y, z <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets the components of this 3D vector to the specified value.
@@ -1799,7 +1851,7 @@ Sets the components of this 3D vector to the specified value.
 				
 			
 				
-				<h3 id="Vec3.SetFrom">func (*Vec3) <a href="/target/vec3.go?s=7427:7461#L249">SetFrom</a></h3>
+				<h3 id="Vec3.SetFrom">func (*Vec3) <a href="/target/vec3.go?s=7976:8010#L258">SetFrom</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFrom(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets the components of this 3D vector to the same values as the components of vec.
@@ -1809,7 +1861,7 @@ Sets the components of this 3D vector to the same values as the components of ve
 				
 			
 				
-				<h3 id="Vec3.SetFromAdd">func (*Vec3) <a href="/target/vec3.go?s=7569:7613#L254">SetFromAdd</a></h3>
+				<h3 id="Vec3.SetFromAdd">func (*Vec3) <a href="/target/vec3.go?s=8118:8162#L263">SetFromAdd</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromAdd(vec1, vec2 *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the result of adding vec1 and vec2.
@@ -1819,14 +1871,17 @@ Sets this 3D vector to the result of adding vec1 and vec2.
 				
 			
 				
-				<h3 id="Vec3.SetFromAddAdd">func (*Vec3) <a href="/target/vec3.go?s=7683:7727#L258">SetFromAddAdd</a></h3>
+				<h3 id="Vec3.SetFromAddAdd">func (*Vec3) <a href="/target/vec3.go?s=8317:8361#L268">SetFromAddAdd</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromAddAdd(a, b, c *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets each vector component in me to the sum of the corresponding a+b+c component.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetFromAddMult">func (*Vec3) <a href="/target/vec3.go?s=7876:7929#L263">SetFromAddMult</a></h3>
+				<h3 id="Vec3.SetFromAddMult">func (*Vec3) <a href="/target/vec3.go?s=8510:8563#L273">SetFromAddMult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromAddMult(add, mul1, mul2 *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the result of multiplying mul1 with mul2, then adding add.
@@ -1836,7 +1891,7 @@ Sets this 3D vector to the result of multiplying mul1 with mul2, then adding add
 				
 			
 				
-				<h3 id="Vec3.SetFromAddScaled">func (*Vec3) <a href="/target/vec3.go?s=8102:8165#L268">SetFromAddScaled</a></h3>
+				<h3 id="Vec3.SetFromAddScaled">func (*Vec3) <a href="/target/vec3.go?s=8736:8799#L278">SetFromAddScaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromAddScaled(vec1, vec2 *<a href="#Vec3">Vec3</a>, mul <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 3D vector to the result of scaling vec2 by mul, then adding vec1.
@@ -1846,14 +1901,17 @@ Sets this 3D vector to the result of scaling vec2 by mul, then adding vec1.
 				
 			
 				
-				<h3 id="Vec3.SetFromAddSub">func (*Vec3) <a href="/target/vec3.go?s=8247:8291#L272">SetFromAddSub</a></h3>
+				<h3 id="Vec3.SetFromAddSub">func (*Vec3) <a href="/target/vec3.go?s=8969:9013#L283">SetFromAddSub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromAddSub(a, b, c *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets each vector component in me to the result of the corresponding a+b-c component.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetFromCos">func (*Vec3) <a href="/target/vec3.go?s=8449:8486#L277">SetFromCos</a></h3>
+				<h3 id="Vec3.SetFromCos">func (*Vec3) <a href="/target/vec3.go?s=9171:9208#L288">SetFromCos</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromCos(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets each component of this 3D vector to the cosine of the corresponding component in vec.
@@ -1863,7 +1921,7 @@ Sets each component of this 3D vector to the cosine of the corresponding compone
 				
 			
 				
-				<h3 id="Vec3.SetFromCross">func (*Vec3) <a href="/target/vec3.go?s=8646:8685#L282">SetFromCross</a></h3>
+				<h3 id="Vec3.SetFromCross">func (*Vec3) <a href="/target/vec3.go?s=9368:9407#L293">SetFromCross</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromCross(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Modifies this Vec3 to represent the cross-product of its previous value and vec.
@@ -1873,7 +1931,7 @@ Modifies this Vec3 to represent the cross-product of its previous value and vec.
 				
 			
 				
-				<h3 id="Vec3.SetFromCrossOf">func (*Vec3) <a href="/target/vec3.go?s=8839:8885#L287">SetFromCrossOf</a></h3>
+				<h3 id="Vec3.SetFromCrossOf">func (*Vec3) <a href="/target/vec3.go?s=9561:9607#L298">SetFromCrossOf</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromCrossOf(one, two *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets me to the cross product of one and two.
@@ -1883,7 +1941,7 @@ Sets me to the cross product of one and two.
 				
 			
 				
-				<h3 id="Vec3.SetFromDegToRad">func (*Vec3) <a href="/target/vec3.go?s=9129:9171#L292">SetFromDegToRad</a></h3>
+				<h3 id="Vec3.SetFromDegToRad">func (*Vec3) <a href="/target/vec3.go?s=9851:9893#L303">SetFromDegToRad</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromDegToRad(deg *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets each component of this 3D vector to the radian equivalent of the degree angle stored in the corresponding component in vec.
@@ -1893,7 +1951,7 @@ Sets each component of this 3D vector to the radian equivalent of the degree ang
 				
 			
 				
-				<h3 id="Vec3.SetFromEpsilon32">func (*Vec3) <a href="/target/vec3.go?s=9351:9385#L297">SetFromEpsilon32</a></h3>
+				<h3 id="Vec3.SetFromEpsilon32">func (*Vec3) <a href="/target/vec3.go?s=10073:10107#L308">SetFromEpsilon32</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromEpsilon32()</pre>
 				<p>
 Sets each component of this 3D vector to Epsilon32 if it is 0 or greater but smaller than Epsilon32.
@@ -1903,7 +1961,7 @@ Sets each component of this 3D vector to Epsilon32 if it is 0 or greater but sma
 				
 			
 				
-				<h3 id="Vec3.SetFromEpsilon64">func (*Vec3) <a href="/target/vec3.go?s=9681:9715#L310">SetFromEpsilon64</a></h3>
+				<h3 id="Vec3.SetFromEpsilon64">func (*Vec3) <a href="/target/vec3.go?s=10403:10437#L321">SetFromEpsilon64</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromEpsilon64()</pre>
 				<p>
 Sets each component of this 3D vector to Epsilon64 if it is 0 or greater but smaller than Epsilon64.
@@ -1913,7 +1971,7 @@ Sets each component of this 3D vector to Epsilon64 if it is 0 or greater but sma
 				
 			
 				
-				<h3 id="Vec3.SetFromInv">func (*Vec3) <a href="/target/vec3.go?s=9953:9990#L323">SetFromInv</a></h3>
+				<h3 id="Vec3.SetFromInv">func (*Vec3) <a href="/target/vec3.go?s=10675:10712#L334">SetFromInv</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromInv(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the inverse of vec.
@@ -1923,7 +1981,7 @@ Sets this 3D vector to the inverse of vec.
 				
 			
 				
-				<h3 id="Vec3.SetFromMult">func (*Vec3) <a href="/target/vec3.go?s=10105:10146#L328">SetFromMult</a></h3>
+				<h3 id="Vec3.SetFromMult">func (*Vec3) <a href="/target/vec3.go?s=10827:10868#L339">SetFromMult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromMult(v1, v2 *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the result of v1 multiplied with v2.
@@ -1933,7 +1991,7 @@ Sets this 3D vector to the result of v1 multiplied with v2.
 				
 			
 				
-				<h3 id="Vec3.SetFromNormalized">func (*Vec3) <a href="/target/vec3.go?s=10803:10847#L348">SetFromNormalized</a></h3>
+				<h3 id="Vec3.SetFromNormalized">func (*Vec3) <a href="/target/vec3.go?s=11525:11569#L359">SetFromNormalized</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromNormalized(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets me to the result  of normalizing vec.
@@ -1943,7 +2001,7 @@ Sets me to the result  of normalizing vec.
 				
 			
 				
-				<h3 id="Vec3.SetFromRotation">func (*Vec3) <a href="/target/vec3.go?s=11008:11066#L355">SetFromRotation</a></h3>
+				<h3 id="Vec3.SetFromRotation">func (*Vec3) <a href="/target/vec3.go?s=11730:11788#L366">SetFromRotation</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromRotation(pos, rotCos, rotSin *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to pos rotated as expressed in rotCos and rotSin.
@@ -1953,7 +2011,7 @@ Sets this 3D vector to pos rotated as expressed in rotCos and rotSin.
 				
 			
 				
-				<h3 id="Vec3.SetFromScaled">func (*Vec3) <a href="/target/vec3.go?s=10263:10316#L333">SetFromScaled</a></h3>
+				<h3 id="Vec3.SetFromScaled">func (*Vec3) <a href="/target/vec3.go?s=10985:11038#L344">SetFromScaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromScaled(vec *<a href="#Vec3">Vec3</a>, mul <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 3D vector to the result of vec scaled by mul.
@@ -1963,7 +2021,7 @@ Sets this 3D vector to the result of vec scaled by mul.
 				
 			
 				
-				<h3 id="Vec3.SetFromScaledSub">func (*Vec3) <a href="/target/vec3.go?s=10448:10511#L338">SetFromScaledSub</a></h3>
+				<h3 id="Vec3.SetFromScaledSub">func (*Vec3) <a href="/target/vec3.go?s=11170:11233#L349">SetFromScaledSub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromScaledSub(vec1, vec2 *<a href="#Vec3">Vec3</a>, mul <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Sets this 3D vector to the result of (vec1 minus vec2), scaled by mul.
@@ -1973,7 +2031,7 @@ Sets this 3D vector to the result of (vec1 minus vec2), scaled by mul.
 				
 			
 				
-				<h3 id="Vec3.SetFromSin">func (*Vec3) <a href="/target/vec3.go?s=11315:11352#L363">SetFromSin</a></h3>
+				<h3 id="Vec3.SetFromSin">func (*Vec3) <a href="/target/vec3.go?s=12037:12074#L374">SetFromSin</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSin(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the sine of vec.
@@ -1983,7 +2041,7 @@ Sets this 3D vector to the sine of vec.
 				
 			
 				
-				<h3 id="Vec3.SetFromStep">func (*Vec3) <a href="/target/vec3.go?s=11574:11634#L368">SetFromStep</a></h3>
+				<h3 id="Vec3.SetFromStep">func (*Vec3) <a href="/target/vec3.go?s=12296:12356#L379">SetFromStep</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromStep(edge <a href="/pkg/builtin/#float64">float64</a>, vec, v0, v1 *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets each component of this 3D vector to the corresponding component in v0 if it is less than edge, else to the corresponding component in v1.
@@ -1993,7 +2051,7 @@ Sets each component of this 3D vector to the corresponding component in v0 if it
 				
 			
 				
-				<h3 id="Vec3.SetFromSub">func (*Vec3) <a href="/target/vec3.go?s=11877:11921#L387">SetFromSub</a></h3>
+				<h3 id="Vec3.SetFromSub">func (*Vec3) <a href="/target/vec3.go?s=12599:12643#L398">SetFromSub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSub(vec1, vec2 *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the result of vec1 minus vec2.
@@ -2003,14 +2061,17 @@ Sets this 3D vector to the result of vec1 minus vec2.
 				
 			
 				
-				<h3 id="Vec3.SetFromSubAdd">func (*Vec3) <a href="/target/vec3.go?s=11991:12035#L391">SetFromSubAdd</a></h3>
+				<h3 id="Vec3.SetFromSubAdd">func (*Vec3) <a href="/target/vec3.go?s=12801:12845#L403">SetFromSubAdd</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSubAdd(a, b, c *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets each vector component in me to the result of the corresponding a-b+c component.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetFromSubMult">func (*Vec3) <a href="/target/vec3.go?s=12426:12479#L404">SetFromSubMult</a></h3>
+				<h3 id="Vec3.SetFromSubMult">func (*Vec3) <a href="/target/vec3.go?s=13420:13473#L418">SetFromSubMult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSubMult(sub1, sub2, mul *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to the result of (sub1 minus sub2), scaled by mul.
@@ -2020,21 +2081,27 @@ Sets this 3D vector to the result of (sub1 minus sub2), scaled by mul.
 				
 			
 				
-				<h3 id="Vec3.SetFromSubScaled">func (*Vec3) <a href="/target/vec3.go?s=12099:12162#L395">SetFromSubScaled</a></h3>
+				<h3 id="Vec3.SetFromSubScaled">func (*Vec3) <a href="/target/vec3.go?s=13005:13068#L408">SetFromSubScaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSubScaled(v1, v2 *<a href="#Vec3">Vec3</a>, v2Scale <a href="/pkg/builtin/#float64">float64</a>)</pre>
-				
+				<p>
+Sets each vector component in me to the result of the corresponding v1-v2*v2Scale component.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetFromSubSub">func (*Vec3) <a href="/target/vec3.go?s=12244:12288#L399">SetFromSubSub</a></h3>
+				<h3 id="Vec3.SetFromSubSub">func (*Vec3) <a href="/target/vec3.go?s=13238:13282#L413">SetFromSubSub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSubSub(a, b, c *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets each vector component in me to the result of the corresponding a-b-c component.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetFromSwapSign">func (*Vec3) <a href="/target/vec3.go?s=10666:10708#L343">SetFromSwapSign</a></h3>
+				<h3 id="Vec3.SetFromSwapSign">func (*Vec3) <a href="/target/vec3.go?s=11388:11430#L354">SetFromSwapSign</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetFromSwapSign(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Sets this 3D vector to vec with each component&#39;s sign reversed.
@@ -2044,28 +2111,27 @@ Sets this 3D vector to vec with each component&#39;s sign reversed.
 				
 			
 				
-				<h3 id="Vec3.SetMinMax">func (*Vec3) <a href="/target/vec3.go?s=4463:4504#L142">SetMinMax</a></h3>
-				<pre>func (me *<a href="#Vec3">Vec3</a>) SetMinMax(min, max *<a href="#Vec3">Vec3</a>)</pre>
-				
-				
-				
-			
-				
-				<h3 id="Vec3.SetToMax">func (*Vec3) <a href="/target/vec3.go?s=12573:12599#L408">SetToMax</a></h3>
+				<h3 id="Vec3.SetToMax">func (*Vec3) <a href="/target/vec3.go?s=13616:13642#L423">SetToMax</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetToMax()</pre>
-				
+				<p>
+Sets all components in me to math.MaxFloat64.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.SetToMin">func (*Vec3) <a href="/target/vec3.go?s=12675:12701#L412">SetToMin</a></h3>
+				<h3 id="Vec3.SetToMin">func (*Vec3) <a href="/target/vec3.go?s=13768:13794#L428">SetToMin</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SetToMin()</pre>
-				
+				<p>
+Sets all components in me to -math.MaxFloat64.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.Sign">func (*Vec3) <a href="/target/vec3.go?s=12888:12916#L417">Sign</a></h3>
+				<h3 id="Vec3.Sign">func (*Vec3) <a href="/target/vec3.go?s=13981:14009#L433">Sign</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Sign() *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a 3D vector where each component indicates the sign of this 3D vector&#39;s corresponding component.
@@ -2075,7 +2141,7 @@ Returns a 3D vector where each component indicates the sign of this 3D vector&#3
 				
 			
 				
-				<h3 id="Vec3.String">func (*Vec3) <a href="/target/vec3.go?s=13026:13057#L422">String</a></h3>
+				<h3 id="Vec3.String">func (*Vec3) <a href="/target/vec3.go?s=14119:14150#L438">String</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 Returns a string representation of this 3D vector.
@@ -2085,7 +2151,7 @@ Returns a string representation of this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Sub">func (*Vec3) <a href="/target/vec3.go?s=13194:13230#L427">Sub</a></h3>
+				<h3 id="Vec3.Sub">func (*Vec3) <a href="/target/vec3.go?s=14287:14323#L443">Sub</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Sub(vec *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents (this 3D vector minus vec).
@@ -2095,7 +2161,7 @@ Returns a new 3D vector that represents (this 3D vector minus vec).
 				
 			
 				
-				<h3 id="Vec3.SubDivMult">func (*Vec3) <a href="/target/vec3.go?s=13399:13452#L432">SubDivMult</a></h3>
+				<h3 id="Vec3.SubDivMult">func (*Vec3) <a href="/target/vec3.go?s=14492:14545#L448">SubDivMult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubDivMult(sub, div, mul *<a href="#Vec3">Vec3</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents (this 3D vector minus sub) divided by div, multiplied with mul.
@@ -2105,7 +2171,7 @@ Returns a new 3D vector that represents (this 3D vector minus sub) divided by di
 				
 			
 				
-				<h3 id="Vec3.SubDot">func (*Vec3) <a href="/target/vec3.go?s=13631:13672#L437">SubDot</a></h3>
+				<h3 id="Vec3.SubDot">func (*Vec3) <a href="/target/vec3.go?s=14724:14765#L453">SubDot</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubDot(vec *<a href="#Vec3">Vec3</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Returns the dot product of (this 3D vector minus vec)
@@ -2115,7 +2181,7 @@ Returns the dot product of (this 3D vector minus vec)
 				
 			
 				
-				<h3 id="Vec3.SubFloorDivMult">func (*Vec3) <a href="/target/vec3.go?s=13915:13975#L442">SubFloorDivMult</a></h3>
+				<h3 id="Vec3.SubFloorDivMult">func (*Vec3) <a href="/target/vec3.go?s=15008:15068#L458">SubFloorDivMult</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubFloorDivMult(floorDiv, mul <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents the result of (this 3D vector divided by floorDiv) floored, then scaled by mul.
@@ -2125,7 +2191,7 @@ Returns a new 3D vector that represents the result of (this 3D vector divided by
 				
 			
 				
-				<h3 id="Vec3.SubFrom">func (*Vec3) <a href="/target/vec3.go?s=14173:14215#L447">SubFrom</a></h3>
+				<h3 id="Vec3.SubFrom">func (*Vec3) <a href="/target/vec3.go?s=15266:15308#L463">SubFrom</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubFrom(val <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents (val minus this 3D vector).
@@ -2135,7 +2201,7 @@ Returns a new 3D vector that represents (val minus this 3D vector).
 				
 			
 				
-				<h3 id="Vec3.SubScaled">func (*Vec3) <a href="/target/vec3.go?s=14357:14412#L452">SubScaled</a></h3>
+				<h3 id="Vec3.SubScaled">func (*Vec3) <a href="/target/vec3.go?s=15450:15505#L468">SubScaled</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubScaled(vec *<a href="#Vec3">Vec3</a>, val <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
 				<p>
 Returns a new 3D vector that represents (this 3D vector minus vec), scaled by val.
@@ -2145,7 +2211,7 @@ Returns a new 3D vector that represents (this 3D vector minus vec), scaled by va
 				
 			
 				
-				<h3 id="Vec3.SubVec">func (*Vec3) <a href="/target/vec3.go?s=14536:14569#L457">SubVec</a></h3>
+				<h3 id="Vec3.SubVec">func (*Vec3) <a href="/target/vec3.go?s=15629:15662#L473">SubVec</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) SubVec(vec *<a href="#Vec3">Vec3</a>)</pre>
 				<p>
 Subtracts vec from this 3D vector.
@@ -2155,35 +2221,50 @@ Subtracts vec from this 3D vector.
 				
 			
 				
-				<h3 id="Vec3.Times">func (*Vec3) <a href="/target/vec3.go?s=4910:4954#L168">Times</a></h3>
+				<h3 id="Vec3.Times">func (*Vec3) <a href="/target/vec3.go?s=5346:5390#L176">Times</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) Times(x, y, z <a href="/pkg/builtin/#float64">float64</a>) *<a href="#Vec3">Vec3</a></pre>
-				
+				<p>
+Returns a vector with each component in me multiplied by the corresponding specified factor.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.TransformCoord">func (*Vec3) <a href="/target/vec3.go?s=14630:14671#L461">TransformCoord</a></h3>
+				<h3 id="Vec3.TransformCoord">func (*Vec3) <a href="/target/vec3.go?s=15809:15850#L478">TransformCoord</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) TransformCoord(mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Transform this coordinate vector according to the specified transformation matrix.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec3.TransformNormal">func (*Vec3) <a href="/target/vec3.go?s=14775:14830#L468">TransformNormal</a></h3>
+				<h3 id="Vec3.TransformNormal">func (*Vec3) <a href="/target/vec3.go?s=16036:16091#L486">TransformNormal</a></h3>
 				<pre>func (me *<a href="#Vec3">Vec3</a>) TransformNormal(mat *<a href="#Mat4">Mat4</a>, absMat <a href="/pkg/builtin/#bool">bool</a>)</pre>
-				
+				<p>
+Transform this normal vector according to the specified transformation matrix.
+</p>
+
 				
 				
 			
 		
 			
 			
-			<h2 id="Vec4">type <a href="/target/vec4.go?s=34:71#L1">Vec4</a></h2>
+			<h2 id="Vec4">type <a href="/target/vec4.go?s=99:178#L1">Vec4</a></h2>
 			<pre>type Vec4 struct {
+    <span class="comment">//	X, Y, Z</span>
     <a href="#Vec3">Vec3</a>
+
+    <span class="comment">//	The 4th vector component</span>
     W <a href="/pkg/builtin/#float64">float64</a>
 }</pre>
-			
+			<p>
+Represents an arbitrary 4-dimensional vector or a Quaternion.
+</p>
+
 
 			
 
@@ -2195,112 +2276,157 @@ Subtracts vec from this 3D vector.
 
 			
 				
-				<h3 id="Vec4.Clone">func (*Vec4) <a href="/target/vec4.go?s=73:106#L2">Clone</a></h3>
+				<h3 id="Vec4.Clone">func (*Vec4) <a href="/target/vec4.go?s=205:238#L7">Clone</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Clone() (q *<a href="#Vec4">Vec4</a>)</pre>
-				
+				<p>
+Returns a copy of me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Conjugate">func (*Vec4) <a href="/target/vec4.go?s=130:157#L7">Conjugate</a></h3>
+				<h3 id="Vec4.Conjugate">func (*Vec4) <a href="/target/vec4.go?s=314:341#L13">Conjugate</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Conjugate()</pre>
-				
+				<p>
+Negates the X, Y, Z components in me, but not W.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Conjugated">func (*Vec4) <a href="/target/vec4.go?s=203:241#L11">Conjugated</a></h3>
+				<h3 id="Vec4.Conjugated">func (*Vec4) <a href="/target/vec4.go?s=446:484#L18">Conjugated</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Conjugated() (v *<a href="#Vec4">Vec4</a>)</pre>
-				
+				<p>
+Returns a Vec4 that is the conjugated equivalent of me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Length">func (*Vec4) <a href="/target/vec4.go?s=318:350#L17">Length</a></h3>
+				<h3 id="Vec4.Length">func (*Vec4) <a href="/target/vec4.go?s=590:622#L25">Length</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Length() <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the length of me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Magnitude">func (*Vec4) <a href="/target/vec4.go?s=426:461#L21">Magnitude</a></h3>
+				<h3 id="Vec4.Magnitude">func (*Vec4) <a href="/target/vec4.go?s=730:765#L30">Magnitude</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Magnitude() <a href="/pkg/builtin/#float64">float64</a></pre>
-				
+				<p>
+Returns the magnitude of me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.MultMat4Vec3">func (*Vec4) <a href="/target/vec4.go?s=1538:1588#L63">MultMat4Vec3</a></h3>
+				<h3 id="Vec4.MultMat4Vec3">func (*Vec4) <a href="/target/vec4.go?s=2253:2303#L79">MultMat4Vec3</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) MultMat4Vec3(mat *<a href="#Mat4">Mat4</a>, vec *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Sets me to the result of multiplying matrix mat with 3D-vector vec.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.MultMat4Vec4">func (*Vec4) <a href="/target/vec4.go?s=1912:1962#L70">MultMat4Vec4</a></h3>
+				<h3 id="Vec4.MultMat4Vec4">func (*Vec4) <a href="/target/vec4.go?s=2698:2748#L87">MultMat4Vec4</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) MultMat4Vec4(mat *<a href="#Mat4">Mat4</a>, vec *<a href="#Vec4">Vec4</a>)</pre>
-				
+				<p>
+Sets me to the result of multiplying matrix mat with 4D-vector vec.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Normalize">func (*Vec4) <a href="/target/vec4.go?s=498:525#L25">Normalize</a></h3>
+				<h3 id="Vec4.Normalize">func (*Vec4) <a href="/target/vec4.go?s=855:882#L35">Normalize</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Normalize()</pre>
-				
+				<p>
+Normalizes this Vec4 according to me.Magnitude().
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.NormalizeFrom">func (*Vec4) <a href="/target/vec4.go?s=702:750#L34">NormalizeFrom</a></h3>
+				<h3 id="Vec4.NormalizeFrom">func (*Vec4) <a href="/target/vec4.go?s=1114:1162#L45">NormalizeFrom</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) NormalizeFrom(magnitude <a href="/pkg/builtin/#float64">float64</a>)</pre>
-				
+				<p>
+Normalizes me according to the specified magnitude.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Normalized">func (*Vec4) <a href="/target/vec4.go?s=872:906#L39">Normalized</a></h3>
+				<h3 id="Vec4.Normalized">func (*Vec4) <a href="/target/vec4.go?s=1322:1356#L51">Normalized</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Normalized() *<a href="#Vec4">Vec4</a></pre>
-				
+				<p>
+Returns the normalized Vec4 of me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.Scale">func (*Vec4) <a href="/target/vec4.go?s=1443:1475#L59">Scale</a></h3>
+				<h3 id="Vec4.Scale">func (*Vec4) <a href="/target/vec4.go?s=2087:2119#L74">Scale</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) Scale(v <a href="/pkg/builtin/#float64">float64</a>)</pre>
-				
+				<p>
+Scales all components in me by factor v.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.SetFromConjugated">func (*Vec4) <a href="/target/vec4.go?s=1054:1096#L48">SetFromConjugated</a></h3>
+				<h3 id="Vec4.SetFromConjugated">func (*Vec4) <a href="/target/vec4.go?s=1550:1592#L61">SetFromConjugated</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) SetFromConjugated(c *<a href="#Vec4">Vec4</a>)</pre>
-				
+				<p>
+Sets me to the conjugated equivalent of c.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.SetFromMult">func (*Vec4) <a href="/target/vec4.go?s=1150:1189#L52">SetFromMult</a></h3>
+				<h3 id="Vec4.SetFromMult">func (*Vec4) <a href="/target/vec4.go?s=1750:1789#L66">SetFromMult</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) SetFromMult(l, r *<a href="#Vec4">Vec4</a>)</pre>
-				
+				<p>
+Applies vector component multiplications of l and r to me, as needed by the Vec3.RotateRad() method.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.SetFromMult3">func (*Vec4) <a href="/target/vec4.go?s=2302:2348#L77">SetFromMult3</a></h3>
+				<h3 id="Vec4.SetFromMult3">func (*Vec4) <a href="/target/vec4.go?s=3192:3238#L95">SetFromMult3</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) SetFromMult3(q *<a href="#Vec4">Vec4</a>, v *<a href="#Vec3">Vec3</a>)</pre>
-				
+				<p>
+Applies vector component multiplications of q and v to me, as needed by the Vec3.RotateRad() method.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.SetFromMultMat4">func (*Vec4) <a href="/target/vec4.go?s=2547:2589#L84">SetFromMultMat4</a></h3>
+				<h3 id="Vec4.SetFromMultMat4">func (*Vec4) <a href="/target/vec4.go?s=3507:3549#L103">SetFromMultMat4</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) SetFromMultMat4(mat *<a href="#Mat4">Mat4</a>)</pre>
-				
+				<p>
+Sets me to the result of multiplying matrix mat with 4D-vector me.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Vec4.String">func (*Vec4) <a href="/target/vec4.go?s=2683:2714#L89">String</a></h3>
+				<h3 id="Vec4.String">func (*Vec4) <a href="/target/vec4.go?s=3643:3674#L108">String</a></h3>
 				<pre>func (me *<a href="#Vec4">Vec4</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 Returns a string representation of this 3D vector.
