@@ -43,7 +43,7 @@ func GopathSrc(subDirNames ...string) (gps string) {
 //	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
 //	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
-	return filepath.Join("github.com", gitHubName, GopathSrc(subDirNames...))
+	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
