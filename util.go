@@ -46,6 +46,14 @@ func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
 }
 
+//	Returns the result of os.Hostname() if any, else "localhost".
+func HostName() (hostName string) {
+	if hostName, _ = os.Hostname(); len(hostName) == 0 {
+		hostName = "localhost"
+	}
+	return
+}
+
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifb(cond, ifTrue, ifFalse bool) bool {
 	return (cond && ifTrue) || ((!cond) && ifFalse)
