@@ -76,6 +76,7 @@ func DirExists(path string) bool {
 	return false
 }
 
+//	Returns true if all dirOrFileNames exist in dirPath.
 func DirsFilesExist(dirPath string, dirOrFileNames ...string) (allExist bool) {
 	allExist = true
 	var (
@@ -252,11 +253,9 @@ func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))
 }
 
-func watchFilesRunHandler(dirPath, fileNamePattern string, handler func(string)) {
-	var m ustr.Matcher
-	m.AddPatterns(fileNamePattern)
+func watchFilesRunHandler(dirPath string, fileNamePattern ustr.Pattern, handler func(string)) {
 	NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
-		if m.IsMatch(filepath.Base(fullPath)) {
+		if fileNamePattern.IsMatch(filepath.Base(fullPath)) {
 			handler(fullPath)
 		}
 		return true

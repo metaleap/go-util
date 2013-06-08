@@ -143,16 +143,13 @@ Various line-savers for common I/O needs.
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Watcher.Close">func (me *Watcher) Close() error</a></dd>
-				
-					
 					<dd>&nbsp; &nbsp; <a href="#Watcher.Go">func (me *Watcher) Go()</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchDir">func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func())</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchFiles">func (me *Watcher) WatchFiles(dirPath, fileNamePattern string, runHandlerNow bool, handler func(string))</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Watcher.WatchFiles">func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler func(string))</a></dd>
 				
 			
 			
@@ -235,14 +232,17 @@ Returns true if a directory exists at the specified path.
 		
 			
 			
-			<h2 id="DirsFilesExist">func <a href="/target/io.go?s=2081:2158#L69">DirsFilesExist</a></h2>
+			<h2 id="DirsFilesExist">func <a href="/target/io.go?s=2137:2214#L70">DirsFilesExist</a></h2>
 			<pre>func DirsFilesExist(dirPath <a href="/pkg/builtin/#string">string</a>, dirOrFileNames ...<a href="/pkg/builtin/#string">string</a>) (allExist <a href="/pkg/builtin/#bool">bool</a>)</pre>
-			
+			<p>
+Returns true if all dirOrFileNames exist in dirPath.
+</p>
+
 			
 		
 			
 			
-			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2470:2515#L86">EnsureDirExists</a></h2>
+			<h2 id="EnsureDirExists">func <a href="/target/io.go?s=2526:2571#L87">EnsureDirExists</a></h2>
 			<pre>func EnsureDirExists(path <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 If a directory does not exist at the specified path, attempts to create it.
@@ -252,7 +252,7 @@ If a directory does not exist at the specified path, attempts to create it.
 		
 			
 			
-			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=2921:3055#L99">ExtractZipFile</a></h2>
+			<h2 id="ExtractZipFile">func <a href="/target/io.go?s=2977:3111#L100">ExtractZipFile</a></h2>
 			<pre>func ExtractZipFile(zipFilePath, targetDirPath <a href="/pkg/builtin/#string">string</a>, deleteZipFile <a href="/pkg/builtin/#bool">bool</a>, fileNamesPrefix <a href="/pkg/builtin/#string">string</a>, fileNamesToExtract ...<a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 Extracts a ZIP archive to the local file system.
@@ -265,7 +265,7 @@ deleteZipFile: deletes the ZIP archive file upon successful extraction.
 		
 			
 			
-			<h2 id="FileExists">func <a href="/target/io.go?s=4273:4306#L149">FileExists</a></h2>
+			<h2 id="FileExists">func <a href="/target/io.go?s=4329:4362#L150">FileExists</a></h2>
 			<pre>func FileExists(path <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Returns true if a file (not a directory) exists at the specified path.
@@ -275,7 +275,7 @@ Returns true if a file (not a directory) exists at the specified path.
 		
 			
 			
-			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4637:4785#L158">FindFileInfo</a></h2>
+			<h2 id="FindFileInfo">func <a href="/target/io.go?s=4693:4841#L159">FindFileInfo</a></h2>
 			<pre>func FindFileInfo(dirPath <a href="/pkg/builtin/#string">string</a>, fileBaseName <a href="/pkg/builtin/#string">string</a>, fileExts []<a href="/pkg/builtin/#string">string</a>, tryLower <a href="/pkg/builtin/#bool">bool</a>, tryUpper <a href="/pkg/builtin/#bool">bool</a>) (fullFilePath <a href="/pkg/builtin/#string">string</a>, fileInfo *<a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>)</pre>
 			<p>
 If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
@@ -286,7 +286,7 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5540:5602#L186">ReadBinaryFile</a></h2>
+			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5596:5658#L187">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -298,7 +298,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=5947:6056#L196">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=6003:6112#L197">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a>, offset <a href="/pkg/builtin/#int64">int64</a>, byteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>, ptr interface{}) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -309,7 +309,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6333:6408#L208">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6389:6464#L209">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>, defVal <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -319,7 +319,7 @@ Reads and returns the contents of a text file with non-idiomatic error handling:
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/io.go?s=6647:6704#L220">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/io.go?s=6703:6760#L221">SaveToFile</a></h2>
 			<pre>func SaveToFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, filename <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -339,7 +339,7 @@ An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirW
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=6993:7053#L234">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7049:7109#L235">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, contents []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -350,7 +350,7 @@ Also ensures the target file&#39;s directory exists.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7306:7357#L241">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7362:7413#L242">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
@@ -452,15 +452,24 @@ records a value higher than the specified testTime.
 		
 			
 			
-			<h2 id="Watcher">type <a href="/target/watcher_unsafe.go?s=137:340#L3">Watcher</a></h2>
+			<h2 id="Watcher">type <a href="/target/watcher_unsafe.go?s=260:676#L5">Watcher</a></h2>
 			<pre>type Watcher struct {
+    <span class="comment">//	Embedded fsnotify.Watcher</span>
     *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#Watcher">Watcher</a>
-    OnEvent      []func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>)
-    OnError      []func(err <a href="/pkg/builtin/#error">error</a>)
-    DirHandlers  map[<a href="/pkg/builtin/#string">string</a>][]func()
-    FileHandlers map[<a href="/pkg/builtin/#string">string</a>][]func(filePath <a href="/pkg/builtin/#string">string</a>)
+
+    <span class="comment">//	A collection of custom fsnotify.FileEvent handlers.</span>
+    <span class="comment">//	Not related to the handlers specified via the WatchDir(..) and WatchFiles(..) methods.</span>
+    OnEvent []func(evt *<a href="/pkg/github.com/goforks/fsnotify/">fsnotify</a>.<a href="/pkg/github.com/goforks/fsnotify/#FileEvent">FileEvent</a>)
+
+    <span class="comment">//	A collection of custom error handlers.</span>
+    OnError []func(err <a href="/pkg/builtin/#error">error</a>)
+    <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
-			
+			<p>
+A convenience wrapper around fsnotify.Watcher.
+Usage: var w uio.Watcher; w.WatchDir(..); w.WatchFiles(..); go w.Go()
+</p>
+
 
 			
 
@@ -470,38 +479,57 @@ records a value higher than the specified testTime.
 
 			
 				
-				<h3 id="NewWatcher">func <a href="/target/watcher_unsafe.go?s=342:384#L11">NewWatcher</a></h3>
+				<h3 id="NewWatcher">func <a href="/target/watcher_unsafe.go?s=735:777#L22">NewWatcher</a></h3>
 				<pre>func NewWatcher() (me *<a href="#Watcher">Watcher</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
-				
+				<p>
+Always returns a new Watcher, even if err is not nil.
+</p>
+
 				
 			
 
 			
 				
-				<h3 id="Watcher.Close">func (*Watcher) <a href="/target/watcher_unsafe.go?s=533:565#L17">Close</a></h3>
-				<pre>func (me *<a href="#Watcher">Watcher</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
-				
-				
-				
-			
-				
-				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher_unsafe.go?s=598:621#L21">Go</a></h3>
+				<h3 id="Watcher.Go">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1009:1032#L29">Go</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) Go()</pre>
-				
+				<p>
+Starts watching. A never-ending loop designed to be called in a new go-routine.
+</p>
+
 				
 				
 			
 				
-				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1269:1348#L55">WatchDir</a></h3>
+				<h3 id="Watcher.WatchDir">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1991:2070#L69">WatchDir</a></h3>
 				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchDir(dirPath <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func())</pre>
-				
+				<p>
+Watches the specified directory (but not sub-directories) for change events.
+</p>
+<p>
+handler is invoked whenever a change event is observed.
+</p>
+<p>
+runHandlerNow allows immediate one-time invokation of handler.
+This is for the use-case pattern &#34;load this dir now, then reload whenever it is modified&#34;
+</p>
+
 				
 				
 			
 				
-				<h3 id="Watcher.WatchFiles">func (*Watcher) <a href="/target/watcher_unsafe.go?s=1541:1645#L67">WatchFiles</a></h3>
-				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchFiles(dirPath, fileNamePattern <a href="/pkg/builtin/#string">string</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func(<a href="/pkg/builtin/#string">string</a>))</pre>
-				
+				<h3 id="Watcher.WatchFiles">func (*Watcher) <a href="/target/watcher_unsafe.go?s=2629:2746#L87">WatchFiles</a></h3>
+				<pre>func (me *<a href="#Watcher">Watcher</a>) WatchFiles(dirPath <a href="/pkg/builtin/#string">string</a>, fileNamePattern <a href="/pkg/github.com/metaleap/go-util/str/">ustr</a>.<a href="/pkg/github.com/metaleap/go-util/str/#Pattern">Pattern</a>, runHandlerNow <a href="/pkg/builtin/#bool">bool</a>, handler func(<a href="/pkg/builtin/#string">string</a>))</pre>
+				<p>
+Watches files (whose name matches the specified pattern) in the specified directory for change events.
+</p>
+<p>
+handler is invoked whenever a change event is observed, providing the full file path.
+</p>
+<p>
+runHandlerNow allows immediate one-time invokation of handler.
+This is for the use-case pattern &#34;load those files now, then reload whenever they are modified&#34;
+</p>
+
 				
 				
 			
