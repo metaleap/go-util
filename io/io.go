@@ -202,6 +202,20 @@ func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLow
 	return "", nil
 }
 
+//	Returns true if srcFilePath has been modified after dstFilePath.
+//	NOTE: be aware that newer will be returned as true if err is returned as NOT nil,
+//	as this is often very convenient for many use-cases.
+func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error) {
+	var out, src os.FileInfo
+	newer = true
+	if out, err = os.Stat(dstFilePath); err == nil && out != nil {
+		if src, err = os.Stat(srcFilePath); err == nil && src != nil {
+			newer = src.ModTime().UnixNano() > out.ModTime().UnixNano()
+		}
+	}
+	return
+}
+
 //	Reads and returns the binary contents of a file with non-idiomatic error handling:
 //	filePath: full local file path
 //	panicOnError: true to panic() if an error occurred reading the file

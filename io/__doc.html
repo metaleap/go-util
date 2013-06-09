@@ -95,6 +95,9 @@ Various line-savers for common I/O needs.
 				<dd><a href="#FindFileInfo">func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, fileInfo *os.FileInfo)</a></dd>
 			
 				
+				<dd><a href="#IsNewerThan">func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error)</a></dd>
+			
+				
 				<dd><a href="#ReadBinaryFile">func ReadBinaryFile(filePath string, panicOnError bool) []byte</a></dd>
 			
 				
@@ -286,7 +289,19 @@ The tryLower and tryUpper flags also test for upper-case and lower-case variants
 		
 			
 			
-			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=5779:5841#L198">ReadBinaryFile</a></h2>
+			<h2 id="IsNewerThan">func <a href="/target/io.go?s=5797:5870#L198">IsNewerThan</a></h2>
+			<pre>func IsNewerThan(srcFilePath, dstFilePath <a href="/pkg/builtin/#string">string</a>) (newer <a href="/pkg/builtin/#bool">bool</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Returns true if srcFilePath has been modified after dstFilePath.
+NOTE: be aware that newer will be returned as true if err is returned as NOT nil,
+as this is often very convenient for many use-cases.
+</p>
+
+			
+		
+			
+			
+			<h2 id="ReadBinaryFile">func <a href="/target/io.go?s=6314:6376#L212">ReadBinaryFile</a></h2>
 			<pre>func ReadBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
 			<p>
 Reads and returns the binary contents of a file with non-idiomatic error handling:
@@ -298,7 +313,7 @@ panicOnError: true to panic() if an error occurred reading the file
 		
 			
 			
-			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=6186:6295#L208">ReadFromBinary</a></h2>
+			<h2 id="ReadFromBinary">func <a href="/target/io.go?s=6721:6830#L222">ReadFromBinary</a></h2>
 			<pre>func ReadFromBinary(readSeeker <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a>, offset <a href="/pkg/builtin/#int64">int64</a>, byteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>, ptr interface{}) <a href="/pkg/builtin/#bool">bool</a></pre>
 			<p>
 Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
@@ -309,7 +324,7 @@ Returns false if data could not be successfully read as specified, otherwise tru
 		
 			
 			
-			<h2 id="ReadTextFile">func <a href="/target/io.go?s=6572:6647#L220">ReadTextFile</a></h2>
+			<h2 id="ReadTextFile">func <a href="/target/io.go?s=7107:7182#L234">ReadTextFile</a></h2>
 			<pre>func ReadTextFile(filePath <a href="/pkg/builtin/#string">string</a>, panicOnError <a href="/pkg/builtin/#bool">bool</a>, defVal <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			<p>
 Reads and returns the contents of a text file with non-idiomatic error handling:
@@ -319,7 +334,7 @@ Reads and returns the contents of a text file with non-idiomatic error handling:
 		
 			
 			
-			<h2 id="SaveToFile">func <a href="/target/io.go?s=6886:6943#L232">SaveToFile</a></h2>
+			<h2 id="SaveToFile">func <a href="/target/io.go?s=7421:7478#L246">SaveToFile</a></h2>
 			<pre>func SaveToFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, filename <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
 Performs an io.Copy() from the specified io.Reader to the specified local file.
@@ -339,7 +354,7 @@ An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirW
 		
 			
 			
-			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7232:7292#L246">WriteBinaryFile</a></h2>
+			<h2 id="WriteBinaryFile">func <a href="/target/io.go?s=7767:7827#L260">WriteBinaryFile</a></h2>
 			<pre>func WriteBinaryFile(filePath <a href="/pkg/builtin/#string">string</a>, contents []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
@@ -350,7 +365,7 @@ Also ensures the target file&#39;s directory exists.
 		
 			
 			
-			<h2 id="WriteTextFile">func <a href="/target/io.go?s=7545:7596#L253">WriteTextFile</a></h2>
+			<h2 id="WriteTextFile">func <a href="/target/io.go?s=8080:8131#L267">WriteTextFile</a></h2>
 			<pre>func WriteTextFile(filePath, contents <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
 A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
