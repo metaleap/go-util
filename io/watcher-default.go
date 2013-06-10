@@ -4,6 +4,7 @@ package uio
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/goforks/fsnotify"
 
@@ -16,6 +17,9 @@ type Watcher struct {
 	//	Embedded fsnotify.Watcher
 	*fsnotify.Watcher
 
+	//	Defaults to a time.Duration of 250 milliseconds
+	DebounceNano int64
+
 	//	A collection of custom fsnotify.FileEvent handlers.
 	//	Not related to the handlers specified via the WatchDir(..) and WatchFiles(..) methods.
 	OnEvent []func(evt *fsnotify.FileEvent)
@@ -23,14 +27,15 @@ type Watcher struct {
 	//	A collection of custom error handlers.
 	OnError []func(err error)
 
-	dirHandlers map[string][]func()
+	dirHandlers map[string][]WatcherHandler
 
-	fileHandlers map[string][]func(filePath string)
+	fileHandlers map[string][]WatcherHandler
 }
 
 //	Always returns a new Watcher, even if err is not nil.
 func NewWatcher() (me *Watcher, err error) {
-	me = &Watcher{dirHandlers: map[string][]func(){}, fileHandlers: map[string][]func(string){}}
+	me = &Watcher{dirHandlers: map[string][]WatcherHandler{}, fileHandlers: map[string][]WatcherHandler{}}
+	me.DebounceNano = time.Duration(250 * time.Millisecond).Nanoseconds()
 	me.Watcher, err = fsnotify.NewWatcher()
 	return
 }
@@ -38,24 +43,32 @@ func NewWatcher() (me *Watcher, err error) {
 //	Starts watching. A never-ending loop designed to be called in a new go-routine.
 func (me *Watcher) Go() {
 	var (
-		evt *fsnotify.FileEvent
-		err error
+		evt      *fsnotify.FileEvent
+		err      error
+		hasLast  bool
+		now, dif int64
 	)
+	lastEvt := map[string]int64{}
 	for {
 		select {
 		case evt = <-me.Event:
 			if evt != nil {
-				for _, on := range me.OnEvent {
-					on(evt)
-				}
-				dirPath := filepath.Dir(evt.Name)
-				for _, on := range me.dirHandlers[dirPath] {
-					on()
-				}
-				for filePathPattern, handlers := range me.fileHandlers {
-					if filepath.Dir(filePathPattern) == dirPath && ustr.MatchesAny(filepath.Base(evt.Name), filepath.Base(filePathPattern)) {
-						for _, on := range handlers {
-							on(evt.Name)
+				_, hasLast = lastEvt[evt.Name]
+				now = time.Now().UnixNano()
+				if dif = now - lastEvt[evt.Name]; dif > me.DebounceNano || !hasLast {
+					lastEvt[evt.Name] = now
+					for _, on := range me.OnEvent {
+						on(evt)
+					}
+					dirPath := filepath.Dir(evt.Name)
+					for _, on := range me.dirHandlers[dirPath] {
+						on(dirPath)
+					}
+					for filePathPattern, handlers := range me.fileHandlers {
+						if filepath.Dir(filePathPattern) == dirPath && ustr.MatchesAny(filepath.Base(evt.Name), filepath.Base(filePathPattern)) {
+							for _, on := range handlers {
+								on(evt.Name)
+							}
 						}
 					}
 				}
@@ -76,16 +89,19 @@ func (me *Watcher) Go() {
 //
 //	runHandlerNow allows immediate one-time invokation of handler.
 //	This is for the use-case pattern "load this dir now, then reload whenever it is modified"
-func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func()) {
+func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler WatcherHandler) (err error) {
 	dirPath = filepath.Clean(dirPath)
 	all, ok := me.dirHandlers[dirPath]
 	if !ok {
-		me.Watch(dirPath)
+		err = me.Watch(dirPath)
 	}
-	me.dirHandlers[dirPath] = append(all, handler)
-	if runHandlerNow {
-		handler()
+	if err == nil {
+		me.dirHandlers[dirPath] = append(all, handler)
+		if runHandlerNow {
+			handler(dirPath)
+		}
 	}
+	return
 }
 
 //	Watches files (whose name matches the specified pattern) in the specified directory for change events.
@@ -94,15 +110,21 @@ func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func()) 
 //
 //	runHandlerNow allows immediate one-time invokation of handler.
 //	This is for the use-case pattern "load those files now, then reload whenever they are modified"
-func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler func(string)) {
+func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
 	dirPath = filepath.Clean(dirPath)
 	filePath := filepath.Join(dirPath, string(fileNamePattern))
 	if _, ok := me.dirHandlers[dirPath]; !ok {
-		me.Watch(dirPath)
-		me.dirHandlers[dirPath] = []func(){}
+		if err := me.Watch(dirPath); err != nil {
+			errs = append(errs, err)
+		} else {
+			me.dirHandlers[dirPath] = []WatcherHandler{}
+		}
 	}
-	me.fileHandlers[filePath] = append(me.fileHandlers[filePath], handler)
-	if runHandlerNow {
-		watchFilesRunHandler(dirPath, fileNamePattern, handler)
+	if len(errs) == 0 {
+		me.fileHandlers[filePath] = append(me.fileHandlers[filePath], handler)
+		if runHandlerNow {
+			errs = append(errs, watchFilesRunHandler(dirPath, fileNamePattern, handler)...)
+		}
 	}
+	return
 }

@@ -28,16 +28,18 @@ func (me *Watcher) Close() error {
 func (me *Watcher) Go() {
 }
 
-//	Runs handler if runHandlerNow is true.
-func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler func()) {
+//	Runs handler if runHandlerNow is true, always returns nil.
+func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler WatcherHandler) (err error) {
 	if runHandlerNow {
-		handler()
+		handler(dirPath)
 	}
+	return
 }
 
 //	If runHandlerNow is true, runs handler for all files in dirPath that match fileNamePattern.
-func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler func(string)) {
+func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
 	if runHandlerNow {
-		watchFilesRunHandler(filepath.Clean(dirPath), fileNamePattern, handler)
+		errs = watchFilesRunHandler(filepath.Clean(dirPath), fileNamePattern, handler)
 	}
+	return
 }

@@ -13,6 +13,8 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
+type WatcherHandler func(path string)
+
 var (
 	//	The permission bits used in EnsureDirExists(), WriteBinaryFile() and WriteTextFile()
 	ModePerm = os.ModePerm
@@ -29,7 +31,7 @@ func (_ *DiscardWriter) Write(_ []byte) (int, error) {
 }
 */
 
-//	Removes any children contained in path, except those whose name matches any of the specified keepNamePatterns.
+//	Removes anything in path (but not path itself), except those whose name matches any of the specified keepNamePatterns.
 func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
 	var fileInfos []os.FileInfo
 	var matcher ustr.Matcher
@@ -53,7 +55,7 @@ func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error)
 		srcPath, destPath string
 		fileInfos         []os.FileInfo
 	)
-	if fileInfos, err = ioutil.ReadDir(srcDirPath); (err == nil) && (len(fileInfos) > 0) {
+	if fileInfos, err = ioutil.ReadDir(srcDirPath); err == nil {
 		EnsureDirExists(destDirPath)
 		for _, fi := range fileInfos {
 			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(destDirPath, fi.Name()); fi.IsDir() {
@@ -278,8 +280,8 @@ func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))
 }
 
-func watchFilesRunHandler(dirPath string, fileNamePattern ustr.Pattern, handler func(string)) {
-	NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
+func watchFilesRunHandler(dirPath string, fileNamePattern ustr.Pattern, handler WatcherHandler) []error {
+	return NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
 		if fileNamePattern.IsMatch(filepath.Base(fullPath)) {
 			handler(fullPath)
 		}
