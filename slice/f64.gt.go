@@ -2,7 +2,7 @@ package uslice
 
 //#begin-gt -gen.gt N:F64 T:float64
 
-//	Appends v to sl only if sl does not already contain v.
+//	Appends v to *ref only if *ref does not already contain v.
 func F64AppendUnique(ref *[]float64, v float64) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -10,6 +10,13 @@ func F64AppendUnique(ref *[]float64, v float64) {
 		}
 	}
 	*ref = append(*ref, v)
+}
+
+//	Appends each value in vals to *ref only *ref sl does not already contain it.
+func F64AppendUniques(ref *[]float64, vals ...float64) {
+	for _, v := range vals {
+		F64AppendUnique(ref, v)
+	}
 }
 
 //	Returns the position of val in slice.

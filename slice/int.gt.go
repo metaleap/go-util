@@ -2,7 +2,7 @@ package uslice
 
 //#begin-gt -gen.gt N:Int T:int
 
-//	Appends v to sl only if sl does not already contain v.
+//	Appends v to *ref only if *ref does not already contain v.
 func IntAppendUnique(ref *[]int, v int) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -10,6 +10,13 @@ func IntAppendUnique(ref *[]int, v int) {
 		}
 	}
 	*ref = append(*ref, v)
+}
+
+//	Appends each value in vals to *ref only *ref sl does not already contain it.
+func IntAppendUniques(ref *[]int, vals ...int) {
+	for _, v := range vals {
+		IntAppendUnique(ref, v)
+	}
 }
 
 //	Returns the position of val in slice.

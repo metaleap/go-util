@@ -267,6 +267,22 @@ func SaveToFile(r io.Reader, filename string) (err error) {
 	return
 }
 
+func WalkAllDirs(dirPath string, visitor WalkerVisitor) []error {
+	return NewDirWalker(true, visitor, nil).Walk(dirPath)
+}
+
+func WalkAllFiles(dirPath string, visitor WalkerVisitor) []error {
+	return NewDirWalker(true, nil, visitor).Walk(dirPath)
+}
+
+func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error {
+	return NewDirWalker(false, visitor, nil).Walk(dirPath)
+}
+
+func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error {
+	return NewDirWalker(false, nil, visitor).Walk(dirPath)
+}
+
 //	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
 //	Also ensures the target file's directory exists.
 func WriteBinaryFile(filePath string, contents []byte) error {
@@ -281,7 +297,7 @@ func WriteTextFile(filePath, contents string) error {
 }
 
 func watchFilesRunHandler(dirPath string, fileNamePattern ustr.Pattern, handler WatcherHandler) []error {
-	return NewDirWalker(false, nil, func(_ *DirWalker, fullPath string, _ os.FileInfo) bool {
+	return NewDirWalker(false, nil, func(fullPath string) bool {
 		if fileNamePattern.IsMatch(filepath.Base(fullPath)) {
 			handler(fullPath)
 		}

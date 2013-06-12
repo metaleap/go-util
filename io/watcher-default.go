@@ -62,7 +62,7 @@ func (me *Watcher) Go() {
 					}
 					dirPath := filepath.Dir(evt.Name)
 					for _, on := range me.dirHandlers[dirPath] {
-						on(dirPath)
+						on(evt.Name)
 					}
 					for filePathPattern, handlers := range me.fileHandlers {
 						if filepath.Dir(filePathPattern) == dirPath && ustr.MatchesAny(filepath.Base(evt.Name), filepath.Base(filePathPattern)) {

@@ -4,31 +4,15 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"time"
 )
 
-//	Used for DirWalker.DirVisitor and DirWalker.FileVisitor. Always check fileInfo for nil!
+//	Used for DirWalker.DirVisitor and DirWalker.FileVisitor.
 //	Always return keepWalking as true unless you want to immediately terminate a Walk() early.
-type WalkerVisitor func(walker *DirWalker, fullPath string, fileInfo os.FileInfo) (keepWalking bool)
+type WalkerVisitor func(fullPath string) (keepWalking bool)
 
 //	An empty WalkerVisitor used in place of a nil DirWalker.DirVisitor or a nil DirWalker.FileVisitor during a DirWalker.Walk(). Returns true.
-func WalkerVisitorNoop(_ *DirWalker, _ string, _ os.FileInfo) bool {
+func walkerVisitorNoop(_ string) bool {
 	return true
-}
-
-//	Returns a new WalkerVisitor that during a DirWalker.Walk() tracks FileInfo.ModTime() for all visited files
-//	and/or directories, always storing the newest one in fileTime, and terminating early as soon as fileTime
-//	records a value higher than the specified testTime.
-func NewWalkerVisitor_IsNewerThan(testTime time.Time, fileTime *time.Time) WalkerVisitor {
-	var tmpTime time.Time
-	return func(_ *DirWalker, _ string, fileInfo os.FileInfo) bool {
-		if fileInfo != nil {
-			if tmpTime = fileInfo.ModTime(); tmpTime.UnixNano() > fileTime.UnixNano() {
-				*fileTime = tmpTime
-			}
-		}
-		return fileTime.UnixNano() <= testTime.UnixNano()
-	}
 }
 
 //	Provides recursive directory walking with a variety of options.
@@ -68,21 +52,15 @@ func (me *DirWalker) Walk(dirPath string) (errs []error) {
 }
 
 func (me *DirWalker) walk(walkSelf bool, dirPath string, errs *[]error) {
-	dirInfo, err := os.Stat(dirPath)
-	if err != nil {
-		if *errs = append(*errs, err); me.BreakOnError {
-			return
-		}
-	}
 	dirVisitor, fileVisitor := me.DirVisitor, me.FileVisitor
 	if dirVisitor == nil {
-		dirVisitor = WalkerVisitorNoop
+		dirVisitor = walkerVisitorNoop
 	}
 	if fileVisitor == nil {
-		fileVisitor = WalkerVisitorNoop
+		fileVisitor = walkerVisitorNoop
 	}
 	if walkSelf {
-		walkSelf = dirVisitor(me, dirPath, dirInfo)
+		walkSelf = dirVisitor(dirPath)
 	} else {
 		walkSelf = true
 	}
@@ -112,7 +90,7 @@ func (me *DirWalker) walkInfos(dirPath string, fileInfos []os.FileInfo, isDir bo
 	keepWalking = true
 	for _, fi := range fileInfos {
 		if fullPath = filepath.Join(dirPath, fi.Name()); fi.IsDir() == isDir {
-			if keepWalking = visitor(me, fullPath, fi); !keepWalking {
+			if keepWalking = visitor(fullPath); !keepWalking {
 				break
 			} else if isDir && me.VisitSubDirs {
 				me.walk(false, fullPath, errs)

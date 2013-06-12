@@ -22,7 +22,7 @@ func StrHasIgnoreCase(vals []string, val string) bool {
 
 //#begin-gt -gen.gt N:Str T:string
 
-//	Appends v to sl only if sl does not already contain v.
+//	Appends v to *ref only if *ref does not already contain v.
 func StrAppendUnique(ref *[]string, v string) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -30,6 +30,13 @@ func StrAppendUnique(ref *[]string, v string) {
 		}
 	}
 	*ref = append(*ref, v)
+}
+
+//	Appends each value in vals to *ref only *ref sl does not already contain it.
+func StrAppendUniques(ref *[]string, vals ...string) {
+	for _, v := range vals {
+		StrAppendUnique(ref, v)
+	}
 }
 
 //	Returns the position of val in slice.
