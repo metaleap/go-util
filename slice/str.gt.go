@@ -1,8 +1,6 @@
 package uslice
 
-import (
-	"strings"
-)
+import "strings"
 
 //	Returns the position of lower-case val in lower-case vals.
 func StrAtIgnoreCase(vals []string, val string) int {
@@ -47,6 +45,26 @@ func StrAt(slice []string, val string) int {
 		}
 	}
 	return -1
+}
+
+func StrConvert(src []interface{}, sparse bool) (dst []string) {
+	if sparse {
+		var (
+			val string
+			ok  bool
+		)
+		for _, v := range src {
+			if val, ok = v.(string); ok {
+				dst = append(dst, val)
+			}
+		}
+	} else {
+		dst = make([]string, len(src))
+		for i, v := range src {
+			dst[i], _ = v.(string)
+		}
+	}
+	return
 }
 
 //	Calls StrSetCap() only if the current capacity of *ref is less than the specified capacity.

@@ -64,7 +64,7 @@ func Hash3 (one, two, three uint) uint {
 		return x >> y
 	}
 	one = one - two;  one = one - three;  one = one ^ (rshift(three, 13));
-	two = two - three;  two = two - one;  two = two ^ (one << 8); 
+	two = two - three;  two = two - one;  two = two ^ (one << 8);
 	three = three - one;  three = three - two;  three = three ^ (rshift(two, 13));
 	one = one - two;  one = one - three;  one = one ^ (rshift(three, 12));
 	two = two - three;  two = two - one;  two = two ^ (one << 16);
@@ -131,7 +131,7 @@ func Mix(x, y, a float64) float64 {
 	return (x * y) + ((1 - y) * a)
 }
 
-//	https://groups.google.com/forum/?fromgroups=#!topic/golang-nuts/dVtKN8QLUNM
+//	https://groups.google.com/d/topic/golang-nuts/dVtKN8QLUNM/discussion
 func Nextafter32(x, y float64) (r float64) {
 	switch {
 	case math.IsNaN(x) || math.IsNaN(y):

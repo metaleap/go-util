@@ -29,6 +29,26 @@ func F64At(slice []float64, val float64) int {
 	return -1
 }
 
+func F64Convert(src []interface{}, sparse bool) (dst []float64) {
+	if sparse {
+		var (
+			val float64
+			ok  bool
+		)
+		for _, v := range src {
+			if val, ok = v.(float64); ok {
+				dst = append(dst, val)
+			}
+		}
+	} else {
+		dst = make([]float64, len(src))
+		for i, v := range src {
+			dst[i], _ = v.(float64)
+		}
+	}
+	return
+}
+
 //	Calls F64SetCap() only if the current capacity of *ref is less than the specified capacity.
 func F64EnsureCap(ref *[]float64, capacity int) {
 	if cap(*ref) < capacity {

@@ -27,6 +27,26 @@ func __N__At(slice []__T__, val __T__) int {
 	return -1
 }
 
+func __N__Convert(src []interface{}, sparse bool) (dst []__T__) {
+	if sparse {
+		var (
+			val __T__
+			ok  bool
+		)
+		for _, v := range src {
+			if val, ok = v.(__T__); ok {
+				dst = append(dst, val)
+			}
+		}
+	} else {
+		dst = make([]__T__, len(src))
+		for i, v := range src {
+			dst[i], _ = v.(__T__)
+		}
+	}
+	return
+}
+
 //	Calls __N__SetCap() only if the current capacity of *ref is less than the specified capacity.
 func __N__EnsureCap(ref *[]__T__, capacity int) {
 	if cap(*ref) < capacity {

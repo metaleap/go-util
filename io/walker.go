@@ -31,6 +31,8 @@ type DirWalker struct {
 	//	(and the directory itself) get visited, but no sub-directories.
 	VisitSubDirs bool
 
+	VisitSelf bool
+
 	//	Called for every directory being visited during Walk().
 	DirVisitor WalkerVisitor
 
@@ -41,13 +43,13 @@ type DirWalker struct {
 //	Initializes and returns a new DirWalker with the specified (optional) visitors.
 //	The deep argument sets the VisitSubDirs field.
 func NewDirWalker(deep bool, dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker) {
-	me = &DirWalker{DirVisitor: dirVisitor, FileVisitor: fileVisitor, VisitSubDirs: deep}
+	me = &DirWalker{DirVisitor: dirVisitor, FileVisitor: fileVisitor, VisitSubDirs: deep, VisitSelf: true}
 	return
 }
 
 //	Initiates me walking through the specified directory.
 func (me *DirWalker) Walk(dirPath string) (errs []error) {
-	me.walk(true, dirPath, &errs)
+	me.walk(me.VisitSelf, dirPath, &errs)
 	return
 }
 

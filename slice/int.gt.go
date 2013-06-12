@@ -29,6 +29,26 @@ func IntAt(slice []int, val int) int {
 	return -1
 }
 
+func IntConvert(src []interface{}, sparse bool) (dst []int) {
+	if sparse {
+		var (
+			val int
+			ok  bool
+		)
+		for _, v := range src {
+			if val, ok = v.(int); ok {
+				dst = append(dst, val)
+			}
+		}
+	} else {
+		dst = make([]int, len(src))
+		for i, v := range src {
+			dst[i], _ = v.(int)
+		}
+	}
+	return
+}
+
 //	Calls IntSetCap() only if the current capacity of *ref is less than the specified capacity.
 func IntEnsureCap(ref *[]int, capacity int) {
 	if cap(*ref) < capacity {

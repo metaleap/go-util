@@ -2,6 +2,7 @@ package ugo
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -121,6 +122,13 @@ func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32 {
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
+	if cond {
+		return ifTrue
+	}
+	return ifFalse
+}
+
+func Ifw(cond bool, ifTrue, ifFalse io.Writer) io.Writer {
 	if cond {
 		return ifTrue
 	}

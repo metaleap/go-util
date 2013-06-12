@@ -276,11 +276,15 @@ func WalkAllFiles(dirPath string, visitor WalkerVisitor) []error {
 }
 
 func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error {
-	return NewDirWalker(false, visitor, nil).Walk(dirPath)
+	w := NewDirWalker(false, visitor, nil)
+	w.VisitSelf = false
+	return w.Walk(dirPath)
 }
 
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error {
-	return NewDirWalker(false, nil, visitor).Walk(dirPath)
+	w := NewDirWalker(false, nil, visitor)
+	w.VisitSelf = false
+	return w.Walk(dirPath)
 }
 
 //	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.

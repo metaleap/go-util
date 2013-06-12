@@ -29,6 +29,26 @@ func BoolAt(slice []bool, val bool) int {
 	return -1
 }
 
+func BoolConvert(src []interface{}, sparse bool) (dst []bool) {
+	if sparse {
+		var (
+			val bool
+			ok  bool
+		)
+		for _, v := range src {
+			if val, ok = v.(bool); ok {
+				dst = append(dst, val)
+			}
+		}
+	} else {
+		dst = make([]bool, len(src))
+		for i, v := range src {
+			dst[i], _ = v.(bool)
+		}
+	}
+	return
+}
+
 //	Calls BoolSetCap() only if the current capacity of *ref is less than the specified capacity.
 func BoolEnsureCap(ref *[]bool, capacity int) {
 	if cap(*ref) < capacity {
