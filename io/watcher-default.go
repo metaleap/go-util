@@ -43,10 +43,10 @@ func NewWatcher() (me *Watcher, err error) {
 //	Starts watching. A never-ending loop designed to be called in a new go-routine.
 func (me *Watcher) Go() {
 	var (
-		evt      *fsnotify.FileEvent
-		err      error
-		hasLast  bool
-		now, dif int64
+		evt     *fsnotify.FileEvent
+		err     error
+		hasLast bool
+		dif     int64
 	)
 	lastEvt := map[string]int64{}
 	for {
@@ -54,9 +54,7 @@ func (me *Watcher) Go() {
 		case evt = <-me.Event:
 			if evt != nil {
 				_, hasLast = lastEvt[evt.Name]
-				now = time.Now().UnixNano()
-				if dif = now - lastEvt[evt.Name]; dif > me.DebounceNano || !hasLast {
-					lastEvt[evt.Name] = now
+				if dif = time.Now().UnixNano() - lastEvt[evt.Name]; dif > me.DebounceNano || !hasLast {
 					for _, on := range me.OnEvent {
 						on(evt)
 					}
@@ -71,6 +69,7 @@ func (me *Watcher) Go() {
 							}
 						}
 					}
+					lastEvt[evt.Name] = time.Now().UnixNano()
 				}
 			}
 		case err = <-me.Error:
