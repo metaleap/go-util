@@ -20,16 +20,14 @@ var (
 	ModePerm = os.ModePerm
 )
 
-/*
-//	Implements io.Writer and discards/ingores all Write() calls.
-type DiscardWriter struct {
+//	Implements io.Writer and discards/ignores all Write() calls.
+type NoopWriter struct {
 }
 
 //	No-op
-func (_ *DiscardWriter) Write(_ []byte) (int, error) {
-	return 0, nil
+func (_ *NoopWriter) Write(_ []byte) (n int, err error) {
+	return
 }
-*/
 
 //	Removes anything in path (but not path itself), except those whose name matches any of the specified keepNamePatterns.
 func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
@@ -300,11 +298,16 @@ func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))
 }
 
-func watchFilesRunHandler(dirPath string, fileNamePattern ustr.Pattern, handler WatcherHandler) []error {
-	return NewDirWalker(false, nil, func(fullPath string) bool {
-		if fileNamePattern.IsMatch(filepath.Base(fullPath)) {
+func watchRunHandler(dirPath string, namePattern ustr.Pattern, handler WatcherHandler) []error {
+	vis := func(fullPath string) (keepWalking bool) {
+		keepWalking = true
+		if namePattern.IsMatch(filepath.Base(fullPath)) {
 			handler(fullPath)
 		}
-		return true
-	}).Walk(dirPath)
+		return
+	}
+	w := NewDirWalker(false, vis, vis)
+	w.VisitSelf = false
+	w.VisitDirsFirst = true
+	return w.Walk(dirPath)
 }

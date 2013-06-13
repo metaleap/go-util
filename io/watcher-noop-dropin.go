@@ -20,26 +20,18 @@ func NewWatcher() (me *Watcher, err error) {
 }
 
 //	No-op
-func (me *Watcher) Close() error {
-	return nil
+func (me *Watcher) Close() (err error) {
+	return
 }
 
 //	No-op
 func (me *Watcher) Go() {
 }
 
-//	Runs handler if runHandlerNow is true, always returns nil.
-func (me *Watcher) WatchDir(dirPath string, runHandlerNow bool, handler WatcherHandler) (err error) {
+//	If runHandlerNow is true, runs handler for all dirs/files in dirPath that match namePattern.
+func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
 	if runHandlerNow {
-		handler(dirPath)
-	}
-	return
-}
-
-//	If runHandlerNow is true, runs handler for all files in dirPath that match fileNamePattern.
-func (me *Watcher) WatchFiles(dirPath string, fileNamePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
-	if runHandlerNow {
-		errs = watchFilesRunHandler(filepath.Clean(dirPath), fileNamePattern, handler)
+		errs = watchRunHandler(filepath.Clean(dirPath), namePattern, handler)
 	}
 	return
 }

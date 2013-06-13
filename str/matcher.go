@@ -13,6 +13,7 @@ func MatchesAny(value string, patterns ...string) bool {
 
 type matcherPattern struct {
 	pattern, prefix, suffix, contains string
+	any                               bool
 }
 
 //	Matches a string against 'simple-patterns': patterns that can have asterisk (*) wildcards only
@@ -36,15 +37,16 @@ func (me *Matcher) AddPatterns(patterns ...string) {
 	patts := make([]matcherPattern, len(patterns))
 	for i := 0; i < len(patterns); i++ {
 		s = patterns[i]
-		patts[i].pattern = s
-		if strings.HasPrefix(s, "*") && strings.HasSuffix(s, "*") {
-			patts[i].contains = s[1 : len(s)-1]
-		} else if strings.HasPrefix(s, "*") {
-			patts[i].suffix = s[1:]
-		} else if strings.HasSuffix(s, "*") {
-			patts[i].prefix = s[:len(s)-1]
+		if patts[i].pattern, patts[i].any = s, len(s) == 0 || s == "*"; !patts[i].any {
+			if strings.HasPrefix(s, "*") && strings.HasSuffix(s, "*") {
+				patts[i].contains = s[1 : len(s)-1]
+			} else if strings.HasPrefix(s, "*") {
+				patts[i].suffix = s[1:]
+			} else if strings.HasSuffix(s, "*") {
+				patts[i].prefix = s[:len(s)-1]
+			}
 		}
-		if len(patts[i].contains) > 0 || len(patts[i].prefix) > 0 || len(patts[i].suffix) > 0 {
+		if patts[i].any || len(patts[i].contains) > 0 || len(patts[i].prefix) > 0 || len(patts[i].suffix) > 0 {
 			me.hasWildcards = true
 		}
 	}
@@ -59,7 +61,7 @@ func (me *Matcher) HasWildcardPatterns() bool {
 //	Matches s against all patterns in me.
 func (me *Matcher) IsMatch(s string) bool {
 	for i := 0; i < len(me.patterns); i++ {
-		if s == me.patterns[i].pattern {
+		if me.patterns[i].any || s == me.patterns[i].pattern {
 			return true
 		}
 		if me.hasWildcards {
@@ -84,6 +86,9 @@ type Pattern string
 //	Returns true if all specified values match this simple-pattern.
 func (me Pattern) AllMatch(values ...string) (allMatch bool) {
 	allMatch = true
+	if len(me) == 0 || me == "*" {
+		return
+	}
 	for _, val := range values {
 		if !me.IsMatch(val) {
 			allMatch = false
@@ -106,13 +111,17 @@ func (me Pattern) AnyMatches(values ...string) (firstMatch string) {
 
 //	Returns true if the specified value matches this simple-pattern.
 func (me Pattern) IsMatch(value string) bool {
-	prefix, suffix := len(me) > 0 && me[0] == '*', len(me) > 0 && me[len(me)-1] == '*'
+	meLen := len(me)
+	if meLen == 0 || me == "*" {
+		return true
+	}
+	prefix, suffix := me[0] == '*', me[meLen-1] == '*'
 	if prefix && suffix {
-		return len(me) == 1 || strings.Contains(value, string(me)[1:len(me)-2])
+		return strings.Contains(value, string(me)[1:meLen-2])
 	} else if prefix {
 		return strings.HasSuffix(value, string(me)[1:])
 	} else if suffix {
-		return strings.HasPrefix(value, string(me)[:len(me)-1])
+		return strings.HasPrefix(value, string(me)[:meLen-1])
 	}
 	return value == string(me)
 }
