@@ -128,6 +128,7 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 	return ifFalse
 }
 
+//	Returns ifTrue if cond is true, otherwise returns ifFalse.
 func Ifw(cond bool, ifTrue, ifFalse io.Writer) io.Writer {
 	if cond {
 		return ifTrue

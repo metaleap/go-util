@@ -21,12 +21,14 @@ func (me *sort__N__) Less(i, j int) bool {
 //	Implements sort.Interface.Swap()
 func (me *sort__N__) Swap(i, j int) { me.slice[i], me.slice[j] = me.slice[j], me.slice[i] }
 
+//	Returns sl, sorted by ascending order.
 func __N__SortAsc(sl []__T__) []__T__ {
 	me := &sort__N__{descending: false, slice: sl}
 	sort.Sort(me)
 	return me.slice
 }
 
+//	Returns sl, sorted by decending order.
 func __N__SortDesc(sl []__T__) []__T__ {
 	me := &sort__N__{descending: true, slice: sl}
 	sort.Sort(me)

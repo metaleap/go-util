@@ -10,9 +10,10 @@ import (
 
 //	Implements http.ResponseWriter with a bytes.Buffer
 type ResponseBuffer struct {
+	//	Used to implement http.ResponseWriter.Write()
 	bytes.Buffer
 
-	//	Used to return Resp.Header in Header()
+	//	Used to implement http.ResponseWriter.Header()
 	Resp http.Response
 }
 

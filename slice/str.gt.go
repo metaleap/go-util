@@ -47,6 +47,10 @@ func StrAt(slice []string, val string) int {
 	return -1
 }
 
+//	Converts src to dst.
+//	If sparse is true, then only successfully converted string values are placed
+//	in dst, so there may not be a 1-to-1 correspondence of dst to src in length or indices.
+//	If sparse is false, dst has the same length as src and non-convertable values remain zeroed.
 func StrConvert(src []interface{}, sparse bool) (dst []string) {
 	if sparse {
 		var (

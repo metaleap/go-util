@@ -29,6 +29,10 @@ func F64At(slice []float64, val float64) int {
 	return -1
 }
 
+//	Converts src to dst.
+//	If sparse is true, then only successfully converted float64 values are placed
+//	in dst, so there may not be a 1-to-1 correspondence of dst to src in length or indices.
+//	If sparse is false, dst has the same length as src and non-convertable values remain zeroed.
 func F64Convert(src []interface{}, sparse bool) (dst []float64) {
 	if sparse {
 		var (

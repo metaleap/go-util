@@ -23,12 +23,14 @@ func (me *sortStr) Less(i, j int) bool {
 //	Implements sort.Interface.Swap()
 func (me *sortStr) Swap(i, j int) { me.slice[i], me.slice[j] = me.slice[j], me.slice[i] }
 
+//	Returns sl, sorted by ascending order.
 func StrSortAsc(sl []string) []string {
 	me := &sortStr{descending: false, slice: sl}
 	sort.Sort(me)
 	return me.slice
 }
 
+//	Returns sl, sorted by decending order.
 func StrSortDesc(sl []string) []string {
 	me := &sortStr{descending: true, slice: sl}
 	sort.Sort(me)
