@@ -136,6 +136,14 @@ func Ifw(cond bool, ifTrue, ifFalse io.Writer) io.Writer {
 	return ifFalse
 }
 
+//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+func Ifx(cond bool, ifTrue, ifFalse interface{}) interface{} {
+	if cond {
+		return ifTrue
+	}
+	return ifFalse
+}
+
 //	A convenience short-hand for log.Println(fmt.Sprintf(LogErrorFormat, err)) if err isn't nil.
 func LogError(err error) {
 	if err != nil {
