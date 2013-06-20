@@ -4,9 +4,25 @@ import (
 	"database/sql"
 )
 
+type Execer interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+}
+
 type SqlCursor struct {
 	cols       []string
 	vals, ptrs []interface{}
+}
+
+func Exec(execer Execer, isInsert bool, query string, args ...interface{}) (result int64, err error) {
+	var res sql.Result
+	if res, err = execer.Exec(query, args...); err == nil {
+		if isInsert {
+			result, err = res.LastInsertId()
+		} else {
+			result, err = res.RowsAffected()
+		}
+	}
+	return
 }
 
 func (me *SqlCursor) PrepareColumns(cursor *sql.Rows) (err error) {
