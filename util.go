@@ -23,13 +23,13 @@ func dirExists(path string) bool {
 	return err == nil && stat.IsDir()
 }
 
-//	Returns all paths listed in the GOPATH environment variable.
+//	Returns all paths listed in the `GOPATH` environment variable.
 func GoPaths() []string {
 	return strings.Split(os.Getenv("GOPATH"), string(os.PathListSeparator))
 }
 
-//	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src sub-directory.
-//	Example: util.GopathSrc("tools", "importers", "sql") = "c:\gd\src\tools\importers\sql" if $GOPATH is c:\gd.
+//	Returns the `path/filepath.Join()`-ed full directory path for a specified `$GOPATH/src` sub-directory.
+//	Example: `util.GopathSrc("tools", "importers", "sql")` yields `c:\gd\src\tools\importers\sql` if `$GOPATH` is `c:\gd`.
 func GopathSrc(subDirNames ...string) (gps string) {
 	gp := []string{"", "src"}
 	for _, goPath := range GoPaths() { // in 99% of setups there's only 1 GOPATH, but hey..
@@ -41,13 +41,13 @@ func GopathSrc(subDirNames ...string) (gps string) {
 	return
 }
 
-//	Returns the path/filepath.Join()ed full directory path for a specified $GOPATH/src/github.com sub-directory.
-//	Example: util.GopathSrcGithub("metaleap", "go-util", "num") = "c:\gd\src\github.com\metaleap\go-util\num" if $GOPATH is c:\gd.
+//	Returns the `path/filepath.Join()`-ed full directory path for a specified `$GOPATH/src/github.com` sub-directory.
+//	Example: `util.GopathSrcGithub("metaleap", "go-util", "num")` yields `c:\gd\src\github.com\metaleap\go-util\num` if `$GOPATH` is `c:\gd`.
 func GopathSrcGithub(gitHubName string, subDirNames ...string) string {
 	return GopathSrc(append([]string{"github.com", gitHubName}, subDirNames...)...)
 }
 
-//	Returns the result of os.Hostname() if any, else "localhost".
+//	Returns the result of `os.Hostname()` if any, else `localhost`.
 func HostName() (hostName string) {
 	if hostName, _ = os.Hostname(); len(hostName) == 0 {
 		hostName = "localhost"
@@ -55,7 +55,7 @@ func HostName() (hostName string) {
 	return
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifb(cond, ifTrue, ifFalse bool) bool {
 	return (cond && ifTrue) || ((!cond) && ifFalse)
 	// if cond {
@@ -64,7 +64,7 @@ func Ifb(cond, ifTrue, ifFalse bool) bool {
 	// return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifd(cond bool, ifTrue, ifFalse float64) float64 {
 	if cond {
 		return ifTrue
@@ -72,7 +72,7 @@ func Ifd(cond bool, ifTrue, ifFalse float64) float64 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifi(cond bool, ifTrue, ifFalse int) int {
 	if cond {
 		return ifTrue
@@ -80,7 +80,7 @@ func Ifi(cond bool, ifTrue, ifFalse int) int {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifi16(cond bool, ifTrue, ifFalse int16) int16 {
 	if cond {
 		return ifTrue
@@ -88,7 +88,7 @@ func Ifi16(cond bool, ifTrue, ifFalse int16) int16 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifi32(cond bool, ifTrue, ifFalse int32) int32 {
 	if cond {
 		return ifTrue
@@ -96,7 +96,7 @@ func Ifi32(cond bool, ifTrue, ifFalse int32) int32 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifi64(cond bool, ifTrue, ifFalse int64) int64 {
 	if cond {
 		return ifTrue
@@ -104,7 +104,7 @@ func Ifi64(cond bool, ifTrue, ifFalse int64) int64 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifs(cond bool, ifTrue string, ifFalse string) string {
 	if cond {
 		return ifTrue
@@ -112,7 +112,7 @@ func Ifs(cond bool, ifTrue string, ifFalse string) string {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32 {
 	if cond {
 		return ifTrue
@@ -120,7 +120,7 @@ func Ifu32(cond bool, ifTrue, ifFalse uint32) uint32 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 	if cond {
 		return ifTrue
@@ -128,7 +128,7 @@ func Ifu64(cond bool, ifTrue, ifFalse uint64) uint64 {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifw(cond bool, ifTrue, ifFalse io.Writer) io.Writer {
 	if cond {
 		return ifTrue
@@ -136,7 +136,7 @@ func Ifw(cond bool, ifTrue, ifFalse io.Writer) io.Writer {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifx(cond bool, ifTrue, ifFalse interface{}) interface{} {
 	if cond {
 		return ifTrue
@@ -144,14 +144,14 @@ func Ifx(cond bool, ifTrue, ifFalse interface{}) interface{} {
 	return ifFalse
 }
 
-//	A convenience short-hand for log.Println(fmt.Sprintf(LogErrorFormat, err)) if err isn't nil.
+//	A convenience short-hand for `log.Println(fmt.Sprintf(LogErrorFormat, err))` if `err` isn't `nil`.
 func LogError(err error) {
 	if err != nil {
 		log.Println(fmt.Sprintf(LogErrorFormat, err))
 	}
 }
 
-//	Returns the human-readable representation associated with the specified GOOS name in OSNames.
+//	Returns the human-readable representation associated with the specified `goOS` name in `OSNames`.
 func OSName(goOS string) (name string) {
 	switch goOS {
 	case "windows":
@@ -169,7 +169,7 @@ func OSName(goOS string) (name string) {
 }
 
 //	Attempts to extract major and minor version components from a string that begins with a version number.
-//	Example: returns []int{3, 2} and float64(3.2) for a verstr that is "3.2.0 - Build 8.15.10.2761"
+//	Example: returns []int{3, 2} and float64(3.2) for a `verstr` that is `3.2.0 - Build 8.15.10.2761`.
 func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
 	var (
 		pos, j int
@@ -199,8 +199,8 @@ func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
 }
 
 //	Returns the path to the current user's home directory.
-//	Might be C:\Users\Kitty under Windows, /home/Kitty under Linux or /Users/Kitty under OSX.
-//	Specifically, returns the value of either the $userprofile (Windows) or the $HOME (others) environment variable, whichever one is set.
+//	Might be `C:\Users\Kitty` under Windows, `/home/Kitty` under Linux or `/Users/Kitty` under Mac OS X.
+//	Specifically, returns the value of either the `$userprofile` (Windows) or the `$HOME` (others) environment variable, whichever one is set.
 func UserHomeDirPath() (dirPath string) {
 	if dirPath = os.Getenv("userprofile"); len(dirPath) == 0 {
 		dirPath = os.Getenv("HOME")
