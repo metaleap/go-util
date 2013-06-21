@@ -151,7 +151,7 @@ func LogError(err error) {
 	}
 }
 
-//	Returns the human-readable representation associated with the specified `goOS` name in `OSNames`.
+//	Returns the human-readable operating system name represented by the specified `goOS` name.
 func OSName(goOS string) (name string) {
 	switch goOS {
 	case "windows":

@@ -139,8 +139,8 @@ A convenience short-hand for `log.Println(fmt.Sprintf(LogErrorFormat, err))` if
 ```go
 func OSName(goOS string) (name string)
 ```
-Returns the human-readable representation associated with the specified `goOS`
-name in `OSNames`.
+Returns the human-readable operating system name represented by the specified
+`goOS` name.
 
 #### func  ParseVersion
 
