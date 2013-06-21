@@ -63,7 +63,7 @@ Retrieves meta-data information about the `rows.Columns()`.
 ```go
 func (me *SqlCursor) Scan(rows *sql.Rows) (rec map[string]interface{}, err error)
 ```
-According to the meta-data retrieved via the latest prior call to
+According to the meta-data retrieved during your prior-most call to
 `me.PrepareColumns()`, populates `rec` with all field values for the current
 record in the specified `rows`.
 

@@ -1,7 +1,6 @@
 package uio
 
 import (
-	"archive/zip"
 	"encoding/binary"
 	"io"
 	"io/ioutil"
@@ -9,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	usl "github.com/metaleap/go-util/slice"
 	ustr "github.com/metaleap/go-util/str"
 )
 
@@ -114,6 +112,7 @@ func EnsureDirExists(path string) (err error) {
 	return
 }
 
+/*
 //	Extracts a ZIP archive to the local file system.
 //	zipFilePath: full file path to the ZIP archive file.
 //	targetDirPath: directory path where un-zipped archive contents are extracted to.
@@ -166,6 +165,7 @@ func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileN
 	}
 	return err
 }
+*/
 
 //	Returns true if a file (not a directory) exists at the specified path.
 func FileExists(path string) bool {

@@ -58,16 +58,6 @@ func EnsureDirExists(path string) (err error)
 ```
 If a directory does not exist at the specified path, attempts to create it.
 
-#### func  ExtractZipFile
-
-```go
-func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileNamesPrefix string, fileNamesToExtract ...string) error
-```
-Extracts a ZIP archive to the local file system. zipFilePath: full file path to
-the ZIP archive file. targetDirPath: directory path where un-zipped archive
-contents are extracted to. deleteZipFile: deletes the ZIP archive file upon
-successful extraction.
-
 #### func  FileExists
 
 ```go

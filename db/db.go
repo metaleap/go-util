@@ -52,7 +52,7 @@ func (me *SqlCursor) PrepareColumns(rows *sql.Rows) (err error) {
 	return
 }
 
-//	According to the meta-data retrieved via the latest prior call to `me.PrepareColumns()`,
+//	According to the meta-data retrieved during your prior-most call to `me.PrepareColumns()`,
 //	populates `rec` with all field values for the current record in the specified `rows`.
 func (me *SqlCursor) Scan(rows *sql.Rows) (rec map[string]interface{}, err error) {
 	if err = rows.Scan(me.ptrs...); err == nil {
