@@ -111,29 +111,31 @@ Performs an io.Copy() from the specified io.Reader to the specified local file.
 ```go
 func WalkAllDirs(dirPath string, visitor WalkerVisitor) []error
 ```
-Calls `visitor` for `dirPath` and all descendent directories.
+Calls `visitor` for `dirPath` and all descendent directories (but not files).
 
 #### func  WalkAllFiles
 
 ```go
 func WalkAllFiles(dirPath string, visitor WalkerVisitor) []error
 ```
-Calls `visitor` for all files directly or indirectly descendent to `dirPath`.
+Calls `visitor` for all files (but not directories) directly or indirectly
+descendent to `dirPath`.
 
 #### func  WalkDirsIn
 
 ```go
 func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error
 ```
-Calls `visitor` for all directories in `dirPath`, but not their sub-directories
-and not `dirPath` itself.
+Calls `visitor` for all directories (but not files) in `dirPath`, but not their
+sub-directories and not `dirPath` itself.
 
 #### func  WalkFilesIn
 
 ```go
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error
 ```
-Calls `visitor` for all files in `dirPath`, but not for any in sub-directories.
+Calls `visitor` for all files (but not directories) in `dirPath`, but not for
+any in sub-directories.
 
 #### func  WriteBinaryFile
 
@@ -165,10 +167,11 @@ type DirWalker struct {
 	//	having visited all sub-directories.
 	VisitDirsFirst bool
 
-	//	If false, only the files in the specified directory
-	//	(and the directory itself) get visited, but no sub-directories.
+	//	If false, only the items in the specified directory get visited
+	//	(and the directory itself if `VisitSelf`), but no items inside its sub-directories.
 	VisitSubDirs bool
 
+	//	Defaults to `true` if initialized via `NewDirWalker()`.
 	VisitSelf bool
 
 	//	Called for every directory being visited during Walk().
@@ -225,18 +228,31 @@ keepWalking as true unless you want to immediately terminate a Walk() early.
 
 ```go
 type Watcher struct {
+	//	Embedded fsnotify.Watcher
+	*fsnotify.Watcher
+
+	//	Defaults to a time.Duration of 250 milliseconds
+	DebounceNano int64
+
+	//	A collection of custom fsnotify.FileEvent handlers.
+	//	Not related to the handlers specified via the Watcher.WatchIn() method.
+	OnEvent []func(evt *fsnotify.FileEvent)
+
+	//	A collection of custom error handlers.
+	OnError []func(err error)
 }
 ```
 
-File-watching is not allowed and not necessary on Google App Engine. So this is
-a "polyfil" empty struct with no-op methods.
+A convenience wrapper around fsnotify.Watcher. Usage: `var w uio.Watcher;
+w.WatchIn(dir, pattern, runNow, handler); go w.Go();
+later(w.WatchIn(another...))`
 
 #### func  NewWatcher
 
 ```go
 func NewWatcher() (me *Watcher, err error)
 ```
-Always returns a new Watcher, even if err is not nil.
+Returns a new Watcher, err is always nil.
 
 #### func (*Watcher) Close
 
@@ -250,22 +266,15 @@ No-op
 ```go
 func (me *Watcher) Go()
 ```
-Starts watching. A never-ending loop designed to be called in a new go-routine.
+No-op
 
 #### func (*Watcher) WatchIn
 
 ```go
 func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error)
 ```
-Watches dirs/files (whose name matches the specified pattern) inside the
-specified dirPath for change events.
-
-handler is invoked whenever a change event is observed, providing the full file
-path.
-
-runHandlerNow allows immediate one-off invokation of handler. This will Walk()
-dirPath. This is for the use-case pattern "load those files now, then reload in
-exactly the same way whenever they are modified"
+If runHandlerNow is true, runs handler for all dirs/files in dirPath that match
+namePattern.
 
 #### type WatcherHandler
 

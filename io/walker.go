@@ -27,10 +27,11 @@ type DirWalker struct {
 	//	having visited all sub-directories.
 	VisitDirsFirst bool
 
-	//	If false, only the files in the specified directory
-	//	(and the directory itself) get visited, but no sub-directories.
+	//	If false, only the items in the specified directory get visited
+	//	(and the directory itself if `VisitSelf`), but no items inside its sub-directories.
 	VisitSubDirs bool
 
+	//	Defaults to `true` if initialized via `NewDirWalker()`.
 	VisitSelf bool
 
 	//	Called for every directory being visited during Walk().
