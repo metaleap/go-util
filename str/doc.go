@@ -1,2 +1,2 @@
-//	Various line-savers for common string-processing needs.
+// Various line-savers for common string-processing needs.
 package ustr

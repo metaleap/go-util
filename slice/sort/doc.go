@@ -1,2 +1,2 @@
-//	'Pseudo-generic' typed-slice sorters
+// 'Pseudo-generic' typed-slice sorters
 package usort
