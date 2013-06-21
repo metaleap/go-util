@@ -265,20 +265,24 @@ func SaveToFile(r io.Reader, filename string) (err error) {
 	return
 }
 
+//	Calls `visitor` for `dirPath` and all descendent directories.
 func WalkAllDirs(dirPath string, visitor WalkerVisitor) []error {
 	return NewDirWalker(true, visitor, nil).Walk(dirPath)
 }
 
+//	Calls `visitor` for all files directly or indirectly descendent to `dirPath`.
 func WalkAllFiles(dirPath string, visitor WalkerVisitor) []error {
 	return NewDirWalker(true, nil, visitor).Walk(dirPath)
 }
 
+//	Calls `visitor` for all directories in `dirPath`, but not their sub-directories and not `dirPath` itself.
 func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error {
 	w := NewDirWalker(false, visitor, nil)
 	w.VisitSelf = false
 	return w.Walk(dirPath)
 }
 
+//	Calls `visitor` for all files in `dirPath`, but not for any in sub-directories.
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error {
 	w := NewDirWalker(false, nil, visitor)
 	w.VisitSelf = false

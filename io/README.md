@@ -121,24 +121,29 @@ Performs an io.Copy() from the specified io.Reader to the specified local file.
 ```go
 func WalkAllDirs(dirPath string, visitor WalkerVisitor) []error
 ```
+Calls `visitor` for `dirPath` and all descendent directories.
 
 #### func  WalkAllFiles
 
 ```go
 func WalkAllFiles(dirPath string, visitor WalkerVisitor) []error
 ```
+Calls `visitor` for all files directly or indirectly descendent to `dirPath`.
 
 #### func  WalkDirsIn
 
 ```go
 func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error
 ```
+Calls `visitor` for all directories in `dirPath`, but not their sub-directories
+and not `dirPath` itself.
 
 #### func  WalkFilesIn
 
 ```go
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error
 ```
+Calls `visitor` for all files in `dirPath`, but not for any in sub-directories.
 
 #### func  WriteBinaryFile
 
