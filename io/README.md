@@ -79,9 +79,9 @@ test for upper-case and lower-case variants of the specified fileBaseName.
 ```go
 func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error)
 ```
-Returns true if srcFilePath has been modified after dstFilePath. NOTE: be aware
-that newer will be returned as true if err is returned as NOT nil, as this is
-often very convenient for many use-cases.
+Returns whether `srcFilePath` has been modified later than `dstFilePath`. NOTE:
+be aware that `newer` will be returned as `true` if `err` is returned as *not*
+`nil`, since that is often very convenient for many use-cases.
 
 #### func  ReadBinaryFile
 
@@ -89,25 +89,15 @@ often very convenient for many use-cases.
 func ReadBinaryFile(filePath string, panicOnError bool) []byte
 ```
 Reads and returns the binary contents of a file with non-idiomatic error
-handling: filePath: full local file path panicOnError: true to panic() if an
-error occurred reading the file
-
-#### func  ReadFromBinary
-
-```go
-func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool
-```
-Reads binary data into the specified interface{} from the specified
-io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
-Returns false if data could not be successfully read as specified, otherwise
-true.
+handling, mostly for one-off `package main`s.
 
 #### func  ReadTextFile
 
 ```go
 func ReadTextFile(filePath string, panicOnError bool, defVal string) string
 ```
-Reads and returns the contents of a text file with non-idiomatic error handling:
+Reads and returns the contents of a text file with non-idiomatic error handling,
+mostly for one-off `package main`s.
 
 #### func  SaveToFile
 

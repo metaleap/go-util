@@ -1,7 +1,6 @@
 package uio
 
 import (
-	"encoding/binary"
 	"io"
 	"io/ioutil"
 	"os"
@@ -202,9 +201,9 @@ func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLow
 	return "", nil
 }
 
-//	Returns true if srcFilePath has been modified after dstFilePath.
-//	NOTE: be aware that newer will be returned as true if err is returned as NOT nil,
-//	as this is often very convenient for many use-cases.
+//	Returns whether `srcFilePath` has been modified later than `dstFilePath`.
+//	NOTE: be aware that `newer` will be returned as `true` if `err` is returned as *not* `nil`,
+//	since that is often very convenient for many use-cases.
 func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error) {
 	var out, src os.FileInfo
 	newer = true
@@ -216,9 +215,7 @@ func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error) {
 	return
 }
 
-//	Reads and returns the binary contents of a file with non-idiomatic error handling:
-//	filePath: full local file path
-//	panicOnError: true to panic() if an error occurred reading the file
+//	Reads and returns the binary contents of a file with non-idiomatic error handling, mostly for one-off `package main`s.
 func ReadBinaryFile(filePath string, panicOnError bool) []byte {
 	bytes, err := ioutil.ReadFile(filePath)
 	if panicOnError && (err != nil) {
@@ -227,6 +224,7 @@ func ReadBinaryFile(filePath string, panicOnError bool) []byte {
 	return bytes
 }
 
+/*
 //	Reads binary data into the specified interface{} from the specified io.ReadSeeker at the specified offset using the specified binary.ByteOrder.
 //	Returns false if data could not be successfully read as specified, otherwise true.
 func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.ByteOrder, ptr interface{}) bool {
@@ -239,8 +237,9 @@ func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.Byt
 	}
 	return true
 }
+*/
 
-//	Reads and returns the contents of a text file with non-idiomatic error handling:
+//	Reads and returns the contents of a text file with non-idiomatic error handling, mostly for one-off `package main`s.
 func ReadTextFile(filePath string, panicOnError bool, defVal string) string {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err == nil {
@@ -255,8 +254,7 @@ func ReadTextFile(filePath string, panicOnError bool, defVal string) string {
 //	Performs an io.Copy() from the specified io.Reader to the specified local file.
 func SaveToFile(r io.Reader, filename string) (err error) {
 	var file *os.File
-	file, err = os.Create(filename)
-	if file != nil {
+	if file, err = os.Create(filename); file != nil {
 		defer file.Close()
 		if err == nil {
 			_, err = io.Copy(file, r)
