@@ -158,7 +158,7 @@ func UserHomeDirPath() (dirPath string)
 ```
 Returns the path to the current user's home directory. Might be `C:\Users\Kitty`
 under Windows, `/home/Kitty` under Linux or `/Users/Kitty` under Mac OS X.
-Specifically, returns the value of either the `$userprofile` (Windows) or the
+Specifically, returns the value of either the `%userprofile%` (Windows) or the
 `$HOME` (others) environment variable, whichever one is set.
 
 --

@@ -200,7 +200,7 @@ func ParseVersion(verstr string) (majorMinor [2]int, both float64) {
 
 //	Returns the path to the current user's home directory.
 //	Might be `C:\Users\Kitty` under Windows, `/home/Kitty` under Linux or `/Users/Kitty` under Mac OS X.
-//	Specifically, returns the value of either the `$userprofile` (Windows) or the `$HOME` (others) environment variable, whichever one is set.
+//	Specifically, returns the value of either the `%userprofile%` (Windows) or the `$HOME` (others) environment variable, whichever one is set.
 func UserHomeDirPath() (dirPath string) {
 	if dirPath = os.Getenv("userprofile"); len(dirPath) == 0 {
 		dirPath = os.Getenv("HOME")
