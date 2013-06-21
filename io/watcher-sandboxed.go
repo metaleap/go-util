@@ -8,8 +8,8 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
-//	File-watching is not allowed and not necessary on Google App Engine.
-//	So this is a "polyfil" empty struct with no-op methods.
+//	A convenience wrapper around fsnotify.Watcher.
+//	Usage: `var w uio.Watcher; w.WatchIn(dir, pattern, runNow, handler); go w.Go(); later(w.WatchIn(another...))`
 type Watcher struct {
 }
 
@@ -19,7 +19,7 @@ func NewWatcher() (me *Watcher, err error) {
 	return
 }
 
-//	No-op
+//	Closes the underlying `me.Watcher`.
 func (me *Watcher) Close() (err error) {
 	return
 }

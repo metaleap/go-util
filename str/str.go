@@ -9,6 +9,7 @@ import (
 	usl "github.com/metaleap/go-util/slice"
 )
 
+/*
 //	Sets all values in m to the empty string.
 func ClearMap(m map[string]string) {
 	for k, v := range m {
@@ -22,6 +23,7 @@ func ClearMap(m map[string]string) {
 func Concat(vals ...string) string {
 	return strings.Join(vals, "")
 }
+*/
 
 //	Returns true if str2 is contained in str1 exactly once.
 func ContainsOnce(str1, str2 string) bool {
@@ -138,7 +140,7 @@ func Ifm(cond bool, ifTrue, ifFalse map[string]string) map[string]string {
 }
 
 //	Returns ifTrue if cond is true, otherwise returns ifFalse.
-func Ifs(cond bool, ifTrue string, ifFalse string) string {
+func Ifs(cond bool, ifTrue, ifFalse string) string {
 	if cond {
 		return ifTrue
 	}

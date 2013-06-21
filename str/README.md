@@ -6,13 +6,6 @@ Various line-savers for common string-processing needs.
 
 ## Usage
 
-#### func  ClearMap
-
-```go
-func ClearMap(m map[string]string)
-```
-Sets all values in m to the empty string.
-
 #### func  Concat
 
 ```go

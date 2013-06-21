@@ -5,7 +5,7 @@ import (
 	"hash"
 )
 
-//	Returns the enc's (or if nil, the base64.URLEncoding's) string-encoding of the specified Hash h for data.
+//	Returns the `enc`'s (or if `nil`, the `base64.URLEncoding`'s) string-encoding of the specified `Hash` for `data`.
 func EncodeToString(h hash.Hash, data []byte, enc *base64.Encoding) string {
 	h.Write(data)
 	if enc == nil {

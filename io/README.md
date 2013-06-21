@@ -231,22 +231,24 @@ type Watcher struct {
 }
 ```
 
-File-watching is not allowed and not necessary on Google App Engine. So this is
-a "polyfil" empty struct with no-op methods.
+A convenience wrapper around fsnotify.Watcher. Usage: `var w uio.Watcher;
+w.WatchIn(dir, pattern, runNow, handler); go w.Go();
+later(w.WatchIn(another...))`
 
 #### func  NewWatcher
 
 ```go
 func NewWatcher() (me *Watcher, err error)
 ```
-Always returns a new Watcher, even if err is not nil.
+Always returns a new `Watcher`, even if `err` is not `nil` (in which case,
+however, `me.Watcher` might be `nil`).
 
 #### func (*Watcher) Close
 
 ```go
 func (me *Watcher) Close() (err error)
 ```
-No-op
+Closes the underlying `me.Watcher`.
 
 #### func (*Watcher) Go
 
@@ -260,7 +262,7 @@ Starts watching. A never-ending loop designed to be called in a new go-routine.
 ```go
 func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error)
 ```
-Watches dirs/files (whose name matches the specified pattern) inside the
+Watches dirs/files (whose base-names match the specified pattern) inside the
 specified dirPath for change events.
 
 handler is invoked whenever a change event is observed, providing the full file

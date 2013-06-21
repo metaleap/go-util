@@ -32,7 +32,7 @@ type Watcher struct {
 	allHandlers map[string][]WatcherHandler
 }
 
-//	Always returns a new Watcher, even if err is not nil.
+//	Always returns a new `Watcher`, even if `err` is not `nil` (in which case, however, `me.Watcher` might be `nil`).
 func NewWatcher() (me *Watcher, err error) {
 	me = &Watcher{dirsWatching: map[string]bool{}, allHandlers: map[string][]WatcherHandler{}}
 	me.DebounceNano = time.Duration(250 * time.Millisecond).Nanoseconds()
@@ -84,7 +84,7 @@ func (me *Watcher) Go() {
 	}
 }
 
-//	Watches dirs/files (whose name matches the specified pattern) inside the specified dirPath for change events.
+//	Watches dirs/files (whose base-names match the specified pattern) inside the specified dirPath for change events.
 //
 //	handler is invoked whenever a change event is observed, providing the full file path.
 //

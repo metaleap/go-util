@@ -18,9 +18,9 @@ type Rgba32 struct {
 	A float32
 }
 
-//	Converts the specified vals to a newly initialized Rgba32 instance.
-//	The first 4 vals are used for R, G, B, and A in that order, if present.
-//	A is set to 1 if vals[3] is not present.
+//	Converts the specified `vals` to a newly initialized `Rgba32` instance.
+//	The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
+//	`A` is set to 1 if `vals[3]` is not present.
 func NewRgba32(vals ...float64) (me *Rgba32) {
 	me = &Rgba32{}
 	if len(vals) > 0 {
@@ -49,9 +49,9 @@ type Rgba64 struct {
 	A float64
 }
 
-//	Converts the specified vals to a newly initialized Rgba64 instance.
-//	The first 4 vals are used for R, G, B, and A in that order, if present.
-//	A is set to 1 if vals[3] is not present.
+//	Converts the specified `vals` to a newly initialized `Rgba64` instance.
+//	The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
+//	`A` is set to 1 if `vals[3]` is not present.
 func NewRgba64(vals ...float64) (me *Rgba64) {
 	me = &Rgba64{}
 	if len(vals) > 0 {
@@ -68,22 +68,22 @@ func NewRgba64(vals ...float64) (me *Rgba64) {
 	return
 }
 
-//	If 2-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 2D coordinate...
+//	If 2 dimensions are represented in a 1-dimensional linear array, this function provides a way to return a 1D index addressing the specified 2D coordinate.
 func Index2D(x, y, ysize int) int {
 	return (x * ysize) + y
 }
 
-//	If 3-dimensions are represented in a 1-dimensional linear array, this function provides one way to return a 1D index addressing a 3D coordinate...
+//	If 3 dimensions are represented in a 1-dimensional linear array, this function provides a way to return a 1D index addressing the specified 3D coordinate.
 func Index3D(x, y, z, xsize, ysize int) int {
 	return (((z * xsize) + x) * ysize) + y
 }
 
-//	Saves any given image as a local PNG file.
+//	Saves any given `Image` as a local PNG file.
 func SavePngImageFile(img image.Image, filePath string) error {
 	file, err := os.Create(filePath)
 	if err == nil {
 		defer file.Close()
-		png.Encode(file, img)
+		err = png.Encode(file, img)
 	}
 	return err
 }
