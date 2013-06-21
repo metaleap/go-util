@@ -10,7 +10,8 @@ import (
 	unum "github.com/metaleap/go-util/num"
 )
 
-//	The interface that the image package was missing...
+//	The "missing interface" from the `image` package:
+//	`Set(x, y, color)` is implemented by most (but not all) `image` types that are also implementing `Image`.
 type Picture interface {
 	image.Image
 
