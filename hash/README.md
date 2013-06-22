@@ -2,7 +2,9 @@
 --
     import "github.com/metaleap/go-util/hash"
 
-Implements the most useful of the hashing algorithms described at:
+A few line-savers for common hashing needs.
+
+Also implements a selection of the hashing algorithms described at:
 http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
 
 ## Usage
