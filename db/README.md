@@ -45,8 +45,9 @@ type SqlCursor struct {
 ```
 
 Helps iterating over `*sql.Rows`. After each `rows.Next()` call, you can call
-the `Scan()` method to return the record set as a `map[string]interface{}`. If
-the columns are identical for all records (most SQL databases), call
+the `Scan()` method to return the record set as a `map[string]interface{}`.
+
+If the columns are identical for all records (most SQL databases), call
 `PrepareColumns()` just once prior to iteration. If the columns vary across
 records (some NoSQL databases), call `PrepareColumns()` during each iteration
 prior to `Scan()`.
