@@ -62,7 +62,7 @@ Calls `BoolSetLen` only if the current `len(*ref)` is less than the specified
 ```go
 func BoolEquivalent(one, two []bool) bool
 ```
-Returns `true` if `one` and `two` only contain identical values, regardless of
+Returns whether `one` and `two` only contain identical values, regardless of
 ordering.
 
 #### func  BoolHas
@@ -164,7 +164,7 @@ Calls `F64SetLen` only if the current `len(*ref)` is less than the specified
 ```go
 func F64Equivalent(one, two []float64) bool
 ```
-Returns `true` if `one` and `two` only contain identical values, regardless of
+Returns whether `one` and `two` only contain identical values, regardless of
 ordering.
 
 #### func  F64Has
@@ -266,7 +266,7 @@ Calls `IntSetLen` only if the current `len(*ref)` is less than the specified
 ```go
 func IntEquivalent(one, two []int) bool
 ```
-Returns `true` if `one` and `two` only contain identical values, regardless of
+Returns whether `one` and `two` only contain identical values, regardless of
 ordering.
 
 #### func  IntHas
@@ -375,7 +375,7 @@ Calls `StrSetLen` only if the current `len(*ref)` is less than the specified
 ```go
 func StrEquivalent(one, two []string) bool
 ```
-Returns `true` if `one` and `two` only contain identical values, regardless of
+Returns whether `one` and `two` only contain identical values, regardless of
 ordering.
 
 #### func  StrHas

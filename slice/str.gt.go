@@ -87,7 +87,7 @@ func StrEnsureLen(ref *[]string, length int) {
 	}
 }
 
-//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
+//	Returns whether `one` and `two` only contain identical values, regardless of ordering.
 func StrEquivalent(one, two []string) bool {
 	if len(one) != len(two) {
 		return false

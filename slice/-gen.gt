@@ -67,7 +67,7 @@ func __N__EnsureLen(ref *[]__T__, length int) {
 	}
 }
 
-//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
+//	Returns whether `one` and `two` only contain identical values, regardless of ordering.
 func __N__Equivalent(one, two []__T__) bool {
 	if len(one) != len(two) {
 		return false

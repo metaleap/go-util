@@ -69,7 +69,7 @@ func IntEnsureLen(ref *[]int, length int) {
 	}
 }
 
-//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
+//	Returns whether `one` and `two` only contain identical values, regardless of ordering.
 func IntEquivalent(one, two []int) bool {
 	if len(one) != len(two) {
 		return false

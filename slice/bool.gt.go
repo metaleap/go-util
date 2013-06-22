@@ -69,7 +69,7 @@ func BoolEnsureLen(ref *[]bool, length int) {
 	}
 }
 
-//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
+//	Returns whether `one` and `two` only contain identical values, regardless of ordering.
 func BoolEquivalent(one, two []bool) bool {
 	if len(one) != len(two) {
 		return false

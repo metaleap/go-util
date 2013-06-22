@@ -1,7 +1,6 @@
 package ustr
 
 import (
-	"math"
 	"strings"
 	"unicode"
 
@@ -25,15 +24,13 @@ func Concat(vals ...string) string {
 }
 */
 
-//	Returns true if str2 is contained in str1 exactly once.
+//	Returns whether `str2` is contained in `str1` exactly once.
 func ContainsOnce(str1, str2 string) bool {
 	first, last := strings.Index(str1, str2), strings.LastIndex(str1, str2)
-	if (first >= 0) && (first == last) {
-		return true
-	}
-	return false
+	return (first >= 0) && (first == last)
 }
 
+/*
 //	A simple string-similarity algorithm.
 func Distance(s1, s2 string) int {
 	var (
@@ -58,8 +55,9 @@ func Distance(s1, s2 string) int {
 	}
 	return d[len(s1)][len(s2)]
 }
+*/
 
-//	Extracts all identifiers (no duplicates, ordered by occurrence) starting with prefix occurring in src.
+//	Extracts all "identifiers" (as per `ExtractFirstIdentifier()`) in `src` and starting with `prefix` (no duplicates, ordered by occurrence).
 func ExtractAllIdentifiers(src, prefix string) (identifiers []string) {
 	minPos := 0
 	id := ExtractFirstIdentifier(src, prefix, minPos)
@@ -72,7 +70,7 @@ func ExtractAllIdentifiers(src, prefix string) (identifiers []string) {
 	return
 }
 
-//	Extracts the first occurrence (at or after minPos) of an identifier starting with prefix in src.
+//	Extracts the first occurrence (at or after `minPos`) of the "identifier" starting with `prefix` in `src`.
 func ExtractFirstIdentifier(src, prefix string, minPos int) (identifier string) {
 	sub := src[minPos:]
 	pos := strings.Index(sub, prefix)
@@ -87,8 +85,9 @@ func ExtractFirstIdentifier(src, prefix string, minPos int) (identifier string) 
 	return
 }
 
-//	Returns the first string in vals to match the specified predicate.
-//	step: 1 to test all values. A higher value to skip n values after each test. Negative for reverse slice traversal. Or use 0 to get stuck in an infinite loop.
+//	Returns the first `string` in `vals` to match the specified `predicate`.
+//
+//	`step`: 1 to test all values, a higher value to skip n values after each test, negative for reverse slice traversal, or use 0 to get stuck in an infinite loop.
 func First(predicate func(s string) bool, step int, vals ...string) string {
 	l := len(vals)
 	reverse := step < 0
@@ -100,7 +99,7 @@ func First(predicate func(s string) bool, step int, vals ...string) string {
 	return ""
 }
 
-//	Returns the first non-empty string in vals.
+//	Returns the first non-empty `string` in `vals`.
 func FirstNonEmpty(vals ...string) (val string) {
 	// return First(func(s string) bool { return len(s) > 0 }, step, vals...)
 	for _, val = range vals {
@@ -111,7 +110,7 @@ func FirstNonEmpty(vals ...string) (val string) {
 	return
 }
 
-//	Returns true if s starts with any one of the specified prefixes.
+//	Returns whether `s` starts with any one of the specified `prefixes`.
 func HasAnyPrefix(s string, prefixes ...string) bool {
 	for _, prefix := range prefixes {
 		if strings.HasPrefix(s, prefix) {
@@ -121,7 +120,7 @@ func HasAnyPrefix(s string, prefixes ...string) bool {
 	return false
 }
 
-//	Returns true if s ends with any one of the specified suffixes.
+//	Returns whether `s` ends with any one of the specified `suffixes`.
 func HasAnySuffix(s string, suffixes ...string) bool {
 	for _, suffix := range suffixes {
 		if strings.HasSuffix(s, suffix) {
@@ -131,7 +130,7 @@ func HasAnySuffix(s string, suffixes ...string) bool {
 	return false
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifm(cond bool, ifTrue, ifFalse map[string]string) map[string]string {
 	if cond {
 		return ifTrue
@@ -139,7 +138,7 @@ func Ifm(cond bool, ifTrue, ifFalse map[string]string) map[string]string {
 	return ifFalse
 }
 
-//	Returns ifTrue if cond is true, otherwise returns ifFalse.
+//	Returns `ifTrue` if `cond` is `true`, otherwise returns `ifFalse`.
 func Ifs(cond bool, ifTrue, ifFalse string) string {
 	if cond {
 		return ifTrue
@@ -147,7 +146,7 @@ func Ifs(cond bool, ifTrue, ifFalse string) string {
 	return ifFalse
 }
 
-//	For all seps, computes the index of first occurrence in s, then returns the smallest index.
+//	For all `seps`, records its position of first occurrence in `s`, then returns the smallest such position.
 func IndexAny(s string, seps ...string) (pos int) {
 	pos = -1
 	for index, sep := range seps {
@@ -158,7 +157,7 @@ func IndexAny(s string, seps ...string) (pos int) {
 	return
 }
 
-//	Returns true if str is ASCII-compatible.
+//	Returns whether `str` is ASCII-compatible.
 func IsAscii(str string) bool {
 	for _, c := range str {
 		if c > unicode.MaxASCII {
@@ -168,7 +167,7 @@ func IsAscii(str string) bool {
 	return true
 }
 
-//	Returns true if all Letter-runes in s are lower-case.
+//	Returns whether all `unicode.IsLetter()` runes in `s` are lower-case.
 func IsLower(s string) bool {
 	for _, r := range s {
 		if unicode.IsLetter(r) && !unicode.IsLower(r) {
@@ -178,7 +177,7 @@ func IsLower(s string) bool {
 	return true
 }
 
-//	Returns true if s is in all.
+//	Returns whether `s` is in `all`.
 func IsOneOf(s string, all ...string) bool {
 	for _, a := range all {
 		if s == a {
@@ -188,7 +187,7 @@ func IsOneOf(s string, all ...string) bool {
 	return false
 }
 
-//	Returns true if all Letter-runes in s are upper-case.
+//	Returns whether all `unicode.IsLetter()` runes in `s` are upper-case.
 func IsUpper(s string) bool {
 	for _, r := range s {
 		if unicode.IsLetter(r) && !unicode.IsUpper(r) {
@@ -198,17 +197,18 @@ func IsUpper(s string) bool {
 	return true
 }
 
-//	Returns a string representation of s with all non-Letter-runes removed.
-func LettersOnly(s string) (ret string) {
+//	Returns a representation of `s` with all non-`unicode.IsLetter()` runes removed.
+func LettersOnly(s string) string {
+	var buf Buffer
 	for _, r := range s {
 		if unicode.IsLetter(r) {
-			ret += string(r)
+			buf.WriteRune(r)
 		}
 	}
-	return
+	return buf.String()
 }
 
-//	Returns a slice that contains the non-empty strings in vals.
+//	Returns a slice that contains the non-empty items in `vals`.
 func NonEmpties(breakAtFirstEmpty bool, vals ...string) (slice []string) {
 	for _, s := range vals {
 		if len(s) > 0 {
@@ -221,9 +221,12 @@ func NonEmpties(breakAtFirstEmpty bool, vals ...string) (slice []string) {
 }
 
 //	A most simplistic (not linguistically-correct) English-language pluralizer that may be useful for code or doc generation.
-//	If s ends with "s", only appends "es": bus -> buses, mess -> messes
-//	If s ends with "y" (but not "ay", "ey", "oy", "uy" or "iy"), removes "y" and appends "ies": autonomy -> autonomies, dictionary -> dictionaries etc.
-//	Otherwise, appends "s".
+//
+//	If `s` ends with "s", only appends "es": bus -> buses, mess -> messes etc.
+//
+//	If `s` ends with "y" (but not "ay", "ey", "oy", "uy" or "iy"), removes "y" and appends "ies": autonomy -> autonomies, dictionary -> dictionaries etc.
+//
+//	Otherwise, appends "s": gopher -> gophers, laptop -> laptops etc.
 func Pluralize(s string) string {
 	if strings.HasSuffix(s, "s") {
 		return s + "es"
@@ -234,7 +237,7 @@ func Pluralize(s string) string {
 	return s + "s"
 }
 
-//	Prepends prefix + sep to v only if prefix isn't empty.
+//	Prepends `prefix + sep` to `v` only if `prefix` isn't empty.
 func PrefixWithSep(prefix, sep, v string) string {
 	if len(prefix) > 0 {
 		return prefix + sep + v
@@ -242,7 +245,7 @@ func PrefixWithSep(prefix, sep, v string) string {
 	return v
 }
 
-//	Prepends p to s only if s doesn't already have that prefix.
+//	Prepends `p` to `s` only if `s` doesn't already have that prefix.
 func PrependIf(s, p string) string {
 	if strings.HasPrefix(s, p) {
 		return s
@@ -250,7 +253,7 @@ func PrependIf(s, p string) string {
 	return p + s
 }
 
-//	Replaces in str all occurrences of all repls map keys with their associated (mapped) value.
+//	Replaces in `str` all occurrences of all `repls` hash-map keys with their respective associated (mapped) value.
 func Replace(str string, repls map[string]string) string {
 	for k, v := range repls {
 		str = strings.Replace(str, k, v, -1)
@@ -259,30 +262,32 @@ func Replace(str string, repls map[string]string) string {
 }
 
 //	Creates a Pascal-cased "identifier" version of the specified string.
-func SafeIdentifier(s string) (ret string) {
-	var isL, isD, last bool
+func SafeIdentifier(s string) string {
+	var (
+		isL, isD, last bool
+		buf            Buffer
+	)
 	for i, r := range s {
 		if isL, isD = unicode.IsLetter(r), unicode.IsDigit(r); isL || isD || ((r == '_') && (i == 0)) {
 			if (i > 0) && (isL != last) {
-				ret += " "
+				buf.WriteRune(' ')
 			}
-			ret += string(r)
+			buf.WriteRune(r)
 		} else {
-			ret += " "
+			buf.WriteRune(' ')
 		}
 		last = isL
 	}
-	words := Split(strings.Title(ret), " ")
+	words := Split(strings.Title(buf.String()), " ")
 	for i, w := range words {
 		if (len(w) > 1) && IsUpper(w) {
 			words[i] = strings.Title(strings.ToLower(w))
 		}
 	}
-	ret = strings.Join(words, "")
-	return
+	return strings.Join(words, "")
 }
 
-//	Returns an empty slice is v is emtpy, otherwise like strings.Split()
+//	Returns an empty slice is `v` is emtpy, otherwise like `strings.Split()`
 func Split(v, s string) (sl []string) {
 	if len(v) > 0 {
 		sl = strings.Split(v, s)
@@ -290,7 +295,7 @@ func Split(v, s string) (sl []string) {
 	return
 }
 
-//	Strips prefix off val if possible.
+//	Strips `prefix` off `val` if possible.
 func StripPrefix(val, prefix string) string {
 	for strings.HasPrefix(val, prefix) {
 		val = val[len(prefix):]
@@ -298,7 +303,7 @@ func StripPrefix(val, prefix string) string {
 	return val
 }
 
-//	Strips suffix off val if possible.
+//	Strips `suffix` off `val` if possible.
 func StripSuffix(val, suffix string) string {
 	for strings.HasSuffix(val, suffix) {
 		val = val[:len(val)-len(suffix)]
@@ -352,7 +357,7 @@ func ToStrings (any interface{}) []string {
 }
 */
 
-//	Returns the lower-case representation of s only if it is currently fully upper-case as per IsUpper().
+//	Returns the lower-case representation of `s` only if it is currently fully upper-case as per `IsUpper()`.
 func ToLowerIfUpper(s string) string {
 	if IsUpper(s) {
 		return strings.ToLower(s)
@@ -360,7 +365,7 @@ func ToLowerIfUpper(s string) string {
 	return s
 }
 
-//	Returns the upper-case representation of s only if it is currently fully lower-case as per IsLower().
+//	Returns the upper-case representation of `s` only if it is currently fully lower-case as per `IsLower()`.
 func ToUpperIfLower(s string) string {
 	if IsLower(s) {
 		return strings.ToUpper(s)
