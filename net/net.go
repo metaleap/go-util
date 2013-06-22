@@ -16,8 +16,11 @@ import (
 //	Examples:
 //
 //	`Addr("http", ":8080")` = `http://localhost:8080`
+//
 //	`Addr("https", "testserver:9090")` = `https://testserver:9090`
+//
 //	`Addr("http", ":http")` = `http://localhost`
+//
 //	`Addr("https", "demomachine:https")` = `https://demomachine`
 func Addr(protocol, tcpAddr string) (fullAddr string) {
 	localhost := ugo.HostName()

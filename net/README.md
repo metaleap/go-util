@@ -15,9 +15,13 @@ Returns a human-readable URL representation of the specified TCP address.
 
 Examples:
 
-`Addr("http", ":8080")` = `http://localhost:8080` `Addr("https",
-"testserver:9090")` = `https://testserver:9090` `Addr("http", ":http")` =
-`http://localhost` `Addr("https", "demomachine:https")` = `https://demomachine`
+`Addr("http", ":8080")` = `http://localhost:8080`
+
+`Addr("https", "testserver:9090")` = `https://testserver:9090`
+
+`Addr("http", ":http")` = `http://localhost`
+
+`Addr("https", "demomachine:https")` = `https://demomachine`
 
 #### func  DownloadFile
 
