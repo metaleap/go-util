@@ -8,6 +8,13 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
+/*
+	HACK ALERT!!
+	This type and the fields in Watcher are all UNUSED in this sandboxed shim.
+	But the documentation generator will sadly pick this sandboxed shim instead of the default watcher src file...
+
+	So the only purpose of this type and all Watcher fields is for them to appear in generated documentation resembling what's in the real default Watcher...
+*/
 type fsnotify_Watcher struct {
 }
 
@@ -20,13 +27,6 @@ type fsnotify_Watcher struct {
 //		otherCode(laterOn...)
 //		w.WatchIn(anotherDir...)
 type Watcher struct {
-	/*
-		HACK ALERT!!
-		These fields are all unused in this sandboxed shim. But the documentation generator will sadly
-		pick this sandboxed shim instead of the default watcher...
-
-		So the only purpose of those fields is for them to appear in generated documentation...
-	*/
 	Watcher *fsnotify_Watcher
 
 	//	Defaults to a `time.Duration` of 250 milliseconds

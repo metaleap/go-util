@@ -206,13 +206,6 @@ Used for `DirWalker.DirVisitor` and `DirWalker.FileVisitor`. Always return
 
 ```go
 type Watcher struct {
-	/*
-		HACK ALERT!!
-		These fields are all unused in this sandboxed shim. But the documentation generator will sadly
-		pick this sandboxed shim instead of the default watcher...
-
-		So the only purpose of those fields is for them to appear in generated documentation...
-	*/
 	Watcher *fsnotify_Watcher
 
 	//	Defaults to a `time.Duration` of 250 milliseconds
