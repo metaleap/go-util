@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/goforks/fsnotify"
+	"github.com/go-forks/fsnotify"
 
 	ustr "github.com/metaleap/go-util/str"
 )
 
-//	A convenient wrapper around `goforks/fsnotify.Watcher`.
+//	A convenient wrapper around `go-forks/fsnotify.Watcher`.
 //
 //	Usage:
 //		var w uio.Watcher

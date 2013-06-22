@@ -220,7 +220,7 @@ type Watcher struct {
 }
 ```
 
-A convenient wrapper around `goforks/fsnotify.Watcher`.
+A convenient wrapper around `go-forks/fsnotify.Watcher`.
 
 Usage:
 

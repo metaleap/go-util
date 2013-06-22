@@ -19,7 +19,7 @@ type matcherPattern struct {
 //	Matches a string against "simple-patterns": patterns that can have asterisk (*) wildcards only
 //	at the beginning ("ends-with"), at the end ("begins-with"), or both ("contains"), or not at all ("equals").
 //
-//	For more complex pattern-matching needs, go and unleash the full force of regular expressions.
+//	For more complex pattern-matching needs, go forth and unleash the full force of the standard library's `regexp` package.
 //	But I found that in a big portion of pattern-matching use-cases, I'm just doing "begins-or-ends-or-contains-or-equals" testing.
 //	Hence the conception of the "simple-pattern".
 //
