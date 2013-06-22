@@ -7,10 +7,10 @@ type sort__N__ struct {
 	slice      []__T__
 }
 
-//	Implements sort.Interface.Len()
+//	Implements `sort.Interface.Len()`.
 func (me *sort__N__) Len() int { return len(me.slice) }
 
-//	Implements sort.Interface.Less()
+//	Implements `sort.Interface.Less()`.
 func (me *sort__N__) Less(i, j int) bool {
 	if me.descending {
 		return me.slice[j] < me.slice[i]
@@ -18,17 +18,17 @@ func (me *sort__N__) Less(i, j int) bool {
 	return me.slice[i] < me.slice[j]
 }
 
-//	Implements sort.Interface.Swap()
+//	Implements `sort.Interface.Swap()`.
 func (me *sort__N__) Swap(i, j int) { me.slice[i], me.slice[j] = me.slice[j], me.slice[i] }
 
-//	Returns sl, sorted by ascending order.
+//	Returns `sl` sorted by ascending order.
 func __N__SortAsc(sl []__T__) []__T__ {
 	me := &sort__N__{descending: false, slice: sl}
 	sort.Sort(me)
 	return me.slice
 }
 
-//	Returns sl, sorted by decending order.
+//	Returns `sl` sorted by decending order.
 func __N__SortDesc(sl []__T__) []__T__ {
 	me := &sort__N__{descending: true, slice: sl}
 	sort.Sort(me)

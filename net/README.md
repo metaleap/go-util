@@ -15,13 +15,13 @@ Returns a human-readable URL representation of the specified TCP address.
 
 Examples:
 
-`Addr("http", ":8080")` = `http://localhost:8080`
+`unet.Addr("http", ":8080")` = `http://localhost:8080`
 
-`Addr("https", "testserver:9090")` = `https://testserver:9090`
+`unet.Addr("https", "testserver:9090")` = `https://testserver:9090`
 
-`Addr("http", ":http")` = `http://localhost`
+`unet.Addr("http", ":http")` = `http://localhost`
 
-`Addr("https", "demomachine:https")` = `https://demomachine`
+`unet.Addr("https", "demomachine:https")` = `https://demomachine`
 
 #### func  DownloadFile
 
@@ -63,7 +63,7 @@ Returns `me.Resp.Header`.
 #### func (*ResponseBuffer) WriteHeader
 
 ```go
-func (me *ResponseBuffer) WriteHeader(_ int)
+func (_ *ResponseBuffer) WriteHeader(_ int)
 ```
 No-op -- currently, headers aren't written to the underlying `bytes.Buffer`.
 

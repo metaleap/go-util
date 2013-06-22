@@ -15,13 +15,13 @@ import (
 //
 //	Examples:
 //
-//	`Addr("http", ":8080")` = `http://localhost:8080`
+//	`unet.Addr("http", ":8080")` = `http://localhost:8080`
 //
-//	`Addr("https", "testserver:9090")` = `https://testserver:9090`
+//	`unet.Addr("https", "testserver:9090")` = `https://testserver:9090`
 //
-//	`Addr("http", ":http")` = `http://localhost`
+//	`unet.Addr("http", ":http")` = `http://localhost`
 //
-//	`Addr("https", "demomachine:https")` = `https://demomachine`
+//	`unet.Addr("https", "demomachine:https")` = `https://demomachine`
 func Addr(protocol, tcpAddr string) (fullAddr string) {
 	localhost := ugo.HostName()
 	both := strings.Split(tcpAddr, ":")
@@ -73,7 +73,10 @@ type ResponseBuffer struct {
 }
 
 //	Returns `me.Resp.Header`.
-func (me *ResponseBuffer) Header() http.Header { return me.Resp.Header }
+func (me *ResponseBuffer) Header() http.Header {
+	return me.Resp.Header
+}
 
 //	No-op -- currently, headers aren't written to the underlying `bytes.Buffer`.
-func (me *ResponseBuffer) WriteHeader(_ int) {}
+func (_ *ResponseBuffer) WriteHeader(_ int) {
+}

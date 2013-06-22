@@ -9,10 +9,10 @@ type sortStr struct {
 	slice      []string
 }
 
-//	Implements sort.Interface.Len()
+//	Implements `sort.Interface.Len()`.
 func (me *sortStr) Len() int { return len(me.slice) }
 
-//	Implements sort.Interface.Less()
+//	Implements `sort.Interface.Less()`.
 func (me *sortStr) Less(i, j int) bool {
 	if me.descending {
 		return me.slice[j] < me.slice[i]
@@ -20,17 +20,17 @@ func (me *sortStr) Less(i, j int) bool {
 	return me.slice[i] < me.slice[j]
 }
 
-//	Implements sort.Interface.Swap()
+//	Implements `sort.Interface.Swap()`.
 func (me *sortStr) Swap(i, j int) { me.slice[i], me.slice[j] = me.slice[j], me.slice[i] }
 
-//	Returns sl, sorted by ascending order.
+//	Returns `sl` sorted by ascending order.
 func StrSortAsc(sl []string) []string {
 	me := &sortStr{descending: false, slice: sl}
 	sort.Sort(me)
 	return me.slice
 }
 
-//	Returns sl, sorted by decending order.
+//	Returns `sl` sorted by decending order.
 func StrSortDesc(sl []string) []string {
 	me := &sortStr{descending: true, slice: sl}
 	sort.Sort(me)
