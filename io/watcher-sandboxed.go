@@ -8,6 +8,9 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
+type fsnotify_Watcher struct {
+}
+
 //	A convenient wrapper around `goforks/fsnotify.Watcher`.
 //
 //	Usage:
@@ -22,6 +25,7 @@ type Watcher struct {
 		These fields are all unused in this sandboxed shim. But the documentation generator will sadly
 		pick this sandboxed shim instead of the default watcher...
 	*/
+	*fsnotify_Watcher
 
 	//	Defaults to a `time.Duration` of 250 milliseconds
 	DebounceNano int64
