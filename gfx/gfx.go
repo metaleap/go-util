@@ -19,6 +19,7 @@ type Rgba32 struct {
 }
 
 //	Converts the specified `vals` to a newly initialized `Rgba32` instance.
+//
 //	The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
 //	`A` is set to 1 if `vals[3]` is not present.
 func NewRgba32(vals ...float64) (me *Rgba32) {
@@ -50,6 +51,7 @@ type Rgba64 struct {
 }
 
 //	Converts the specified `vals` to a newly initialized `Rgba64` instance.
+//
 //	The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
 //	`A` is set to 1 if `vals[3]` is not present.
 func NewRgba64(vals ...float64) (me *Rgba64) {

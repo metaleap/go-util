@@ -11,18 +11,21 @@ import (
 )
 
 //	The "missing interface" from the `image` package:
-//	`Set(x, y, color)` is implemented by most (but not all) `image` types that are also implementing `Image`.
+//	`Set(x, y, color)` is implemented by most (but not all) `image` types that also implement `Image`.
 type Picture interface {
 	image.Image
 
-	//	Set pixel at x,y to the specified color.
+	//	Set pixel at `x, y` to the specified `Color`.
 	Set(int, int, color.Color)
 }
 
-//	Creates and returns a copy of `src`.
+//	Creates and returns a `Picture` just like `src`:
+//
 //	If `copyPixels` is `true`, pixels in `src` are copied to `dst`, otherwise `dst` will be an
-//	empty/black image of the same dimensions, color format, stride/offset/etc as `src`.
-func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte) {
+//	empty/black `Picture` of the exact same dimensions, color format, stride/offset/etc as `src`.
+//
+//	The resulting `dst` will be of the same type as `src` if `src` is an `*image.Alpha`, `*image.Alpha16`, `*image.Gray`, `*image.Gray16`, `*image.NRGBA`, `*image.NRGBA16`, or `*image.RGBA64` --- otherwise, `dst` will be an `*image.RGBA`.
+func CreateLike(src image.Image, copyPixels bool) (dst Picture, pix []byte) {
 	makePix := func(pix []byte) (cp []byte) {
 		if cp = make([]byte, len(pix)); copyPixels {
 			copy(cp, pix)
@@ -73,12 +76,16 @@ func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte) {
 	return
 }
 
-//	Processes the specified `Image` and writes the result to the specified `Picture`.
-//	Unless `flipY` is `true`, `dst` and `src` may well be the same object.
+//	Processes the specified `Image` and writes the result to the specified `Picture`:
+//
 //	If `flipY` is `true`, all pixel rows are inverted (`dst` becomes `src` vertically mirrored).
+//
 //	If `toBgra` is `true`, all pixels' red and blue components are swapped.
+//
 //	If `toLinear` is `true`, all pixels are converted from gamma/sRGB to linear space --
 //	only use this if you're certain that `src` is not already in linear space.
+//
+//	`dst` and `src` may point to the same `Image` object ONLY if `flipY` is `false`.
 func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool) {
 	const preprocessParallel = true
 	var wg sync.WaitGroup

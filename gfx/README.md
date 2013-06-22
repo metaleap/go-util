@@ -28,12 +28,18 @@ provides a way to return a 1D index addressing the specified 3D coordinate.
 func PreprocessImage(src image.Image, dst Picture, flipY, toBgra, toLinear bool)
 ```
 Processes the specified `Image` and writes the result to the specified
-`Picture`. Unless `flipY` is `true`, `dst` and `src` may well be the same
-object. If `flipY` is `true`, all pixel rows are inverted (`dst` becomes `src`
-vertically mirrored). If `toBgra` is `true`, all pixels' red and blue components
-are swapped. If `toLinear` is `true`, all pixels are converted from gamma/sRGB
-to linear space -- only use this if you're certain that `src` is not already in
-linear space.
+`Picture`:
+
+If `flipY` is `true`, all pixel rows are inverted (`dst` becomes `src`
+vertically mirrored).
+
+If `toBgra` is `true`, all pixels' red and blue components are swapped.
+
+If `toLinear` is `true`, all pixels are converted from gamma/sRGB to linear
+space -- only use this if you're certain that `src` is not already in linear
+space.
+
+`dst` and `src` may point to the same `Image` object ONLY if `flipY` is `false`.
 
 #### func  SavePngImageFile
 
@@ -48,23 +54,29 @@ Saves any given `Image` as a local PNG file.
 type Picture interface {
 	image.Image
 
-	//	Set pixel at x,y to the specified color.
+	//	Set pixel at `x, y` to the specified `Color`.
 	Set(int, int, color.Color)
 }
 ```
 
 The "missing interface" from the `image` package: `Set(x, y, color)` is
-implemented by most (but not all) `image` types that are also implementing
-`Image`.
+implemented by most (but not all) `image` types that also implement `Image`.
 
-#### func  CloneImage
+#### func  CreateLike
 
 ```go
-func CloneImage(src image.Image, copyPixels bool) (dst Picture, pix []byte)
+func CreateLike(src image.Image, copyPixels bool) (dst Picture, pix []byte)
 ```
-Creates and returns a copy of `src`. If `copyPixels` is `true`, pixels in `src`
-are copied to `dst`, otherwise `dst` will be an empty/black image of the same
-dimensions, color format, stride/offset/etc as `src`.
+Creates and returns a `Picture` just like `src`:
+
+If `copyPixels` is `true`, pixels in `src` are copied to `dst`, otherwise `dst`
+will be an empty/black `Picture` of the exact same dimensions, color format,
+stride/offset/etc as `src`.
+
+The resulting `dst` will be of the same type as `src` if `src` is an
+`*image.Alpha`, `*image.Alpha16`, `*image.Gray`, `*image.Gray16`,
+`*image.NRGBA`, `*image.NRGBA16`, or `*image.RGBA64` --- otherwise, `dst` will
+be an `*image.RGBA`.
 
 #### type Rgba32
 
@@ -89,9 +101,10 @@ order.
 ```go
 func NewRgba32(vals ...float64) (me *Rgba32)
 ```
-Converts the specified `vals` to a newly initialized `Rgba32` instance. The
-first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
-`A` is set to 1 if `vals[3]` is not present.
+Converts the specified `vals` to a newly initialized `Rgba32` instance.
+
+The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if
+present. `A` is set to 1 if `vals[3]` is not present.
 
 #### type Rgba64
 
@@ -116,9 +129,10 @@ order.
 ```go
 func NewRgba64(vals ...float64) (me *Rgba64)
 ```
-Converts the specified `vals` to a newly initialized `Rgba64` instance. The
-first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if present.
-`A` is set to 1 if `vals[3]` is not present.
+Converts the specified `vals` to a newly initialized `Rgba64` instance.
+
+The first 4 `vals` are used for `R`, `G`, `B`, and `A` in that order, if
+present. `A` is set to 1 if `vals[3]` is not present.
 
 --
 **godocdown** http://github.com/robertkrimen/godocdown
