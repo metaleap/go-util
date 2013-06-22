@@ -7,15 +7,6 @@ http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
 
 ## Usage
 
-#### func  EncodeToString
-
-```go
-func EncodeToString(h hash.Hash, data []byte, enc *base64.Encoding) string
-```
-Returns the `enc`'s string-encoding of the specified `Hash` for `data`.
-
-If `enc` is `nil`, then `base64.URLEncoding` will be used instead.
-
 #### func  Fnv1
 
 ```go
@@ -58,6 +49,13 @@ The rotating hash with SUM
 func RotatingXor(vals []int) (h int)
 ```
 The rotating hash with XOR
+
+#### func  WriteAndSum
+
+```go
+func WriteAndSum(h hash.Hash, data, b []byte) (sum []byte, err error)
+```
+Convenience short-hand for `h.Write(data)`, then `h.Sum(b)`.
 
 --
 **godocdown** http://github.com/robertkrimen/godocdown

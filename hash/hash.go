@@ -1,19 +1,15 @@
 package uhash
 
 import (
-	"encoding/base64"
 	"hash"
 )
 
-//	Returns the `enc`'s string-encoding of the specified `Hash` for `data`.
-//
-//	If `enc` is `nil`, then `base64.URLEncoding` will be used instead.
-func EncodeToString(h hash.Hash, data []byte, enc *base64.Encoding) string {
-	h.Write(data)
-	if enc == nil {
-		enc = base64.URLEncoding
+//	Convenience short-hand for `h.Write(data)`, then `h.Sum(b)`.
+func WriteAndSum(h hash.Hash, data, b []byte) (sum []byte, err error) {
+	if _, err = h.Write(data); err == nil {
+		sum = h.Sum(b)
 	}
-	return enc.EncodeToString(h.Sum(nil))
+	return
 }
 
 //	Fowler/Noll/Vo '1'
