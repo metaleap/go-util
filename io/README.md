@@ -206,6 +206,16 @@ Used for `DirWalker.DirVisitor` and `DirWalker.FileVisitor`. Always return
 
 ```go
 type Watcher struct {
+
+	//	Defaults to a `time.Duration` of 250 milliseconds
+	DebounceNano int64
+
+	//	A collection of custom `fsnotify.FileEvent` handlers.
+	//	Not related to the handlers specified in your `Watcher.WatchIn()` calls.
+	OnEvent []func(evt *fsnotify.FileEvent)
+
+	//	A collection of custom `error` handlers.
+	OnError []func(err error)
 }
 ```
 
