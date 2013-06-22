@@ -2,7 +2,7 @@ package uslice
 
 import "strings"
 
-//	Returns the position of lower-case val in lower-case vals.
+//	Returns the position of lower-case `val` in lower-case `vals`.
 func StrAtIgnoreCase(vals []string, val string) int {
 	lv := strings.ToLower(val)
 	for i, v := range vals {
@@ -13,14 +13,14 @@ func StrAtIgnoreCase(vals []string, val string) int {
 	return -1
 }
 
-//	Returns true if lower-case val is in lower-case vals.
+//	Returns whether lower-case `val` is in lower-case `vals`.
 func StrHasIgnoreCase(vals []string, val string) bool {
 	return StrAtIgnoreCase(vals, val) >= 0
 }
 
 //#begin-gt -gen.gt N:Str T:string
 
-//	Appends v to *ref only if *ref does not already contain v.
+//	Appends `v` to `*ref` only if `*ref` does not already contain `v`.
 func StrAppendUnique(ref *[]string, v string) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -30,14 +30,14 @@ func StrAppendUnique(ref *[]string, v string) {
 	*ref = append(*ref, v)
 }
 
-//	Appends each value in vals to *ref only *ref sl does not already contain it.
+//	Appends each value in `vals` to `*ref` only `*ref` does not already contain it.
 func StrAppendUniques(ref *[]string, vals ...string) {
 	for _, v := range vals {
 		StrAppendUnique(ref, v)
 	}
 }
 
-//	Returns the position of val in slice.
+//	Returns the position of `val` in `slice`.
 func StrAt(slice []string, val string) int {
 	for i, v := range slice {
 		if v == val {
@@ -47,10 +47,12 @@ func StrAt(slice []string, val string) int {
 	return -1
 }
 
-//	Converts src to dst.
-//	If sparse is true, then only successfully converted string values are placed
-//	in dst, so there may not be a 1-to-1 correspondence of dst to src in length or indices.
-//	If sparse is false, dst has the same length as src and non-convertable values remain zeroed.
+//	Converts `src` to `dst`.
+//
+//	If `sparse` is `true`, then only successfully converted `string` values are placed
+//	in `dst`, so there may not be a 1-to-1 correspondence of `dst` to `src` in length or indices.
+//
+//	If `sparse` is `false`, `dst` has the same length as `src` and non-convertable values remain zeroed.
 func StrConvert(src []interface{}, sparse bool) (dst []string) {
 	if sparse {
 		var (
@@ -71,21 +73,21 @@ func StrConvert(src []interface{}, sparse bool) (dst []string) {
 	return
 }
 
-//	Calls StrSetCap() only if the current capacity of *ref is less than the specified capacity.
+//	Calls `StrSetCap()` only if the current `cap(*ref)` is less than the specified `capacity`.
 func StrEnsureCap(ref *[]string, capacity int) {
 	if cap(*ref) < capacity {
 		StrSetCap(ref, capacity)
 	}
 }
 
-//	Calls StrSetLen only if the current length of *ref is less than the specified length.
+//	Calls `StrSetLen` only if the current `len(*ref)` is less than the specified `length`.
 func StrEnsureLen(ref *[]string, length int) {
 	if len(*ref) < length {
 		StrSetLen(ref, length)
 	}
 }
 
-//	Returns true if one and two only contain identical values, regardless of ordering.
+//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
 func StrEquivalent(one, two []string) bool {
 	if len(one) != len(two) {
 		return false
@@ -98,12 +100,12 @@ func StrEquivalent(one, two []string) bool {
 	return true
 }
 
-//	Returns true if val is in slice.
+//	Returns whether `val` is in `slice`.
 func StrHas(slice []string, val string) bool {
 	return StrAt(slice, val) >= 0
 }
 
-//	Returns whether one of the specified vals is contained in slice.
+//	Returns whether at least one of the specified `vals` is contained in `slice`.
 func StrHasAny(slice []string, vals ...string) bool {
 	for _, v1 := range vals {
 		for _, v2 := range slice {
@@ -115,7 +117,7 @@ func StrHasAny(slice []string, vals ...string) bool {
 	return false
 }
 
-//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
+//	Removes the first occurrence of `v` encountered in `*ref`, or all occurrences if `all` is `true`.
 func StrRemove(ref *[]string, v string, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -128,21 +130,21 @@ func StrRemove(ref *[]string, v string, all bool) {
 	}
 }
 
-//	Sets *ref to a copy of *ref with the specified capacity.
+//	Sets `*ref` to a copy of `*ref` with the specified `capacity`.
 func StrSetCap(ref *[]string, capacity int) {
 	nu := make([]string, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Sets *ref to a copy of *ref with the specified length.
+//	Sets `*ref` to a copy of `*ref` with the specified `length`.
 func StrSetLen(ref *[]string, length int) {
 	nu := make([]string, length)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Removes all withoutVals from slice.
+//	Removes all specified `withoutVals` from `slice`.
 func StrWithout(slice []string, keepOrder bool, withoutVals ...string) []string {
 	if len(withoutVals) > 0 {
 		for _, w := range withoutVals {

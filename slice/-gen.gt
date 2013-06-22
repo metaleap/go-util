@@ -1,6 +1,6 @@
 package gt
 
-//	Appends v to *ref only if *ref does not already contain v.
+//	Appends `v` to `*ref` only if `*ref` does not already contain `v`.
 func __N__AppendUnique(ref *[]__T__, v __T__) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -10,14 +10,14 @@ func __N__AppendUnique(ref *[]__T__, v __T__) {
 	*ref = append(*ref, v)
 }
 
-//	Appends each value in vals to *ref only *ref sl does not already contain it.
+//	Appends each value in `vals` to `*ref` only `*ref` does not already contain it.
 func __N__AppendUniques(ref *[]__T__, vals ...__T__) {
 	for _, v := range vals {
 		__N__AppendUnique(ref, v)
 	}
 }
 
-//	Returns the position of val in slice.
+//	Returns the position of `val` in `slice`.
 func __N__At(slice []__T__, val __T__) int {
 	for i, v := range slice {
 		if v == val {
@@ -27,10 +27,12 @@ func __N__At(slice []__T__, val __T__) int {
 	return -1
 }
 
-//	Converts src to dst.
-//	If sparse is true, then only successfully converted __T__ values are placed
-//	in dst, so there may not be a 1-to-1 correspondence of dst to src in length or indices.
-//	If sparse is false, dst has the same length as src and non-convertable values remain zeroed.
+//	Converts `src` to `dst`.
+//
+//	If `sparse` is `true`, then only successfully converted `__T__` values are placed
+//	in `dst`, so there may not be a 1-to-1 correspondence of `dst` to `src` in length or indices.
+//
+//	If `sparse` is `false`, `dst` has the same length as `src` and non-convertable values remain zeroed.
 func __N__Convert(src []interface{}, sparse bool) (dst []__T__) {
 	if sparse {
 		var (
@@ -51,21 +53,21 @@ func __N__Convert(src []interface{}, sparse bool) (dst []__T__) {
 	return
 }
 
-//	Calls __N__SetCap() only if the current capacity of *ref is less than the specified capacity.
+//	Calls `__N__SetCap()` only if the current `cap(*ref)` is less than the specified `capacity`.
 func __N__EnsureCap(ref *[]__T__, capacity int) {
 	if cap(*ref) < capacity {
 		__N__SetCap(ref, capacity)
 	}
 }
 
-//	Calls __N__SetLen only if the current length of *ref is less than the specified length.
+//	Calls `__N__SetLen` only if the current `len(*ref)` is less than the specified `length`.
 func __N__EnsureLen(ref *[]__T__, length int) {
 	if len(*ref) < length {
 		__N__SetLen(ref, length)
 	}
 }
 
-//	Returns true if one and two only contain identical values, regardless of ordering.
+//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
 func __N__Equivalent(one, two []__T__) bool {
 	if len(one) != len(two) {
 		return false
@@ -78,12 +80,12 @@ func __N__Equivalent(one, two []__T__) bool {
 	return true
 }
 
-//	Returns true if val is in slice.
+//	Returns whether `val` is in `slice`.
 func __N__Has(slice []__T__, val __T__) bool {
 	return __N__At(slice, val) >= 0
 }
 
-//	Returns whether one of the specified vals is contained in slice.
+//	Returns whether at least one of the specified `vals` is contained in `slice`.
 func __N__HasAny(slice []__T__, vals ...__T__) bool {
 	for _, v1 := range vals {
 		for _, v2 := range slice {
@@ -95,7 +97,7 @@ func __N__HasAny(slice []__T__, vals ...__T__) bool {
 	return false
 }
 
-//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
+//	Removes the first occurrence of `v` encountered in `*ref`, or all occurrences if `all` is `true`.
 func __N__Remove(ref *[]__T__, v __T__, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -108,21 +110,21 @@ func __N__Remove(ref *[]__T__, v __T__, all bool) {
 	}
 }
 
-//	Sets *ref to a copy of *ref with the specified capacity.
+//	Sets `*ref` to a copy of `*ref` with the specified `capacity`.
 func __N__SetCap(ref *[]__T__, capacity int) {
 	nu := make([]__T__, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Sets *ref to a copy of *ref with the specified length.
+//	Sets `*ref` to a copy of `*ref` with the specified `length`.
 func __N__SetLen(ref *[]__T__, length int) {
 	nu := make([]__T__, length)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Removes all withoutVals from slice.
+//	Removes all specified `withoutVals` from `slice`.
 func __N__Without(slice []__T__, keepOrder bool, withoutVals ...__T__) []__T__ {
 	if len(withoutVals) > 0 {
 		for _, w := range withoutVals {

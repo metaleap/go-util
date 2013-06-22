@@ -2,7 +2,7 @@ package uslice
 
 //#begin-gt -gen.gt N:Int T:int
 
-//	Appends v to *ref only if *ref does not already contain v.
+//	Appends `v` to `*ref` only if `*ref` does not already contain `v`.
 func IntAppendUnique(ref *[]int, v int) {
 	for _, sv := range *ref {
 		if sv == v {
@@ -12,14 +12,14 @@ func IntAppendUnique(ref *[]int, v int) {
 	*ref = append(*ref, v)
 }
 
-//	Appends each value in vals to *ref only *ref sl does not already contain it.
+//	Appends each value in `vals` to `*ref` only `*ref` does not already contain it.
 func IntAppendUniques(ref *[]int, vals ...int) {
 	for _, v := range vals {
 		IntAppendUnique(ref, v)
 	}
 }
 
-//	Returns the position of val in slice.
+//	Returns the position of `val` in `slice`.
 func IntAt(slice []int, val int) int {
 	for i, v := range slice {
 		if v == val {
@@ -29,10 +29,12 @@ func IntAt(slice []int, val int) int {
 	return -1
 }
 
-//	Converts src to dst.
-//	If sparse is true, then only successfully converted int values are placed
-//	in dst, so there may not be a 1-to-1 correspondence of dst to src in length or indices.
-//	If sparse is false, dst has the same length as src and non-convertable values remain zeroed.
+//	Converts `src` to `dst`.
+//
+//	If `sparse` is `true`, then only successfully converted `int` values are placed
+//	in `dst`, so there may not be a 1-to-1 correspondence of `dst` to `src` in length or indices.
+//
+//	If `sparse` is `false`, `dst` has the same length as `src` and non-convertable values remain zeroed.
 func IntConvert(src []interface{}, sparse bool) (dst []int) {
 	if sparse {
 		var (
@@ -53,21 +55,21 @@ func IntConvert(src []interface{}, sparse bool) (dst []int) {
 	return
 }
 
-//	Calls IntSetCap() only if the current capacity of *ref is less than the specified capacity.
+//	Calls `IntSetCap()` only if the current `cap(*ref)` is less than the specified `capacity`.
 func IntEnsureCap(ref *[]int, capacity int) {
 	if cap(*ref) < capacity {
 		IntSetCap(ref, capacity)
 	}
 }
 
-//	Calls IntSetLen only if the current length of *ref is less than the specified length.
+//	Calls `IntSetLen` only if the current `len(*ref)` is less than the specified `length`.
 func IntEnsureLen(ref *[]int, length int) {
 	if len(*ref) < length {
 		IntSetLen(ref, length)
 	}
 }
 
-//	Returns true if one and two only contain identical values, regardless of ordering.
+//	Returns `true` if `one` and `two` only contain identical values, regardless of ordering.
 func IntEquivalent(one, two []int) bool {
 	if len(one) != len(two) {
 		return false
@@ -80,12 +82,12 @@ func IntEquivalent(one, two []int) bool {
 	return true
 }
 
-//	Returns true if val is in slice.
+//	Returns whether `val` is in `slice`.
 func IntHas(slice []int, val int) bool {
 	return IntAt(slice, val) >= 0
 }
 
-//	Returns whether one of the specified vals is contained in slice.
+//	Returns whether at least one of the specified `vals` is contained in `slice`.
 func IntHasAny(slice []int, vals ...int) bool {
 	for _, v1 := range vals {
 		for _, v2 := range slice {
@@ -97,7 +99,7 @@ func IntHasAny(slice []int, vals ...int) bool {
 	return false
 }
 
-//	Removes the first occurrence of v encountered in *ref, or all occurrences if all is true.
+//	Removes the first occurrence of `v` encountered in `*ref`, or all occurrences if `all` is `true`.
 func IntRemove(ref *[]int, v int, all bool) {
 	for i := 0; i < len(*ref); i++ {
 		if (*ref)[i] == v {
@@ -110,21 +112,21 @@ func IntRemove(ref *[]int, v int, all bool) {
 	}
 }
 
-//	Sets *ref to a copy of *ref with the specified capacity.
+//	Sets `*ref` to a copy of `*ref` with the specified `capacity`.
 func IntSetCap(ref *[]int, capacity int) {
 	nu := make([]int, len(*ref), capacity)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Sets *ref to a copy of *ref with the specified length.
+//	Sets `*ref` to a copy of `*ref` with the specified `length`.
 func IntSetLen(ref *[]int, length int) {
 	nu := make([]int, length)
 	copy(nu, *ref)
 	*ref = nu
 }
 
-//	Removes all withoutVals from slice.
+//	Removes all specified `withoutVals` from `slice`.
 func IntWithout(slice []int, keepOrder bool, withoutVals ...int) []int {
 	if len(withoutVals) > 0 {
 		for _, w := range withoutVals {
