@@ -8,12 +8,18 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
-//	A convenience wrapper around fsnotify.Watcher.
-//	Usage: `var w uio.Watcher; w.WatchIn(dir, pattern, runNow, handler); go w.Go(); later(w.WatchIn(another...))`
+//	A convenient wrapper around `goforks/fsnotify.Watcher`.
+//
+//	Usage:
+//		var w uio.Watcher
+//		w.WatchIn(dir, pattern, runNow, handler)
+//		go w.Go()
+//		otherCode(laterOn...)
+//		w.WatchIn(anotherDir...)
 type Watcher struct {
 }
 
-//	Returns a new Watcher, err is always nil.
+//	Returns a new `Watcher`, `err` is always nil.
 func NewWatcher() (me *Watcher, err error) {
 	me = &Watcher{}
 	return
@@ -24,11 +30,9 @@ func (me *Watcher) Close() (err error) {
 	return
 }
 
-//	No-op
 func (me *Watcher) Go() {
 }
 
-//	If runHandlerNow is true, runs handler for all dirs/files in dirPath that match namePattern.
 func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
 	if runHandlerNow {
 		errs = watchRunHandler(filepath.Clean(dirPath), namePattern, handler)

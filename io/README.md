@@ -8,7 +8,7 @@ Various line-savers for common I/O needs.
 
 ```go
 var (
-	//	The permission bits used in EnsureDirExists(), WriteBinaryFile() and WriteTextFile()
+	//	The permission bits used in `EnsureDirExists()`, `WriteBinaryFile()` and `WriteTextFile()`
 	ModePerm = os.ModePerm
 )
 ```
@@ -16,72 +16,65 @@ var (
 #### func  ClearDirectory
 
 ```go
-func ClearDirectory(path string, keepNamePatterns ...string) (err error)
+func ClearDirectory(dirPath string, keepNamePatterns ...string) (err error)
 ```
-Removes anything in path (but not path itself), except those whose name matches
-any of the specified keepNamePatterns.
+Removes anything in `dirPath` (but not `dirPath` itself), except items whose
+`os.FileInfo.Name()` matches any of the specified `keepNamePatterns`.
 
 #### func  CopyAll
 
 ```go
-func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error)
+func CopyAll(srcDirPath, dstDirPath string, skipDirs *ustr.Matcher) (err error)
 ```
-Copies all files and directories inside srcDirPath to destDirPath. All
-sub-directories whose name is matched by skipDirs (optional) are skipped.
+Copies all files and directories inside `srcDirPath` to `dstDirPath`. All
+sub-directories whose `os.FileInfo.Name()` is matched by `skipDirs` (optional)
+are skipped.
 
 #### func  CopyFile
 
 ```go
-func CopyFile(srcFilePath, destFilePath string) (err error)
+func CopyFile(srcFilePath, dstFilePath string) (err error)
 ```
-Performs an io.Copy from the specified local source file to the specified local
+Performs an `io.Copy` from the specified source file to the specified
 destination file.
 
 #### func  DirExists
 
 ```go
-func DirExists(path string) bool
+func DirExists(dirPath string) bool
 ```
-Returns true if a directory exists at the specified path.
+Returns whether a directory (not a file) exists at the specified `dirPath`.
 
-#### func  DirsFilesExist
+#### func  DirsOrFilesExistIn
 
 ```go
-func DirsFilesExist(dirPath string, dirOrFileNames ...string) (allExist bool)
+func DirsOrFilesExistIn(dirPath string, dirOrFileNames ...string) bool
 ```
-Returns true if all dirOrFileNames exist in dirPath.
+Returns whether all of the specified `dirOrFileNames` exist in `dirPath`.
 
 #### func  EnsureDirExists
 
 ```go
-func EnsureDirExists(path string) (err error)
+func EnsureDirExists(dirPath string) (err error)
 ```
-If a directory does not exist at the specified path, attempts to create it.
+If a directory does not exist at the specified `dirPath`, attempts to create it.
 
 #### func  FileExists
 
 ```go
-func FileExists(path string) bool
+func FileExists(filePath string) (fileExists bool)
 ```
-Returns true if a file (not a directory) exists at the specified path.
-
-#### func  FindFileInfo
-
-```go
-func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, fileInfo *os.FileInfo)
-```
-If a file with a given base-name and one of a set of extensions exists in the
-specified directory, returns details on it. The tryLower and tryUpper flags also
-test for upper-case and lower-case variants of the specified fileBaseName.
+Returns whether a file (not a directory) exists at the specified `filePath`.
 
 #### func  IsNewerThan
 
 ```go
 func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error)
 ```
-Returns whether `srcFilePath` has been modified later than `dstFilePath`. NOTE:
-be aware that `newer` will be returned as `true` if `err` is returned as *not*
-`nil`, since that is often very convenient for many use-cases.
+Returns whether `srcFilePath` has been modified later than `dstFilePath`.
+
+NOTE: be aware that `newer` will be returned as `true` if `err` is returned as
+*not* `nil`, since that is often more convenient for many use-cases.
 
 #### func  ReadBinaryFile
 
@@ -94,7 +87,7 @@ handling, mostly for one-off `package main`s.
 #### func  ReadTextFile
 
 ```go
-func ReadTextFile(filePath string, panicOnError bool, defVal string) string
+func ReadTextFile(filePath string, panicOnError bool, defaultValue string) string
 ```
 Reads and returns the contents of a text file with non-idiomatic error handling,
 mostly for one-off `package main`s.
@@ -102,9 +95,10 @@ mostly for one-off `package main`s.
 #### func  SaveToFile
 
 ```go
-func SaveToFile(r io.Reader, filename string) (err error)
+func SaveToFile(src io.Reader, dstFilePath string) (err error)
 ```
-Performs an io.Copy() from the specified io.Reader to the specified local file.
+Performs an `io.Copy()` from the specified `io.Reader` to the specified local
+file.
 
 #### func  WalkAllDirs
 
@@ -134,50 +128,50 @@ sub-directories and not `dirPath` itself.
 ```go
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error
 ```
-Calls `visitor` for all files (but not directories) in `dirPath`, but not for
-any in sub-directories.
+Calls `visitor` for all files (but not directories) directly inside `dirPath`,
+but not for any inside sub-directories.
 
 #### func  WriteBinaryFile
 
 ```go
 func WriteBinaryFile(filePath string, contents []byte) error
 ```
-A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm. Also
-ensures the target file's directory exists.
+A short-hand for `ioutil.WriteFile` using `ModePerm`. Also ensures the target
+file's directory exists.
 
 #### func  WriteTextFile
 
 ```go
 func WriteTextFile(filePath, contents string) error
 ```
-A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or
-string-conversion. Also ensures the target file's directory exists.
+A short-hand for `ioutil.WriteFile`, using `ModePerm`. Also ensures the target
+file's directory exists.
 
 #### type DirWalker
 
 ```go
 type DirWalker struct {
-	//	Walk() returns a slice of all errors encountered but
-	//	to cancel walking upon the first error, set this to true.
+	//	`Walk()` returns a slice of all `error`s encountered but keeps walking as indicated by
+	//	`DirVisitor` and/or `FileVisitor` --- to abort walking upon the first `error`, set this to `true`.
 	BreakOnError bool
 
-	//	After invoking DirVisitor on the specified directory, by default
+	//	After invoking `DirVisitor` on the specified directory (if `VisitSelf`), by default
 	//	its files get visited first before visiting its sub-directories.
-	//	If VisitDirsFirst is true, then files get visited last, after
+	//	If `VisitDirsFirst` is `true`, then files get visited last, after
 	//	having visited all sub-directories.
 	VisitDirsFirst bool
 
-	//	If false, only the items in the specified directory get visited
+	//	If `false`, only the items in the specified directory get visited
 	//	(and the directory itself if `VisitSelf`), but no items inside its sub-directories.
 	VisitSubDirs bool
 
 	//	Defaults to `true` if initialized via `NewDirWalker()`.
 	VisitSelf bool
 
-	//	Called for every directory being visited during Walk().
+	//	Called for every directory being visited during a `Walk()`.
 	DirVisitor WalkerVisitor
 
-	//	Called for every file being visited during Walk().
+	//	Called for every file being visited during a `Walk()`.
 	FileVisitor WalkerVisitor
 }
 ```
@@ -189,31 +183,15 @@ Provides recursive directory walking with a variety of options.
 ```go
 func NewDirWalker(deep bool, dirVisitor, fileVisitor WalkerVisitor) (me *DirWalker)
 ```
-Initializes and returns a new DirWalker with the specified (optional) visitors.
-The deep argument sets the VisitSubDirs field.
+Initializes and returns a new `DirWalker` with the specified (optional)
+`WalkerVisitor`s. `deep` sets `VisitSubDirs`.
 
 #### func (*DirWalker) Walk
 
 ```go
 func (me *DirWalker) Walk(dirPath string) (errs []error)
 ```
-Initiates me walking through the specified directory.
-
-#### type NoopWriter
-
-```go
-type NoopWriter struct {
-}
-```
-
-Implements io.Writer and discards/ignores all Write() calls.
-
-#### func (*NoopWriter) Write
-
-```go
-func (_ *NoopWriter) Write(_ []byte) (n int, err error)
-```
-No-op
+Initiates a walk starting at the specified `dirPath`.
 
 #### type WalkerVisitor
 
@@ -221,8 +199,8 @@ No-op
 type WalkerVisitor func(fullPath string) (keepWalking bool)
 ```
 
-Used for DirWalker.DirVisitor and DirWalker.FileVisitor. Always return
-keepWalking as true unless you want to immediately terminate a Walk() early.
+Used for `DirWalker.DirVisitor` and `DirWalker.FileVisitor`. Always return
+`keepWalking` as true unless you want to immediately terminate a `Walk()` early.
 
 #### type Watcher
 
@@ -231,9 +209,15 @@ type Watcher struct {
 }
 ```
 
-A convenience wrapper around fsnotify.Watcher. Usage: `var w uio.Watcher;
-w.WatchIn(dir, pattern, runNow, handler); go w.Go();
-later(w.WatchIn(another...))`
+A convenient wrapper around `goforks/fsnotify.Watcher`.
+
+Usage:
+
+    var w uio.Watcher
+    w.WatchIn(dir, pattern, runNow, handler)
+    go w.Go()
+    otherCode(laterOn...)
+    w.WatchIn(anotherDir...)
 
 #### func  NewWatcher
 
@@ -255,28 +239,32 @@ Closes the underlying `me.Watcher`.
 ```go
 func (me *Watcher) Go()
 ```
-Starts watching. A never-ending loop designed to be called in a new go-routine.
+Starts watching. A never-ending loop designed to be called in a new go-routine,
+as in `go myWatcher.Go()`.
 
 #### func (*Watcher) WatchIn
 
 ```go
 func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error)
 ```
-Watches dirs/files (whose base-names match the specified pattern) inside the
-specified dirPath for change events.
+Watches dirs/files (whose `filepath.Base()` names match the specified
+`namePattern`) inside the specified `dirPath` for change event notifications.
 
-handler is invoked whenever a change event is observed, providing the full file
+`handler` is invoked whenever a change event is observed, providing the full
 path.
 
-runHandlerNow allows immediate one-off invokation of handler. This will Walk()
-dirPath. This is for the use-case pattern "load those files now, then reload in
-exactly the same way whenever they are modified"
+`runHandlerNow` allows immediate one-off invokation of `handler`. This will
+`DirWalker.Walk()` the `dirPath`.
+
+An empty `namePattern` is equivalent to `*`.
 
 #### type WatcherHandler
 
 ```go
 type WatcherHandler func(path string)
 ```
+
+Handles a file-system notification originating in a `Watcher`.
 
 --
 **godocdown** http://github.com/robertkrimen/godocdown

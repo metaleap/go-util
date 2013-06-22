@@ -5,18 +5,19 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 
 	ustr "github.com/metaleap/go-util/str"
 )
 
+//	Handles a file-system notification originating in a `Watcher`.
 type WatcherHandler func(path string)
 
 var (
-	//	The permission bits used in EnsureDirExists(), WriteBinaryFile() and WriteTextFile()
+	//	The permission bits used in `EnsureDirExists()`, `WriteBinaryFile()` and `WriteTextFile()`
 	ModePerm = os.ModePerm
 )
 
+/*
 //	Implements io.Writer and discards/ignores all Write() calls.
 type NoopWriter struct {
 }
@@ -25,16 +26,17 @@ type NoopWriter struct {
 func (_ *NoopWriter) Write(_ []byte) (n int, err error) {
 	return
 }
+*/
 
-//	Removes anything in path (but not path itself), except those whose name matches any of the specified keepNamePatterns.
-func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
+//	Removes anything in `dirPath` (but not `dirPath` itself), except items whose `os.FileInfo.Name()` matches any of the specified `keepNamePatterns`.
+func ClearDirectory(dirPath string, keepNamePatterns ...string) (err error) {
 	var fileInfos []os.FileInfo
 	var matcher ustr.Matcher
 	matcher.AddPatterns(keepNamePatterns...)
-	if fileInfos, err = ioutil.ReadDir(path); err == nil {
+	if fileInfos, err = ioutil.ReadDir(dirPath); err == nil {
 		for _, fi := range fileInfos {
 			if fn := fi.Name(); !matcher.IsMatch(fn) {
-				if err = os.RemoveAll(filepath.Join(path, fn)); err != nil {
+				if err = os.RemoveAll(filepath.Join(dirPath, fn)); err != nil {
 					return
 				}
 			}
@@ -43,17 +45,17 @@ func ClearDirectory(path string, keepNamePatterns ...string) (err error) {
 	return
 }
 
-//	Copies all files and directories inside srcDirPath to destDirPath.
-//	All sub-directories whose name is matched by skipDirs (optional) are skipped.
-func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error) {
+//	Copies all files and directories inside `srcDirPath` to `dstDirPath`.
+//	All sub-directories whose `os.FileInfo.Name()` is matched by `skipDirs` (optional) are skipped.
+func CopyAll(srcDirPath, dstDirPath string, skipDirs *ustr.Matcher) (err error) {
 	var (
 		srcPath, destPath string
 		fileInfos         []os.FileInfo
 	)
 	if fileInfos, err = ioutil.ReadDir(srcDirPath); err == nil {
-		EnsureDirExists(destDirPath)
+		EnsureDirExists(dstDirPath)
 		for _, fi := range fileInfos {
-			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(destDirPath, fi.Name()); fi.IsDir() {
+			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(dstDirPath, fi.Name()); fi.IsDir() {
 				if skipDirs == nil || !skipDirs.IsMatch(fi.Name()) {
 					CopyAll(srcPath, destPath, skipDirs)
 				}
@@ -65,47 +67,45 @@ func CopyAll(srcDirPath, destDirPath string, skipDirs *ustr.Matcher) (err error)
 	return
 }
 
-//	Performs an io.Copy from the specified local source file to the specified local destination file.
-func CopyFile(srcFilePath, destFilePath string) (err error) {
+//	Performs an `io.Copy` from the specified source file to the specified destination file.
+func CopyFile(srcFilePath, dstFilePath string) (err error) {
 	var src *os.File
 	if src, err = os.Open(srcFilePath); err != nil {
 		return
 	}
 	defer src.Close()
-	err = SaveToFile(src, destFilePath)
+	err = SaveToFile(src, dstFilePath)
 	return
 }
 
-//	Returns true if a directory exists at the specified path.
-func DirExists(path string) bool {
-	if stat, err := os.Stat(path); err == nil {
+//	Returns whether a directory (not a file) exists at the specified `dirPath`.
+func DirExists(dirPath string) bool {
+	if stat, err := os.Stat(dirPath); err == nil {
 		return stat.IsDir()
 	}
 	return false
 }
 
-//	Returns true if all dirOrFileNames exist in dirPath.
-func DirsFilesExist(dirPath string, dirOrFileNames ...string) (allExist bool) {
-	allExist = true
+//	Returns whether all of the specified `dirOrFileNames` exist in `dirPath`.
+func DirsOrFilesExistIn(dirPath string, dirOrFileNames ...string) bool {
 	var (
 		err  error
 		stat os.FileInfo
 	)
 	for _, name := range dirOrFileNames {
 		if stat, err = os.Stat(filepath.Join(dirPath, name)); err != nil || stat == nil {
-			allExist = false
-			break
+			return false
 		}
 
 	}
-	return
+	return true
 }
 
-//	If a directory does not exist at the specified path, attempts to create it.
-func EnsureDirExists(path string) (err error) {
-	if !DirExists(path) {
-		if err = EnsureDirExists(filepath.Dir(path)); err == nil {
-			err = os.Mkdir(path, ModePerm)
+//	If a directory does not exist at the specified `dirPath`, attempts to create it.
+func EnsureDirExists(dirPath string) (err error) {
+	if !DirExists(dirPath) {
+		if err = EnsureDirExists(filepath.Dir(dirPath)); err == nil {
+			err = os.Mkdir(dirPath, ModePerm)
 		}
 	}
 	return
@@ -166,14 +166,15 @@ func ExtractZipFile(zipFilePath, targetDirPath string, deleteZipFile bool, fileN
 }
 */
 
-//	Returns true if a file (not a directory) exists at the specified path.
-func FileExists(path string) bool {
-	if stat, err := os.Stat(path); err == nil {
-		return !stat.IsDir()
+//	Returns whether a file (not a directory) exists at the specified `filePath`.
+func FileExists(filePath string) (fileExists bool) {
+	if stat, err := os.Stat(filePath); err == nil {
+		fileExists = !stat.IsDir()
 	}
-	return false
+	return
 }
 
+/*
 //	If a file with a given base-name and one of a set of extensions exists in the specified directory, returns details on it.
 //	The tryLower and tryUpper flags also test for upper-case and lower-case variants of the specified fileBaseName.
 func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLower bool, tryUpper bool) (fullFilePath string, fileInfo *os.FileInfo) {
@@ -200,10 +201,12 @@ func FindFileInfo(dirPath string, fileBaseName string, fileExts []string, tryLow
 	}
 	return "", nil
 }
+*/
 
 //	Returns whether `srcFilePath` has been modified later than `dstFilePath`.
+//
 //	NOTE: be aware that `newer` will be returned as `true` if `err` is returned as *not* `nil`,
-//	since that is often very convenient for many use-cases.
+//	since that is often more convenient for many use-cases.
 func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error) {
 	var out, src os.FileInfo
 	newer = true
@@ -240,7 +243,7 @@ func ReadFromBinary(readSeeker io.ReadSeeker, offset int64, byteOrder binary.Byt
 */
 
 //	Reads and returns the contents of a text file with non-idiomatic error handling, mostly for one-off `package main`s.
-func ReadTextFile(filePath string, panicOnError bool, defVal string) string {
+func ReadTextFile(filePath string, panicOnError bool, defaultValue string) string {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		return string(bytes)
@@ -248,16 +251,16 @@ func ReadTextFile(filePath string, panicOnError bool, defVal string) string {
 	if panicOnError && (err != nil) {
 		panic(err)
 	}
-	return defVal
+	return defaultValue
 }
 
-//	Performs an io.Copy() from the specified io.Reader to the specified local file.
-func SaveToFile(r io.Reader, filename string) (err error) {
+//	Performs an `io.Copy()` from the specified `io.Reader` to the specified local file.
+func SaveToFile(src io.Reader, dstFilePath string) (err error) {
 	var file *os.File
-	if file, err = os.Create(filename); file != nil {
+	if file, err = os.Create(dstFilePath); file != nil {
 		defer file.Close()
 		if err == nil {
-			_, err = io.Copy(file, r)
+			_, err = io.Copy(file, src)
 		}
 	}
 	return
@@ -280,21 +283,21 @@ func WalkDirsIn(dirPath string, visitor WalkerVisitor) []error {
 	return w.Walk(dirPath)
 }
 
-//	Calls `visitor` for all files (but not directories) in `dirPath`, but not for any in sub-directories.
+//	Calls `visitor` for all files (but not directories) directly inside `dirPath`, but not for any inside sub-directories.
 func WalkFilesIn(dirPath string, visitor WalkerVisitor) []error {
 	w := NewDirWalker(false, nil, visitor)
 	w.VisitSelf = false
 	return w.Walk(dirPath)
 }
 
-//	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm.
+//	A short-hand for `ioutil.WriteFile` using `ModePerm`.
 //	Also ensures the target file's directory exists.
 func WriteBinaryFile(filePath string, contents []byte) error {
 	EnsureDirExists(filepath.Dir(filePath))
 	return ioutil.WriteFile(filePath, contents, ModePerm)
 }
 
-//	A short-hand for ioutil.WriteFile, without needing to specify os.ModePerm or string-conversion.
+//	A short-hand for `ioutil.WriteFile`, using `ModePerm`.
 //	Also ensures the target file's directory exists.
 func WriteTextFile(filePath, contents string) error {
 	return WriteBinaryFile(filePath, []byte(contents))

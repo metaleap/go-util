@@ -11,20 +11,25 @@ import (
 	ustr "github.com/metaleap/go-util/str"
 )
 
-//	A convenience wrapper around fsnotify.Watcher.
-//	Usage: `var w uio.Watcher; w.WatchIn(dir, pattern, runNow, handler); go w.Go(); later(w.WatchIn(another...))`
+//	A convenient wrapper around `goforks/fsnotify.Watcher`.
+//
+//	Usage:
+//		var w uio.Watcher
+//		w.WatchIn(dir, pattern, runNow, handler)
+//		go w.Go()
+//		otherCode(laterOn...)
+//		w.WatchIn(anotherDir...)
 type Watcher struct {
-	//	Embedded fsnotify.Watcher
 	*fsnotify.Watcher
 
-	//	Defaults to a time.Duration of 250 milliseconds
+	//	Defaults to a `time.Duration` of 250 milliseconds
 	DebounceNano int64
 
-	//	A collection of custom fsnotify.FileEvent handlers.
-	//	Not related to the handlers specified via the Watcher.WatchIn() method.
+	//	A collection of custom `fsnotify.FileEvent` handlers.
+	//	Not related to the handlers specified in your `Watcher.WatchIn()` calls.
 	OnEvent []func(evt *fsnotify.FileEvent)
 
-	//	A collection of custom error handlers.
+	//	A collection of custom `error` handlers.
 	OnError []func(err error)
 
 	dirsWatching map[string]bool
@@ -40,7 +45,7 @@ func NewWatcher() (me *Watcher, err error) {
 	return
 }
 
-//	Starts watching. A never-ending loop designed to be called in a new go-routine.
+//	Starts watching. A never-ending loop designed to be called in a new go-routine, as in `go myWatcher.Go()`.
 func (me *Watcher) Go() {
 	var (
 		evt                            *fsnotify.FileEvent
@@ -84,12 +89,13 @@ func (me *Watcher) Go() {
 	}
 }
 
-//	Watches dirs/files (whose base-names match the specified pattern) inside the specified dirPath for change events.
+//	Watches dirs/files (whose `filepath.Base()` names match the specified `namePattern`) inside the specified `dirPath` for change event notifications.
 //
-//	handler is invoked whenever a change event is observed, providing the full file path.
+//	`handler` is invoked whenever a change event is observed, providing the full path.
 //
-//	runHandlerNow allows immediate one-off invokation of handler. This will Walk() dirPath.
-//	This is for the use-case pattern "load those files now, then reload in exactly the same way whenever they are modified"
+//	`runHandlerNow` allows immediate one-off invokation of `handler`. This will `DirWalker.Walk()` the `dirPath`.
+//
+//	An empty `namePattern` is equivalent to `*`.
 func (me *Watcher) WatchIn(dirPath string, namePattern ustr.Pattern, runHandlerNow bool, handler WatcherHandler) (errs []error) {
 	dirPath = filepath.Clean(dirPath)
 	if _, ok := me.dirsWatching[dirPath]; !ok {
