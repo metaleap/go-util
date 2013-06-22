@@ -12,8 +12,9 @@ http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
 ```go
 func EncodeToString(h hash.Hash, data []byte, enc *base64.Encoding) string
 ```
-Returns the `enc`'s (or if `nil`, the `base64.URLEncoding`'s) string-encoding of
-the specified `Hash` for `data`.
+Returns the `enc`'s string-encoding of the specified `Hash` for `data`.
+
+If `enc` is `nil`, then `base64.URLEncoding` will be used instead.
 
 #### func  Fnv1
 
