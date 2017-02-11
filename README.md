@@ -1,4 +1,1 @@
-**udb**: utilities for common database needs.
-**udb/umgo**: utilities for common MongoDB needs.
-**ugfx**: utilities for common graphics and imaging needs.
-**uhash**: utilities for common hashing needs.
+All packages in this repo have been separated into separate pkg repos: see the various metaleap/go-util-*
