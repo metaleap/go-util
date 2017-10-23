@@ -1,0 +1,14 @@
+[00:13 rox ~/.../ahs/haxtatic]$ stack build --copy-bins  --no-terminal --dump-logs --no-haddock-deps --no-keep-going --no-test --no-rerun-tests --no-bench --no-run-benchmarks --no-cabal-verbose --no-split-objs --verbosity info
+
+Error: While constructing the build plan, the following exceptions were encountered:
+
+In the dependencies for haxbase-1.0.0.3:
+    text must match -any, but the stack configuration has no specified version (latest applicable is 1.2.2.1)
+needed due to haxtatic-1.0.0.2 -> haxbase-1.0.0.3
+
+Recommended action: try adding the following to your extra-deps in /home/rox/c/go/src/github.com/metaleap/ahs/haxtatic/stack.yaml:
+- text-1.2.2.1
+
+You may also want to try the 'stack solver' command
+Plan construction failed.
+
