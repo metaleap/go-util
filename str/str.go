@@ -527,9 +527,18 @@ func SafeIdentifier(s string) string {
 }
 
 //	Returns an empty slice is `v` is emtpy, otherwise like `strings.Split`
-func Split(v, s string) (sl []string) {
+func Split(v, sep string) (sl []string) {
 	if len(v) > 0 {
-		sl = strings.Split(v, s)
+		sl = strings.Split(v, sep)
+	}
+	return
+}
+
+func SplitOnce(v string, sep rune) (left string, right string) {
+	if i := strings.IndexRune(v, sep); i > 0 {
+		left, right = v[:i], v[i+1:]
+	} else {
+		right = v
 	}
 	return
 }
