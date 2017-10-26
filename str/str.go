@@ -434,6 +434,10 @@ func ParseFloats(vals ...string) []float64 {
 	return all
 }
 
+func FromInt(i int) string {
+	return strconv.Itoa(i)
+}
+
 func ToInt(s string) (i int) {
 	i, _ = strconv.Atoi(s)
 	return
