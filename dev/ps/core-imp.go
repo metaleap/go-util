@@ -17,10 +17,10 @@ type CoreImp struct { // we skip unmarshaling what isn't used for now, but DO ke
 	// Comments   []*CoreComment `json:"comments"`
 	// Foreign    []string          `json:"foreign"`
 	// Exports    []string          `json:"exports"`
-	Imps     [][]string  `json:"imports"`
-	Body     CoreImpAsts `json:"body"`
-	DeclAnns []*CoreDecl `json:"declAnns"`
-	DeclEnv  CoreEnv     `json:"declEnv"`
+	// Imps     [][]string  `json:"imports"`
+	// Body     CoreImpAsts `json:"body"`
+	// DeclAnns []*CoreDecl `json:"declAnns"`
+	DeclEnv CoreEnv `json:"declEnv"`
 
 	My struct {
 		ImpFilePath   string
@@ -29,9 +29,9 @@ type CoreImp struct { // we skip unmarshaling what isn't used for now, but DO ke
 }
 
 func (me *CoreImp) Prep() {
-	for _, da := range me.DeclAnns {
-		da.prep()
-	}
+	// for _, da := range me.DeclAnns {
+	// 	da.prep()
+	// }
 	me.DeclEnv.prep()
 }
 
@@ -81,38 +81,38 @@ type CoreImpAst struct {
 }
 
 func (me *CoreImp) InitAstOnLoaded() {
-	me.Body = me.initSubAsts(nil, me.Body...)
+	// me.Body = me.initSubAsts(nil, me.Body...)
 }
 
 func (me *CoreImp) PrepTopLevel() {
-	me.My.NamedRequires = map[string]string{}
-	i := 0
-	ditch := func() {
-		me.Body = append(me.Body[:i], me.Body[i+1:]...)
-		i--
-	}
-	for i = 0; i < len(me.Body); i++ {
-		a := me.Body[i]
-		if a.StringLiteral == "use strict" {
-			//	"use strict"
-			ditch()
-		} else if a.Assignment != nil && a.Assignment.Indexer != nil && a.Assignment.Indexer.Var == "module" && a.Assignment.AstRight != nil && a.Assignment.AstRight.StringLiteral == "exports" {
-			//	module.exports = ..
-			ditch()
-		} else if a.AstTag == "VariableIntroduction" {
-			if a.AstRight != nil && a.AstRight.App != nil && a.AstRight.App.Var == "require" && len(a.AstRight.AstApplArgs) == 1 && len(a.AstRight.AstApplArgs[0].StringLiteral) > 0 {
-				me.My.NamedRequires[a.VariableIntroduction] = a.AstRight.AstApplArgs[0].StringLiteral
-				ditch()
-			} else if a.AstRight != nil && a.AstRight.AstTag == "Function" {
-				// turn top-level `var foo = func()` into `func foo()`
-				a.AstRight.Function = a.VariableIntroduction
-				a = a.AstRight
-				a.Parent, me.Body[i] = nil, a
-			}
-		} else if a.AstTag != "Function" && a.AstTag != "VariableIntroduction" && a.AstTag != "Comment" {
-			panic(NotImplErr("top-level CoreImp AST tag", a.AstTag, me.My.ImpFilePath))
-		}
-	}
+	// me.My.NamedRequires = map[string]string{}
+	// i := 0
+	// ditch := func() {
+	// 	me.Body = append(me.Body[:i], me.Body[i+1:]...)
+	// 	i--
+	// }
+	// for i = 0; i < len(me.Body); i++ {
+	// 	a := me.Body[i]
+	// 	if a.StringLiteral == "use strict" {
+	// 		//	"use strict"
+	// 		ditch()
+	// 	} else if a.Assignment != nil && a.Assignment.Indexer != nil && a.Assignment.Indexer.Var == "module" && a.Assignment.AstRight != nil && a.Assignment.AstRight.StringLiteral == "exports" {
+	// 		//	module.exports = ..
+	// 		ditch()
+	// 	} else if a.AstTag == "VariableIntroduction" {
+	// 		if a.AstRight != nil && a.AstRight.App != nil && a.AstRight.App.Var == "require" && len(a.AstRight.AstApplArgs) == 1 && len(a.AstRight.AstApplArgs[0].StringLiteral) > 0 {
+	// 			me.My.NamedRequires[a.VariableIntroduction] = a.AstRight.AstApplArgs[0].StringLiteral
+	// 			ditch()
+	// 		} else if a.AstRight != nil && a.AstRight.AstTag == "Function" {
+	// 			// turn top-level `var foo = func()` into `func foo()`
+	// 			a.AstRight.Function = a.VariableIntroduction
+	// 			a = a.AstRight
+	// 			a.Parent, me.Body[i] = nil, a
+	// 		}
+	// 	} else if a.AstTag != "Function" && a.AstTag != "VariableIntroduction" && a.AstTag != "Comment" {
+	// 		panic(NotImplErr("top-level CoreImp AST tag", a.AstTag, me.My.ImpFilePath))
+	// 	}
+	// }
 }
 
 func (me *CoreImp) initSubAsts(Parent *CoreImpAst, asts ...*CoreImpAst) CoreImpAsts {

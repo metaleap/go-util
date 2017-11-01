@@ -139,10 +139,10 @@ type CoreEnvTypeCtor struct {
 	Args []string     `json:"cArgs"` // value0, value1 ..etc.
 }
 
-func (me *CoreEnvTypeCtor) IsDeclData() bool    { return me.Decl == "data" }
-func (me *CoreEnvTypeCtor) IsDeclNewtype() bool { return me.Decl == "newtype" }
+func (me *CoreEnvTypeCtor) IsDeclˇData() bool    { return me.Decl == "data" }
+func (me *CoreEnvTypeCtor) IsDeclˇNewtype() bool { return me.Decl == "newtype" }
 func (me *CoreEnvTypeCtor) prep() {
-	if !(me.IsDeclData() || me.IsDeclNewtype()) {
+	if !(me.IsDeclˇData() || me.IsDeclˇNewtype()) {
 		panic(NotImplErr("cDecl", me.Decl, "'dataConstructors'"))
 	}
 	if me.Ctor != nil {
@@ -212,16 +212,16 @@ type CoreEnvName struct {
 	Type *CoreTagType `json:"nType"`
 }
 
-func (me *CoreEnvName) isVisDefined() bool   { return me.Vis == "Defined" }
-func (me *CoreEnvName) isVisUndefined() bool { return me.Vis == "Undefined" }
-func (me *CoreEnvName) isKindPrivate() bool  { return me.Kind == "Private" }
-func (me *CoreEnvName) isKindPublic() bool   { return me.Kind == "Public" }
-func (me *CoreEnvName) isKindExternal() bool { return me.Kind == "External" }
+func (me *CoreEnvName) IsVisˇDefined() bool   { return me.Vis == "Defined" }
+func (me *CoreEnvName) IsVisˇUndefined() bool { return me.Vis == "Undefined" }
+func (me *CoreEnvName) IsKindˇPrivate() bool  { return me.Kind == "Private" }
+func (me *CoreEnvName) IsKindˇPublic() bool   { return me.Kind == "Public" }
+func (me *CoreEnvName) IsKindˇExternal() bool { return me.Kind == "External" }
 func (me *CoreEnvName) prep() {
-	if !(me.isVisDefined() || me.isVisUndefined()) {
+	if !(me.IsVisˇDefined() || me.IsVisˇUndefined()) {
 		panic(NotImplErr("nVis", me.Vis, "'names'"))
 	}
-	if !(me.isKindPublic() || me.isKindPrivate() || me.isKindExternal()) {
+	if !(me.IsKindˇPublic() || me.IsKindˇPrivate() || me.IsKindˇExternal()) {
 		panic(NotImplErr("nKind", me.Kind, "'names'"))
 	}
 	if me.Type != nil {
