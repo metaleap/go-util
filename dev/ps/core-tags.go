@@ -27,10 +27,10 @@ func (_ *CoreTag) tagFrom(tc map[string]interface{}) CoreTag {
 type CoreTagKind struct {
 	CoreTag
 
-	Num   int
-	Text  string
-	Kind0 *CoreTagKind
-	Kind1 *CoreTagKind
+	Num   int          `json:"n,omitempty"`
+	Text  string       `json:"t,omitempty"`
+	Kind0 *CoreTagKind `json:"k0,omitempty"`
+	Kind1 *CoreTagKind `json:"k1,omitempty"`
 }
 
 func (me *CoreTagKind) IsRow() bool       { return me.Tag == "Row" }
@@ -66,33 +66,33 @@ func (me *CoreTagKind) prep() {
 type CoreTagType struct {
 	CoreTag
 
-	Num    int
-	Skolem int
-	Text   string
-	Type0  *CoreTagType
-	Type1  *CoreTagType
-	Constr *CoreConstr
+	Num    int          `json:"n,omitempty"`
+	Skolem int          `json:"s,omitempty"`
+	Text   string       `json:"t,omitempty"`
+	Type0  *CoreTagType `json:"t0,omitempty"`
+	Type1  *CoreTagType `json:"t1,omitempty"`
+	Constr *CoreConstr  `json:"c,omitempty"`
 }
 
-func (me *CoreTagType) IsTypeWildcard() bool        { return me.Tag == "TypeWildcard" }
-func (me *CoreTagType) IsTypeOp() bool              { return me.Tag == "TypeOp" }
-func (me *CoreTagType) IsProxyType() bool           { return me.Tag == "ProxyType" }
-func (me *CoreTagType) IsKindedType() bool          { return me.Tag == "KindedType" }
-func (me *CoreTagType) IsPrettyPrintFunction() bool { return me.Tag == "PrettyPrintFunction" }
-func (me *CoreTagType) IsPrettyPrintObject() bool   { return me.Tag == "PrettyPrintObject" }
-func (me *CoreTagType) IsPrettyPrintForAll() bool   { return me.Tag == "PrettyPrintForAll" }
-func (me *CoreTagType) IsBinaryNoParensType() bool  { return me.Tag == "BinaryNoParensType" }
-func (me *CoreTagType) IsParensInType() bool        { return me.Tag == "ParensInType" }
-func (me *CoreTagType) IsTUnknown() bool            { return me.Tag == "TUnknown" }
-func (me *CoreTagType) IsTypeLevelString() bool     { return me.Tag == "TypeLevelString" }
-func (me *CoreTagType) IsTypeVar() bool             { return me.Tag == "TypeVar" }
-func (me *CoreTagType) IsTypeConstructor() bool     { return me.Tag == "TypeConstructor" }
-func (me *CoreTagType) IsSkolem() bool              { return me.Tag == "Skolem" }
-func (me *CoreTagType) IsREmpty() bool              { return me.Tag == "REmpty" }
-func (me *CoreTagType) IsRCons() bool               { return me.Tag == "RCons" }
-func (me *CoreTagType) IsTypeApp() bool             { return me.Tag == "TypeApp" }
-func (me *CoreTagType) IsForAll() bool              { return me.Tag == "ForAll" }
-func (me *CoreTagType) IsConstrainedType() bool     { return me.Tag == "ConstrainedType" }
+// func (me *CoreTagType) IsTypeWildcard() bool        { return me.Tag == "TypeWildcard" }
+// func (me *CoreTagType) IsTypeOp() bool              { return me.Tag == "TypeOp" }
+// func (me *CoreTagType) IsProxyType() bool           { return me.Tag == "ProxyType" }
+// func (me *CoreTagType) IsKindedType() bool          { return me.Tag == "KindedType" }
+// func (me *CoreTagType) IsPrettyPrintFunction() bool { return me.Tag == "PrettyPrintFunction" }
+// func (me *CoreTagType) IsPrettyPrintObject() bool   { return me.Tag == "PrettyPrintObject" }
+// func (me *CoreTagType) IsPrettyPrintForAll() bool   { return me.Tag == "PrettyPrintForAll" }
+// func (me *CoreTagType) IsBinaryNoParensType() bool  { return me.Tag == "BinaryNoParensType" }
+// func (me *CoreTagType) IsParensInType() bool        { return me.Tag == "ParensInType" }
+// func (me *CoreTagType) IsTUnknown() bool            { return me.Tag == "TUnknown" }
+func (me *CoreTagType) IsTypeLevelString() bool { return me.Tag == "TypeLevelString" }
+func (me *CoreTagType) IsTypeVar() bool         { return me.Tag == "TypeVar" }
+func (me *CoreTagType) IsTypeConstructor() bool { return me.Tag == "TypeConstructor" }
+func (me *CoreTagType) IsSkolem() bool          { return me.Tag == "Skolem" }
+func (me *CoreTagType) IsREmpty() bool          { return me.Tag == "REmpty" }
+func (me *CoreTagType) IsRCons() bool           { return me.Tag == "RCons" }
+func (me *CoreTagType) IsTypeApp() bool         { return me.Tag == "TypeApp" }
+func (me *CoreTagType) IsForAll() bool          { return me.Tag == "ForAll" }
+func (me *CoreTagType) IsConstrainedType() bool { return me.Tag == "ConstrainedType" }
 func (me *CoreTagType) new(tc map[string]interface{}) *CoreTagType {
 	return &CoreTagType{CoreTag: me.tagFrom(tc), Num: -1, Skolem: -1}
 }
@@ -144,7 +144,7 @@ func (me *CoreTagType) prep() {
 		// nothing to do
 	} else if me.IsTypeLevelString() {
 		me.Text = me.Contents.(string)
-		// let any of these panic below if they ever start occurring, so we can handle them then
+		// let any of these panic below if they ever start occurring, so we can handle them then:
 		// } else if me.IsTypeWildcard() {
 		// } else if me.IsTypeOp() {
 		// } else if me.IsProxyType() {

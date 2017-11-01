@@ -71,11 +71,11 @@ func (me *CoreEnvClass) prep() {
 
 type CoreEnvClassArg struct {
 	Name string       `json:"tcaName"`
-	Type *CoreTagKind `json:"tcaKind"`
+	Kind *CoreTagKind `json:"tcaKind"`
 }
 
 func (me *CoreEnvClassArg) prep() {
-	me.Type.prep()
+	me.Kind.prep()
 }
 
 type CoreEnvClassMember struct {
@@ -139,10 +139,10 @@ type CoreEnvTypeCtor struct {
 	Args []string     `json:"cArgs"` // value0, value1 ..etc.
 }
 
-func (me *CoreEnvTypeCtor) isDeclData() bool    { return me.Decl == "data" }
-func (me *CoreEnvTypeCtor) isDeclNewtype() bool { return me.Decl == "newtype" }
+func (me *CoreEnvTypeCtor) IsDeclData() bool    { return me.Decl == "data" }
+func (me *CoreEnvTypeCtor) IsDeclNewtype() bool { return me.Decl == "newtype" }
 func (me *CoreEnvTypeCtor) prep() {
-	if !(me.isDeclData() || me.isDeclNewtype()) {
+	if !(me.IsDeclData() || me.IsDeclNewtype()) {
 		panic(NotImplErr("cDecl", me.Decl, "'dataConstructors'"))
 	}
 	if me.Ctor != nil {
