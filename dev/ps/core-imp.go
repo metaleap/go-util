@@ -22,10 +22,7 @@ type CoreImp struct { // we skip unmarshaling what isn't used for now, but DO ke
 	// DeclAnns []*CoreDecl `json:"declAnns"`
 	DeclEnv CoreEnv `json:"declEnv"`
 
-	My struct {
-		ImpFilePath   string
-		NamedRequires map[string]string
-	}
+	impFilePath string
 }
 
 func (me *CoreImp) Prep() {
@@ -80,7 +77,8 @@ type CoreImpAst struct {
 	Root   *CoreImp
 }
 
-func (me *CoreImp) InitAstOnLoaded() {
+func (me *CoreImp) InitAstOnLoaded(filepath4errormsgs string) {
+	me.impFilePath = filepath4errormsgs
 	// me.Body = me.initSubAsts(nil, me.Body...)
 }
 
@@ -110,7 +108,7 @@ func (me *CoreImp) PrepTopLevel() {
 	// 			a.Parent, me.Body[i] = nil, a
 	// 		}
 	// 	} else if a.AstTag != "Function" && a.AstTag != "VariableIntroduction" && a.AstTag != "Comment" {
-	// 		panic(NotImplErr("top-level CoreImp AST tag", a.AstTag, me.My.ImpFilePath))
+	// 		panic(NotImplErr("top-level CoreImp AST tag", a.AstTag, me.impFilePath))
 	// 	}
 	// }
 }
@@ -125,7 +123,7 @@ func (me *CoreImp) initSubAsts(Parent *CoreImpAst, asts ...*CoreImpAst) CoreImpA
 			if a.AstTag == "Comment" && a.AstCommentDecl != nil {
 				//	decls as sub-asts of comments is handy for PureScript but not for our own traversals, we lift the inner decl outward and set its own Comment instead. hence, we never process any AstCommentDecl, after this branch they're all nil
 				if a.AstCommentDecl.AstTag == "Comment" {
-					panic(NotImplErr("comments", "nesting", me.My.ImpFilePath))
+					panic(NotImplErr("comments", "nesting", me.impFilePath))
 				}
 				decl := a.AstCommentDecl
 				a.AstCommentDecl, decl.Comment, decl.Parent = nil, a.Comment, Parent
