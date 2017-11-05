@@ -2,10 +2,12 @@
 package umisc
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -119,6 +121,15 @@ func IfX(cond bool, ifTrue, ifFalse interface{}) interface{} {
 		return ifTrue
 	}
 	return ifFalse
+}
+
+func JsonDecodeFromFile(fromfilepath string, into interface{}) (err error) {
+	var f *os.File
+	if f, err = os.Open(fromfilepath); err == nil {
+		defer f.Close()
+		err = json.NewDecoder(f).Decode(into)
+	}
+	return
 }
 
 //	A convenience short-hand for `log.Println(fmt.Sprintf(LogErrorFormat, err))` if `err` isn't `nil`.
