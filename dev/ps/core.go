@@ -53,6 +53,10 @@ func (me *CoreConstr) prep() {
 	}
 }
 
+type CoreModuleRef struct {
+	ModuleName []string `json:"moduleName"`
+}
+
 type CoreSourceSpan struct {
 	Name  string `json:"name"`
 	Start []int  `json:"start"`

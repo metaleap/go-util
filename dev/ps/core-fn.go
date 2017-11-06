@@ -6,10 +6,10 @@ import (
 )
 
 type CoreFn struct {
-	ModuleName []string `json:"moduleName"` // ["Control","Monad","Eff"]
-	Imports    []struct {
+	CoreModuleRef
+	Imports []struct {
 		CoreAnnotated
-		ModuleName []string `json:"moduleName"`
+		CoreModuleRef
 	} `json:"imports"`
 	ModulePath string        `json:"modulePath"` // /home/_/c/ps/gonad-test/src/Mini/DataType.purs   ,   /home/_/c/ps/gonad-test/bower_components/purescript-eff/src/Control/Monad/Eff.purs
 	Exports    []string      `json:"exports"`
@@ -25,6 +25,11 @@ func (me *CoreFn) Prep() {
 	for _, decl := range me.Decls {
 		decl.prep()
 	}
+}
+
+type CoreFnIdent struct {
+	CoreModuleRef
+	Identifier string `json:"identifier"`
 }
 
 type CoreFnDecl struct {
@@ -187,9 +192,9 @@ func (me *CoreFnExprCase) prep() {
 }
 
 type CoreFnExprCaseAlt struct {
-	Binders     []CoreFnExprCaseBinder `json:"binders"`
-	IsGuarded   bool                   `json:"isGuarded"`
-	Expression  *CoreFnExpr            `json:"expression"`
+	Binders     []CoreFnBinder `json:"binders"`
+	IsGuarded   bool           `json:"isGuarded"`
+	Expression  *CoreFnExpr    `json:"expression"`
 	Expressions []struct {
 		Guard      *CoreFnExpr `json:"guard"`
 		Expression *CoreFnExpr `json:"expression"`
@@ -209,24 +214,30 @@ func (me *CoreFnExprCaseAlt) prep() {
 	}
 }
 
-type CoreFnExprCaseBinder struct {
+type CoreFnBinder struct {
 	CoreAnnotated
 	BinderType string `json:"binderType"`
 
-	Identifier string `json:"identifier"`
-	// Literal     *CoreFnExprLitVal      `json:"literal"`
-	CtorName string `json:"constructorName"`
-	CtorType string `json:"typeName"`
-	// CtorBinders []CoreFnExprCaseBinder `json:"binders"`
-	// Named       *CoreFnExprCaseBinder  `json:"binder"`
+	Identifier string            `json:"identifier"`
+	Literal    *CoreFnExprLitVal `json:"literal"`
+
+	CtorName CoreFnIdent `json:"constructorName"`
+	CtorType CoreFnIdent `json:"typeName"`
+
+	CtorBinders []CoreFnBinder `json:"binders"`
+	Named       *CoreFnBinder  `json:"binder"`
 }
 
-func (me *CoreFnExprCaseBinder) prep() {
-	// me.Literal.prep()
-	// for _, cb := range me.CtorBinders {
-	// 	cb.prep()
-	// }
-	// me.Named.prep()
+func (me *CoreFnBinder) prep() {
+	if me.Literal != nil {
+		me.Literal.prep()
+	}
+	for _, cb := range me.CtorBinders {
+		cb.prep()
+	}
+	if me.Named != nil {
+		me.Named.prep()
+	}
 }
 
 type CoreFnExprCtor struct {
@@ -260,14 +271,15 @@ func (me *CoreFnExprLit) prep() {
 }
 
 type CoreFnExprLitVal struct {
-	Type    string                `json:"-"`
-	Number  float64               `json:"-"`
-	Int     int                   `json:"-"`
-	Boolean bool                  `json:"-"`
-	Char    rune                  `json:"-"`
-	String  string                `json:"-"`
-	Array   []CoreFnExpr          `json:"-"`
-	Obj     []CoreFnExprLitObjFld `json:"-"`
+	Type           string                `json:"-"`
+	Number         float64               `json:"-"`
+	Int            int                   `json:"-"`
+	Boolean        bool                  `json:"-"`
+	Char           rune                  `json:"-"`
+	String         string                `json:"-"`
+	Array          []CoreFnExpr          `json:"-"`
+	ArrayOfBinders []CoreFnBinder        `json:"-"`
+	Obj            []CoreFnExprLitObjFld `json:"-"`
 }
 
 func (me *CoreFnExprLitVal) prep() {
@@ -292,6 +304,13 @@ func (me *CoreFnExprLitVal) UnmarshalJSON(data []byte) (err error) {
 			}
 			if err = json.Unmarshal(data, &arr); err == nil {
 				me.Array = arr.Val
+			} else {
+				var binders struct {
+					Val []CoreFnBinder `json:"value"`
+				}
+				if err = json.Unmarshal(data, &binders); err == nil {
+					me.ArrayOfBinders = binders.Val
+				}
 			}
 		case "ObjectLiteral":
 			var obj struct {
@@ -329,12 +348,18 @@ func (me *CoreFnExprLitVal) UnmarshalJSON(data []byte) (err error) {
 }
 
 type CoreFnExprLitObjFld struct {
-	Name string     `json:"-"`
-	Val  CoreFnExpr `json:"-"`
+	Name   string        `json:"-"`
+	Val    *CoreFnExpr   `json:"-"`
+	Binder *CoreFnBinder `json:"-"`
 }
 
 func (me *CoreFnExprLitObjFld) prep() {
-	me.Val.prep()
+	if me.Binder != nil {
+		me.Binder.prep()
+	}
+	if me.Val != nil {
+		me.Val.prep()
+	}
 }
 
 func (me *CoreFnExprLitObjFld) UnmarshalJSON(data []byte) (err error) {
@@ -342,7 +367,10 @@ func (me *CoreFnExprLitObjFld) UnmarshalJSON(data []byte) (err error) {
 	if strings.HasPrefix(hacky, "[\"") && strings.HasSuffix(hacky, "}]") {
 		if i := strings.Index(hacky, "\",{\""); i > 0 {
 			me.Name = hacky[:i][2:]
-			err = json.Unmarshal([]byte(hacky[:len(hacky)-1][i+2:]), &me.Val)
+			data = []byte(hacky[:len(hacky)-1][i+2:])
+			if err = json.Unmarshal(data, me.Val); err != nil {
+				err = json.Unmarshal(data, &me.Binder)
+			}
 		} else {
 			err = NotImplErr("CoreFnExprLit", "ObjectLiteral", hacky)
 		}
@@ -368,8 +396,5 @@ func (me *CoreFnExprObjUpd) prep() {
 
 type CoreFnExprVar struct {
 	CoreFnExprBase
-	Value struct {
-		ModuleName []string `json:"moduleName"`
-		Identifier string   `json:"identifier"`
-	} `json:"value"`
+	Value CoreFnIdent `json:"value"`
 }
