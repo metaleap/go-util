@@ -121,7 +121,7 @@ func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
 				me.prep, me.Var = vªr.prep, &vªr
 			}
 		default:
-			err = NotImplErr("CoreFnExpr.Type", exprtype.Type, "some corefn.json file")
+			err = NotImplErr("CoreFnExpr.Type", exprtype.Type, string(data))
 		}
 	}
 	return
@@ -205,7 +205,55 @@ func (me *CoreFnExprLet) prep() {
 
 type CoreFnExprLit struct {
 	CoreFnExprBase
-	Value interface{} `json:"value"`
+	Number  float64      `json:"-"`
+	Int     int          `json:"-"`
+	Boolean bool         `json:"-"`
+	Char    rune         `json:"-"`
+	String  string       `json:"-"`
+	Array   []CoreFnExpr `json:"-"`
+
+	Type string `json:"-"`
+}
+
+func (me *CoreFnExprLit) UnmarshalJSON(data []byte) (err error) {
+	var raw struct {
+		CoreFnExprBase
+		Lit struct {
+			Type string      `json:"literalType"`
+			Val  interface{} `json:"value"`
+		} `json:"value"`
+	}
+	if err = json.Unmarshal(data, &raw); err == nil {
+		me.Type, me.CoreFnExprBase = raw.Lit.Type, raw.CoreFnExprBase
+		switch me.Type {
+		case "ArrayLiteral":
+			var arr struct {
+				Lit struct {
+					Val []CoreFnExpr `json:"value"`
+				} `json:"value"`
+			}
+			if err = json.Unmarshal(data, &arr); err == nil {
+				me.Array = arr.Lit.Val
+			}
+		case "ObjectLiteral":
+		case "IntLiteral":
+			me.Int = int(raw.Lit.Val.(float64))
+		case "NumberLiteral":
+			me.Number = raw.Lit.Val.(float64)
+		case "CharLiteral":
+			for _, r := range raw.Lit.Val.(string) {
+				me.Char = r
+				break
+			}
+		case "StringLiteral":
+			me.String = raw.Lit.Val.(string)
+		case "BooleanLiteral":
+			me.Boolean = raw.Lit.Val.(bool)
+		default:
+			err = NotImplErr("CoreFnExprLit.Type", me.Type, string(data))
+		}
+	}
+	return
 }
 
 type CoreFnExprObjUpd struct {
