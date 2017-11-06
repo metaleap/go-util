@@ -1,5 +1,9 @@
 package udevps
 
+type CoreAnnotated struct {
+	Annotation CoreAnnotation `json:"annotation"`
+}
+
 type CoreAnnotation struct {
 	SourceSpan *CoreSourceSpan     `json:"sourceSpan"`
 	Type       *CoreTagType        `json:"type"`
