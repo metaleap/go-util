@@ -19,7 +19,7 @@ type CoreImp struct { // we skip unmarshaling what isn't used for now, but DO ke
 	// Exports    []string          `json:"exports"`
 	// Imps     [][]string  `json:"imports"`
 	// Body     CoreImpAsts `json:"body"`
-	// DeclAnns []*CoreDecl `json:"declAnns"`
+	// DeclAnns []*CoreImpDecl `json:"declAnns"`
 	DeclEnv CoreEnv `json:"declEnv"`
 
 	impFilePath string
@@ -31,6 +31,36 @@ func (me *CoreImp) Prep() {
 	// }
 	me.DeclEnv.prep()
 }
+
+// type CoreImpDecl struct {
+// 	BindType string           `json:"bindType"`
+// 	Ident    string           `json:"identifier"`
+// 	Ann      *CoreAnnotation  `json:"annotation"`
+// 	Expr     *CoreImpDeclExpr `json:"expression"`
+// }
+
+// func (me *CoreImpDecl) prep() {
+// 	if me.Ann != nil {
+// 		me.Ann.prep()
+// 	}
+// 	if me.Expr != nil {
+// 		me.Expr.prep()
+// 	}
+// }
+
+// type CoreImpDeclExpr struct {
+// 	Annotation            *CoreAnnotation `json:"annotation"`
+// 	ExprTag               string          `json:"type"`            // Var or Literal or Abs or App or Let or Constructor (or Accessor or ObjectUpdate or Case)
+// 	ConstructorName       string          `json:"constructorName"` // if ExprTag=Constructor
+// 	ConstructorType       string          `json:"typeName"`        // if ExprTag=Constructor
+// 	ConstructorFieldNames []string        `json:"fieldNames"`      // if ExprTag=Constructor
+// }
+
+// func (me *CoreImpDeclExpr) prep() {
+// 	if me.Annotation != nil {
+// 		me.Annotation.prep()
+// 	}
+// }
 
 type CoreImpAsts []*CoreImpAst
 
