@@ -72,7 +72,8 @@ type CoreFnExpr struct {
 	ObjectUpdate *CoreFnExprObjUpd `json:"-"`
 	Var          *CoreFnExprVar    `json:"-"`
 
-	prep func()
+	prep   func()
+	String func() string
 }
 
 func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
@@ -80,6 +81,7 @@ func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
 		Type string `json:"type"`
 	}
 	if err = json.Unmarshal(data, &exprtype); err == nil {
+		me.String = func() string { return exprtype.Type }
 		switch exprtype.Type {
 		case "Abs":
 			var abs CoreFnExprAbs
@@ -286,6 +288,9 @@ func (me *CoreFnExprLitVal) prep() {
 	for _, a := range me.Array {
 		a.prep()
 	}
+	for _, ab := range me.ArrayOfBinders {
+		ab.prep()
+	}
 	for _, o := range me.Obj {
 		o.prep()
 	}
@@ -354,11 +359,10 @@ type CoreFnExprLitObjFld struct {
 }
 
 func (me *CoreFnExprLitObjFld) prep() {
-	if me.Binder != nil {
-		me.Binder.prep()
-	}
 	if me.Val != nil {
 		me.Val.prep()
+	} else if me.Binder != nil {
+		me.Binder.prep()
 	}
 }
 
@@ -371,11 +375,7 @@ func (me *CoreFnExprLitObjFld) UnmarshalJSON(data []byte) (err error) {
 			if err = json.Unmarshal(data, me.Val); err != nil {
 				err = json.Unmarshal(data, &me.Binder)
 			}
-		} else {
-			err = NotImplErr("CoreFnExprLit", "ObjectLiteral", hacky)
 		}
-	} else {
-		err = NotImplErr("CoreFnExprLit", "ObjectLiteral", hacky)
 	}
 	return
 }
