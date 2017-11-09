@@ -148,6 +148,9 @@ func (me *CoreFnExprCase) prep() {
 
 func (me *CoreFnExprCase) String() string {
 	s := "CASE "
+	if len(me.Expressions) > 1 {
+		println(len(me.Expressions))
+	}
 	for i, _ := range me.Expressions {
 		s += ", " + me.Expressions[i].String()
 	}
@@ -182,20 +185,20 @@ func (me *CoreFnExprCaseAlt) prep() {
 }
 
 func (me *CoreFnExprCaseAlt) String() string {
-	s := fmt.Sprintf(" ❬C:%v ", me.IsGuarded)
+	s := fmt.Sprintf(" ❬C:%v| ", me.IsGuarded)
 	for i, _ := range me.Binders {
-		s += ", " + me.Binders[i].String()
+		s += "B:" + me.Binders[i].String() + " "
 	}
 	if me.Expression != nil {
 		s += me.Expression.String()
 	} else {
-		s += "["
+		s += "EXPRS["
 		for i, _ := range me.Expressions {
-			s += ", " + me.Expressions[i].Guard.String() + " |?| " + me.Expressions[i].Expression.String()
+			s += "X:" + me.Expressions[i].Guard.String() + " |?| " + me.Expressions[i].Expression.String() + " "
 		}
 		s += "]"
 	}
-	return s + " C:❭"
+	return s + " |C:❭"
 }
 
 type CoreFnExprCtor struct {
