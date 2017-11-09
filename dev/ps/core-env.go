@@ -127,8 +127,8 @@ func (me *CoreEnvTypeSyn) prep() {
 	if me.Type != nil {
 		me.Type.prep()
 	}
-	for _, tsa := range me.Args {
-		tsa.Kind.prep()
+	for i, _ := range me.Args {
+		me.Args[i].Kind.prep()
 	}
 }
 
@@ -196,11 +196,11 @@ type CoreEnvTypeData struct {
 }
 
 func (me *CoreEnvTypeData) prep() {
-	for _, tda := range me.Args {
-		tda.Kind.prep()
+	for i, _ := range me.Args {
+		me.Args[i].Kind.prep()
 	}
-	for _, tdc := range me.Ctors {
-		for _, tdct := range tdc.Types {
+	for i, _ := range me.Ctors {
+		for _, tdct := range me.Ctors[i].Types {
 			tdct.prep()
 		}
 	}

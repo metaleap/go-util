@@ -2,64 +2,9 @@ package udevps
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 )
-
-type CoreFn struct {
-	CoreModuleRef
-	Imports []struct {
-		CoreAnnotated
-		CoreModuleRef
-	} `json:"imports"`
-	ModulePath string        `json:"modulePath"` // /home/_/c/ps/gonad-test/src/Mini/DataType.purs   ,   /home/_/c/ps/gonad-test/bower_components/purescript-eff/src/Control/Monad/Eff.purs
-	Exports    []string      `json:"exports"`
-	Decls      []CoreFnDecl  `json:"decls"`
-	Comments   []CoreComment `json:"comments"`
-	Foreign    []string      `json:"foreign"`
-}
-
-func (me *CoreFn) Prep() {
-	for _, imp := range me.Imports {
-		imp.Annotation.prep()
-	}
-	for _, decl := range me.Decls {
-		decl.prep()
-	}
-}
-
-type CoreFnIdent struct {
-	CoreModuleRef
-	Identifier string `json:"identifier"`
-}
-
-type CoreFnDecl struct {
-	*CoreFnDeclBind
-	Binds []CoreFnDeclBind `json:"binds"`
-}
-
-func (me *CoreFnDecl) IsRecursive() bool    { return me.CoreFnDeclBind == nil }
-func (me *CoreFnDecl) IsNonRecursive() bool { return me.CoreFnDeclBind != nil }
-
-func (me *CoreFnDecl) prep() {
-	if me.CoreFnDeclBind != nil {
-		me.CoreFnDeclBind.prep()
-	} else {
-		for _, b := range me.Binds {
-			b.prep()
-		}
-	}
-}
-
-type CoreFnDeclBind struct {
-	CoreAnnotated
-	Identifier string     `json:"identifier"`
-	Expression CoreFnExpr `json:"expression"`
-}
-
-func (me *CoreFnDeclBind) prep() {
-	me.Annotation.prep()
-	me.Expression.prep()
-}
 
 type CoreFnExpr struct {
 	Abs          *CoreFnExprAbs    `json:"-"`
@@ -81,52 +26,51 @@ func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
 		Type string `json:"type"`
 	}
 	if err = json.Unmarshal(data, &exprtype); err == nil {
-		me.String = func() string { return exprtype.Type }
 		switch exprtype.Type {
 		case "Abs":
 			var abs CoreFnExprAbs
 			if err = json.Unmarshal(data, &abs); err == nil {
-				me.prep, me.Abs = abs.prep, &abs
+				me.prep, me.Abs, me.String = abs.prep, &abs, abs.String
 			}
 		case "Accessor":
 			var acc CoreFnExprAcc
 			if err = json.Unmarshal(data, &acc); err == nil {
-				me.prep, me.Accessor = acc.prep, &acc
+				me.prep, me.Accessor, me.String = acc.prep, &acc, acc.String
 			}
 		case "App":
 			var app CoreFnExprApp
 			if err = json.Unmarshal(data, &app); err == nil {
-				me.prep, me.App = app.prep, &app
+				me.prep, me.App, me.String = app.prep, &app, app.String
 			}
 		case "Case":
 			var cªse CoreFnExprCase
 			if err = json.Unmarshal(data, &cªse); err == nil {
-				me.prep, me.Case = cªse.prep, &cªse
+				me.prep, me.Case, me.String = cªse.prep, &cªse, cªse.String
 			}
 		case "Constructor":
 			var ctor CoreFnExprCtor
 			if err = json.Unmarshal(data, &ctor); err == nil {
-				me.prep, me.Constructor = ctor.prep, &ctor
+				me.prep, me.Constructor, me.String = ctor.prep, &ctor, ctor.String
 			}
 		case "Let":
 			var let CoreFnExprLet
 			if err = json.Unmarshal(data, &let); err == nil {
-				me.prep, me.Let = let.prep, &let
+				me.prep, me.Let, me.String = let.prep, &let, let.String
 			}
 		case "Literal":
 			var lit CoreFnExprLit
 			if err = json.Unmarshal(data, &lit); err == nil {
-				me.prep, me.Literal = lit.prep, &lit
+				me.prep, me.Literal, me.String = lit.prep, &lit, lit.String
 			}
 		case "ObjectUpdate":
 			var objupd CoreFnExprObjUpd
 			if err = json.Unmarshal(data, &objupd); err == nil {
-				me.prep, me.ObjectUpdate = objupd.prep, &objupd
+				me.prep, me.ObjectUpdate, me.String = objupd.prep, &objupd, objupd.String
 			}
 		case "Var":
 			var vªr CoreFnExprVar
 			if err = json.Unmarshal(data, &vªr); err == nil {
-				me.prep, me.Var = vªr.prep, &vªr
+				me.prep, me.Var, me.String = vªr.prep, &vªr, vªr.String
 			}
 		default:
 			err = NotImplErr("CoreFnExpr.Type", exprtype.Type, string(data))
@@ -153,6 +97,9 @@ func (me *CoreFnExprAbs) prep() {
 	me.CoreFnExprBase.prep()
 	me.Body.prep()
 }
+func (me *CoreFnExprAbs) String() string {
+	return "\\" + me.Argument + "-> " + me.Body.String()
+}
 
 type CoreFnExprAcc struct {
 	CoreFnExprBase
@@ -163,6 +110,9 @@ type CoreFnExprAcc struct {
 func (me *CoreFnExprAcc) prep() {
 	me.CoreFnExprBase.prep()
 	me.Expression.prep()
+}
+func (me *CoreFnExprAcc) String() string {
+	return me.Expression.String() + "@@" + me.FieldName
 }
 
 type CoreFnExprApp struct {
@@ -176,6 +126,9 @@ func (me *CoreFnExprApp) prep() {
 	me.Abstraction.prep()
 	me.Argument.prep()
 }
+func (me *CoreFnExprApp) String() string {
+	return me.Abstraction.String() + "(" + me.Argument.String() + ")"
+}
 
 type CoreFnExprCase struct {
 	CoreFnExprBase
@@ -185,12 +138,24 @@ type CoreFnExprCase struct {
 
 func (me *CoreFnExprCase) prep() {
 	me.CoreFnExprBase.prep()
-	for _, expr := range me.Expressions {
-		expr.prep()
+	for i, _ := range me.Expressions {
+		me.Expressions[i].prep()
 	}
-	for _, alt := range me.Alternatives {
-		alt.prep()
+	for i, _ := range me.Alternatives {
+		me.Alternatives[i].prep()
 	}
+}
+
+func (me *CoreFnExprCase) String() string {
+	s := "CASE "
+	for i, _ := range me.Expressions {
+		s += ", " + me.Expressions[i].String()
+	}
+	s += " OF"
+	for i, _ := range me.Alternatives {
+		s += me.Alternatives[i].String()
+	}
+	return s
 }
 
 type CoreFnExprCaseAlt struct {
@@ -198,48 +163,39 @@ type CoreFnExprCaseAlt struct {
 	IsGuarded   bool           `json:"isGuarded"`
 	Expression  *CoreFnExpr    `json:"expression"`
 	Expressions []struct {
-		Guard      *CoreFnExpr `json:"guard"`
-		Expression *CoreFnExpr `json:"expression"`
+		Guard      CoreFnExpr `json:"guard"`
+		Expression CoreFnExpr `json:"expression"`
 	} `json:"expressions"`
 }
 
 func (me *CoreFnExprCaseAlt) prep() {
-	for _, b := range me.Binders {
-		b.prep()
+	for i, _ := range me.Binders {
+		me.Binders[i].prep()
 	}
 	if me.Expression != nil {
 		me.Expression.prep()
 	}
-	for _, expr := range me.Expressions {
-		expr.Guard.prep()
-		expr.Expression.prep()
+	for i, _ := range me.Expressions {
+		me.Expressions[i].Guard.prep()
+		me.Expressions[i].Expression.prep()
 	}
 }
 
-type CoreFnBinder struct {
-	CoreAnnotated
-	BinderType string `json:"binderType"`
-
-	Identifier string            `json:"identifier"`
-	Literal    *CoreFnExprLitVal `json:"literal"`
-
-	CtorName CoreFnIdent `json:"constructorName"`
-	CtorType CoreFnIdent `json:"typeName"`
-
-	CtorBinders []CoreFnBinder `json:"binders"`
-	Named       *CoreFnBinder  `json:"binder"`
-}
-
-func (me *CoreFnBinder) prep() {
-	if me.Literal != nil {
-		me.Literal.prep()
+func (me *CoreFnExprCaseAlt) String() string {
+	s := fmt.Sprintf(" ❬C:%v ", me.IsGuarded)
+	for i, _ := range me.Binders {
+		s += ", " + me.Binders[i].String()
 	}
-	for _, cb := range me.CtorBinders {
-		cb.prep()
+	if me.Expression != nil {
+		s += me.Expression.String()
+	} else {
+		s += "["
+		for i, _ := range me.Expressions {
+			s += ", " + me.Expressions[i].Guard.String() + " |?| " + me.Expressions[i].Expression.String()
+		}
+		s += "]"
 	}
-	if me.Named != nil {
-		me.Named.prep()
-	}
+	return s + " C:❭"
 }
 
 type CoreFnExprCtor struct {
@@ -247,6 +203,14 @@ type CoreFnExprCtor struct {
 	ConstructorName string   `json:"constructorName"`
 	TypeName        string   `json:"typeName"`
 	FieldNames      []string `json:"fieldNames"`
+}
+
+func (me *CoreFnExprCtor) String() string {
+	s := me.TypeName + "::" + me.ConstructorName + "<"
+	for _, fn := range me.FieldNames {
+		s += ", " + fn
+	}
+	return s + ">"
 }
 
 type CoreFnExprLet struct {
@@ -258,9 +222,16 @@ type CoreFnExprLet struct {
 func (me *CoreFnExprLet) prep() {
 	me.CoreFnExprBase.prep()
 	me.Expression.prep()
-	for _, bind := range me.Binds {
-		bind.prep()
+	for i, _ := range me.Binds {
+		me.Binds[i].prep()
 	}
+}
+func (me *CoreFnExprLet) String() string {
+	s := "LET"
+	for i, _ := range me.Binds {
+		s += ", " + me.Binds[i].String()
+	}
+	return s + " IN " + me.Expression.String()
 }
 
 type CoreFnExprLit struct {
@@ -272,27 +243,63 @@ func (me *CoreFnExprLit) prep() {
 	me.Val.prep()
 }
 
+func (me *CoreFnExprLit) String() string {
+	return me.Val.String()
+}
+
 type CoreFnExprLitVal struct {
 	Type           string                `json:"-"`
 	Number         float64               `json:"-"`
 	Int            int                   `json:"-"`
 	Boolean        bool                  `json:"-"`
 	Char           rune                  `json:"-"`
-	String         string                `json:"-"`
+	Str            string                `json:"-"`
 	Array          []CoreFnExpr          `json:"-"`
 	ArrayOfBinders []CoreFnBinder        `json:"-"`
 	Obj            []CoreFnExprLitObjFld `json:"-"`
 }
 
 func (me *CoreFnExprLitVal) prep() {
-	for _, a := range me.Array {
-		a.prep()
+	for i, _ := range me.Array {
+		me.Array[i].prep()
 	}
-	for _, ab := range me.ArrayOfBinders {
-		ab.prep()
+	for i, _ := range me.ArrayOfBinders {
+		me.ArrayOfBinders[i].prep()
 	}
-	for _, o := range me.Obj {
-		o.prep()
+	for i, _ := range me.Obj {
+		me.Obj[i].prep()
+	}
+}
+
+func (me *CoreFnExprLitVal) String() string {
+	switch me.Type {
+	case "ArrayLiteral":
+		s := "["
+		for i, _ := range me.Array {
+			s += ", " + me.Array[i].String()
+		}
+		for i, _ := range me.ArrayOfBinders {
+			s += ", " + me.ArrayOfBinders[i].String()
+		}
+		return s + "]"
+	case "ObjectLiteral":
+		s := "{"
+		for i, _ := range me.Obj {
+			s += ", " + me.Obj[i].String()
+		}
+		return s + "}"
+	case "IntLiteral":
+		return fmt.Sprintf("%v", me.Int)
+	case "NumberLiteral":
+		return fmt.Sprintf("%v", me.Number)
+	case "CharLiteral":
+		return fmt.Sprintf("%q", me.Char)
+	case "StringLiteral":
+		return fmt.Sprintf("%q", me.Str)
+	case "BooleanLiteral":
+		return fmt.Sprintf("%v", me.Boolean)
+	default:
+		panic(NotImplErr("CoreFnExprLit.Type", me.Type, *me))
 	}
 }
 
@@ -340,7 +347,7 @@ func (me *CoreFnExprLitVal) UnmarshalJSON(data []byte) (err error) {
 						break
 					}
 				case "StringLiteral":
-					me.String = prim.Val.(string)
+					me.Str = prim.Val.(string)
 				case "BooleanLiteral":
 					me.Boolean = prim.Val.(bool)
 				default:
@@ -366,6 +373,16 @@ func (me *CoreFnExprLitObjFld) prep() {
 	}
 }
 
+func (me *CoreFnExprLitObjFld) String() (s string) {
+	s = me.Name + ":"
+	if me.Val != nil {
+		s += me.Val.String()
+	} else if me.Binder != nil {
+		s += me.Binder.String()
+	}
+	return
+}
+
 func (me *CoreFnExprLitObjFld) UnmarshalJSON(data []byte) (err error) {
 	hacky := string(data)
 	if strings.HasPrefix(hacky, "[\"") && strings.HasSuffix(hacky, "}]") {
@@ -389,12 +406,24 @@ type CoreFnExprObjUpd struct {
 func (me *CoreFnExprObjUpd) prep() {
 	me.CoreFnExprBase.prep()
 	me.Expression.prep()
-	for _, upd := range me.Updates {
-		upd.prep()
+	for i, _ := range me.Updates {
+		me.Updates[i].prep()
 	}
+}
+
+func (me *CoreFnExprObjUpd) String() string {
+	s := "SET " + me.Expression.String() + "{"
+	for i, _ := range me.Updates {
+		s += ", " + me.Updates[i].String()
+	}
+	return s + "}"
 }
 
 type CoreFnExprVar struct {
 	CoreFnExprBase
 	Value CoreFnIdent `json:"value"`
+}
+
+func (me *CoreFnExprVar) String() string {
+	return me.Value.String()
 }
