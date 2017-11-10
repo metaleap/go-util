@@ -1,11 +1,10 @@
 package udevps
 
 /*
-We ignore most of the stuff in externs.json now, as it's
-provided in coreimp's DeclEnv for both exports & non-exports.
+We ignore most of the stuff in externs.json now:
 
-BUT we make use of EfExports still, as coreimp's `exports`
-don't capture type synonyms.
+BUT we make use of EfExports still, it covers more than
+coreimp (type aliases) / corefn (exported datas with unexported ctors)
 */
 
 type Extern struct {
@@ -28,9 +27,9 @@ type ExternRefs struct {
 	TypeClassRef    []interface{}
 	TypeInstanceRef []interface{}
 	ValueRef        []interface{}
-	ValueOpRef      []interface{}
-	ModuleRef       []interface{}
-	ReExportRef     []interface{}
+	// ValueOpRef  []interface{}
+	// ModuleRef   []interface{}
+	// ReExportRef []interface{}
 }
 
 // type ExternImportType struct {
