@@ -27,6 +27,10 @@ func (me *CoreFn) Prep() {
 	}
 }
 
+func (me *CoreFn) RemoveAt(i int) {
+	me.Decls = append(me.Decls[:i], me.Decls[i+1:]...)
+}
+
 type CoreFnBinder struct {
 	CoreAnnotated
 	BinderType string `json:"binderType"`
@@ -79,8 +83,8 @@ func (me *CoreFnBinder) String() (s string) {
 }
 
 type CoreFnDecl struct {
-	*CoreFnDeclBind
-	Binds []CoreFnDeclBind `json:"binds"`
+	*CoreFnDeclBind                  // directly upon decode may be nil or non-nil, after prep() ALWAYS nil
+	Binds           []CoreFnDeclBind `json:"binds"`
 }
 
 func (me *CoreFnDecl) IsRecursive() bool    { return me.CoreFnDeclBind == nil }
@@ -88,11 +92,11 @@ func (me *CoreFnDecl) IsNonRecursive() bool { return me.CoreFnDeclBind != nil }
 
 func (me *CoreFnDecl) prep() {
 	if me.CoreFnDeclBind != nil {
-		me.CoreFnDeclBind.prep()
-	} else {
-		for i, _ := range me.Binds {
-			me.Binds[i].prep()
-		}
+		me.Binds = []CoreFnDeclBind{*me.CoreFnDeclBind}
+		me.CoreFnDeclBind = nil
+	}
+	for i, _ := range me.Binds {
+		me.Binds[i].prep()
 	}
 }
 

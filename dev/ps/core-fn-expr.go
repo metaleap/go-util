@@ -17,8 +17,9 @@ type CoreFnExpr struct {
 	ObjectUpdate *CoreFnExprObjUpd `json:"-"`
 	Var          *CoreFnExprVar    `json:"-"`
 
-	prep   func()
-	String func() string
+	prep       func()
+	Annotation func() *CoreAnnotation
+	String     func() string
 }
 
 func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
@@ -26,51 +27,63 @@ func (me *CoreFnExpr) UnmarshalJSON(data []byte) (err error) {
 		Type string `json:"type"`
 	}
 	if err = json.Unmarshal(data, &exprtype); err == nil {
+		setann := func(ann *CoreAnnotation) {
+			me.Annotation = func() *CoreAnnotation { return ann }
+		}
 		switch exprtype.Type {
 		case "Abs":
 			var abs CoreFnExprAbs
 			if err = json.Unmarshal(data, &abs); err == nil {
 				me.prep, me.Abs, me.String = abs.prep, &abs, abs.String
+				setann(&abs.Annotation)
 			}
 		case "Accessor":
 			var acc CoreFnExprAcc
 			if err = json.Unmarshal(data, &acc); err == nil {
 				me.prep, me.Accessor, me.String = acc.prep, &acc, acc.String
+				setann(&acc.Annotation)
 			}
 		case "App":
 			var app CoreFnExprApp
 			if err = json.Unmarshal(data, &app); err == nil {
 				me.prep, me.App, me.String = app.prep, &app, app.String
+				setann(&app.Annotation)
 			}
 		case "Case":
 			var cªse CoreFnExprCase
 			if err = json.Unmarshal(data, &cªse); err == nil {
 				me.prep, me.Case, me.String = cªse.prep, &cªse, cªse.String
+				setann(&cªse.Annotation)
 			}
 		case "Constructor":
 			var ctor CoreFnExprCtor
 			if err = json.Unmarshal(data, &ctor); err == nil {
 				me.prep, me.Constructor, me.String = ctor.prep, &ctor, ctor.String
+				setann(&ctor.Annotation)
 			}
 		case "Let":
 			var let CoreFnExprLet
 			if err = json.Unmarshal(data, &let); err == nil {
 				me.prep, me.Let, me.String = let.prep, &let, let.String
+				setann(&let.Annotation)
 			}
 		case "Literal":
 			var lit CoreFnExprLit
 			if err = json.Unmarshal(data, &lit); err == nil {
 				me.prep, me.Literal, me.String = lit.prep, &lit, lit.String
+				setann(&lit.Annotation)
 			}
 		case "ObjectUpdate":
 			var objupd CoreFnExprObjUpd
 			if err = json.Unmarshal(data, &objupd); err == nil {
 				me.prep, me.ObjectUpdate, me.String = objupd.prep, &objupd, objupd.String
+				setann(&objupd.Annotation)
 			}
 		case "Var":
 			var vªr CoreFnExprVar
 			if err = json.Unmarshal(data, &vªr); err == nil {
 				me.prep, me.Var, me.String = vªr.prep, &vªr, vªr.String
+				setann(&vªr.Annotation)
 			}
 		default:
 			err = NotImplErr("CoreFnExpr.Type", exprtype.Type, string(data))
@@ -98,7 +111,7 @@ func (me *CoreFnExprAbs) prep() {
 	me.Body.prep()
 }
 func (me *CoreFnExprAbs) String() string {
-	return "\\" + me.Argument + "-> " + me.Body.String()
+	return "ABS:\\" + me.Argument + "-> " + me.Body.String()
 }
 
 type CoreFnExprAcc struct {
@@ -112,7 +125,7 @@ func (me *CoreFnExprAcc) prep() {
 	me.Expression.prep()
 }
 func (me *CoreFnExprAcc) String() string {
-	return me.Expression.String() + "@@" + me.FieldName
+	return "ACC:" + me.Expression.String() + "@" + me.FieldName
 }
 
 type CoreFnExprApp struct {
@@ -127,7 +140,7 @@ func (me *CoreFnExprApp) prep() {
 	me.Argument.prep()
 }
 func (me *CoreFnExprApp) String() string {
-	return me.Abstraction.String() + "(" + me.Argument.String() + ")"
+	return "ABS:" + me.Abstraction.String() + "(" + me.Argument.String() + ")"
 }
 
 type CoreFnExprCase struct {
@@ -147,14 +160,17 @@ func (me *CoreFnExprCase) prep() {
 }
 
 func (me *CoreFnExprCase) String() string {
-	s := "CASE "
+	s := "CASE:"
 	if len(me.Expressions) > 1 {
 		println(len(me.Expressions))
 	}
 	for i, _ := range me.Expressions {
-		s += ", " + me.Expressions[i].String()
+		if i > 0 {
+			s += ", "
+		}
+		s += me.Expressions[i].String()
 	}
-	s += " OF"
+	s += ":OF:"
 	for i, _ := range me.Alternatives {
 		s += me.Alternatives[i].String()
 	}
@@ -210,8 +226,11 @@ type CoreFnExprCtor struct {
 
 func (me *CoreFnExprCtor) String() string {
 	s := me.TypeName + "::" + me.ConstructorName + "<"
-	for _, fn := range me.FieldNames {
-		s += ", " + fn
+	for i, fn := range me.FieldNames {
+		if i > 0 {
+			s += ", "
+		}
+		s += fn
 	}
 	return s + ">"
 }
@@ -230,11 +249,14 @@ func (me *CoreFnExprLet) prep() {
 	}
 }
 func (me *CoreFnExprLet) String() string {
-	s := "LET"
+	s := "LET:"
 	for i, _ := range me.Binds {
-		s += ", " + me.Binds[i].String()
+		if i > 0 {
+			s += ", "
+		}
+		s += me.Binds[i].String()
 	}
-	return s + " IN " + me.Expression.String()
+	return s + ":IN:" + me.Expression.String()
 }
 
 type CoreFnExprLit struct {
@@ -277,30 +299,39 @@ func (me *CoreFnExprLitVal) prep() {
 func (me *CoreFnExprLitVal) String() string {
 	switch me.Type {
 	case "ArrayLiteral":
-		s := "["
+		s := "La:["
 		for i, _ := range me.Array {
-			s += ", " + me.Array[i].String()
+			if i > 0 {
+				s += ", "
+			}
+			s += me.Array[i].String()
 		}
 		for i, _ := range me.ArrayOfBinders {
-			s += ", " + me.ArrayOfBinders[i].String()
+			if i > 0 {
+				s += ", "
+			}
+			s += me.ArrayOfBinders[i].String()
 		}
 		return s + "]"
 	case "ObjectLiteral":
-		s := "{"
+		s := "Lo:{"
 		for i, _ := range me.Obj {
-			s += ", " + me.Obj[i].String()
+			if i > 0 {
+				s += ", "
+			}
+			s += me.Obj[i].String()
 		}
 		return s + "}"
 	case "IntLiteral":
-		return fmt.Sprintf("%v", me.Int)
+		return fmt.Sprintf("Li:%d", me.Int)
 	case "NumberLiteral":
-		return fmt.Sprintf("%v", me.Number)
+		return fmt.Sprintf("Ln:%f", me.Number)
 	case "CharLiteral":
-		return fmt.Sprintf("%q", me.Char)
+		return fmt.Sprintf("Lc:%q", me.Char)
 	case "StringLiteral":
-		return fmt.Sprintf("%q", me.Str)
+		return fmt.Sprintf("Ls:%q", me.Str)
 	case "BooleanLiteral":
-		return fmt.Sprintf("%v", me.Boolean)
+		return fmt.Sprintf("Lb:%t", me.Boolean)
 	default:
 		panic(NotImplErr("CoreFnExprLit.Type", me.Type, *me))
 	}
@@ -415,9 +446,12 @@ func (me *CoreFnExprObjUpd) prep() {
 }
 
 func (me *CoreFnExprObjUpd) String() string {
-	s := "SET " + me.Expression.String() + "{"
+	s := "UPDOBJ:" + me.Expression.String() + "{"
 	for i, _ := range me.Updates {
-		s += ", " + me.Updates[i].String()
+		if i > 0 {
+			s += ", "
+		}
+		s += me.Updates[i].String()
 	}
 	return s + "}"
 }
@@ -428,5 +462,5 @@ type CoreFnExprVar struct {
 }
 
 func (me *CoreFnExprVar) String() string {
-	return me.Value.String()
+	return "V:" + me.Value.String()
 }
