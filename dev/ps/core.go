@@ -15,6 +15,7 @@ type CoreAnnotation struct {
 
 func (me *CoreAnnotation) prep() {
 	if me.Type != nil {
+		panic(NotImplErr("CoreFn Annotation.Type", me.Type.Tag, *me.Type))
 		me.Type.prep()
 	}
 	if me.Meta != nil {
@@ -79,6 +80,10 @@ func (me *CoreConstr) prep() {
 
 type CoreModuleRef struct {
 	ModuleName []string `json:"moduleName"`
+}
+
+func (me *CoreModuleRef) IsModuleNameNil() bool {
+	return len(me.ModuleName) == 0
 }
 
 type CoreSourceSpan struct {

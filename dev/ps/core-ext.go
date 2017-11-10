@@ -7,22 +7,22 @@ BUT we make use of EfExports still, it covers more than
 coreimp (type aliases) / corefn (exported datas with unexported ctors)
 */
 
-type Extern struct {
-	// EfSourceSpan *coreImpSourceSpan `json:"efSourceSpan"`
-	// EfVersion    string             `json:"efVersion"`
-	// EfModuleName []string           `json:"efModuleName"`
-	// EfDecls      []*ExternDecl       `json:"efDeclarations"`
-	// EfImports    []*ExternImport     `json:"efImports"`
-	EfExports []*ExternRefs `json:"efExports"`
+type CoreExt struct {
+	// SourceSpan *coreImpSourceSpan `json:"efSourceSpan"`
+	// Version    string             `json:"efVersion"`
+	// ModuleName []string           `json:"efModuleName"`
+	// Decls      []*CoreExtDecl     `json:"efDeclarations"`
+	// Imports    []*CoreExtImport   `json:"efImports"`
+	Exports []*CoreExtRefs `json:"efExports"`
 }
 
-// type ExternImport struct {
-// 	EiModule     []string         `json:"eiModule"`
-// 	EiImportType *ExternImportType `json:"eiImportType"`
-// 	EiImportedAs []string         `json:"eiImportedAs"`
+// type CoreExtImport struct {
+// 	Module     []string           `json:"eiModule"`
+// 	ImportType *CoreExtImportType `json:"eiImportType"`
+// 	ImportedAs []string           `json:"eiImportedAs"`
 // }
 
-type ExternRefs struct {
+type CoreExtRefs struct {
 	TypeRef         []interface{}
 	TypeClassRef    []interface{}
 	TypeInstanceRef []interface{}
@@ -32,51 +32,51 @@ type ExternRefs struct {
 	// ReExportRef []interface{}
 }
 
-// type ExternImportType struct {
+// type CoreExtImportType struct {
 // 	Implicit []interface{}
-// 	Explicit []*ExternRefs
+// 	Explicit []*CoreExtRefs
 // }
 
-// type ExternDecl struct {
-// 	EDClass           *ExternTypeClass
-// 	EDType            *ExternType
-// 	EDTypeSynonym     *ExternTypeAlias
-// 	EDValue           *ExternVal
-// 	EDInstance        *ExternInst
+// type CoreExtDecl struct {
+// 	EDClass           *CoreExtTypeClass
+// 	EDType            *CoreExtType
+// 	EDTypeSynonym     *CoreExtTypeSyn
+// 	EDValue           *CoreExtVal
+// 	EDInstance        *CoreExtInst
 // 	EDDataConstructor map[string]interface{}
 // }
 
-// type ExternIdent struct {
+// type CoreExtIdent struct {
 // 	Ident string
 // }
 
-// type ExternVal struct {
-// 	Name ExternIdent    `json:"edValueName"`
+// type CoreExtVal struct {
+// 	Name CoreExtIdent  `json:"edValueName"`
 // 	Type coreImpEnvTag `json:"edValueType"`
 // }
 
-// type ExternType struct {
+// type CoreExtType struct {
 // 	Name     string        `json:"edTypeName"`
 // 	Kind     coreImpEnvTag `json:"edTypeKind"`
 // 	DeclKind interface{}   `json:"edTypeDeclarationKind"`
 // }
 
-// type ExternTypeAlias struct {
+// type CoreExtTypeSyn struct {
 // 	Name      string         `json:"edTypeSynonymName"`
 // 	Arguments []interface{}  `json:"edTypeSynonymArguments"`
 // 	Type      *coreImpEnvTag `json:"edTypeSynonymType"`
 // }
 
-// type ExternInst struct {
+// type CoreExtInst struct {
 // 	ClassName   []interface{}   `json:"edInstanceClassName"`
-// 	Name        ExternIdent      `json:"edInstanceName"`
+// 	Name        CoreExtIdent    `json:"edInstanceName"`
 // 	Types       []coreImpEnvTag `json:"edInstanceTypes"`
-// 	Constraints []CoreConstr   `json:"edInstanceConstraints"`
+// 	Constraints []CoreConstr    `json:"edInstanceConstraints"`
 // 	Chain       [][]interface{} `json:"edInstanceChain"`
 // 	ChainIndex  int             `json:"edInstanceChainIndex"`
 // }
 
-// type ExternTypeClass struct {
+// type CoreExtTypeClass struct {
 // 	Name           string          `json:"edClassName"`
 // 	TypeArgs       [][]interface{} `json:"edClassTypeArguments"`
 // 	FunctionalDeps []struct {
@@ -84,5 +84,5 @@ type ExternRefs struct {
 // 		Determined  []int `json:"determined"`
 // 	} `json:"edFunctionalDependencies"`
 // 	Members     [][]interface{} `json:"edClassMembers"`
-// 	Constraints []CoreConstr   `json:"edClassConstraints"`
+// 	Constraints []CoreConstr    `json:"edClassConstraints"`
 // }

@@ -110,6 +110,11 @@ func (me *CoreFnExprAbs) prep() {
 	me.CoreFnExprBase.prep()
 	me.Body.prep()
 }
+
+func (me *CoreFnExprAbs) Meta() *CoreAnnotationMeta {
+	return me.Annotation.Meta
+}
+
 func (me *CoreFnExprAbs) String() string {
 	return "ABS:\\" + me.Argument + "-> " + me.Body.String()
 }
@@ -266,6 +271,10 @@ type CoreFnExprLit struct {
 
 func (me *CoreFnExprLit) prep() {
 	me.Val.prep()
+}
+
+func (me *CoreFnExprLit) Meta() *CoreAnnotationMeta {
+	return me.Annotation.Meta
 }
 
 func (me *CoreFnExprLit) String() string {
@@ -459,6 +468,10 @@ func (me *CoreFnExprObjUpd) String() string {
 type CoreFnExprVar struct {
 	CoreFnExprBase
 	Value CoreFnIdent `json:"value"`
+}
+
+func (me *CoreFnExprVar) Meta() *CoreAnnotationMeta {
+	return me.Annotation.Meta
 }
 
 func (me *CoreFnExprVar) String() string {
