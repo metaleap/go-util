@@ -83,7 +83,7 @@ type CoreTagType struct {
 // func (me *CoreTagType) IsPrettyPrintForAll() bool   { return me.Tag == "PrettyPrintForAll" }
 // func (me *CoreTagType) IsBinaryNoParensType() bool  { return me.Tag == "BinaryNoParensType" }
 // func (me *CoreTagType) IsParensInType() bool        { return me.Tag == "ParensInType" }
-// func (me *CoreTagType) IsTUnknown() bool            { return me.Tag == "TUnknown" }
+func (me *CoreTagType) IsTUnknown() bool        { return me.Tag == "TUnknown" }
 func (me *CoreTagType) IsTypeLevelString() bool { return me.Tag == "TypeLevelString" }
 func (me *CoreTagType) IsTypeVar() bool         { return me.Tag == "TypeVar" }
 func (me *CoreTagType) IsTypeConstructor() bool { return me.Tag == "TypeConstructor" }
@@ -141,9 +141,9 @@ func (me *CoreTagType) prep() {
 		me.Type1 = me.new(tuple[2].(map[string]interface{}))
 		me.Type1.prep()
 	} else if me.IsREmpty() && me.Contents == nil {
-		// nothing to do
 	} else if me.IsTypeLevelString() {
 		me.Text = me.Contents.(string)
+	} else if me.IsTUnknown() {
 		// let any of these panic below if they ever start occurring, so we can handle them then:
 		// } else if me.IsTypeWildcard() {
 		// } else if me.IsTypeOp() {
@@ -154,7 +154,6 @@ func (me *CoreTagType) prep() {
 		// } else if me.IsPrettyPrintForAll() {
 		// } else if me.IsBinaryNoParensType() {
 		// } else if me.IsParensInType() {
-		// } else if me.IsTUnknown() {
 	} else {
 		panic(NotImplErr("tagged-type", me.Tag, me.Contents))
 	}

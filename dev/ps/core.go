@@ -15,7 +15,6 @@ type CoreAnnotation struct {
 
 func (me *CoreAnnotation) prep() {
 	if me.Type != nil {
-		panic(NotImplErr("CoreFn Annotation.Type", me.Type.Tag, *me.Type))
 		me.Type.prep()
 	}
 	if me.Meta != nil {
@@ -58,7 +57,11 @@ type CoreConstr struct {
 	Args  []*CoreTagType `json:"constraintArgs"`
 	Data  interface{}    `json:"constraintData"`
 
-	Cls string
+	Cls   string `json:"-"`
+	CData struct {
+		Strs [][]string
+		Bool bool
+	} `json:"-"`
 }
 
 func (me *CoreConstr) prep() {
@@ -71,7 +74,16 @@ func (me *CoreConstr) prep() {
 		}
 	}
 	if me.Data != nil {
-		panic(NotImplErr("constraintData for 'typeClasses' or", "typeClassDictionaries", me.Data))
+		data := me.Data.([]interface{})
+		me.CData.Bool = data[1].(bool)
+		for _, subdata := range data[0].([]interface{}) {
+			sd := subdata.([]interface{})
+			strs := make([]string, 0, len(sd))
+			for _, sdx := range sd {
+				strs = append(strs, sdx.(string))
+			}
+			me.CData.Strs = append(me.CData.Strs, strs)
+		}
 	}
 	for _, ca := range me.Args {
 		ca.prep()
