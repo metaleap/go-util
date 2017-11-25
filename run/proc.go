@@ -16,10 +16,10 @@ type CmdTry struct {
 	Ran  *bool
 }
 
-func SetupJsonProtoPipes(bufferCapacity int, clenProto bool, needJsonOut bool) (stdin *bufio.Scanner, rawOut *bufio.Writer, jsonOut *json.Encoder) {
+func SetupJsonProtoPipes(bufferCapacity int, withContentLen bool, needJsonOut bool) (stdin *bufio.Scanner, rawOut *bufio.Writer, jsonOut *json.Encoder) {
 	stdin = bufio.NewScanner(os.Stdin)
 	stdin.Buffer(make([]byte, bufferCapacity), bufferCapacity)
-	if clenProto {
+	if withContentLen {
 		stdin.Split(func(data []byte, ateof bool) (advance int, token []byte, err error) {
 			if i_cl1 := bytes.Index(data, []byte("Content-Length: ")); i_cl1 >= 0 {
 				datafromclen := data[i_cl1+16:]
