@@ -22,16 +22,16 @@ var (
 	Has_hothasktags     bool
 	Has_lushtags        bool
 	Has_deadcodedetect  bool
+	Has_intero          bool
+	Has_doctest         bool
+	Has_hoogle          bool
+	Has_apply_refact    bool
 	// Has_hsautofix       bool
 	// Has_hscabal         bool
 	// Has_hsclearimports  bool
 	// Has_hsdev           bool
 	// Has_hshayoo         bool
 	// Has_hsinspect       bool
-	Has_intero       bool
-	Has_doctest      bool
-	Has_hoogle       bool
-	Has_apply_refact bool
 
 	StackArgs      = []string{"--dump-logs", "--no-time-in-log", "--no-install-ghc", "--skip-ghc-check", "--skip-msys", "--no-terminal", "--color", "never", "--jobs", "8", "--verbosity", "info"}
 	StackArgsBuild = []string{"--copy-bins", "--no-haddock", "--no-open", "--no-haddock-internal", "--no-haddock-deps", "--no-keep-going", "--no-test", "--no-rerun-tests", "--no-bench", "--no-run-benchmarks", "--no-cabal-verbose", "--no-split-objs"}
