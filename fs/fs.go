@@ -252,6 +252,16 @@ func IsNewerThan(srcFilePath, dstFilePath string) (newer bool, err error) {
 	return
 }
 
+func IsNewerThanTime(srcFilePath string, time int64) (newer bool, err error) {
+	var src os.FileInfo
+	if newer = true; time > 0 {
+		if src, err = os.Stat(srcFilePath); err == nil && src != nil {
+			newer = src.ModTime().UnixNano() > time
+		}
+	}
+	return
+}
+
 func AllFilePathsIn(dirpath string, ignoresubpath string) (filepaths []string) {
 	if len(ignoresubpath) > 0 && !strings.HasPrefix(ignoresubpath, dirpath) {
 		ignoresubpath = filepath.Join(dirpath, ignoresubpath)

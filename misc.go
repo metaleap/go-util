@@ -132,6 +132,15 @@ func JsonDecodeFromFile(fromfilepath string, into interface{}) (err error) {
 	return
 }
 
+func JsonEncodeToFile(from interface{}, tofilepath string) (err error) {
+	var f *os.File
+	if f, err = os.Create(tofilepath); err == nil {
+		defer f.Close()
+		err = json.NewEncoder(f).Encode(from)
+	}
+	return
+}
+
 //	A convenience short-hand for `log.Println(fmt.Sprintf(LogErrorFormat, err))` if `err` isn't `nil`.
 func LogError(err error) {
 	if err != nil {

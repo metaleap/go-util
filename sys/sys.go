@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	_userHomeDirPath string
-	_userDataDirPath string
+	_userHomeDirPath  string
+	_userDataDirPaths = make(map[bool]string, 2)
 
 	//	Look-up hash-table for the `OSName` function.
 	OSNames = map[string]string{
@@ -38,10 +38,13 @@ func OSName(goOS string) (name string) {
 	return
 }
 
-func UserDataDirPath() string {
-	dirpath := _userDataDirPath
+func UserDataDirPath(preferCacheOverConfig bool) string {
+	dirpath := _userDataDirPaths[preferCacheOverConfig]
 	if len(dirpath) == 0 {
-		probeenvvars := []string{"XDG_CACHE_HOME", "XDG_CONFIG_HOME", "LOCALAPPDATA", "APPDATA"}
+		probeenvvars := []string{"XDG_CONFIG_HOME", "XDG_CACHE_HOME", "LOCALAPPDATA", "APPDATA"}
+		if preferCacheOverConfig {
+			probeenvvars[0], probeenvvars[1] = probeenvvars[1], probeenvvars[0]
+		}
 		for _, envvar := range probeenvvars {
 			if maybedirpath := os.Getenv(envvar); len(maybedirpath) > 0 && ufs.DirExists(maybedirpath) {
 				dirpath = maybedirpath
@@ -49,7 +52,10 @@ func UserDataDirPath() string {
 			}
 		}
 		if len(dirpath) == 0 {
-			probehomesubdirs := []string{".cache", ".config", "Library/Caches", "Library/Application Support"}
+			probehomesubdirs := []string{".config", ".cache", "Library/Caches", "Library/Application Support"}
+			if preferCacheOverConfig {
+				probehomesubdirs[0], probehomesubdirs[1] = probehomesubdirs[1], probehomesubdirs[0]
+			}
 			for _, homesubdir := range probehomesubdirs {
 				if maybedirpath := filepath.Join(UserHomeDirPath(), homesubdir); ufs.DirExists(maybedirpath) {
 					dirpath = maybedirpath
@@ -60,7 +66,7 @@ func UserDataDirPath() string {
 				dirpath = UserHomeDirPath()
 			}
 		}
-		_userDataDirPath = dirpath
+		_userDataDirPaths[preferCacheOverConfig] = dirpath
 	}
 	return dirpath
 }
