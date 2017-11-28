@@ -624,3 +624,11 @@ func ToUpperIfLower(s string) string {
 	}
 	return s
 }
+
+func Until(s string, r rune) string {
+	i := strings.IndexRune(s, r)
+	if i < 0 {
+		return s
+	}
+	return s[:i]
+}

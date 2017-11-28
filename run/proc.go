@@ -86,7 +86,7 @@ func CmdExecStdin(stdin string, dir string, cmdname string, cmdargs ...string) (
 	cmd.Stdout = &bufout
 	cmd.Stderr = &buferr
 	if err = cmd.Run(); err != nil {
-		if _, isexiterr := err.(*exec.ExitError); isexiterr || strings.Contains(err.Error(), "pipe has been ended") {
+		if _, isexiterr := err.(*exec.ExitError); isexiterr || strings.Contains(err.Error(), "pipe has been ended") || strings.Contains(err.Error(), "pipe has been closed") {
 			err = nil
 		}
 	}
