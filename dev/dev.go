@@ -13,14 +13,14 @@ import (
 )
 
 type SrcMsg struct {
-	Ref    string `json:",omitempty"`
-	Msg    string `json:",omitempty"`
-	Misc   string `json:",omitempty"`
-	Pos1Ln int
-	Pos1Ch int
-	Pos2Ln int
-	Pos2Ch int
-	Flag   int
+	Ref    string                 `json:",omitempty"`
+	Msg    string                 `json:",omitempty"`
+	Misc   string                 `json:",omitempty"`
+	Pos1Ln int                    `json:",omitempty"`
+	Pos1Ch int                    `json:",omitempty"`
+	Pos2Ln int                    `json:",omitempty"`
+	Pos2Ch int                    `json:",omitempty"`
+	Flag   int                    `json:",omitempty"`
 	Data   map[string]interface{} `json:",omitempty"`
 }
 
