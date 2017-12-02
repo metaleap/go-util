@@ -22,8 +22,12 @@ type Gogetdoc struct {
 	Doc    string `json:"doc,omitempty"`
 	DocUrl string `json:",omitempty"`
 	Pos    string `json:"pos,omitempty"`
+	Pkg    string `json:"pkg,omitempty"`
 	ImpS   string `json:",omitempty"`
 	ImpN   string `json:",omitempty"`
+
+	Err     string `json:",omitempty"`
+	ErrMsgs string `json:",omitempty"`
 }
 
 var (
@@ -191,9 +195,9 @@ func QueryCmplSugg_Gocode(fullsrcfilepath string, srcin string, pos string) (cmp
 	return
 }
 
-func cmdArgs_Godef(fullsrcfilepath string, srcin *string, bytepos *string) (args []string) {
-	args = []string{"-f", fullsrcfilepath, "-o", *bytepos}
-	if len(*srcin) > 0 {
+func cmdArgs_Godef(fullsrcfilepath string, srcin string, bytepos string) (args []string) {
+	args = []string{"-f", fullsrcfilepath, "-o", bytepos}
+	if len(srcin) > 0 {
 		args = append(args, "-i")
 	}
 	return
@@ -201,7 +205,7 @@ func cmdArgs_Godef(fullsrcfilepath string, srcin *string, bytepos *string) (args
 
 func QueryDefLoc_Godef(fullsrcfilepath string, srcin string, bytepos string) *udev.SrcMsg {
 	var refs udev.SrcMsgs
-	args := cmdArgs_Godef(fullsrcfilepath, &srcin, &bytepos)
+	args := cmdArgs_Godef(fullsrcfilepath, srcin, bytepos)
 	refs, _ = udev.CmdExecOnStdIn(srcin, filepath.Dir(fullsrcfilepath), nil, "godef", args...)
 	for _, srcmsg := range refs {
 		if isfile := ufs.FileExists(srcmsg.Ref); isfile {
@@ -218,9 +222,11 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 		}
 		return ln
 	}
-	args := append(cmdArgs_Godef(fullsrcfilepath, &srcin, &bytepos), "-t")
-	if cmdout, _, _ := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); len(cmdout) > 0 {
-		defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
+	args := append(cmdArgs_Godef(fullsrcfilepath, srcin, bytepos), "-t")
+	if cmdout, _, err := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); err == nil {
+		if cmdout = ustr.Trim(cmdout); cmdout != "" {
+			defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
+		}
 	}
 	return
 }
@@ -235,25 +241,25 @@ func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) 
 }
 
 func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Gogetdoc {
-	cmdargs := []string{"-json", "-pos", fullsrcfilepath + ":#" + bytepos}
+	var ggd Gogetdoc
+	cmdargs := []string{"-json", "-u", "-linelength", "50", "-pos", fullsrcfilepath + ":#" + bytepos}
 	if len(srcin) > 0 {
 		cmdargs = append(cmdargs, "-modified")
 		srcin = fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
 	}
-	cmdout, _, _ := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
-	if cmdout = ustr.Trim(cmdout); len(cmdout) > 0 {
-		var rec Gogetdoc
-		if err := json.Unmarshal([]byte(cmdout), &rec); err == nil {
-			rec.ImpS = ShortImpP(rec.ImpP)
-			rec.Decl = ShortenImPs(rec.Decl)
-			rec.DocUrl = rec.ImpP + "#"
-			dochash := rec.Name
+	cmdout, cmderr, err := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
+	if cmdout, cmderr = ustr.Trim(cmdout), ustr.Trim(cmderr); err == nil && len(cmdout) > 0 {
+		if err = json.Unmarshal([]byte(cmdout), &ggd); err == nil {
+			ggd.ImpS = ShortImpP(ggd.ImpP)
+			ggd.Decl = ShortenImPs(ggd.Decl)
+			ggd.DocUrl = ggd.ImpP + "#"
+			dochash := ggd.Name
 			var tname string
-			if ustr.Pref(rec.Decl, "func (") {
-				tname = rec.Decl[6:ustr.Idx(rec.Decl, ")")]
+			if ustr.Pref(ggd.Decl, "func (") {
+				tname = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
 				_, tname = ustr.BreakOn(tname, " ")
 				_, tname = ustr.BreakOnLast(tname, ".")
-			} else if ustr.Pref(rec.Decl, "field ") {
+			} else if ustr.Pref(ggd.Decl, "field ") && Has_guru {
 				if gw := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); gw != nil {
 					for _, encl := range gw.Enclosing {
 						if encl.Description == "composite literal" {
@@ -268,15 +274,21 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 			if tname = strings.TrimLeft(tname, "*"); len(tname) > 0 {
 				dochash = tname + "." + dochash
 			}
-			rec.DocUrl += dochash
-			rec.ImpN = rec.ImpS
-			if len(tname) > 0 || rec.Name != ustr.AfterLast(rec.ImpS, "/", false) {
-				rec.ImpN = rec.ImpN + " · " + strings.TrimLeft(tname+"."+rec.Name, ".")
+			ggd.DocUrl += dochash
+			ggd.ImpN = ggd.Pkg
+			if len(tname) > 0 || ggd.Name != ggd.ImpN {
+				if ggd.ImpN != "" {
+					ggd.ImpN = "_" + ggd.ImpN + "_ · "
+				}
+				ggd.ImpN += strings.TrimLeft(tname+"."+ggd.Name, ".")
 			}
-			return &rec
-		} else if cmdout != "gogetdoc: no documentation found" {
-			return &Gogetdoc{Doc: cmdout}
 		}
 	}
-	return nil
+	if cmdout == "gogetdoc: no documentation found" {
+		return nil
+	}
+	if ggd.ErrMsgs = cmderr; err != nil {
+		ggd.Err = err.Error()
+	}
+	return &ggd
 }

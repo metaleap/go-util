@@ -20,6 +20,15 @@ var (
 
 type runeLowCaser struct{}
 
+func Both(s1 string, join string, s2 string) string {
+	if s1 != "" && s2 != "" {
+		return s1 + join + s2
+	} else if s1 != "" {
+		return s1
+	}
+	return s2
+}
+
 func (_ runeLowCaser) Ensure(s string, i int) string {
 	runes := []rune(s)
 	runes[i] = unicode.ToLower(runes[i])
