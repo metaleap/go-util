@@ -5,11 +5,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/metaleap/go-util/dev"
 	"github.com/metaleap/go-util/fs"
 	"github.com/metaleap/go-util/run"
 	"github.com/metaleap/go-util/slice"
-	"github.com/metaleap/go-util/str"
 )
 
 var (
@@ -39,7 +37,7 @@ var (
 	Has_gocode      bool
 	Has_gogetdoc    bool
 
-	SnipImp string
+	// SnipImp string
 )
 
 func HasGoDevEnv() bool {
@@ -78,11 +76,11 @@ func HasGoDevEnv() bool {
 		GoPaths = nil
 		return false
 	}
-	for _, gopath := range GoPaths {
-		if ustr.Pref(udev.SrcDir, gopath) {
-			SnipImp = filepath.ToSlash(strings.Trim(udev.SrcDir[len(filepath.Join(gopath, "src")):], "/\\")) + "/"
-		}
-	}
+	// for _, gopath := range GoPaths {
+	// 	if ustr.Pref(udev.SrcDir, gopath) {
+	// 		SnipImp = filepath.ToSlash(strings.Trim(udev.SrcDir[len(filepath.Join(gopath, "src")):], "/\\")) + "/"
+	// 	}
+	// }
 
 	//  OKAY! we ran go command and have 1-or-more GOPATHs, the rest is optional
 	stdargs := []string{"-help"}

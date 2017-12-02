@@ -23,8 +23,9 @@ type Gogetdoc struct {
 	DocUrl string `json:",omitempty"`
 	Pos    string `json:"pos,omitempty"`
 	Pkg    string `json:"pkg,omitempty"`
-	ImpS   string `json:",omitempty"`
-	ImpN   string `json:",omitempty"`
+	// ImpS   string `json:",omitempty"`
+	ImpN string `json:",omitempty"`
+	Type string `json:",omitempty"`
 
 	Err     string `json:",omitempty"`
 	ErrMsgs string `json:",omitempty"`
@@ -39,12 +40,12 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 	if len(bpos2) > 0 {
 		cmdargs[len(cmdargs)-1] = cmdargs[len(cmdargs)-1] + ",#" + bpos2
 	}
-	if len(SnipImp) > 0 {
-		cmdargs = append([]string{"-scope", SnipImp + "..."}, cmdargs...)
-		for _, exclpkg := range GuruScopeExclPkgs {
-			cmdargs[1] = cmdargs[1] + ",-" + exclpkg
-		}
-	}
+	// if len(SnipImp) > 0 {
+	// 	cmdargs = append([]string{"-scope", SnipImp + "..."}, cmdargs...)
+	// 	for _, exclpkg := range GuruScopeExclPkgs {
+	// 		cmdargs[1] = cmdargs[1] + ",-" + exclpkg
+	// 	}
+	// }
 	var jsonerr error
 	cmdout, cmderr, _ := urun.CmdExecStdin(srcin, "", "guru", cmdargs...)
 	if len(cmderr) > 0 {
@@ -242,7 +243,7 @@ func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) 
 
 func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Gogetdoc {
 	var ggd Gogetdoc
-	cmdargs := []string{"-json", "-u", "-linelength", "50", "-pos", fullsrcfilepath + ":#" + bytepos}
+	cmdargs := []string{"-json", "-u", "-linelength", "123", "-pos", fullsrcfilepath + ":#" + bytepos}
 	if len(srcin) > 0 {
 		cmdargs = append(cmdargs, "-modified")
 		srcin = fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
@@ -250,37 +251,36 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 	cmdout, cmderr, err := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
 	if cmdout, cmderr = ustr.Trim(cmdout), ustr.Trim(cmderr); err == nil && len(cmdout) > 0 {
 		if err = json.Unmarshal([]byte(cmdout), &ggd); err == nil {
-			ggd.ImpS = ShortImpP(ggd.ImpP)
-			ggd.Decl = ShortenImPs(ggd.Decl)
+			// ggd.ImpS = ShortImpP(ggd.ImpP)
+			// ggd.Decl = ShortenImPs(ggd.Decl)
 			ggd.DocUrl = ggd.ImpP + "#"
 			dochash := ggd.Name
-			var tname string
 			if ustr.Pref(ggd.Decl, "func (") {
-				tname = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
-				_, tname = ustr.BreakOn(tname, " ")
-				_, tname = ustr.BreakOnLast(tname, ".")
+				ggd.Type = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
+				_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
+				_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
 			} else if ustr.Pref(ggd.Decl, "field ") && Has_guru {
 				if gw := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); gw != nil {
 					for _, encl := range gw.Enclosing {
-						if encl.Description == "composite literal" {
+						if encl.Description == "composite literal" || encl.Description == "selector" {
 							if gd := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil && gd.Type != nil {
-								tname = gd.Type.Type
+								ggd.Type = gd.Type.Type
 							}
 							break
 						}
 					}
 				}
 			}
-			if tname = strings.TrimLeft(tname, "*"); len(tname) > 0 {
-				dochash = tname + "." + dochash
+			if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
+				dochash = ggd.Type + "." + dochash
 			}
 			ggd.DocUrl += dochash
 			ggd.ImpN = ggd.Pkg
-			if len(tname) > 0 || ggd.Name != ggd.ImpN {
+			if len(ggd.Type) > 0 || ggd.Name != ggd.ImpN {
 				if ggd.ImpN != "" {
 					ggd.ImpN = "_" + ggd.ImpN + "_ · "
 				}
-				ggd.ImpN += strings.TrimLeft(tname+"."+ggd.Name, ".")
+				ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
 			}
 		}
 	}

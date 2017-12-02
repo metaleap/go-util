@@ -47,33 +47,33 @@ var (
 	pkgsMutex sync.Mutex
 )
 
-func ShortImpP(pkgimppath string) string {
-	if len(SnipImp) > 0 && ustr.Pref(pkgimppath, SnipImp) {
-		if PkgsByImP != nil {
-			if pkg := PkgsByImP[pkgimppath]; pkg != nil {
-				return pkg.Name
-			}
-		}
-		return strings.TrimPrefix(pkgimppath, SnipImp)
-	}
-	return pkgimppath
-}
+// func ShortImpP(pkgimppath string) string {
+// 	if len(SnipImp) > 0 && ustr.Pref(pkgimppath, SnipImp) {
+// 		if PkgsByImP != nil {
+// 			if pkg := PkgsByImP[pkgimppath]; pkg != nil {
+// 				return pkg.Name
+// 			}
+// 		}
+// 		return strings.TrimPrefix(pkgimppath, SnipImp)
+// 	}
+// 	return pkgimppath
+// }
 
-func ShortenImPs(val string) string {
-	if len(SnipImp) > 0 {
-		l := len(SnipImp)
-		for {
-			if i := ustr.Idx(val, SnipImp); i < 0 {
-				return val
-			} else if j := ustr.Idx(val[i+l:], "."); j < 0 {
-				return val
-			} else {
-				val = val[:i] + ShortImpP(val[i:i+l+j]) + val[i+l+j:]
-			}
-		}
-	}
-	return val
-}
+// func ShortenImPs(val string) string {
+// 	if len(SnipImp) > 0 {
+// 		l := len(SnipImp)
+// 		for {
+// 			if i := ustr.Idx(val, SnipImp); i < 0 {
+// 				return val
+// 			} else if j := ustr.Idx(val[i+l:], "."); j < 0 {
+// 				return val
+// 			} else {
+// 				val = val[:i] + ShortImpP(val[i:i+l+j]) + val[i+l+j:]
+// 			}
+// 		}
+// 	}
+// 	return val
+// }
 
 func AllFinalDependants(origpkgimppaths []string) (depimppaths []string) {
 	opkgs := map[string]*Pkg{}
