@@ -44,7 +44,8 @@ var (
 	PkgsByImP map[string]*Pkg
 	_PkgsErrs []*Pkg
 
-	pkgsMutex sync.Mutex
+	pkgsMutex       sync.Mutex
+	ShortenImpPaths *strings.Replacer
 )
 
 // func ShortImpP(pkgimppath string) string {
@@ -168,52 +169,53 @@ func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
 	return
 }
 
-func RefreshPkgs() (errs []error) {
+func RefreshPkgs() {
 	pkgsbydir, pkgsbyimp, pkgserrs := map[string]*Pkg{}, map[string]*Pkg{}, []*Pkg{}
-	errs = []error{}
 
-	if cmdout, _ := urun.CmdExec("go", "list", "-e", "-json", "all"); len(cmdout) > 0 {
-		if jsonobjstrs := ustr.Split(cmdout, "}\n{"); len(jsonobjstrs) > 0 {
-			for _, jsonobjstr := range jsonobjstrs {
-				if jsonobjstr[0] != '{' {
-					jsonobjstr = "{" + jsonobjstr
+	if cmdout, _, err := urun.CmdExecStdin("", "", "go", "list", "-e", "-json", "all"); err != nil {
+		panic(err)
+	} else if jsonobjstrs := ustr.Split(ustr.Trim(cmdout), "}\n{"); len(jsonobjstrs) > 0 {
+		jsonobjstrs[0] = jsonobjstrs[0][1:]
+		idxlast := len(jsonobjstrs) - 1
+		jsonobjstrs[idxlast] = jsonobjstrs[idxlast][:len(jsonobjstrs[idxlast])-1]
+		for _, jsonobjstr := range jsonobjstrs {
+			var pkg Pkg
+			if err := json.Unmarshal([]byte("{"+jsonobjstr+"}"), &pkg); err != nil {
+				panic(err)
+			} else {
+				if runtime.GOOS == "windows" {
+					pkg.Dir = strings.ToLower(pkg.Dir)
 				}
-				if jsonobjstr[len(jsonobjstr)-1] != '}' {
-					jsonobjstr = jsonobjstr + "}"
-				}
-				var pkg Pkg // re-decl in loop isn't the most efficient but the most defensive =)
-				if err := json.Unmarshal([]byte(jsonobjstr), &pkg); err == nil {
-					if runtime.GOOS == "windows" {
-						pkg.Dir = strings.ToLower(pkg.Dir)
+				pkgsbydir[pkg.Dir] = &pkg
+				pkgsbyimp[pkg.ImportPath] = &pkg
+				if pkgerror := pkg.Error; pkgerror != nil {
+					var pkgerrs udev.SrcMsgs
+					if multerrs := ustr.Split(pkgerror.Err, "\n"); len(multerrs) > 0 {
+						pkgerrs = append(pkgerrs, udev.SrcMsgsFromLns(multerrs)...)
+					} else if errpos := strings.Split(pkgerror.Pos, ":"); len(errpos) >= 3 {
+						fpath := errpos[0]
+						pos1ln, _ := strconv.Atoi(errpos[1])
+						pos1ch, _ := strconv.Atoi(errpos[2])
+						pkgerrs = append(pkgerrs, &udev.SrcMsg{Pos1Ln: pos1ln - 1, Pos1Ch: pos1ch - 1, Ref: fpath, Msg: pkgerror.Err})
+					} else {
+						fpath := errpos[0]
+						pkgerrs = append(pkgerrs, &udev.SrcMsg{Ref: fpath, Msg: pkgerror.Err})
 					}
-					pkgsbydir[pkg.Dir] = &pkg
-					pkgsbyimp[pkg.ImportPath] = &pkg
-					if pkgerror := pkg.Error; pkgerror != nil {
-						var pkgerrs udev.SrcMsgs
-						if multerrs := ustr.Split(pkgerror.Err, "\n"); len(multerrs) > 0 {
-							pkgerrs = append(pkgerrs, udev.SrcMsgsFromLns(multerrs)...)
-						} else if errpos := strings.Split(pkgerror.Pos, ":"); len(errpos) >= 3 {
-							fpath := errpos[0]
-							pos1ln, _ := strconv.Atoi(errpos[1])
-							pos1ch, _ := strconv.Atoi(errpos[2])
-							pkgerrs = append(pkgerrs, &udev.SrcMsg{Pos1Ln: pos1ln - 1, Pos1Ch: pos1ch - 1, Ref: fpath, Msg: pkgerror.Err})
-						} else {
-							fpath := errpos[0]
-							pkgerrs = append(pkgerrs, &udev.SrcMsg{Ref: fpath, Msg: pkgerror.Err})
-						}
-						pkg.Errs = pkgerrs
-						pkgserrs = append(pkgserrs, &pkg)
-					}
-				} else {
-					errs = append(errs, err)
+					pkg.Errs = pkgerrs
+					pkgserrs = append(pkgserrs, &pkg)
 				}
-			}
-			if len(pkgsbydir) > 0 && len(pkgsbydir) == len(pkgsbyimp) {
-				pkgsMutex.Lock()
-				defer pkgsMutex.Unlock()
-				PkgsByDir, PkgsByImP, _PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
 			}
 		}
+
+		repls := make([]string, 0, len(pkgsbyimp)*2)
+		for imp, pkg := range pkgsbyimp {
+			repls = append(repls, imp, pkg.Name)
+		}
+		ShortenImpPaths = strings.NewReplacer(repls...)
+
+		pkgsMutex.Lock()
+		defer pkgsMutex.Unlock()
+		PkgsByDir, PkgsByImP, _PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
 	}
 	return
 }

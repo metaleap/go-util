@@ -243,7 +243,7 @@ func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) 
 
 func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Gogetdoc {
 	var ggd Gogetdoc
-	cmdargs := []string{"-json", "-u", "-linelength", "123", "-pos", fullsrcfilepath + ":#" + bytepos}
+	cmdargs := []string{"-json", "-u", "-linelength", "50", "-pos", fullsrcfilepath + ":#" + bytepos}
 	if len(srcin) > 0 {
 		cmdargs = append(cmdargs, "-modified")
 		srcin = fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
@@ -257,19 +257,25 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 			dochash := ggd.Name
 			if ustr.Pref(ggd.Decl, "func (") {
 				ggd.Type = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
-				_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
-				_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
-			} else if ustr.Pref(ggd.Decl, "field ") && Has_guru {
+			} else if Has_guru && ustr.Pref(ggd.Decl, "field ") {
 				if gw := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); gw != nil {
 					for _, encl := range gw.Enclosing {
 						if encl.Description == "composite literal" || encl.Description == "selector" {
-							if gd := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil && gd.Type != nil {
-								ggd.Type = gd.Type.Type
+							if gd := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
+								if gd.Type != nil {
+									ggd.Type = gd.Type.Type
+								} else if encl.Description != "selector" && gd.Value != nil {
+									ggd.Type = gd.Value.Type
+								}
 							}
 							break
 						}
 					}
 				}
+			}
+			if ggd.Type != "" {
+				_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
+				_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
 			}
 			if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
 				dochash = ggd.Type + "." + dochash
