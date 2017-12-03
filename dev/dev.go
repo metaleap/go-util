@@ -13,6 +13,7 @@ import (
 )
 
 type SrcMsg struct {
+	Flag   int
 	Ref    string                 `json:",omitempty"`
 	Msg    string                 `json:",omitempty"`
 	Misc   string                 `json:",omitempty"`
@@ -20,7 +21,6 @@ type SrcMsg struct {
 	Pos1Ch int                    `json:",omitempty"`
 	Pos2Ln int                    `json:",omitempty"`
 	Pos2Ch int                    `json:",omitempty"`
-	Flag   int                    `json:",omitempty"`
 	Data   map[string]interface{} `json:",omitempty"`
 }
 
