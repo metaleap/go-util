@@ -1,6 +1,8 @@
 package udevhs
 
 import (
+	"strings"
+
 	"github.com/metaleap/go-util/run"
 )
 
@@ -38,37 +40,36 @@ var (
 )
 
 func HasHsDevEnv() bool {
-	var cmdout string
+	var cmdout, cmderr string
 	var err error
 
-	if len(StackVersion) > 0 {
+	if StackVersion != "" {
 		return true
 	}
-	if cmdout, err = urun.CmdExec("stack", "--numeric-version", "--no-terminal", "--color", "never"); err == nil && len(cmdout) > 0 {
-		StackVersion = cmdout
-
-		urun.CmdsTryStart(map[string]*urun.CmdTry{
-			"ghc-mod":             {Ran: &Has_ghcmod, Args: []string{"--version"}},
-			"ghc-hare":            {Ran: &Has_hare, Args: []string{"--version"}},
-			"hsimport":            {Ran: &Has_hsimport, Args: []string{"--version"}},
-			"hasktags":            {Ran: &Has_hasktags, Args: []string{"--help"}},
-			"lushtags":            {Ran: &Has_lushtags, Args: []string{"--help"}},
-			"hothasktags":         {Ran: &Has_hothasktags, Args: []string{"--help"}},
-			"dead-code-detection": {Ran: &Has_deadcodedetect, Args: []string{"--version"}},
-			"pointfree":           {Ran: &Has_pointfree},
-			"pointful":            {Ran: &Has_pointful},
-			"refactor":            {Ran: &Has_apply_refact},
-			"hoogle":              {Ran: &Has_hoogle, Args: []string{"--version"}},
-			"hlint":               {Ran: &Has_hlint, Args: []string{"--version"}},
-			"doctest":             {Ran: &Has_doctest, Args: []string{"--version"}},
-			"intero":              {Ran: &Has_intero, Args: []string{"--version"}},
-			"hindent":             {Ran: &Has_hindent, Args: []string{"--version"}},
-			"brittany":            {Ran: &Has_brittany, Args: []string{"--version"}},
-			"stylish-haskell":     {Ran: &Has_stylish_haskell, Args: []string{"--version"}},
-			"ht-refact":           {Ran: &Has_htrefact},
-			"ht-daemon":           {Ran: &Has_htdaemon, Args: []string{"hows'it hangin holmes"}},
-		})
-
+	if cmdout, cmderr, err = urun.CmdExec("stack", "--numeric-version", "--no-terminal", "--color", "never"); err == nil && cmderr == "" && cmdout != "" {
+		if StackVersion = strings.TrimSpace(cmdout); StackVersion != "" {
+			urun.CmdsTryStart(map[string]*urun.CmdTry{
+				"ghc-mod":             {Ran: &Has_ghcmod, Args: []string{"--version"}},
+				"ghc-hare":            {Ran: &Has_hare, Args: []string{"--version"}},
+				"hsimport":            {Ran: &Has_hsimport, Args: []string{"--version"}},
+				"hasktags":            {Ran: &Has_hasktags, Args: []string{"--help"}},
+				"lushtags":            {Ran: &Has_lushtags, Args: []string{"--help"}},
+				"hothasktags":         {Ran: &Has_hothasktags, Args: []string{"--help"}},
+				"dead-code-detection": {Ran: &Has_deadcodedetect, Args: []string{"--version"}},
+				"pointfree":           {Ran: &Has_pointfree},
+				"pointful":            {Ran: &Has_pointful},
+				"refactor":            {Ran: &Has_apply_refact},
+				"hoogle":              {Ran: &Has_hoogle, Args: []string{"--version"}},
+				"hlint":               {Ran: &Has_hlint, Args: []string{"--version"}},
+				"doctest":             {Ran: &Has_doctest, Args: []string{"--version"}},
+				"intero":              {Ran: &Has_intero, Args: []string{"--version"}},
+				"hindent":             {Ran: &Has_hindent, Args: []string{"--version"}},
+				"brittany":            {Ran: &Has_brittany, Args: []string{"--version"}},
+				"stylish-haskell":     {Ran: &Has_stylish_haskell, Args: []string{"--version"}},
+				"ht-refact":           {Ran: &Has_htrefact},
+				"ht-daemon":           {Ran: &Has_htdaemon, Args: []string{"hows'it hangin holmes"}},
+			})
+		}
 	}
-	return (len(StackVersion) > 0)
+	return StackVersion != ""
 }

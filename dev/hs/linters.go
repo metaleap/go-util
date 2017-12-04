@@ -40,22 +40,24 @@ func LintHlint(filerelpaths []string) (msgs udev.SrcMsgs) {
 		cmdargs = append(cmdargs, "--ignore", ign)
 	}
 	cmdargs = append(cmdargs, filerelpaths...)
-	jsonoutput, _ := urun.CmdExec("hlint", cmdargs...)
-	jsonoutput = strings.Replace(strings.Replace(jsonoutput, "\n", "", -1), "\r", "", -1)
-	var hlints []Hlint
-	if err := json.Unmarshal([]byte(jsonoutput), &hlints); err != nil {
-		msgs = append(msgs, &udev.SrcMsg{Msg: "Problematic HlintJSON: " + err.Error() + " ➜ " + jsonoutput, Ref: filerelpaths[0], Pos1Ln: 1, Pos1Ch: 1})
-	} else {
-		for _, hl := range hlints {
-			if hl.Severity != "Error" {
-				msg := &udev.SrcMsg{Msg: hl.Hint, Ref: hl.File, Pos1Ln: hl.StartLine, Pos1Ch: hl.StartColumn, Pos2Ln: hl.EndLine, Pos2Ch: hl.EndColumn}
-				msg.Data = map[string]interface{}{"rf": hl.From, "rt": hl.To, "rn": hl.Note}
-				if md := strings.Trim(hl.Module+"."+hl.Decl, "."); len(md) > 0 {
-					msg.Misc = md
+	jsonoutput, _, _ := urun.CmdExec("hlint", cmdargs...)
+	if jsonoutput = strings.TrimSpace(jsonoutput); jsonoutput != "" {
+		jsonoutput = strings.Replace(strings.Replace(jsonoutput, "\n", "", -1), "\r", "", -1)
+		var hlints []Hlint
+		if err := json.Unmarshal([]byte(jsonoutput), &hlints); err != nil {
+			msgs = append(msgs, &udev.SrcMsg{Msg: "Problematic HlintJSON: " + err.Error() + " ➜ " + jsonoutput, Ref: filerelpaths[0], Pos1Ln: 1, Pos1Ch: 1})
+		} else {
+			for _, hl := range hlints {
+				if hl.Severity != "Error" {
+					msg := &udev.SrcMsg{Msg: hl.Hint, Ref: hl.File, Pos1Ln: hl.StartLine, Pos1Ch: hl.StartColumn, Pos2Ln: hl.EndLine, Pos2Ch: hl.EndColumn}
+					msg.Data = map[string]interface{}{"rf": hl.From, "rt": hl.To, "rn": hl.Note}
+					if md := strings.Trim(hl.Module+"."+hl.Decl, "."); len(md) > 0 {
+						msg.Misc = md
+					}
+					msgs = append(msgs, msg)
 				}
-				msgs = append(msgs, msg)
 			}
 		}
 	}
-	return msgs
+	return
 }

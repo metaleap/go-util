@@ -14,14 +14,14 @@ import (
 
 func Gorename(cmdname string, relfilepath string, offset uint64, newname string, eol string) (fileedits udev.SrcMsgs, err error) {
 	cmdargs := []string{"-d", "-to", newname, "-offset", fmt.Sprintf("%s:#%d", relfilepath, offset)}
-	var renout string
+	var renout, renerr string
 	if len(cmdname) == 0 {
 		cmdname = "gorename"
 	}
-	if renout, err = urun.CmdExec(cmdname, cmdargs...); err != nil {
-		if len(renout) > 0 {
-			err = umisc.E(renout)
-		}
+	if renout, renerr, err = urun.CmdExec(cmdname, cmdargs...); err != nil {
+		return
+	} else if renerr != "" {
+		err = umisc.E(renerr)
 		return
 	}
 	i := ustr.Idx(renout, "--- ")

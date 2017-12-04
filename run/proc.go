@@ -95,27 +95,35 @@ func CmdExecStdin(stdin string, dir string, cmdname string, cmdargs ...string) (
 	return
 }
 
-func CmdExecIn(dir string, cmdname string, cmdargs ...string) (out string, err error) {
-	var output []byte
+func CmdExecIn(dir string, cmdname string, cmdargs ...string) (cmdout string, cmderr string, err error) {
 	cmd := exec.Command(cmdname, cmdargs...)
 	cmd.Dir = dir
-	output, err = cmd.CombinedOutput()      // wish Output() would suffice, but sadly some tools abuse stderr for all sorts of non-error 'metainfotainment' (hi godoc & gofmt!)
-	out = strings.TrimSpace(string(output)) // do this regardless of err, because it might well be benign such as "exitcode 2", in which case output is still wanted
+
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	var stdout []byte
+	if stdout, err = cmd.Output(); err != nil {
+		if _, isexiterr := err.(*exec.ExitError); isexiterr || strings.Contains(err.Error(), "pipe has been ended") || strings.Contains(err.Error(), "pipe has been closed") {
+			err = nil
+		}
+	}
+	cmderr = strings.TrimSpace(stderr.String())
+	cmdout = string(stdout)
 	return
 }
 
-func CmdExecInOr(def string, dir string, cmdname string, cmdargs ...string) string {
-	out, err := CmdExecIn(dir, cmdname, cmdargs...)
-	if err != nil {
-		return def
-	}
-	return out
-}
+// func CmdExecInOr(def string, dir string, cmdname string, cmdargs ...string) string {
+// 	stdout, stderr, err := CmdExecIn(dir, cmdname, cmdargs...)
+// 	if err != nil || stderr!="" {
+// 		return def
+// 	}
+// 	return out
+// }
 
-func CmdExec(cmdname string, cmdargs ...string) (string, error) {
+func CmdExec(cmdname string, cmdargs ...string) (string, string, error) {
 	return CmdExecIn("", cmdname, cmdargs...)
 }
 
-func CmdExecOr(def string, cmdname string, cmdargs ...string) string {
-	return CmdExecInOr(def, "", cmdname, cmdargs...)
-}
+// func CmdExecOr(def string, cmdname string, cmdargs ...string) string {
+// 	return CmdExecInOr(def, "", cmdname, cmdargs...)
+// }

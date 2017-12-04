@@ -41,31 +41,35 @@ var (
 )
 
 func HasGoDevEnv() bool {
-	var cmdout string
+	var cmdout, cmderr string
 	var err error
 
-	if len(GoPaths) > 0 && len(GoVersion) > 0 {
+	if len(GoPaths) > 0 && GoVersion != "" {
 		return true
 	}
 
 	//  GoVersion
-	if cmdout, err = urun.CmdExec("go", "tool", "dist", "version"); err == nil && len(cmdout) > 0 {
-		GoVersion = cmdout
-	} else if cmdout, err = urun.CmdExec("go", "version"); err == nil && len(cmdout) > 0 {
-		GoVersion = strings.TrimPrefix(cmdout, "go version ")
-		GoVersion = strings.SplitAfter(GoVersion, " ")[0]
-	} else {
+	if cmdout, cmderr, err = urun.CmdExec("go", "tool", "dist", "version"); err == nil && cmderr == "" && cmdout != "" {
+		GoVersion = strings.TrimSpace(cmdout)
+	}
+	if GoVersion == "" {
+		if cmdout, cmderr, err = urun.CmdExec("go", "version"); err == nil && cmderr == "" && cmdout != "" {
+			if GoVersion = strings.TrimPrefix(strings.TrimSpace(cmdout), "go version "); GoVersion != "" {
+				GoVersion = strings.SplitAfter(GoVersion, " ")[0]
+			}
+		}
+	}
+	if GoVersion = strings.TrimPrefix(GoVersion, "go"); GoVersion == "" {
 		return false
 	}
-	GoVersion = strings.TrimPrefix(GoVersion, "go")
 
 	//  GoPaths
-	if cmdout, err = urun.CmdExec("go", "env", "GOPATH"); err != nil {
+	if cmdout, cmderr, err = urun.CmdExec("go", "env", "GOPATH"); err != nil || cmderr != "" {
 		GoVersion = ""
 		GoPaths = nil
 		return false
 	}
-	GoPaths = filepath.SplitList(cmdout)
+	GoPaths = filepath.SplitList(strings.TrimSpace(cmdout))
 	for i, gopath := range GoPaths {
 		if !ufs.DirExists(gopath) {
 			GoPaths[i] = ""

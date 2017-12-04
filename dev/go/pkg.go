@@ -169,11 +169,14 @@ func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
 	return
 }
 
+// may panic() as it's intended to run in a go-routine
 func RefreshPkgs() {
 	pkgsbydir, pkgsbyimp, pkgserrs := map[string]*Pkg{}, map[string]*Pkg{}, []*Pkg{}
 
-	if cmdout, _, err := urun.CmdExecStdin("", "", "go", "list", "-e", "-json", "all"); err != nil {
+	if cmdout, cmderr, err := urun.CmdExec("go", "list", "-e", "-json", "all"); err != nil {
 		panic(err)
+	} else if cmderr != "" && !ustr.Pref(strings.ToLower(cmderr), "warning: ") {
+		panic(cmderr)
 	} else if jsonobjstrs := ustr.Split(ustr.Trim(cmdout), "}\n{"); len(jsonobjstrs) > 0 {
 		jsonobjstrs[0] = jsonobjstrs[0][1:]
 		idxlast := len(jsonobjstrs) - 1
