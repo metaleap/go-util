@@ -17,6 +17,7 @@ var (
 	Has_godoc       bool
 	Has_gofmt       bool
 	Has_goimports   bool
+	Has_goreturns   bool
 	Has_golint      bool
 	Has_guru        bool
 	Has_checkvar    bool
@@ -91,6 +92,7 @@ func HasGoDevEnv() bool {
 	urun.CmdsTryStart(map[string]*urun.CmdTry{
 		"gofmt":     {Ran: &Has_gofmt, Args: stdargs},
 		"goimports": {Ran: &Has_goimports, Args: stdargs},
+		"goreturns": {Ran: &Has_goreturns, Args: stdargs},
 
 		"golint":      {Ran: &Has_golint, Args: stdargs},
 		"ineffassign": {Ran: &Has_ineffassign, Args: stdargs},
