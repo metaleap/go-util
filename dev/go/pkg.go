@@ -2,6 +2,7 @@ package udevgo
 
 import (
 	"encoding/json"
+	"errors"
 	"go/build"
 	"path/filepath"
 	"runtime"
@@ -42,7 +43,7 @@ type PackageError struct {
 var (
 	PkgsByDir map[string]*Pkg
 	PkgsByImP map[string]*Pkg
-	_PkgsErrs []*Pkg
+	PkgsErrs  []*Pkg
 
 	pkgsMutex       sync.Mutex
 	ShortenImpPaths *strings.Replacer
@@ -169,14 +170,13 @@ func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
 	return
 }
 
-// may panic() as it's intended to run in a go-routine
-func RefreshPkgs() {
+func RefreshPkgs() error {
 	pkgsbydir, pkgsbyimp, pkgserrs := map[string]*Pkg{}, map[string]*Pkg{}, []*Pkg{}
 
 	if cmdout, cmderr, err := urun.CmdExec("go", "list", "-e", "-json", "all"); err != nil {
-		panic(err)
+		return err
 	} else if cmderr != "" && !ustr.Pref(strings.ToLower(cmderr), "warning: ") {
-		panic(cmderr)
+		return errors.New(cmderr)
 	} else if jsonobjstrs := ustr.Split(ustr.Trim(cmdout), "}\n{"); len(jsonobjstrs) > 0 {
 		jsonobjstrs[0] = jsonobjstrs[0][1:]
 		idxlast := len(jsonobjstrs) - 1
@@ -184,7 +184,7 @@ func RefreshPkgs() {
 		for _, jsonobjstr := range jsonobjstrs {
 			var pkg Pkg
 			if err := json.Unmarshal([]byte("{"+jsonobjstr+"}"), &pkg); err != nil {
-				panic(err)
+				return err
 			} else {
 				if runtime.GOOS == "windows" {
 					pkg.Dir = strings.ToLower(pkg.Dir)
@@ -218,7 +218,7 @@ func RefreshPkgs() {
 
 		pkgsMutex.Lock()
 		defer pkgsMutex.Unlock()
-		PkgsByDir, PkgsByImP, _PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
+		PkgsByDir, PkgsByImP, PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
 	}
-	return
+	return nil
 }
