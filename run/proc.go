@@ -16,7 +16,7 @@ type CmdTry struct {
 	Ran  *bool
 }
 
-func SetupJsonProtoPipes(bufferCapacity int, withContentLen bool, needJsonOut bool) (stdin *bufio.Scanner, rawOut *bufio.Writer, jsonOut *json.Encoder) {
+func SetupJsonIpcPipes(bufferCapacity int, withContentLen bool, needJsonOut bool) (stdin *bufio.Scanner, rawOut *bufio.Writer, jsonOut *json.Encoder) {
 	stdin = bufio.NewScanner(os.Stdin)
 	stdin.Buffer(make([]byte, bufferCapacity), bufferCapacity)
 	if withContentLen {
