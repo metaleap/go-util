@@ -33,6 +33,13 @@ type Pkg struct {
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
 }
 
+func (me *Pkg) LessThan(pkg interface{}) (isLess bool) {
+	if p, _ := pkg.(*Pkg); p != nil {
+		return me.ImportPath < p.ImportPath
+	}
+	return
+}
+
 //	copied over from `go list` src because that cmd outputs this stuff but one cannot import it from anywhere
 type PackageError struct {
 	ImportStack []string // shortest path from package named on command line to this one
