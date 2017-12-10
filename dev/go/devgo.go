@@ -14,12 +14,18 @@ var (
 	GoVersion string
 	GoPaths   []string
 
-	Has_godoc       bool
-	Has_gofmt       bool
-	Has_goimports   bool
-	Has_goreturns   bool
+	Has_godoc     bool
+	Has_gofmt     bool
+	Has_goimports bool
+	Has_goreturns bool
+	Has_guru      bool
+	Has_gorename  bool
+	Has_godef     bool
+	Has_gogetdoc  bool
+
+	Has_gocode bool
+
 	Has_golint      bool
-	Has_guru        bool
 	Has_checkvar    bool
 	Has_checkalign  bool
 	Has_checkstruct bool
@@ -33,10 +39,6 @@ var (
 	Has_gosimple    bool
 	Has_unused      bool
 	Has_staticcheck bool
-	Has_gorename    bool
-	Has_godef       bool
-	Has_gocode      bool
-	Has_gogetdoc    bool
 
 	// SnipImp string
 )
