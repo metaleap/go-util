@@ -13,7 +13,7 @@ import (
 )
 
 type SrcMsg struct {
-	Flag   int
+	Flag   int                    `json:",omitempty"`
 	Ref    string                 `json:",omitempty"`
 	Msg    string                 `json:",omitempty"`
 	Misc   string                 `json:",omitempty"`
