@@ -31,6 +31,8 @@ type Pkg struct {
 	Incomplete  bool            `json:",omitempty"` // was there an error loading this package or dependencies?
 	Error       *PackageError   `json:",omitempty"` // error loading this package (not dependencies)
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
+
+	dependants []string
 }
 
 func (me *Pkg) LessThan(pkg interface{}) (isLess bool) {
@@ -151,15 +153,18 @@ func ImportersOf(pkgdirpath string, basedirpath string) (pkgimppaths []string) {
 	return
 }
 
-func (me *Pkg) Dependants() (pkgimppaths []string) {
-	pkgsMutex.Lock()
-	defer pkgsMutex.Unlock()
-	for _, pkg := range PkgsByDir {
-		if uslice.StrHas(pkg.Deps, me.ImportPath) {
-			pkgimppaths = append(pkgimppaths, pkg.ImportPath)
+func (me *Pkg) Dependants() []string {
+	if me.dependants == nil {
+		pkgsMutex.Lock()
+		defer pkgsMutex.Unlock()
+		me.dependants = []string{}
+		for _, pkg := range PkgsByDir {
+			if uslice.StrHas(pkg.Deps, me.ImportPath) {
+				me.dependants = append(me.dependants, pkg.ImportPath)
+			}
 		}
 	}
-	return
+	return me.dependants
 }
 
 func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
