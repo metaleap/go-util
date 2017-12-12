@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"go/build"
-	"path/filepath"
+	// "path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -33,6 +33,7 @@ type Pkg struct {
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
 
 	dependants []string
+	importers  []string
 }
 
 func (me *Pkg) LessThan(pkg interface{}) (isLess bool) {
@@ -86,72 +87,72 @@ var (
 // 	return val
 // }
 
-func AllFinalDependants(origpkgimppaths []string) (depimppaths []string) {
-	opkgs := map[string]*Pkg{}
-	for _, origpkgimppath := range origpkgimppaths {
-		if pkg := PkgsByImP[origpkgimppath]; pkg != nil {
-			opkgs[pkg.ImportPath] = pkg
-		}
-	}
-	//	grab all dependants of each origpkg
-	for _, opkg := range opkgs {
-		for _, depimppath := range opkg.Dependants() {
-			if _, ignore := opkgs[depimppath]; !ignore {
-				uslice.StrAppendUnique(&depimppaths, depimppath)
-			}
-		}
-	}
-	//	shake out unnecessary mentions
-	depimppaths = ShakeOutIntermediateDeps(depimppaths)
-	return
-}
+// func AllFinalDependants(origpkgimppaths []string) (depimppaths []string) {
+// 	opkgs := map[string]*Pkg{}
+// 	for _, origpkgimppath := range origpkgimppaths {
+// 		if pkg := PkgsByImP[origpkgimppath]; pkg != nil {
+// 			opkgs[pkg.ImportPath] = pkg
+// 		}
+// 	}
+// 	//	grab all dependants of each origpkg
+// 	for _, opkg := range opkgs {
+// 		for _, depimppath := range opkg.Dependants() {
+// 			if _, ignore := opkgs[depimppath]; !ignore {
+// 				uslice.StrAppendUnique(&depimppaths, depimppath)
+// 			}
+// 		}
+// 	}
+// 	//	shake out unnecessary mentions
+// 	depimppaths = ShakeOutIntermediateDeps(depimppaths)
+// 	return
+// }
 
-func ShakeOutIntermediateDeps(pkgimppaths []string) []string {
-	pkgimppaths = uslice.StrWithout(pkgimppaths, false, "")
-	for oncemore := true; oncemore; {
-		oncemore = false
-		for _, pkgimppath := range pkgimppaths {
-			if pkg := PkgsByImP[pkgimppath]; pkg != nil {
-				for _, subimppath := range pkg.Deps {
-					if uslice.StrHas(pkgimppaths, subimppath) {
-						pkgimppaths = uslice.StrWithout(pkgimppaths, false, subimppath)
-						oncemore = true
-						break
-					}
-				}
-			}
-		}
-	}
-	return pkgimppaths
-}
+// func ShakeOutIntermediateDeps(pkgimppaths []string) []string {
+// 	pkgimppaths = uslice.StrWithout(pkgimppaths, false, "")
+// 	for oncemore := true; oncemore; {
+// 		oncemore = false
+// 		for _, pkgimppath := range pkgimppaths {
+// 			if pkg := PkgsByImP[pkgimppath]; pkg != nil {
+// 				for _, subimppath := range pkg.Deps {
+// 					if uslice.StrHas(pkgimppaths, subimppath) {
+// 						pkgimppaths = uslice.StrWithout(pkgimppaths, false, subimppath)
+// 						oncemore = true
+// 						break
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return pkgimppaths
+// }
 
-func ShakeOutIntermediateDepsViaDir(dirrelpaths []string, basedirpath string) []string {
-	pkgimppaths := ShakeOutIntermediateDeps(uslice.StrMap(dirrelpaths, func(drp string) string {
-		dir := filepath.Join(basedirpath, drp)
-		if runtime.GOOS == "windows" {
-			dir = strings.ToLower(dir)
-		}
-		return PkgsByDir[dir].ImportPath
-	}))
-	return uslice.StrMap(pkgimppaths, func(pkgimppath string) (dirrelpath string) {
-		dirrelpath, _ = filepath.Rel(basedirpath, PkgsByImP[pkgimppath].Dir)
-		return
-	})
-}
+// func ShakeOutIntermediateDepsViaDir(dirrelpaths []string, basedirpath string) []string {
+// 	pkgimppaths := ShakeOutIntermediateDeps(uslice.StrMap(dirrelpaths, func(drp string) string {
+// 		dir := filepath.Join(basedirpath, drp)
+// 		if runtime.GOOS == "windows" {
+// 			dir = strings.ToLower(dir)
+// 		}
+// 		return PkgsByDir[dir].ImportPath
+// 	}))
+// 	return uslice.StrMap(pkgimppaths, func(pkgimppath string) (dirrelpath string) {
+// 		dirrelpath, _ = filepath.Rel(basedirpath, PkgsByImP[pkgimppath].Dir)
+// 		return
+// 	})
+// }
 
-func DependantsOn(pkgdirpath string) (pkgimppaths []string) {
-	if pkg := PkgsByDir[pkgdirpath]; pkg != nil {
-		pkgimppaths = pkg.Dependants()
-	}
-	return
-}
+// func DependantsOn(pkgdirpath string) (pkgimppaths []string) {
+// 	if pkg := PkgsByDir[pkgdirpath]; pkg != nil {
+// 		pkgimppaths = pkg.Dependants()
+// 	}
+// 	return
+// }
 
-func ImportersOf(pkgdirpath string, basedirpath string) (pkgimppaths []string) {
-	if pkg := PkgsByDir[pkgdirpath]; pkg != nil {
-		pkgimppaths = pkg.Importers(basedirpath)
-	}
-	return
-}
+// func ImportersOf(pkgdirpath string, basedirpath string) (pkgimppaths []string) {
+// 	if pkg := PkgsByDir[pkgdirpath]; pkg != nil {
+// 		pkgimppaths = pkg.Importers(basedirpath)
+// 	}
+// 	return
+// }
 
 func (me *Pkg) Dependants() []string {
 	if me.dependants == nil {
@@ -167,20 +168,34 @@ func (me *Pkg) Dependants() []string {
 	return me.dependants
 }
 
-func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
-	pkgsMutex.Lock()
-	defer pkgsMutex.Unlock()
-	for _, pkg := range PkgsByDir {
-		if uslice.StrHas(pkg.Imports, me.ImportPath) {
-			if len(basedirpath) == 0 {
-				pkgimppaths = append(pkgimppaths, pkg.ImportPath)
-			} else if reldirpath, _ := filepath.Rel(basedirpath, pkg.Dir); len(reldirpath) > 0 {
-				pkgimppaths = append(pkgimppaths, reldirpath)
+func (me *Pkg) Importers() []string {
+	if me.importers == nil {
+		pkgsMutex.Lock()
+		defer pkgsMutex.Unlock()
+		me.importers = []string{}
+		for _, pkg := range PkgsByDir {
+			if uslice.StrHas(pkg.Imports, me.ImportPath) {
+				me.importers = append(me.importers, pkg.ImportPath)
 			}
 		}
 	}
-	return
+	return me.importers
 }
+
+// func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
+// 	pkgsMutex.Lock()
+// 	defer pkgsMutex.Unlock()
+// 	for _, pkg := range PkgsByDir {
+// 		if uslice.StrHas(pkg.Imports, me.ImportPath) {
+// 			if len(basedirpath) == 0 {
+// 				pkgimppaths = append(pkgimppaths, pkg.ImportPath)
+// 			} else if reldirpath, _ := filepath.Rel(basedirpath, pkg.Dir); len(reldirpath) > 0 {
+// 				pkgimppaths = append(pkgimppaths, reldirpath)
+// 			}
+// 		}
+// 	}
+// 	return
+// }
 
 func RefreshPkgs() error {
 	pkgsbydir, pkgsbyimp, pkgserrs := map[string]*Pkg{}, map[string]*Pkg{}, []*Pkg{}
