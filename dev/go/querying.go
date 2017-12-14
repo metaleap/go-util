@@ -250,7 +250,9 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 	}
 	cmdout, cmderr, err := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
 	if cmdout, cmderr = ustr.Trim(cmdout), ustr.Trim(cmderr); err == nil && len(cmdout) > 0 {
-		if err = json.Unmarshal([]byte(cmdout), &ggd); err == nil {
+		if cmdout == "gogetdoc: no documentation found" || strings.HasPrefix(cmdout, "No documentation found for ") {
+			return nil
+		} else if err = json.Unmarshal([]byte(cmdout), &ggd); err == nil {
 			// ggd.ImpS = ShortImpP(ggd.ImpP)
 			// ggd.Decl = ShortenImPs(ggd.Decl)
 			ggd.DocUrl = ggd.ImpP + "#"
@@ -289,9 +291,6 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 				ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
 			}
 		}
-	}
-	if cmdout == "gogetdoc: no documentation found" {
-		return nil
 	}
 	if ggd.ErrMsgs = cmderr; err != nil {
 		ggd.Err = err.Error()
