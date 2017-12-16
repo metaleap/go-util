@@ -4,6 +4,12 @@ import (
 	"sync"
 )
 
+func Using(l sync.Locker, do func()) {
+	l.Lock()
+	defer l.Unlock()
+	do()
+}
+
 //	A `sync.Mutex` wrapper for convenient conditional `defer`d un/locking.
 //
 //	Example: `defer mut.UnlockIf(mut.LockIf(mycondition))`

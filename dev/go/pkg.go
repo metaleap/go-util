@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"go/build"
-	// "path/filepath"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -180,6 +180,25 @@ func (me *Pkg) Importers() []string {
 		}
 	}
 	return me.importers
+}
+
+func PkgsForFiles(filePaths ...string) (pkgs []*Pkg) {
+	if all := PkgsByDir; all != nil {
+		for _, fp := range filePaths {
+			found, dp := false, filepath.Dir(fp)
+			for i := range pkgs {
+				if found = pkgs[i].Dir == dp; found {
+					break
+				}
+			}
+			if !found {
+				if pkg := all[dp]; pkg != nil {
+					pkgs = append(pkgs, pkg)
+				}
+			}
+		}
+	}
+	return
 }
 
 // func (me *Pkg) Importers(basedirpath string) (pkgimppaths []string) {
