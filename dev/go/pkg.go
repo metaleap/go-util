@@ -192,18 +192,24 @@ func (me *Pkg) GoFilePaths() []string {
 	return me.goFilePaths
 }
 
-func PkgsForFiles(filePaths ...string) (pkgs []*Pkg) {
+func PkgsForFiles(filePaths ...string) (pkgs []*Pkg, shouldRefresh bool) {
 	if all := PkgsByDir; all != nil {
 		for _, fp := range filePaths {
-			found, dp := false, filepath.Dir(fp)
+			alreadyhave, dp := false, filepath.Dir(fp)
 			for i := range pkgs {
-				if found = pkgs[i].Dir == dp; found {
+				if alreadyhave = (pkgs[i].Dir == dp); alreadyhave {
 					break
 				}
 			}
-			if !found {
+			if !alreadyhave {
 				if pkg := all[dp]; pkg != nil {
 					pkgs = append(pkgs, pkg)
+				} else if (!shouldRefresh) && strings.ToLower(filepath.Ext(fp)) == ".go" {
+					for _, gp := range AllGoPaths() {
+						if shouldRefresh = strings.HasPrefix(dp, gp); shouldRefresh {
+							break
+						}
+					}
 				}
 			}
 		}

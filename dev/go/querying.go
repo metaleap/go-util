@@ -290,7 +290,7 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 			}
 		}
 	}
-	if ggd.ErrMsgs = cmderr; err != nil {
+	if ggd.ErrMsgs = ustr.Trim(strings.Replace(cmderr, "gogetdoc: no documentation found", "", -1)); err != nil {
 		ggd.Err = err.Error()
 	}
 	return &ggd
