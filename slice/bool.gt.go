@@ -59,7 +59,7 @@ func BoolConvert(src []interface{}, sparse bool) (dst []bool) {
 //	Although `sl` is modified in-place, it is also returned for convenience.
 func BoolEach(sl []bool, apply ...func(bool) bool) []bool {
 	for _, fn := range apply {
-		for i, _ := range sl {
+		for i := range sl {
 			sl[i] = fn(sl[i])
 		}
 	}
