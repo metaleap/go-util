@@ -32,15 +32,15 @@ type Pkg struct {
 	Error       *PackageError   `json:",omitempty"` // error loading this package (not dependencies)
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
 
-	dependants []string
-	importers  []string
+	dependants  []string
+	importers   []string
+	goFilePaths []string
 }
 
-func (me *Pkg) LessThan(pkg interface{}) (isLess bool) {
-	if p, _ := pkg.(*Pkg); p != nil {
-		return me.ImportPath < p.ImportPath
-	}
-	return
+func (me *Pkg) IsSortedPriorTo(pkg interface{}) bool { return me.ImportPath < pkg.(*Pkg).ImportPath }
+func (me *Pkg) String() string                       { return me.ImportPath }
+func (me *Pkg) IsSortedPriorToByDeps(cmp *Pkg) bool {
+	return !uslice.StrHas(me.Deps, cmp.ImportPath)
 }
 
 //	copied over from `go list` src because that cmd outputs this stuff but one cannot import it from anywhere
@@ -180,6 +180,16 @@ func (me *Pkg) Importers() []string {
 		}
 	}
 	return me.importers
+}
+
+func (me *Pkg) GoFilePaths() []string {
+	if l := len(me.GoFiles); l != len(me.goFilePaths) {
+		me.goFilePaths = make([]string, 0, l)
+		for _, fname := range me.GoFiles {
+			me.goFilePaths = append(me.goFilePaths, filepath.Join(me.Dir, fname))
+		}
+	}
+	return me.goFilePaths
 }
 
 func PkgsForFiles(filePaths ...string) (pkgs []*Pkg) {
