@@ -101,12 +101,12 @@ func lintGolintCensored(msg string) bool {
 	return false
 }
 
-func LintGoVet(dirpath string) udev.SrcMsgs {
+func LintGoVet(pkgimppath string) udev.SrcMsgs {
 	reline := func(ln string) string {
 		if strings.HasPrefix(ln, "vet: ") {
 			return ""
 		}
 		return ln
 	}
-	return udev.CmdExecOnSrc(true, reline, "go", "vet", "-shadow=true", "-shadowstrict", "-all", dirpath)
+	return udev.CmdExecOnSrc(true, reline, "go", "vet", "-shadow=true", "-shadowstrict", "-all", pkgimppath)
 }
