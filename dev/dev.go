@@ -94,6 +94,8 @@ func SrcMsgsFromLns(lines []string) (msgs SrcMsgs) {
 	for i, _ := range lines {
 		if item := SrcMsgFromLn(lines[i]); item != nil {
 			msgs = append(msgs, item)
+		} else if l := len(msgs); l > 0 {
+			msgs[l-1].Msg += "\n" + lines[i]
 		}
 	}
 	return
