@@ -14,6 +14,7 @@ var (
 		"ALL_CAPS",
 		"underscore",
 		"CamelCase",
+		"it will be inferred from the right-hand side",
 		"should be of the form \"",
 		// "should omit 2nd value from range; this loop is equivalent to ",
 		// "don't use generic names",
@@ -40,12 +41,12 @@ func LintCheck(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
 }
 
 func LintIneffAssign(dirrelpath string) (msgs udev.SrcMsgs) {
-	msgs = append(msgs, udev.CmdExecOnSrc(false, udev.LnRelify, "ineffassign", "-n", dirrelpath)...)
+	msgs = udev.CmdExecOnSrc(false, udev.LnRelify, "ineffassign", "-n", dirrelpath)
 	return
 }
 
 func LintMDempsky(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = append(msgs, udev.CmdExecOnSrc(false, udev.LnRelify, cmdname, pkgimppath)...)
+	msgs = udev.CmdExecOnSrc(false, udev.LnRelify, cmdname, pkgimppath)
 	return
 }
 
@@ -70,7 +71,7 @@ func LintGoConst(dirpath string) (msgs udev.SrcMsgs) {
 }
 
 func LintGoSimple(pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(true, nil, "gosimple", "-go", GoVersionShort, pkgimppath)
+	msgs = udev.CmdExecOnSrc(false, nil, "gosimple", "-go", GoVersionShort, pkgimppath)
 	return
 }
 
@@ -100,13 +101,12 @@ func lintGolintCensored(msg string) bool {
 	return false
 }
 
-func LintGoVet(pkgimppathordirpath string) udev.SrcMsgs {
+func LintGoVet(dirpath string) udev.SrcMsgs {
 	reline := func(ln string) string {
 		if strings.HasPrefix(ln, "vet: ") {
 			return ""
-		} else {
-			return ln
 		}
+		return ln
 	}
-	return udev.CmdExecOnSrc(true, reline, "go", "tool", "vet", "-shadow=true", "-shadowstrict", "-all", pkgimppathordirpath)
+	return udev.CmdExecOnSrc(true, reline, "go", "vet", "-shadow=true", "-shadowstrict", "-all", dirpath)
 }
