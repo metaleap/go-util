@@ -10,13 +10,13 @@ import (
 var (
 	GolintIgnoreSubstrings = []string{
 		" should have comment ",
-		"if block ends with a return statement, so drop this else and outdent its block",
+		// "if block ends with a return statement, so drop this else and outdent its block",
 		"ALL_CAPS",
 		"underscore",
 		"CamelCase",
 		"should be of the form \"",
-		"should omit 2nd value from range; this loop is equivalent to ",
-		"don't use generic names",
+		// "should omit 2nd value from range; this loop is equivalent to ",
+		// "don't use generic names",
 	}
 )
 
@@ -60,7 +60,12 @@ func LintMvDan(cmdname string, pkgimppath string) udev.SrcMsgs {
 }
 
 func LintHonnef(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = append(msgs, udev.CmdExecOnSrc(false, nil, cmdname, pkgimppath)...)
+	msgs = udev.CmdExecOnSrc(false, nil, cmdname, pkgimppath)
+	return
+}
+
+func LintGoConst(dirpath string) (msgs udev.SrcMsgs) {
+	msgs = udev.CmdExecOnSrc(true, nil, "goconst", "-match-constant", dirpath)
 	return
 }
 
@@ -72,24 +77,25 @@ func LintErrcheck(pkgimppath string) (msgs udev.SrcMsgs) {
 	return
 }
 
-func LintGolint(dirrelpath string) (msgs udev.SrcMsgs) {
-	censored := func(msg string) bool {
-		for _, s := range GolintIgnoreSubstrings {
-			if ustr.Has(msg, s) {
-				return true
-			}
-		}
-		return false
-	}
-	for _, msg := range udev.CmdExecOnSrc(false, nil, "golint", dirrelpath) {
-		if !censored(msg.Msg) {
+func LintGolint(pkgimppathordirpath string) (msgs udev.SrcMsgs) {
+	for _, msg := range udev.CmdExecOnSrc(false, nil, "golint", pkgimppathordirpath) {
+		if !lintGolintCensored(msg.Msg) {
 			msgs = append(msgs, msg)
 		}
 	}
 	return
 }
 
-func LintGoVet(dirrelpath string) udev.SrcMsgs {
+func lintGolintCensored(msg string) bool {
+	for _, s := range GolintIgnoreSubstrings {
+		if ustr.Has(msg, s) {
+			return true
+		}
+	}
+	return false
+}
+
+func LintGoVet(pkgimppathordirpath string) udev.SrcMsgs {
 	reline := func(ln string) string {
 		if strings.HasPrefix(ln, "vet: ") {
 			return ""
@@ -97,5 +103,5 @@ func LintGoVet(dirrelpath string) udev.SrcMsgs {
 			return ln
 		}
 	}
-	return udev.CmdExecOnSrc(true, reline, "go", "tool", "vet", "-shadow=true", "-shadowstrict", "-all", dirrelpath)
+	return udev.CmdExecOnSrc(true, reline, "go", "tool", "vet", "-shadow=true", "-shadowstrict", "-all", pkgimppathordirpath)
 }
