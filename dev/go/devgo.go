@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	GoVersion string
-	GoPaths   []string
+	GoVersion      string
+	GoVersionShort string
+	GoPaths        []string
 
 	Has_godoc     bool
 	Has_gofmt     bool
@@ -88,6 +89,11 @@ func HasGoDevEnv() bool {
 	// 		SnipImp = filepath.ToSlash(strings.Trim(udev.SrcDir[len(filepath.Join(gopath, "src")):], "/\\")) + "/"
 	// 	}
 	// }
+
+	i, l := strings.IndexRune(GoVersion, '.'), strings.LastIndex(GoVersion, ".")
+	for GoVersionShort = GoVersion; l > i; l = strings.LastIndex(GoVersionShort, ".") {
+		GoVersionShort = GoVersionShort[:l]
+	}
 
 	//  OKAY! we ran go command and have 1-or-more GOPATHs, the rest is optional
 	stdargs := []string{"-help"}

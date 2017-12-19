@@ -65,7 +65,12 @@ func LintHonnef(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
 }
 
 func LintGoConst(dirpath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(true, nil, "goconst", "-match-constant", dirpath)
+	msgs = udev.CmdExecOnSrc(false, nil, "goconst", "-match-constant", dirpath)
+	return
+}
+
+func LintGoSimple(pkgimppath string) (msgs udev.SrcMsgs) {
+	msgs = udev.CmdExecOnSrc(true, nil, "gosimple", "-go", GoVersionShort, pkgimppath)
 	return
 }
 
