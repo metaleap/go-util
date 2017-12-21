@@ -24,7 +24,7 @@ var (
 func LintCheck(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
 	reline := func(ln string) string {
 		if strings.HasPrefix(ln, pkgimppath+": ") {
-			return udev.LnRelify(ln[len(pkgimppath)+2:])
+			return ln[len(pkgimppath)+2:]
 		}
 		return ""
 	}
@@ -32,7 +32,7 @@ func LintCheck(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
 		if strings.HasPrefix(srcref.Msg, pkgimppath+".") {
 			srcref.Msg = srcref.Msg[len(pkgimppath)+1:]
 		}
-		if cmdname != "aligncheck" {
+		if cmdname == "varcheck" || cmdname == "structcheck" {
 			srcref.Msg = "unused & unexported: " + srcref.Msg
 		}
 		msgs = append(msgs, srcref)
@@ -41,12 +41,12 @@ func LintCheck(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
 }
 
 func LintIneffAssign(dirrelpath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(false, udev.LnRelify, "ineffassign", "-n", dirrelpath)
+	msgs = udev.CmdExecOnSrc(false, nil, "ineffassign", "-n", dirrelpath)
 	return
 }
 
 func LintMDempsky(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(false, udev.LnRelify, cmdname, pkgimppath)
+	msgs = udev.CmdExecOnSrc(false, nil, cmdname, pkgimppath)
 	return
 }
 
@@ -98,7 +98,8 @@ func lintGolintCensored(msg string) bool {
 			return true
 		}
 	}
-	return false
+	words := strings.Split(msg, " ") // the likes of: "method writeAsJsonTo should be writeAsJSONTo" etc..
+	return len(words) == 5 && words[2] == "should" && words[3] == "be" && strings.ToLower(words[4]) == strings.ToLower(words[1])
 }
 
 func LintGoVet(pkgimppath string) udev.SrcMsgs {
