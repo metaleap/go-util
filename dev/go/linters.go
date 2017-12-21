@@ -45,19 +45,19 @@ func LintIneffAssign(dirrelpath string) (msgs udev.SrcMsgs) {
 	return
 }
 
-func LintMDempsky(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(false, nil, cmdname, pkgimppath)
+func LintViaPkgImpPath(cmdname string, pkgimppath string, inclstderr bool) (msgs udev.SrcMsgs) {
+	msgs = udev.CmdExecOnSrc(inclstderr, nil, cmdname, pkgimppath)
 	return
 }
 
 func LintMvDan(cmdname string, pkgimppath string) udev.SrcMsgs {
-	reline := func(ln string) string {
-		if rln := udev.LnRelify(ln); len(rln) > 0 {
-			return rln
-		}
-		return ln
+	cmdargs := []string{pkgimppath}
+	if cmdname == "unindent" {
+		cmdargs = []string{"-exp.r", "3.01", pkgimppath}
+	} else if cmdname == "unparam" {
+		cmdargs = []string{"-exported", "-tests", "false", pkgimppath}
 	}
-	return udev.CmdExecOnSrc(false, reline, cmdname, pkgimppath)
+	return udev.CmdExecOnSrc(false, nil, cmdname, cmdargs...)
 }
 
 func LintHonnef(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
@@ -76,7 +76,7 @@ func LintGoSimple(pkgimppath string) (msgs udev.SrcMsgs) {
 }
 
 func LintErrcheck(pkgimppath string) (msgs udev.SrcMsgs) {
-	for _, m := range udev.CmdExecOnSrc(false, nil, "errcheck", pkgimppath) {
+	for _, m := range udev.CmdExecOnSrc(false, nil, "errcheck", "-abspath", "-asserts", "-blank", "-ignoretests", "true", pkgimppath) {
 		m.Msg = "Ignores a returned `error`: " + m.Msg
 		msgs = append(msgs, m)
 	}

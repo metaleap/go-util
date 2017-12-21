@@ -23,8 +23,8 @@ var (
 	Has_gorename  bool
 	Has_godef     bool
 	Has_gogetdoc  bool
-
-	Has_gocode bool
+	Has_gocode    bool
+	Has_apisearch bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
 
 	Has_golint      bool
 	Has_checkvar    bool
@@ -34,12 +34,14 @@ var (
 	Has_ineffassign bool
 	Has_interfacer  bool
 	Has_unparam     bool
+	Has_unindent    bool
 	Has_unconvert   bool
 	Has_maligned    bool
 	Has_goconst     bool
 	Has_gosimple    bool
 	Has_unused      bool
 	Has_staticcheck bool
+	Has_deadcode    bool
 
 	// SnipImp string
 )
@@ -110,19 +112,22 @@ func HasGoDevEnv() bool {
 		"varcheck":    {Ran: &Has_checkvar, Args: stdargs},
 		"interfacer":  {Ran: &Has_interfacer, Args: stdargs},
 		"unparam":     {Ran: &Has_unparam, Args: stdargs},
+		"unindent":    {Ran: &Has_unindent, Args: stdargs},
 		"unconvert":   {Ran: &Has_unconvert, Args: stdargs},
 		"maligned":    {Ran: &Has_maligned, Args: stdargs},
 		"gosimple":    {Ran: &Has_gosimple, Args: stdargs},
 		"staticcheck": {Ran: &Has_staticcheck, Args: stdargs},
 		"unused":      {Ran: &Has_unused, Args: stdargs},
+		"deadcode":    {Ran: &Has_deadcode, Args: stdargs},
 
-		"gorename": {Ran: &Has_gorename, Args: stdargs},
-		"godef":    {Ran: &Has_godef, Args: stdargs},
-		"gocode":   {Ran: &Has_gocode, Args: stdargs},
-		"guru":     {Ran: &Has_guru, Args: stdargs},
-		"gogetdoc": {Ran: &Has_gogetdoc, Args: stdargs},
-		"godoc":    {Ran: &Has_godoc, Args: stdargs},
-		"goconst":  {Ran: &Has_goconst, Args: stdargs},
+		"gorename":  {Ran: &Has_gorename, Args: stdargs},
+		"godef":     {Ran: &Has_godef, Args: stdargs},
+		"gocode":    {Ran: &Has_gocode, Args: stdargs},
+		"guru":      {Ran: &Has_guru, Args: stdargs},
+		"gogetdoc":  {Ran: &Has_gogetdoc, Args: stdargs},
+		"godoc":     {Ran: &Has_godoc, Args: stdargs},
+		"goconst":   {Ran: &Has_goconst, Args: stdargs},
+		"apisearch": {Ran: &Has_apisearch, Args: stdargs},
 	})
 	return true
 }
