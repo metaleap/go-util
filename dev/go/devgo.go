@@ -25,7 +25,7 @@ var (
 	Has_gogetdoc     bool
 	Has_gocode       bool
 	Has_apisearch    bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
-	Has_structlayout bool // https://github.com/dominikh/go-tools/tree/master/cmd/structlayout
+	Has_structlayout bool
 
 	Has_golint      bool
 	Has_checkvar    bool
