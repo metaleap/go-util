@@ -61,7 +61,7 @@ func LintMvDan(cmdname string, pkgimppath string) udev.SrcMsgs {
 }
 
 func LintHonnef(cmdname string, pkgimppath string) (msgs udev.SrcMsgs) {
-	msgs = udev.CmdExecOnSrc(false, nil, cmdname, pkgimppath)
+	msgs = udev.CmdExecOnSrc(false, nil, cmdname, "-go", GoVersionShort, pkgimppath)
 	return
 }
 

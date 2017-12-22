@@ -15,16 +15,18 @@ var (
 	GoVersionShort string
 	GoPaths        []string
 
-	Has_godoc     bool
-	Has_gofmt     bool
-	Has_goimports bool
-	Has_goreturns bool
-	Has_guru      bool
-	Has_gorename  bool
-	Has_godef     bool
-	Has_gogetdoc  bool
-	Has_gocode    bool
-	Has_apisearch bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
+	Has_godoc        bool
+	Has_gofmt        bool
+	Has_goimports    bool
+	Has_goreturns    bool
+	Has_guru         bool
+	Has_gorename     bool
+	Has_godef        bool
+	Has_gogetdoc     bool
+	Has_gocode       bool
+	Has_apisearch    bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
+	Has_structlayout bool // https://github.com/dominikh/go-tools/tree/master/cmd/structlayout
+	Has_keyify       bool // https://github.com/dominikh/go-tools/tree/master/cmd/keyify
 
 	Has_golint      bool
 	Has_checkvar    bool
@@ -42,8 +44,6 @@ var (
 	Has_unused      bool
 	Has_staticcheck bool
 	Has_deadcode    bool
-
-	// SnipImp string
 )
 
 func HasGoDevEnv() bool {
@@ -86,11 +86,6 @@ func HasGoDevEnv() bool {
 		GoPaths = nil
 		return false
 	}
-	// for _, gopath := range GoPaths {
-	// 	if ustr.Pref(udev.SrcDir, gopath) {
-	// 		SnipImp = filepath.ToSlash(strings.Trim(udev.SrcDir[len(filepath.Join(gopath, "src")):], "/\\")) + "/"
-	// 	}
-	// }
 
 	i, l := strings.IndexRune(GoVersion, '.'), strings.LastIndex(GoVersion, ".")
 	for GoVersionShort = GoVersion; l > i; l = strings.LastIndex(GoVersionShort, ".") {
@@ -120,14 +115,16 @@ func HasGoDevEnv() bool {
 		"unused":      {Ran: &Has_unused, Args: stdargs},
 		"deadcode":    {Ran: &Has_deadcode, Args: stdargs},
 
-		"gorename":  {Ran: &Has_gorename, Args: stdargs},
-		"godef":     {Ran: &Has_godef, Args: stdargs},
-		"gocode":    {Ran: &Has_gocode, Args: stdargs},
-		"guru":      {Ran: &Has_guru, Args: stdargs},
-		"gogetdoc":  {Ran: &Has_gogetdoc, Args: stdargs},
-		"godoc":     {Ran: &Has_godoc, Args: stdargs},
-		"goconst":   {Ran: &Has_goconst, Args: stdargs},
-		"apisearch": {Ran: &Has_apisearch, Args: stdargs},
+		"structlayout": {Ran: &Has_structlayout, Args: stdargs},
+		"gorename":     {Ran: &Has_gorename, Args: stdargs},
+		"godef":        {Ran: &Has_godef, Args: stdargs},
+		"gocode":       {Ran: &Has_gocode, Args: stdargs},
+		"guru":         {Ran: &Has_guru, Args: stdargs},
+		"gogetdoc":     {Ran: &Has_gogetdoc, Args: stdargs},
+		"godoc":        {Ran: &Has_godoc, Args: stdargs},
+		"goconst":      {Ran: &Has_goconst, Args: stdargs},
+		"apisearch":    {Ran: &Has_apisearch, Args: stdargs},
+		"keyify":       {Ran: &Has_keyify, Args: stdargs},
 	})
 	return true
 }
