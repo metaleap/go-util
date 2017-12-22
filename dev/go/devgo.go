@@ -26,7 +26,6 @@ var (
 	Has_gocode       bool
 	Has_apisearch    bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
 	Has_structlayout bool // https://github.com/dominikh/go-tools/tree/master/cmd/structlayout
-	Has_keyify       bool // https://github.com/dominikh/go-tools/tree/master/cmd/keyify
 
 	Has_golint      bool
 	Has_checkvar    bool
@@ -124,7 +123,6 @@ func HasGoDevEnv() bool {
 		"godoc":        {Ran: &Has_godoc, Args: stdargs},
 		"goconst":      {Ran: &Has_goconst, Args: stdargs},
 		"apisearch":    {Ran: &Has_apisearch, Args: stdargs},
-		"keyify":       {Ran: &Has_keyify, Args: stdargs},
 	})
 	return true
 }
