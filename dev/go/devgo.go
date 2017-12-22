@@ -24,7 +24,6 @@ var (
 	Has_godef        bool
 	Has_gogetdoc     bool
 	Has_gocode       bool
-	Has_apisearch    bool // github.com/remyoudompheng/go-misc/blob/master/apisearch
 	Has_structlayout bool
 
 	Has_golint      bool
@@ -122,7 +121,6 @@ func HasGoDevEnv() bool {
 		"gogetdoc":     {Ran: &Has_gogetdoc, Args: stdargs},
 		"godoc":        {Ran: &Has_godoc, Args: stdargs},
 		"goconst":      {Ran: &Has_goconst, Args: stdargs},
-		"apisearch":    {Ran: &Has_apisearch, Args: stdargs},
 	})
 	return true
 }

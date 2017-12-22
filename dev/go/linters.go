@@ -98,8 +98,9 @@ func lintGolintCensored(msg string) bool {
 			return true
 		}
 	}
-	words := strings.Split(msg, " ") // the likes of: "method writeAsJsonTo should be writeAsJSONTo" etc..
-	return len(words) == 5 && words[2] == "should" && words[3] == "be" && strings.ToLower(words[4]) == strings.ToLower(words[1])
+	words := strings.Split(msg, " ") // the likes of: "... nameFoo should be nameFOO"
+	l := len(words)
+	return l >= 5 && words[l-3] == "should" && words[l-2] == "be" && strings.ToLower(words[l-1]) == strings.ToLower(words[l-4])
 }
 
 func LintGoVet(pkgimppath string) udev.SrcMsgs {
