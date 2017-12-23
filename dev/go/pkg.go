@@ -293,14 +293,13 @@ func PkgImpPathsToNamesInLn(ln string, curPkgDir string) string {
 		if isla := strings.IndexRune(ln, '/'); isla >= 0 {
 			isla1 := isla + 1
 			if idot := strings.IndexRune(ln[isla1:], '.'); idot > 0 {
-				i, ipos, imppath := 0, 0, ln[:isla1+idot]
-				for _, r := range imppath {
+				ipos, imppath := 0, ln[:isla1+idot]
+				for ir, r := range imppath {
 					if r == '/' {
 						break
-					} else if unicode.IsSpace(r) || r == '*' || r == '[' || r == ']' || r == '(' || r == ')' || r == '{' || r == '}' {
-						ipos = i + 1
+					} else if r == '*' || r == '[' || r == ']' || r == '(' || r == ')' || r == '{' || r == '}' || unicode.IsSpace(r) {
+						ipos = ir + 1
 					}
-					i++
 				}
 				imppath = imppath[ipos:]
 				if pkg := PkgsByImP[imppath]; pkg != nil {
