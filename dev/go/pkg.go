@@ -288,15 +288,16 @@ func RefreshPkgs() error {
 	return nil
 }
 
-func PkgImpPathsToNamesIn(s string, curPkgDir string) string {
+func PkgImpPathsToNamesInLn(ln string, curPkgDir string) string {
 	if PkgsByImP != nil {
-		if isla := strings.IndexRune(s, '/'); isla > 0 {
-			if idot := strings.IndexRune(s[isla+1:], '.'); idot > 0 {
-				i, ipos, imppath := 0, 0, s[:isla+1+idot]
+		if isla := strings.IndexRune(ln, '/'); isla >= 0 {
+			isla1 := isla + 1
+			if idot := strings.IndexRune(ln[isla1:], '.'); idot > 0 {
+				i, ipos, imppath := 0, 0, ln[:isla1+idot]
 				for _, r := range imppath {
 					if r == '/' {
 						break
-					} else if unicode.IsSpace(r) || r == '{' || r == '}' || r == '*' || r == '[' || r == ']' || r == '(' || r == ')' {
+					} else if unicode.IsSpace(r) || r == '*' || r == '[' || r == ']' || r == '(' || r == ')' || r == '{' || r == '}' {
 						ipos = i + 1
 					}
 					i++
@@ -304,14 +305,14 @@ func PkgImpPathsToNamesIn(s string, curPkgDir string) string {
 				imppath = imppath[ipos:]
 				if pkg := PkgsByImP[imppath]; pkg != nil {
 					if pkg.Dir != curPkgDir {
-						s = strings.Replace(s, imppath+".", pkg.Name+".", -1)
+						ln = strings.Replace(ln, imppath+".", pkg.Name+".", -1)
 					} else {
-						s = strings.Replace(s, imppath+".", "", -1)
+						ln = strings.Replace(ln, imppath+".", "", -1)
 					}
-					return PkgImpPathsToNamesIn(s, curPkgDir)
+					ln = PkgImpPathsToNamesInLn(ln, curPkgDir)
 				}
 			}
 		}
 	}
-	return s
+	return ln
 }
