@@ -183,10 +183,12 @@ func (me *Pkg) Importers() []string {
 }
 
 func (me *Pkg) GoFilePaths() []string {
-	if l := len(me.GoFiles); l != len(me.goFilePaths) {
+	if l := len(me.GoFiles) + len(me.TestGoFiles); l != len(me.goFilePaths) {
 		me.goFilePaths = make([]string, 0, l)
-		for _, fname := range me.GoFiles {
-			me.goFilePaths = append(me.goFilePaths, filepath.Join(me.Dir, fname))
+		for _, filenames := range [][]string{me.GoFiles, me.TestGoFiles} {
+			for _, fname := range filenames {
+				me.goFilePaths = append(me.goFilePaths, filepath.Join(me.Dir, fname))
+			}
 		}
 	}
 	return me.goFilePaths

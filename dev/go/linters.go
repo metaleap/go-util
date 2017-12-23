@@ -105,7 +105,7 @@ func lintGolintCensored(msg string) bool {
 
 func LintGoVet(pkgimppath string) udev.SrcMsgs {
 	reline := func(ln string) string {
-		if strings.HasPrefix(ln, "vet: ") {
+		if strings.HasPrefix(ln, "vet: ") || strings.HasPrefix(ln, "exit status ") {
 			return ""
 		}
 		return ln
