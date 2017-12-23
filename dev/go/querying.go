@@ -85,12 +85,12 @@ func QueryDef_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujs
 	return nil
 }
 
-func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujson.Describe {
+func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) (*gurujson.Describe, error) {
 	var gr gurujson.Describe
-	if ok, _ := queryGuru("describe", fullsrcfilepath, srcin, bytepos, "", &gr, nil); ok {
-		return &gr
+	if _, err := queryGuru("describe", fullsrcfilepath, srcin, bytepos, "", &gr, nil); err != nil {
+		return nil, err
 	}
-	return nil
+	return &gr, nil
 }
 
 func QueryImpl_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujson.Implements {
@@ -261,12 +261,14 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 				if gw := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); gw != nil {
 					for _, encl := range gw.Enclosing {
 						if encl.Description == "composite literal" || encl.Description == "selector" {
-							if gd := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
+							if gd, e := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
 								if gd.Type != nil {
 									ggd.Type = gd.Type.Type
 								} else if encl.Description != "selector" && gd.Value != nil {
 									ggd.Type = gd.Value.Type
 								}
+							} else if e != nil {
+								err = e
 							}
 							break
 						}

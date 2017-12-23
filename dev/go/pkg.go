@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"unicode"
 
 	"github.com/metaleap/go-util/dev"
 	"github.com/metaleap/go-util/run"
@@ -285,4 +286,32 @@ func RefreshPkgs() error {
 		PkgsByDir, PkgsByImP, PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
 	}
 	return nil
+}
+
+func PkgImpPathsToNamesIn(s string, curPkgDir string) string {
+	if PkgsByImP != nil {
+		if isla := strings.IndexRune(s, '/'); isla > 0 {
+			if idot := strings.IndexRune(s[isla+1:], '.'); idot > 0 {
+				i, ipos, imppath := 0, 0, s[:isla+1+idot]
+				for _, r := range imppath {
+					if r == '/' {
+						break
+					} else if unicode.IsSpace(r) || r == '{' || r == '}' || r == '*' || r == '[' || r == ']' || r == '(' || r == ')' {
+						ipos = i + 1
+					}
+					i++
+				}
+				imppath = imppath[ipos:]
+				if pkg := PkgsByImP[imppath]; pkg != nil {
+					if pkg.Dir != curPkgDir {
+						s = strings.Replace(s, imppath+".", pkg.Name+".", -1)
+					} else {
+						s = strings.Replace(s, imppath+".", "", -1)
+					}
+					return PkgImpPathsToNamesIn(s, curPkgDir)
+				}
+			}
+		}
+	}
+	return s
 }
