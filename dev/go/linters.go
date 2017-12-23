@@ -55,7 +55,7 @@ func LintMvDan(cmdname string, pkgimppath string) udev.SrcMsgs {
 	if cmdname == "unindent" {
 		cmdargs = []string{"-exp.r", "3.01", pkgimppath}
 	} else if cmdname == "unparam" {
-		cmdargs = []string{"-exported", "-tests", "false", pkgimppath}
+		cmdargs = []string{"-exported", "-tests", "true", pkgimppath}
 	}
 	return udev.CmdExecOnSrc(false, nil, cmdname, cmdargs...)
 }
@@ -76,7 +76,7 @@ func LintGoSimple(pkgimppath string) (msgs udev.SrcMsgs) {
 }
 
 func LintErrcheck(pkgimppath string) (msgs udev.SrcMsgs) {
-	for _, m := range udev.CmdExecOnSrc(false, nil, "errcheck", "-abspath", "-asserts", "-blank", "-ignoretests", "true", pkgimppath) {
+	for _, m := range udev.CmdExecOnSrc(false, nil, "errcheck", "-abspath", "-asserts", "-blank", "-ignoretests", "false", pkgimppath) {
 		m.Msg = "Ignores a returned `error`: " + m.Msg
 		msgs = append(msgs, m)
 	}
