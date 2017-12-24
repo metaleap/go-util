@@ -32,6 +32,7 @@ type Gogetdoc struct {
 }
 
 var (
+	GuruScopes        string
 	GuruScopeExclPkgs []string
 )
 
@@ -40,12 +41,12 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 	if len(bpos2) > 0 {
 		cmdargs[len(cmdargs)-1] = cmdargs[len(cmdargs)-1] + ",#" + bpos2
 	}
-	// if len(SnipImp) > 0 {
-	// 	cmdargs = append([]string{"-scope", SnipImp + "..."}, cmdargs...)
-	// 	for _, exclpkg := range GuruScopeExclPkgs {
-	// 		cmdargs[1] = cmdargs[1] + ",-" + exclpkg
-	// 	}
-	// }
+	if GuruScopes != "" {
+		cmdargs = append([]string{"-scope", GuruScopes}, cmdargs...)
+		for _, exclpkg := range GuruScopeExclPkgs {
+			cmdargs[1] = cmdargs[1] + ",-" + exclpkg
+		}
+	}
 	var jsonerr error
 	cmdout, cmderr, _ := urun.CmdExecStdin(srcin, "", "guru", cmdargs...)
 	if len(cmderr) > 0 {
