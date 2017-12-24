@@ -31,6 +31,38 @@ type Gogetdoc struct {
 	ErrMsgs string `json:",omitempty"`
 }
 
+type Guru struct {
+	gurujson.Describe
+
+	IsLessThan func(*gurujson.DescribeMember, *gurujson.DescribeMember) bool `json:"-"`
+}
+
+func (me *Guru) Len() int { return len(me.Package.Members) }
+
+func (me *Guru) Less(i int, j int) bool {
+	dis, dat := me.Package.Members[i], me.Package.Members[j]
+	if me.IsLessThan != nil {
+		return me.IsLessThan(dis, dat)
+	}
+	if dis.Kind != dat.Kind {
+		return dis.Kind < dat.Kind
+	} else if dis.Type != dat.Type {
+		return dis.Type < dat.Type
+	}
+	return dis.Name < dat.Name
+}
+
+func (me *Guru) Swap(i int, j int) {
+	me.Package.Members[i], me.Package.Members[j] = me.Package.Members[j], me.Package.Members[i]
+}
+
+func (me *Guru) Matches(pM *gurujson.DescribeMember, lowerCaseQuery string) bool {
+	return strings.Contains(strings.ToLower(pM.Kind), lowerCaseQuery) ||
+		strings.Contains(strings.ToLower(pM.Type), lowerCaseQuery) ||
+		strings.Contains(strings.ToLower(pM.Name), lowerCaseQuery) ||
+		strings.Contains(strings.ToLower(pM.Value), lowerCaseQuery)
+}
+
 var (
 	GuruScopes        string
 	GuruScopeExclPkgs []string
@@ -86,8 +118,8 @@ func QueryDef_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujs
 	return nil
 }
 
-func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) (*gurujson.Describe, error) {
-	var gr gurujson.Describe
+func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) (*Guru, error) {
+	var gr Guru
 	if _, err := queryGuru("describe", fullsrcfilepath, srcin, bytepos, "", &gr, nil); err != nil {
 		return nil, err
 	}
