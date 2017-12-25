@@ -214,17 +214,22 @@ func QueryFreevars_Guru(fullsrcfilepath string, srcin string, bytepos1 string, b
 	return
 }
 
-func QueryCmplSugg_Gocode(fullsrcfilepath string, srcin string, pos string) (cmpls []map[string]string) {
+func QueryCmplSugg_Gocode(fullsrcfilepath string, srcin string, pos string) (cmpls []map[string]string, err error) {
 	var args []string
 	if len(srcin) == 0 {
 		args = []string{"-in=" + fullsrcfilepath}
 	}
 	args = append(args, "-f=json", "autocomplete", fullsrcfilepath, pos)
-	if cmdout, _, _ := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "gocode", args...); len(cmdout) > 0 {
+	cmdout, cmderr, e := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "gocode", args...)
+	if cmdout = ustr.Trim(cmdout); len(cmdout) > 0 {
 		if i := ustr.Idx(cmdout, "[{"); i > 0 {
 			cmdout = cmdout[:len(cmdout)-1][i:]
 		}
-		json.Unmarshal([]byte(cmdout), &cmpls)
+		err = json.Unmarshal([]byte(cmdout), &cmpls)
+	} else if e != nil {
+		err = e
+	} else if len(cmderr) > 0 {
+		err = umisc.E(cmderr)
 	}
 	return
 }
