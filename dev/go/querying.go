@@ -134,12 +134,12 @@ func QueryImpl_Guru(fullsrcfilepath string, srcin string, bytepos string) *guruj
 	return nil
 }
 
-func QueryWhat_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujson.What {
+func QueryWhat_Guru(fullsrcfilepath string, srcin string, bytepos string) (*gurujson.What, error) {
 	var gr gurujson.What
-	if ok, _ := queryGuru("what", fullsrcfilepath, srcin, bytepos, "", &gr, nil); ok {
-		return &gr
+	if _, err := queryGuru("what", fullsrcfilepath, srcin, bytepos, "", &gr, nil); err != nil {
+		return nil, err
 	}
-	return nil
+	return &gr, nil
 }
 
 func QueryRefs_Guru(fullsrcfilepath string, srcin string, bytepos string) (refs []gurujson.Ref) {
@@ -291,7 +291,9 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 			if ustr.Pref(ggd.Decl, "func (") {
 				ggd.Type = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
 			} else if Has_guru && ustr.Pref(ggd.Decl, "field ") {
-				if gw := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); gw != nil {
+				if gw, e := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); e != nil {
+					err = e
+				} else {
 					for _, encl := range gw.Enclosing {
 						if encl.Description == "composite literal" || encl.Description == "selector" {
 							if gd, e := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
@@ -308,20 +310,22 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 					}
 				}
 			}
-			if ggd.Type != "" {
-				_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
-				_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
-			}
-			if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
-				dochash = ggd.Type + "." + dochash
-			}
-			ggd.DocUrl += dochash
-			ggd.ImpN = ggd.Pkg
-			if len(ggd.Type) > 0 || ggd.Name != ggd.ImpN {
-				if ggd.ImpN != "" {
-					ggd.ImpN = "_" + ggd.ImpN + "_ · "
+			if err == nil {
+				if ggd.Type != "" {
+					_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
+					_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
 				}
-				ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
+				if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
+					dochash = ggd.Type + "." + dochash
+				}
+				ggd.DocUrl += dochash
+				ggd.ImpN = ggd.Pkg
+				if len(ggd.Type) > 0 || ggd.Name != ggd.ImpN {
+					if ggd.ImpN != "" {
+						ggd.ImpN = "_" + ggd.ImpN + "_ · "
+					}
+					ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
+				}
 			}
 		}
 	}
