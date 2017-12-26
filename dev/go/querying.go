@@ -262,10 +262,12 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 		return ln
 	}
 	args := append(cmdArgs_Godef(fullsrcfilepath, srcin, bytepos), "-t")
-	if cmdout, _, err := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); err == nil {
-		if cmdout = ustr.Trim(cmdout); cmdout != "" {
-			defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
-		}
+	if cmdout, cmderr, err := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); err != nil {
+		defdecl = err.Error()
+	} else if cmdout = ustr.Trim(cmdout); cmdout == "" && cmderr != "" {
+		defdecl = cmderr
+	} else if cmdout != "" {
+		defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
 	}
 	return
 }
