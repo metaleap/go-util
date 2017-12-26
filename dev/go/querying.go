@@ -73,6 +73,10 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 	if len(bpos2) > 0 {
 		cmdargs[len(cmdargs)-1] = cmdargs[len(cmdargs)-1] + ",#" + bpos2
 	}
+	if srcin != "" {
+		cmdargs = append([]string{"-modified"}, cmdargs...)
+		srcin = queryModSrcIn(fullsrcfilepath, srcin)
+	}
 	if GuruScopes != "" {
 		cmdargs = append([]string{"-scope", GuruScopes}, cmdargs...)
 		for _, exclpkg := range GuruScopeExclPkgs {
@@ -80,12 +84,16 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 		}
 	}
 	var jsonerr error
-	cmdout, cmderr, _ := urun.CmdExecStdin(srcin, "", "guru", cmdargs...)
+	cmdout, cmderr, e := urun.CmdExecStdin(srcin, "", "guru", cmdargs...)
 	if len(cmderr) > 0 {
-		if ustr.Has(cmderr, "guru: ") {
-			cmderr = ustr.Join(uslice.StrFiltered(ustr.Split(cmderr, "\n"), func(ln string) bool { return ustr.Pref(ln, "guru: ") }), "\n")
+		if ustr.Has(cmderr, "is not a Go source file") {
+			cmderr = ""
+		} else {
+			if ustr.Has(cmderr, "guru: ") {
+				cmderr = ustr.Join(uslice.StrFiltered(ustr.Split(cmderr, "\n"), func(ln string) bool { return ustr.Pref(ln, "guru: ") }), "\n")
+			}
+			err = umisc.E(cmderr)
 		}
-		err = umisc.E(cmderr)
 	}
 	if cmdout = ustr.Trim(cmdout); len(cmdout) > 0 {
 		if singlevar != nil {
@@ -106,6 +114,9 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 				}
 			}
 		}
+	}
+	if err == nil && e != nil {
+		err = e
 	}
 	return
 }
@@ -264,7 +275,7 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 	args := append(cmdArgs_Godef(fullsrcfilepath, srcin, bytepos), "-t")
 	if cmdout, cmderr, err := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); err != nil {
 		defdecl = err.Error()
-	} else if cmdout = ustr.Trim(cmdout); cmdout == "" && cmderr != "" {
+	} else if cmdout = ustr.Trim(cmdout); cmdout == "" && cmderr != "" && !(strings.HasPrefix(cmderr, "godef: ") && strings.Contains(cmderr, "found")) {
 		defdecl = cmderr
 	} else if cmdout != "" {
 		defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
@@ -273,7 +284,7 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 }
 
 func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *udev.SrcMsg {
-	if ggd := Query_Gogetdoc(fullsrcfilepath, srcin, bytepos); ggd != nil && len(ggd.Pos) > 0 {
+	if ggd := Query_Gogetdoc(fullsrcfilepath, srcin, bytepos, true); ggd != nil && len(ggd.Pos) > 0 {
 		if srcref := udev.SrcMsgFromLn(ggd.Pos); srcref != nil {
 			return srcref
 		}
@@ -281,12 +292,16 @@ func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) 
 	return nil
 }
 
-func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Gogetdoc {
+func queryModSrcIn(fullsrcfilepath string, srcin string) string {
+	return fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
+}
+
+func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string, onlyDocAndDecl bool) *Gogetdoc {
 	var ggd Gogetdoc
 	cmdargs := []string{"-json", "-u", "-linelength", "50", "-pos", fullsrcfilepath + ":#" + bytepos}
 	if len(srcin) > 0 {
 		cmdargs = append(cmdargs, "-modified")
-		srcin = fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
+		srcin = queryModSrcIn(fullsrcfilepath, srcin)
 	}
 	cmdout, cmderr, err := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
 	if cmdout, cmderr = ustr.Trim(cmdout), ustr.Trim(cmderr); err == nil && len(cmdout) > 0 {
@@ -295,43 +310,45 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *Goget
 			// ggd.Decl = ShortenImPs(ggd.Decl)
 			ggd.DocUrl = ggd.ImpP + "#"
 			dochash := ggd.Name
-			if ustr.Pref(ggd.Decl, "func (") {
-				ggd.Type = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
-			} else if Has_guru && ustr.Pref(ggd.Decl, "field ") {
-				if gw, e := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); e != nil {
-					err = e
-				} else {
-					for _, encl := range gw.Enclosing {
-						if encl.Description == "composite literal" || encl.Description == "selector" {
-							if gd, e := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
-								if gd.Type != nil {
-									ggd.Type = gd.Type.Type
-								} else if encl.Description != "selector" && gd.Value != nil {
-									ggd.Type = gd.Value.Type
+			if !onlyDocAndDecl {
+				if ustr.Pref(ggd.Decl, "func (") {
+					ggd.Type = ggd.Decl[6:ustr.Idx(ggd.Decl, ")")]
+				} else if Has_guru && ustr.Pref(ggd.Decl, "field ") {
+					if gw, e := QueryWhat_Guru(fullsrcfilepath, srcin, bytepos); e != nil {
+						err = e
+					} else {
+						for _, encl := range gw.Enclosing {
+							if encl.Description == "composite literal" || encl.Description == "selector" {
+								if gd, e := QueryDesc_Guru(fullsrcfilepath, srcin, umisc.Str(encl.Start)); gd != nil {
+									if gd.Type != nil {
+										ggd.Type = gd.Type.Type
+									} else if encl.Description != "selector" && gd.Value != nil {
+										ggd.Type = gd.Value.Type
+									}
+								} else if e != nil {
+									err = e
 								}
-							} else if e != nil {
-								err = e
+								break
 							}
-							break
 						}
 					}
 				}
-			}
-			if err == nil {
-				if ggd.Type != "" {
-					_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
-					_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
-				}
-				if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
-					dochash = ggd.Type + "." + dochash
-				}
-				ggd.DocUrl += dochash
-				ggd.ImpN = ggd.Pkg
-				if len(ggd.Type) > 0 || ggd.Name != ggd.ImpN {
-					if ggd.ImpN != "" {
-						ggd.ImpN = "_" + ggd.ImpN + "_ · "
+				if err == nil {
+					if ggd.Type != "" {
+						_, ggd.Type = ustr.BreakOn(ggd.Type, " ")
+						_, ggd.Type = ustr.BreakOnLast(ggd.Type, ".")
 					}
-					ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
+					if ggd.Type = strings.TrimLeft(ggd.Type, "*[]"); len(ggd.Type) > 0 {
+						dochash = ggd.Type + "." + dochash
+					}
+					ggd.DocUrl += dochash
+					ggd.ImpN = ggd.Pkg
+					if len(ggd.Type) > 0 || ggd.Name != ggd.ImpN {
+						if ggd.ImpN != "" {
+							ggd.ImpN = "_" + ggd.ImpN + "_ · "
+						}
+						ggd.ImpN += strings.TrimLeft(ggd.Type+"."+ggd.Name, ".")
+					}
 				}
 			}
 		}
