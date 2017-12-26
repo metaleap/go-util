@@ -155,7 +155,7 @@ func QueryWhat_Guru(fullsrcfilepath string, srcin string, bytepos string) (*guru
 
 func QueryRefs_Guru(fullsrcfilepath string, srcin string, bytepos string) (refs []gurujson.Ref) {
 	onrefpkg := func(mayberefpkg interface{}) {
-		if refpkg, ok := mayberefpkg.(*gurujson.ReferrersPackage); ok && refpkg != nil {
+		if refpkg, _ := mayberefpkg.(*gurujson.ReferrersPackage); refpkg != nil {
 			refs = append(refs, refpkg.Refs...)
 		}
 	}
