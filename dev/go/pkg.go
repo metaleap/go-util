@@ -12,6 +12,7 @@ import (
 	"unicode"
 
 	"github.com/metaleap/go-util/dev"
+	"github.com/metaleap/go-util/fs"
 	"github.com/metaleap/go-util/run"
 	"github.com/metaleap/go-util/slice"
 	"github.com/metaleap/go-util/str"
@@ -32,6 +33,7 @@ type Pkg struct {
 	Incomplete  bool            `json:",omitempty"` // was there an error loading this package or dependencies?
 	Error       *PackageError   `json:",omitempty"` // error loading this package (not dependencies)
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
+	LoC         int             `json:"-"`          // 0 unless/until calling CountLoC()
 
 	dependants  []string
 	importers   []string
@@ -193,6 +195,24 @@ func (me *Pkg) GoFilePaths() []string {
 		}
 	}
 	return me.goFilePaths
+}
+
+func (me *Pkg) CountLoC() {
+	me.LoC = 0
+	for _, gfp := range me.GoFilePaths() {
+		incomment := false
+		for _, ln := range ustr.Split(ufs.ReadTextFile(gfp, false, ""), "\n") {
+			if ln = ustr.Trim(ln); len(ln) > 0 { // yeap, will bug for pointlessly unusual multiline-comment "compositions"
+				if ustr.Suff(ln, "*/") {
+					incomment = false
+				} else if ustr.Pref(ln, "/*") {
+					incomment = true
+				} else if (!incomment) && !ustr.Pref(ln, "//") {
+					me.LoC++
+				}
+			}
+		}
+	}
 }
 
 func PkgsForFiles(filePaths ...string) (pkgs []*Pkg, shouldRefresh bool) {
