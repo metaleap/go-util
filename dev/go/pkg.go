@@ -302,10 +302,27 @@ func RefreshPkgs() error {
 		ShortenImpPaths = strings.NewReplacer(repls...)
 
 		pkgsMutex.Lock()
-		defer pkgsMutex.Unlock()
+		defer func() { pkgsMutex.Unlock(); go pkgAfterRefreshUpdateGuruScopeExcls() }()
 		PkgsByDir, PkgsByImP, PkgsErrs = pkgsbydir, pkgsbyimp, pkgserrs
 	}
 	return nil
+}
+
+func pkgAfterRefreshUpdateGuruScopeExcls() {
+	guruscopeexclpkgs := make(map[string]bool, len(PkgsByImP))
+	for _, pkg := range PkgsByImP {
+		if pkg.Error != nil || len(pkg.Errs) > 0 || len(pkg.DepsErrors) > 0 || pkg.Incomplete || len(pkg.InvalidGoFiles) > 0 {
+			guruscopeexclpkgs[pkg.ImportPath] = true
+			for _, d := range pkg.Dependants() {
+				guruscopeexclpkgs[d] = true
+			}
+		}
+	}
+	for pkgimppath, _ := range guruscopeexclpkgs {
+		if !uslice.StrHas(GuruScopeExclPkgs, pkgimppath) {
+			GuruScopeExclPkgs = append(GuruScopeExclPkgs, pkgimppath)
+		}
+	}
 }
 
 func PkgImpPathsToNamesInLn(ln string, curPkgDir string) string {
