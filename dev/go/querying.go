@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"path/filepath"
 	"strings"
-	"time"
 
 	gurujson "golang.org/x/tools/cmd/guru/serial"
 
@@ -85,16 +84,12 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 		}
 	}
 	var jsonerr error
-	ufs.WriteTextFile(umisc.Strf("/home/__/tmp/guru%d.txt", time.Now().UnixNano()), cmdargs[1])
 	cmdout, cmderr, e := urun.CmdExecStdin(srcin, "", "guru", cmdargs...)
 	if len(cmderr) > 0 {
 		if ustr.Has(cmderr, "is not a Go source file") {
 			cmderr = ""
-		} else {
-			if ustr.Has(cmderr, "guru: ") {
-				cmderr = ustr.Join(uslice.StrFiltered(ustr.Split(cmderr, "\n"), func(ln string) bool { return ustr.Pref(ln, "guru: ") }), "\n")
-			}
-			err = umisc.E(cmderr)
+		} else if ustr.Has(cmderr, "guru: ") {
+			cmderr = ustr.Join(uslice.StrFiltered(ustr.Split(cmderr, "\n"), func(ln string) bool { return ustr.Pref(ln, "guru: ") }), "\n")
 		}
 	}
 	if cmdout = ustr.Trim(cmdout); len(cmdout) > 0 {
@@ -116,6 +111,8 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 				}
 			}
 		}
+	} else if len(cmderr) > 0 {
+		err = umisc.E(cmderr)
 	}
 	if err == nil && e != nil {
 		err = e
