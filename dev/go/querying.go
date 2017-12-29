@@ -179,42 +179,42 @@ func QueryCallees_Guru(fullsrcfilepath string, srcin string, bytepos1 string, by
 	return
 }
 
-func QueryCallers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) ([]gurujson.Caller, error) {
+func QueryCallers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) ([]gurujson.Caller, error) {
 	var gr []gurujson.Caller
-	_, err := queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, "")
+	_, err := queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes)
 	return gr, err
 }
 
-func QueryCallstack_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gcs *gurujson.CallStack, err error) {
+func QueryCallstack_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gcs *gurujson.CallStack, err error) {
 	var gr gurujson.CallStack
 	var ok bool
-	if ok, err = queryGuru("callstack", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
+	if ok, err = queryGuru("callstack", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); ok {
 		gcs = &gr
 	}
 	return
 }
 
-func QueryWhicherrs_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gwe *gurujson.WhichErrs, err error) {
+func QueryWhicherrs_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gwe *gurujson.WhichErrs, err error) {
 	var gr gurujson.WhichErrs
 	var ok bool
-	if ok, err = queryGuru("whicherrs", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
+	if ok, err = queryGuru("whicherrs", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); ok {
 		gwe = &gr
 	}
 	return
 }
 
-func QueryPeers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gp *gurujson.Peers, err error) {
+func QueryPeers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gp *gurujson.Peers, err error) {
 	var gr gurujson.Peers
 	var ok bool
-	if ok, err = queryGuru("peers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
+	if ok, err = queryGuru("peers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); ok {
 		gp = &gr
 	}
 	return
 }
 
-func QueryPointsto_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) ([]gurujson.PointsTo, error) {
+func QueryPointsto_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) ([]gurujson.PointsTo, error) {
 	var gr []gurujson.PointsTo
-	_, err := queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, "")
+	_, err := queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes)
 	return gr, err
 }
 
