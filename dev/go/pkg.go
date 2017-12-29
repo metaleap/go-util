@@ -216,7 +216,9 @@ func (me *Pkg) CountLoC() {
 }
 
 func PkgsForFiles(filePaths ...string) (pkgs []*Pkg, shouldRefresh bool) {
-	if all := PkgsByDir; all != nil {
+	if all := PkgsByDir; all == nil {
+		shouldRefresh = true
+	} else {
 		for _, fp := range filePaths {
 			alreadyhave, dp := false, filepath.Dir(fp)
 			for i := range pkgs {

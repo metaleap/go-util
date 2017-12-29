@@ -68,7 +68,7 @@ var (
 	GuruScopeExclPkgs = map[string]bool{}
 )
 
-func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 string, bpos2 string, singlevar interface{}, multnextvar func() (interface{}, func(interface{}))) (allok bool, err error) {
+func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 string, bpos2 string, singlevar interface{}, multnextvar func() (interface{}, func(interface{})), guruScopes string) (allok bool, err error) {
 	cmdargs := []string{"-json", gurucmd, fullsrcfilepath + ":#" + bpos1}
 	if len(bpos2) > 0 {
 		cmdargs[len(cmdargs)-1] = cmdargs[len(cmdargs)-1] + ",#" + bpos2
@@ -77,8 +77,12 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 		cmdargs = append([]string{"-modified"}, cmdargs...)
 		srcin = queryModSrcIn(fullsrcfilepath, srcin)
 	}
-	if GuruScopes != "" {
-		cmdargs = append([]string{"-scope", GuruScopes}, cmdargs...)
+	canscope := gurucmd == "callees" || gurucmd == "callers" || gurucmd == "callstack" || gurucmd == "pointsto" || gurucmd == "peers" || gurucmd == "whicherrs"
+	if guruScopes == "" {
+		guruScopes = GuruScopes
+	}
+	if guruScopes != "" && canscope {
+		cmdargs = append([]string{"-scope", guruScopes}, cmdargs...)
 		for exclpkg, excl := range GuruScopeExclPkgs {
 			if excl {
 				cmdargs[1] = cmdargs[1] + ",-" + exclpkg
@@ -124,7 +128,7 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 
 func QueryDef_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujson.Definition {
 	var gr gurujson.Definition
-	if ok, _ := queryGuru("definition", fullsrcfilepath, srcin, bytepos, "", &gr, nil); ok {
+	if ok, _ := queryGuru("definition", fullsrcfilepath, srcin, bytepos, "", &gr, nil, ""); ok {
 		return &gr
 	}
 	return nil
@@ -132,7 +136,7 @@ func QueryDef_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujs
 
 func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) (*Guru, error) {
 	var gr Guru
-	if _, err := queryGuru("describe", fullsrcfilepath, srcin, bytepos, "", &gr, nil); err != nil {
+	if _, err := queryGuru("describe", fullsrcfilepath, srcin, bytepos, "", &gr, nil, ""); err != nil {
 		return nil, err
 	}
 	return &gr, nil
@@ -140,7 +144,7 @@ func QueryDesc_Guru(fullsrcfilepath string, srcin string, bytepos string) (*Guru
 
 func QueryImpl_Guru(fullsrcfilepath string, srcin string, bytepos string) *gurujson.Implements {
 	var gr gurujson.Implements
-	if ok, _ := queryGuru("implements", fullsrcfilepath, srcin, bytepos, "", &gr, nil); ok {
+	if ok, _ := queryGuru("implements", fullsrcfilepath, srcin, bytepos, "", &gr, nil, ""); ok {
 		return &gr
 	}
 	return nil
@@ -148,7 +152,7 @@ func QueryImpl_Guru(fullsrcfilepath string, srcin string, bytepos string) *guruj
 
 func QueryWhat_Guru(fullsrcfilepath string, srcin string, bytepos string) (*gurujson.What, error) {
 	var gr gurujson.What
-	if _, err := queryGuru("what", fullsrcfilepath, srcin, bytepos, "", &gr, nil); err != nil {
+	if _, err := queryGuru("what", fullsrcfilepath, srcin, bytepos, "", &gr, nil, ""); err != nil {
 		return nil, err
 	}
 	return &gr, nil
@@ -162,14 +166,14 @@ func QueryRefs_Guru(fullsrcfilepath string, srcin string, bytepos string) (refs 
 	}
 	queryGuru("referrers", fullsrcfilepath, srcin, bytepos, "", nil, func() (interface{}, func(interface{})) {
 		return &gurujson.ReferrersPackage{}, onrefpkg
-	})
+	}, "")
 	return
 }
 
-func QueryCallees_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gc *gurujson.Callees, err error) {
+func QueryCallees_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gc *gurujson.Callees, err error) {
 	var gr gurujson.Callees
 	var ok bool
-	if ok, err = queryGuru("callees", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil); ok {
+	if ok, err = queryGuru("callees", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); ok {
 		gc = &gr
 	}
 	return
@@ -177,14 +181,14 @@ func QueryCallees_Guru(fullsrcfilepath string, srcin string, bytepos1 string, by
 
 func QueryCallers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) ([]gurujson.Caller, error) {
 	var gr []gurujson.Caller
-	_, err := queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil)
+	_, err := queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, "")
 	return gr, err
 }
 
 func QueryCallstack_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gcs *gurujson.CallStack, err error) {
 	var gr gurujson.CallStack
 	var ok bool
-	if ok, err = queryGuru("callstack", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil); ok {
+	if ok, err = queryGuru("callstack", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
 		gcs = &gr
 	}
 	return
@@ -193,7 +197,7 @@ func QueryCallstack_Guru(fullsrcfilepath string, srcin string, bytepos1 string, 
 func QueryWhicherrs_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gwe *gurujson.WhichErrs, err error) {
 	var gr gurujson.WhichErrs
 	var ok bool
-	if ok, err = queryGuru("whicherrs", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil); ok {
+	if ok, err = queryGuru("whicherrs", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
 		gwe = &gr
 	}
 	return
@@ -202,7 +206,7 @@ func QueryWhicherrs_Guru(fullsrcfilepath string, srcin string, bytepos1 string, 
 func QueryPeers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gp *gurujson.Peers, err error) {
 	var gr gurujson.Peers
 	var ok bool
-	if ok, err = queryGuru("peers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil); ok {
+	if ok, err = queryGuru("peers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, ""); ok {
 		gp = &gr
 	}
 	return
@@ -210,7 +214,7 @@ func QueryPeers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, byte
 
 func QueryPointsto_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) ([]gurujson.PointsTo, error) {
 	var gr []gurujson.PointsTo
-	_, err := queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil)
+	_, err := queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, "")
 	return gr, err
 }
 
@@ -222,7 +226,7 @@ func QueryFreevars_Guru(fullsrcfilepath string, srcin string, bytepos1 string, b
 	}
 	_, err = queryGuru("freevars", fullsrcfilepath, srcin, bytepos1, bytepos2, nil, func() (interface{}, func(interface{})) {
 		return &gurujson.FreeVar{}, ongfv
-	})
+	}, "")
 	return
 }
 
