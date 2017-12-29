@@ -65,7 +65,7 @@ func (me *Guru) Matches(pM *gurujson.DescribeMember, lowerCaseQuery string) bool
 
 var (
 	GuruScopes        string
-	GuruScopeExclPkgs []string
+	GuruScopeExclPkgs = map[string]bool{}
 )
 
 func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 string, bpos2 string, singlevar interface{}, multnextvar func() (interface{}, func(interface{}))) (allok bool, err error) {
@@ -79,8 +79,10 @@ func queryGuru(gurucmd string, fullsrcfilepath string, srcin string, bpos1 strin
 	}
 	if GuruScopes != "" {
 		cmdargs = append([]string{"-scope", GuruScopes}, cmdargs...)
-		for _, exclpkg := range GuruScopeExclPkgs {
-			cmdargs[1] = cmdargs[1] + ",-" + exclpkg
+		for exclpkg, excl := range GuruScopeExclPkgs {
+			if excl {
+				cmdargs[1] = cmdargs[1] + ",-" + exclpkg
+			}
 		}
 	}
 	var jsonerr error

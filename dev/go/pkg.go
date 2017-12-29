@@ -309,6 +309,12 @@ func RefreshPkgs() error {
 }
 
 func pkgAfterRefreshUpdateGuruScopeExcls() {
+	pats := make([]string, 0, len(GuruScopeExclPkgs))
+	for gsxp, excl := range GuruScopeExclPkgs {
+		if excl && strings.HasSuffix(gsxp, "/...") {
+			pats = append(pats, gsxp[:len(gsxp)-3])
+		}
+	}
 	guruscopeexclpkgs := make(map[string]bool, len(PkgsByImP))
 	for _, pkg := range PkgsByImP {
 		if pkg.Error != nil || len(pkg.Errs) > 0 || len(pkg.DepsErrors) > 0 || pkg.Incomplete || len(pkg.InvalidGoFiles) > 0 {
@@ -318,9 +324,15 @@ func pkgAfterRefreshUpdateGuruScopeExcls() {
 			}
 		}
 	}
+	coveredbypat := false
 	for pkgimppath, _ := range guruscopeexclpkgs {
-		if !uslice.StrHas(GuruScopeExclPkgs, pkgimppath) {
-			GuruScopeExclPkgs = append(GuruScopeExclPkgs, pkgimppath)
+		for _, pat := range pats {
+			if coveredbypat = strings.HasPrefix(pkgimppath, pat) || pkgimppath == pat[:len(pat)-1]; coveredbypat {
+				break
+			}
+		}
+		if !coveredbypat {
+			GuruScopeExclPkgs[pkgimppath] = true
 		}
 	}
 }
