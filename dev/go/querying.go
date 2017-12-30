@@ -293,7 +293,7 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 }
 
 func QueryDefLoc_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string) *udev.SrcMsg {
-	if ggd := Query_Gogetdoc(fullsrcfilepath, srcin, bytepos, true); ggd != nil && len(ggd.Pos) > 0 {
+	if ggd := Query_Gogetdoc(fullsrcfilepath, srcin, bytepos, true, false); ggd != nil && len(ggd.Pos) > 0 {
 		if srcref := udev.SrcMsgFromLn(ggd.Pos); srcref != nil {
 			return srcref
 		}
@@ -305,7 +305,7 @@ func queryModSrcIn(fullsrcfilepath string, srcin string) string {
 	return fullsrcfilepath + "\n" + umisc.Str(len([]byte(srcin))) + "\n" + srcin
 }
 
-func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string, onlyDocAndDecl bool) *Gogetdoc {
+func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string, onlyDocAndDecl bool, docFromPlainToMarkdown bool) *Gogetdoc {
 	var ggd Gogetdoc
 	cmdargs := []string{"-json", "-u", "-linelength", "50", "-pos", fullsrcfilepath + ":#" + bytepos}
 	if len(srcin) > 0 {
@@ -318,6 +318,17 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string, onlyDo
 			// ggd.ImpS = ShortImpP(ggd.ImpP)
 			// ggd.Decl = ShortenImPs(ggd.Decl)
 			ggd.DocUrl = ggd.ImpP + "#"
+			if ispkgstd := (ggd.ImpP == "builtin"); docFromPlainToMarkdown {
+				if (!ispkgstd) && PkgsByImP != nil {
+					if pkg := PkgsByImP[ggd.ImpP]; pkg != nil {
+						ispkgstd = pkg.Standard
+					}
+				}
+				if ispkgstd {
+					ggd.Doc = strings.Replace(ggd.Doc, "\n\t", "\n\n\t", -1)
+					ggd.Doc = strings.Replace(ggd.Doc, "\n\n\n", "\n\n", -1)
+				}
+			}
 			dochash := ggd.Name
 			if !onlyDocAndDecl {
 				if ustr.Pref(ggd.Decl, "func (") {
