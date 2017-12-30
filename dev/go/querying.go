@@ -179,10 +179,12 @@ func QueryCallees_Guru(fullsrcfilepath string, srcin string, bytepos1 string, by
 	return
 }
 
-func QueryCallers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) ([]gurujson.Caller, error) {
-	var gr []gurujson.Caller
-	_, err := queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes)
-	return gr, err
+func QueryCallers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gr []gurujson.Caller, err error) {
+	var ok bool
+	if ok, err = queryGuru("callers", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); !ok {
+		gr = nil
+	}
+	return
 }
 
 func QueryCallstack_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gcs *gurujson.CallStack, err error) {
@@ -212,10 +214,12 @@ func QueryPeers_Guru(fullsrcfilepath string, srcin string, bytepos1 string, byte
 	return
 }
 
-func QueryPointsto_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) ([]gurujson.PointsTo, error) {
-	var gr []gurujson.PointsTo
-	_, err := queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes)
-	return gr, err
+func QueryPointsto_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string, altScopes string) (gr []gurujson.PointsTo, err error) {
+	var ok bool
+	if ok, err = queryGuru("pointsto", fullsrcfilepath, srcin, bytepos1, bytepos2, &gr, nil, altScopes); !ok {
+		gr = nil
+	}
+	return
 }
 
 func QueryFreevars_Guru(fullsrcfilepath string, srcin string, bytepos1 string, bytepos2 string) (gfvs []*gurujson.FreeVar, err error) {
@@ -280,7 +284,7 @@ func QueryDefDecl_GoDef(fullsrcfilepath string, srcin string, bytepos string) (d
 	args := append(cmdArgs_Godef(fullsrcfilepath, srcin, bytepos), "-t")
 	if cmdout, cmderr, err := urun.CmdExecStdin(srcin, filepath.Dir(fullsrcfilepath), "godef", args...); err != nil {
 		defdecl = err.Error()
-	} else if cmdout = ustr.Trim(cmdout); cmdout == "" && cmderr != "" && !(strings.HasPrefix(cmderr, "godef: ") && strings.Contains(cmderr, "found")) {
+	} else if cmdout = ustr.Trim(cmdout); cmdout == "" && cmderr != "" && !(strings.HasPrefix(cmderr, "godef: ") && (strings.ContainsAny(cmderr, "found") || strings.Contains(cmderr, "error finding import path for"))) {
 		defdecl = cmderr
 	} else if cmdout != "" {
 		defdecl = strings.TrimSpace(ustr.Join(uslice.StrWithout(uslice.StrMap(ustr.Split(cmdout, "\n"), foreachln), true, ""), "\n"))
