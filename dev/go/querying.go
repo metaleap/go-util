@@ -315,8 +315,6 @@ func Query_Gogetdoc(fullsrcfilepath string, srcin string, bytepos string, onlyDo
 	cmdout, cmderr, err := urun.CmdExecStdin(srcin, "", "gogetdoc", cmdargs...)
 	if cmdout, cmderr = ustr.Trim(cmdout), ustr.Trim(cmderr); err == nil && len(cmdout) > 0 {
 		if err = json.Unmarshal([]byte(cmdout), &ggd); err == nil {
-			// ggd.ImpS = ShortImpP(ggd.ImpP)
-			// ggd.Decl = ShortenImPs(ggd.Decl)
 			ggd.DocUrl = ggd.ImpP + "#"
 			if ispkgstd := (ggd.ImpP == "builtin"); docFromPlainToMarkdown {
 				if (!ispkgstd) && PkgsByImP != nil {

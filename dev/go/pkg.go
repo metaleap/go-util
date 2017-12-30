@@ -19,6 +19,7 @@ import (
 )
 
 type Pkg struct {
+	ApproxLoC int // 0 unless/until calling CountLoC()
 	build.Package
 	Errs udev.SrcMsgs
 
@@ -33,7 +34,6 @@ type Pkg struct {
 	Incomplete  bool            `json:",omitempty"` // was there an error loading this package or dependencies?
 	Error       *PackageError   `json:",omitempty"` // error loading this package (not dependencies)
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
-	LoC         int             `json:"-"`          // 0 unless/until calling CountLoC()
 
 	dependants  []string
 	importers   []string
@@ -198,7 +198,7 @@ func (me *Pkg) GoFilePaths() []string {
 }
 
 func (me *Pkg) CountLoC() {
-	me.LoC = 0
+	me.ApproxLoC = 0
 	for _, gfp := range me.GoFilePaths() {
 		incomment := false
 		for _, ln := range ustr.Split(ufs.ReadTextFile(gfp, false, ""), "\n") {
@@ -208,7 +208,7 @@ func (me *Pkg) CountLoC() {
 				} else if ustr.Pref(ln, "/*") {
 					incomment = true
 				} else if (!incomment) && !ustr.Pref(ln, "//") {
-					me.LoC++
+					me.ApproxLoC++
 				}
 			}
 		}
