@@ -76,7 +76,7 @@ func IsPowerOfTwo(x uint32) bool {
 
 //	Returns `a` if `t` is 0, or `b` if `t` is 1, or else the linear interpolation from `a` to `b` according to `t`.
 func Lerp(a, b, t float64) float64 {
-	return ((b-a)*t)+a
+	return ((b - a) * t) + a
 }
 
 //	Same as Lerp but makes sure the values interpolate correctly when they wrap around 360 degrees.
@@ -160,7 +160,7 @@ func strf(format string, args ...interface{}) string {
 
 //	Returns whether `val` is even.
 func IsEven(val int) bool {
-	return (math.Mod(float64(val), 2) == 0)
+	return ((val & 1) == 0)
 }
 
 //	Returns whether `val` represents an integer.
