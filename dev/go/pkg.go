@@ -215,6 +215,55 @@ func (me *Pkg) CountLoC() {
 	}
 }
 
+func GuruMinimalScopeFor(goFilePath string) (pkgScope string, shouldRefresh bool) {
+	var pkgs []*Pkg
+	pkgs, shouldRefresh = PkgsForFiles(goFilePath) // we pass only 1 filepath so len(pkgs) will be at-most 1:
+	var pkg *Pkg
+	if len(pkgs) > 0 {
+		pkg = pkgs[0]
+	}
+	if pkg == nil && PkgsByDir != nil {
+		for dp, lastdp := filepath.Dir(filepath.Dir(goFilePath)), ""; dp != "" && dp != lastdp; lastdp, dp = dp, filepath.Dir(dp) {
+			if pkg = PkgsByDir[dp]; pkg != nil {
+				break
+			}
+		}
+	}
+	if pkg != nil {
+		check := func(p *Pkg) *Pkg {
+			if p.IsCommand() || len(p.TestGoFiles) > 0 {
+				return p
+			} else if PkgsByDir != nil {
+				for _, sub := range PkgsByDir {
+					if sub == nil {
+						println("WUTUTUT?")
+					} else if strings.HasPrefix(sub.Dir, p.Dir+string(filepath.Separator)) && (sub.IsCommand() || len(sub.TestGoFiles) > 0) {
+						return sub
+					}
+				}
+			}
+			return nil
+		}
+		for pkg != nil {
+			if check(pkg) != nil {
+				break
+			} else if dp, lastdp := filepath.Dir(pkg.Dir), ""; PkgsByDir != nil {
+				for pkg = nil; dp != "" && dp != lastdp; lastdp, dp = dp, filepath.Dir(dp) {
+					if pkg = PkgsByDir[dp]; pkg != nil {
+						break
+					}
+				}
+			} else {
+				pkg = nil
+			}
+		}
+	}
+	if pkg != nil {
+		pkgScope = pkg.ImportPath
+	}
+	return
+}
+
 func PkgsForFiles(filePaths ...string) (pkgs []*Pkg, shouldRefresh bool) {
 	if all := PkgsByDir; all == nil {
 		shouldRefresh = true
@@ -231,7 +280,7 @@ func PkgsForFiles(filePaths ...string) (pkgs []*Pkg, shouldRefresh bool) {
 					pkgs = append(pkgs, pkg)
 				} else if (!shouldRefresh) && strings.ToLower(filepath.Ext(fp)) == ".go" {
 					for _, gp := range AllGoPaths() {
-						if shouldRefresh = strings.HasPrefix(dp, gp); shouldRefresh {
+						if shouldRefresh = strings.HasPrefix(dp, filepath.Join(gp, "src")); shouldRefresh {
 							break
 						}
 					}
