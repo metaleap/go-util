@@ -50,7 +50,12 @@ func CmdExecOnSrcIn(dir string, inclstderr bool, reline func(string) string, cmd
 	} else {
 		output, _ = cmd.Output()
 	}
-	return SrcMsgsFromLns(uslice.StrMap(ustr.Split(strings.TrimSpace(string(output)), "\n"), reline))
+	cmdout := strings.TrimSpace(string(output))
+	msgs := SrcMsgsFromLns(uslice.StrMap(ustr.Split(cmdout, "\n"), reline))
+	if len(msgs) == 0 && cmdout != "" && dir == "" && inclstderr && reline == nil {
+		msgs = append(msgs, &SrcMsg{Msg: cmdout, Pos1Ch: 1, Pos1Ln: 1})
+	}
+	return msgs
 }
 
 func CmdExecOnStdIn(stdin string, dir string, reline func(string) string, cmdname string, cmdargs ...string) (SrcMsgs, error) {
