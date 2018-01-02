@@ -83,6 +83,10 @@ func HasGoDevEnv() bool {
 		GoVersion = ""
 		GoPaths = nil
 		return false
+	} else if cmdout, cmderr, err = urun.CmdExec("go", "env", "GOROOT"); err == nil && cmdout != "" {
+		if gorootdirpath := strings.TrimSpace(cmdout); gorootdirpath != "" && ufs.DirExists(gorootdirpath) && !uslice.StrHas(GoPaths, gorootdirpath) {
+			GoPaths = append(GoPaths, gorootdirpath)
+		}
 	}
 
 	i, l := strings.IndexRune(GoVersion, '.'), strings.LastIndex(GoVersion, ".")
