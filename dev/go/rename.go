@@ -21,6 +21,16 @@ func Gorename(cmdname string, filepath string, offset int, newname string, eol s
 	if renout, renerr, err = urun.CmdExec(cmdname, cmdargs...); err != nil {
 		return
 	} else if renout = strings.TrimSpace(renout); renerr != "" && renout == "" {
+		if join, re, msgs := " — ", "", udev.SrcMsgsFromLns(strings.Split(renerr, "\n")); len(msgs) > 0 {
+			for _, m := range msgs {
+				if m.Ref != "" && ufs.FileExists(m.Ref) {
+					re += m.Msg + join
+				}
+			}
+			if re != "" {
+				renerr = re[:len(re)-len(join)]
+			}
+		}
 		err = umisc.E(renerr)
 		return
 	}
