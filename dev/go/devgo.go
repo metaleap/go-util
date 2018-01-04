@@ -137,6 +137,15 @@ func AllGoPaths() []string {
 	return GoPaths
 }
 
+func DirPathToImportPath(dirpath string) string {
+	for _, gopath := range AllGoPaths() {
+		if strings.HasPrefix(dirpath, gopath) {
+			return dirpath[len(gopath)+1:]
+		}
+	}
+	return ""
+}
+
 //	Returns the `path/filepath.Join`-ed full directory path for a specified `$GOPATH/src` sub-directory.
 //	Example: `util.GopathSrc("tools", "importers", "sql")` yields `c:\gd\src\tools\importers\sql` if `$GOPATH` is `c:\gd`.
 func GopathSrc(subDirNames ...string) (gps string) {
