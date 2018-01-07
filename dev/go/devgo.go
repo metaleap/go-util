@@ -140,7 +140,7 @@ func AllGoPaths() []string {
 func DirPathToImportPath(dirpath string) string {
 	for _, gopath := range AllGoPaths() {
 		if strings.HasPrefix(dirpath, gopath) {
-			return dirpath[len(gopath)+1:]
+			return dirpath[len(filepath.Join(gopath, "src"))+1:]
 		}
 	}
 	return ""
