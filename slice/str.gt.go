@@ -53,6 +53,15 @@ func StrHasIgnoreCase(vals []string, val string) bool {
 	return StrAtIgnoreCase(vals, val) >= 0
 }
 
+func StrShortest(v []string) (shortest string) {
+	for _, s := range v {
+		if shortest == "" || len(s) < len(shortest) {
+			shortest = s
+		}
+	}
+	return
+}
+
 func StrReverse(v []string) []string {
 	for l, r := 0, len(v)-1; l < r; l, r = l+1, r-1 {
 		v[l], v[r] = v[r], v[l]
