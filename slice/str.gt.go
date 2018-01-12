@@ -62,6 +62,19 @@ func StrShortest(v []string) (shortest string) {
 	return
 }
 
+func StrWithFewest(v []string, substr string, otherwise func([]string) string) (found string) {
+	var lastnum int
+	for _, s := range v {
+		if num := strings.Count(s, substr); num > 0 && (lastnum == 0 || num < lastnum) {
+			found, lastnum = s, num
+		}
+	}
+	if found == "" && otherwise != nil {
+		found = otherwise(v)
+	}
+	return
+}
+
 func StrReverse(v []string) []string {
 	for l, r := 0, len(v)-1; l < r; l, r = l+1, r-1 {
 		v[l], v[r] = v[r], v[l]

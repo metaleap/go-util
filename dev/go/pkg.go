@@ -415,3 +415,14 @@ func PkgImpPathsToNamesInLn(ln string, curPkgDir string) string {
 	}
 	return ln
 }
+
+func PkgsByName(name string) (pkgImpPaths []string) {
+	if pkgs := PkgsByImP; pkgs != nil {
+		for _, pkg := range pkgs {
+			if pkg.Name == name {
+				pkgImpPaths = append(pkgImpPaths, pkg.ImportPath)
+			}
+		}
+	}
+	return
+}
