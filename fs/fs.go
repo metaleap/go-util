@@ -358,6 +358,14 @@ func ReadTextFile(filePath string, panicOnError bool, defaultValue string) strin
 	return defaultValue
 }
 
+func ReadFileIntoStr(filePath string, contents *string) error {
+	bytes, err := ioutil.ReadFile(filePath)
+	if err == nil {
+		*contents = string(bytes)
+	}
+	return err
+}
+
 func SanitizeFsName(name string) string {
 	return ustr.Replace(name, map[string]string{":": "_",
 		"*":  "_",
