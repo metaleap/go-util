@@ -35,9 +35,10 @@ type Pkg struct {
 	Error       *PackageError   `json:",omitempty"` // error loading this package (not dependencies)
 	DepsErrors  []*PackageError `json:",omitempty"` // errors loading dependencies
 
-	dependants  []string
-	importers   []string
-	goFilePaths []string
+	dependants        []string
+	importers         []string
+	goFilePathsNoTest []string
+	goFilePathsAll    []string
 }
 
 func (me *Pkg) IsSortedPriorTo(pkg interface{}) bool { return me.ImportPath < pkg.(*Pkg).ImportPath }
@@ -185,21 +186,33 @@ func (me *Pkg) Importers() []string {
 	return me.importers
 }
 
-func (me *Pkg) GoFilePaths() []string {
-	if l := len(me.GoFiles) + len(me.TestGoFiles); l != len(me.goFilePaths) {
-		me.goFilePaths = make([]string, 0, l)
-		for _, filenames := range [][]string{me.GoFiles, me.TestGoFiles} {
+func (me *Pkg) GoFilePaths(inclTests bool) []string {
+	l, gofilepaths := len(me.GoFiles), me.goFilePathsNoTest
+	if inclTests {
+		l, gofilepaths = l+len(me.TestGoFiles), me.goFilePathsAll
+	}
+	if l != len(gofilepaths) {
+		slices := [][]string{me.GoFiles}
+		if gofilepaths = make([]string, 0, l); inclTests {
+			slices = append(slices, me.TestGoFiles)
+		}
+		for _, filenames := range slices {
 			for _, fname := range filenames {
-				me.goFilePaths = append(me.goFilePaths, filepath.Join(me.Dir, fname))
+				gofilepaths = append(gofilepaths, filepath.Join(me.Dir, fname))
 			}
 		}
+		if inclTests {
+			me.goFilePathsAll = gofilepaths
+		} else {
+			me.goFilePathsNoTest = gofilepaths
+		}
 	}
-	return me.goFilePaths
+	return gofilepaths
 }
 
 func (me *Pkg) CountLoC() {
 	me.ApproxLoC = 0
-	for _, gfp := range me.GoFilePaths() {
+	for _, gfp := range me.GoFilePaths(false) {
 		incomment := false
 		for _, ln := range ustr.Split(ufs.ReadTextFile(gfp, false, ""), "\n") {
 			if ln = ustr.Trim(ln); len(ln) > 0 { // yeap, will bug for pointlessly unusual multiline-comment "compositions"
