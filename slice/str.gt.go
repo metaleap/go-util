@@ -1,6 +1,9 @@
 package uslice
 
-import "strings"
+import (
+	"math"
+	"strings"
+)
 
 //	Returns the position of lower-case `val` in lower-case `vals`.
 func StrAtIgnoreCase(vals []string, val string) int {
@@ -63,9 +66,9 @@ func StrShortest(v []string) (shortest string) {
 }
 
 func StrWithFewest(v []string, substr string, otherwise func([]string) string) (found string) {
-	var lastnum int
+	lastnum := math.MaxInt64
 	for _, s := range v {
-		if num := strings.Count(s, substr); num > 0 && (lastnum == 0 || num < lastnum) {
+		if num := strings.Count(s, substr); num < lastnum {
 			found, lastnum = s, num
 		}
 	}
