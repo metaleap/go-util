@@ -66,13 +66,14 @@ func StrShortest(v []string) (shortest string) {
 }
 
 func StrWithFewest(v []string, substr string, otherwise func([]string) string) (found string) {
-	lastnum := math.MaxInt64
+	lastnum, counts := math.MaxInt64, make(map[int]bool, len(v))
 	for _, s := range v {
-		if num := strings.Count(s, substr); num < lastnum {
+		num := strings.Count(s, substr)
+		if counts[num] = true; num < lastnum {
 			found, lastnum = s, num
 		}
 	}
-	if found == "" && otherwise != nil {
+	if (found == "" || len(counts) == 1) && otherwise != nil {
 		found = otherwise(v)
 	}
 	return
