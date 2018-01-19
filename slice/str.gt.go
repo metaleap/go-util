@@ -73,7 +73,7 @@ func StrWithFewest(v []string, substr string, otherwise func([]string) string) (
 			found, lastnum = s, num
 		}
 	}
-	if (found == "" || len(counts) == 1) && otherwise != nil {
+	if len(counts) == 1 && otherwise != nil {
 		found = otherwise(v)
 	}
 	return
