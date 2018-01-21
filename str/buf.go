@@ -10,7 +10,6 @@ type Buffer struct {
 	bytes.Buffer
 }
 
-
 //	Convenience short-hand for `bytes.Buffer.WriteString(fmt.Sprintf(format, args...))`
 func (me *Buffer) Write(format string, args ...interface{}) {
 	if len(args) > 0 {

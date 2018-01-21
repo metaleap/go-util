@@ -25,6 +25,7 @@ var (
 	Has_gogetdoc     bool
 	Has_gocode       bool
 	Has_structlayout bool
+	Has_godocdown    bool
 
 	Has_golint      bool
 	Has_checkvar    bool
@@ -123,6 +124,7 @@ func HasGoDevEnv() bool {
 		"gocode":       {Ran: &Has_gocode, Args: stdargs},
 		"guru":         {Ran: &Has_guru, Args: stdargs},
 		"gogetdoc":     {Ran: &Has_gogetdoc, Args: stdargs},
+		"godocdown":    {Ran: &Has_godocdown, Args: stdargs},
 		"godoc":        {Ran: &Has_godoc, Args: stdargs},
 		"goconst":      {Ran: &Has_goconst, Args: stdargs},
 	})
