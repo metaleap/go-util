@@ -334,8 +334,8 @@ func Ifs(cond bool, ifTrue, ifFalse string) string {
 //	For all `seps`, records its position of first occurrence in `s`, then returns the smallest such position.
 func IndexAny(s string, seps ...string) (pos int) {
 	pos = -1
-	for index, sep := range seps {
-		if index = strings.Index(s, sep); pos < 0 || (index >= 0 && index < pos) {
+	for _, sep := range seps {
+		if index := strings.Index(s, sep); pos < 0 || (index >= 0 && index < pos) {
 			pos = index
 		}
 	}
