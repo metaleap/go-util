@@ -9,7 +9,6 @@ import (
 	"runtime"
 	"strings"
 
-	nustr "github.com/go-leap/str"
 	"github.com/metaleap/go-util/slice"
 	"github.com/metaleap/go-util/str"
 )
@@ -88,7 +87,7 @@ func ClearEmptyDirectories(dirPath string) (canDelete bool, err error) {
 
 //	Copies all files and directories inside `srcDirPath` to `dstDirPath`.
 //	All sub-directories whose `os.FileInfo.Name` is matched by `skipDirs` (optional) are skipped.
-func CopyAll(srcDirPath, dstDirPath string, skipDirs nustr.Pats, skipFileSuffix string) (err error) {
+func CopyAll(srcDirPath, dstDirPath string, skipDirs *ustr.Matcher, skipFileSuffix string) (err error) {
 	var (
 		srcPath, destPath string
 		fileInfos         []os.FileInfo
@@ -97,7 +96,7 @@ func CopyAll(srcDirPath, dstDirPath string, skipDirs nustr.Pats, skipFileSuffix 
 		EnsureDirExists(dstDirPath)
 		for _, fi := range fileInfos {
 			if srcPath, destPath = filepath.Join(srcDirPath, fi.Name()), filepath.Join(dstDirPath, fi.Name()); fi.IsDir() {
-				if skipDirs.NoMatch(fi.Name()) {
+				if skipDirs == nil || !skipDirs.IsMatch(fi.Name()) {
 					if skipFileSuffix == "" || !strings.HasSuffix(srcPath, skipFileSuffix) {
 						CopyAll(srcPath, destPath, skipDirs, skipFileSuffix)
 					}
