@@ -84,7 +84,7 @@ func HasGoDevEnv() bool {
 		GoVersion = ""
 		GoPaths = nil
 		return false
-	} else if cmdout, cmderr, err = urun.CmdExec("go", "env", "GOROOT"); err == nil && cmdout != "" {
+	} else if cmdout, cmderr, err = urun.CmdExec("go", "env", "GOROOT"); err == nil && cmderr == "" && cmdout != "" {
 		if gorootdirpath := strings.TrimSpace(cmdout); gorootdirpath != "" && ufs.DirExists(gorootdirpath) && !uslice.StrHas(GoPaths, gorootdirpath) {
 			GoPaths = append(GoPaths, gorootdirpath)
 		}
